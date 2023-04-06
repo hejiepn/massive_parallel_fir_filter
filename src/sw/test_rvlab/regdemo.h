@@ -1,0 +1,1 @@
+int regdemo_test(void);

@@ -1,0 +1,563 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="simk.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="sim_tb_top" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="53.092269666 us"></ZoomStartTime>
+      <ZoomEndTime time="97.792269667 us"></ZoomEndTime>
+      <Cursor1Time time="90.342269666 us"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="276"></NameColumnWidth>
+      <ValueColumnWidth column_width="88"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="135" />
+   <wvobject type="logic" fp_name="/sim_tb_top/sys_rst_n">
+      <obj_property name="ElementShortName">sys_rst_n</obj_property>
+      <obj_property name="ObjectShortName">sys_rst_n</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/sys_rst">
+      <obj_property name="ElementShortName">sys_rst</obj_property>
+      <obj_property name="ObjectShortName">sys_rst</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/sys_clk_i">
+      <obj_property name="ElementShortName">sys_clk_i</obj_property>
+      <obj_property name="ObjectShortName">sys_clk_i</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/clk_ref_i">
+      <obj_property name="ElementShortName">clk_ref_i</obj_property>
+      <obj_property name="ObjectShortName">clk_ref_i</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/ddr3_reset_n">
+      <obj_property name="ElementShortName">ddr3_reset_n</obj_property>
+      <obj_property name="ObjectShortName">ddr3_reset_n</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/ddr3_dq_fpga">
+      <obj_property name="ElementShortName">ddr3_dq_fpga[15:0]</obj_property>
+      <obj_property name="ObjectShortName">ddr3_dq_fpga[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/ddr3_dqs_p_fpga">
+      <obj_property name="ElementShortName">ddr3_dqs_p_fpga[1:0]</obj_property>
+      <obj_property name="ObjectShortName">ddr3_dqs_p_fpga[1:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/ddr3_dqs_n_fpga">
+      <obj_property name="ElementShortName">ddr3_dqs_n_fpga[1:0]</obj_property>
+      <obj_property name="ObjectShortName">ddr3_dqs_n_fpga[1:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/ddr3_addr_fpga">
+      <obj_property name="ElementShortName">ddr3_addr_fpga[14:0]</obj_property>
+      <obj_property name="ObjectShortName">ddr3_addr_fpga[14:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/ddr3_ba_fpga">
+      <obj_property name="ElementShortName">ddr3_ba_fpga[2:0]</obj_property>
+      <obj_property name="ObjectShortName">ddr3_ba_fpga[2:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/ddr3_ras_n_fpga">
+      <obj_property name="ElementShortName">ddr3_ras_n_fpga</obj_property>
+      <obj_property name="ObjectShortName">ddr3_ras_n_fpga</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/ddr3_cas_n_fpga">
+      <obj_property name="ElementShortName">ddr3_cas_n_fpga</obj_property>
+      <obj_property name="ObjectShortName">ddr3_cas_n_fpga</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/ddr3_we_n_fpga">
+      <obj_property name="ElementShortName">ddr3_we_n_fpga</obj_property>
+      <obj_property name="ObjectShortName">ddr3_we_n_fpga</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/ddr3_cke_fpga">
+      <obj_property name="ElementShortName">ddr3_cke_fpga[0:0]</obj_property>
+      <obj_property name="ObjectShortName">ddr3_cke_fpga[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/ddr3_ck_p_fpga">
+      <obj_property name="ElementShortName">ddr3_ck_p_fpga[0:0]</obj_property>
+      <obj_property name="ObjectShortName">ddr3_ck_p_fpga[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/ddr3_ck_n_fpga">
+      <obj_property name="ElementShortName">ddr3_ck_n_fpga[0:0]</obj_property>
+      <obj_property name="ObjectShortName">ddr3_ck_n_fpga[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/init_calib_complete">
+      <obj_property name="ElementShortName">init_calib_complete</obj_property>
+      <obj_property name="ObjectShortName">init_calib_complete</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/tg_compare_error">
+      <obj_property name="ElementShortName">tg_compare_error</obj_property>
+      <obj_property name="ObjectShortName">tg_compare_error</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/ddr3_dm_fpga">
+      <obj_property name="ElementShortName">ddr3_dm_fpga[1:0]</obj_property>
+      <obj_property name="ObjectShortName">ddr3_dm_fpga[1:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/ddr3_odt_fpga">
+      <obj_property name="ElementShortName">ddr3_odt_fpga[0:0]</obj_property>
+      <obj_property name="ObjectShortName">ddr3_odt_fpga[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/ddr3_dm_sdram_tmp">
+      <obj_property name="ElementShortName">ddr3_dm_sdram_tmp[1:0]</obj_property>
+      <obj_property name="ObjectShortName">ddr3_dm_sdram_tmp[1:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/ddr3_odt_sdram_tmp">
+      <obj_property name="ElementShortName">ddr3_odt_sdram_tmp[0:0]</obj_property>
+      <obj_property name="ObjectShortName">ddr3_odt_sdram_tmp[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/ddr3_dq_sdram">
+      <obj_property name="ElementShortName">ddr3_dq_sdram[15:0]</obj_property>
+      <obj_property name="ObjectShortName">ddr3_dq_sdram[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/ddr3_addr_sdram">
+      <obj_property name="ElementShortName">ddr3_addr_sdram[0:1][14:0]</obj_property>
+      <obj_property name="ObjectShortName">ddr3_addr_sdram[0:1][14:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/ddr3_ba_sdram">
+      <obj_property name="ElementShortName">ddr3_ba_sdram[0:1][2:0]</obj_property>
+      <obj_property name="ObjectShortName">ddr3_ba_sdram[0:1][2:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/ddr3_ras_n_sdram">
+      <obj_property name="ElementShortName">ddr3_ras_n_sdram</obj_property>
+      <obj_property name="ObjectShortName">ddr3_ras_n_sdram</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/ddr3_cas_n_sdram">
+      <obj_property name="ElementShortName">ddr3_cas_n_sdram</obj_property>
+      <obj_property name="ObjectShortName">ddr3_cas_n_sdram</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/ddr3_we_n_sdram">
+      <obj_property name="ElementShortName">ddr3_we_n_sdram</obj_property>
+      <obj_property name="ObjectShortName">ddr3_we_n_sdram</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/ddr3_cs_n_sdram">
+      <obj_property name="ElementShortName">ddr3_cs_n_sdram[0:0]</obj_property>
+      <obj_property name="ObjectShortName">ddr3_cs_n_sdram[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/ddr3_odt_sdram">
+      <obj_property name="ElementShortName">ddr3_odt_sdram[0:0]</obj_property>
+      <obj_property name="ObjectShortName">ddr3_odt_sdram[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/ddr3_cke_sdram">
+      <obj_property name="ElementShortName">ddr3_cke_sdram[0:0]</obj_property>
+      <obj_property name="ObjectShortName">ddr3_cke_sdram[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/ddr3_dm_sdram">
+      <obj_property name="ElementShortName">ddr3_dm_sdram[1:0]</obj_property>
+      <obj_property name="ObjectShortName">ddr3_dm_sdram[1:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/ddr3_dqs_p_sdram">
+      <obj_property name="ElementShortName">ddr3_dqs_p_sdram[1:0]</obj_property>
+      <obj_property name="ObjectShortName">ddr3_dqs_p_sdram[1:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/ddr3_dqs_n_sdram">
+      <obj_property name="ElementShortName">ddr3_dqs_n_sdram[1:0]</obj_property>
+      <obj_property name="ObjectShortName">ddr3_dqs_n_sdram[1:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/ddr3_ck_p_sdram">
+      <obj_property name="ElementShortName">ddr3_ck_p_sdram[0:0]</obj_property>
+      <obj_property name="ObjectShortName">ddr3_ck_p_sdram[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/ddr3_ck_n_sdram">
+      <obj_property name="ElementShortName">ddr3_ck_n_sdram[0:0]</obj_property>
+      <obj_property name="ObjectShortName">ddr3_ck_n_sdram[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/SIMULATION">
+      <obj_property name="ElementShortName">SIMULATION[31:0]</obj_property>
+      <obj_property name="ObjectShortName">SIMULATION[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/PORT_MODE">
+      <obj_property name="ElementShortName">PORT_MODE[55:0]</obj_property>
+      <obj_property name="ObjectShortName">PORT_MODE[55:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/DATA_MODE">
+      <obj_property name="ElementShortName">DATA_MODE[3:0]</obj_property>
+      <obj_property name="ObjectShortName">DATA_MODE[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/TST_MEM_INSTR_MODE">
+      <obj_property name="ElementShortName">TST_MEM_INSTR_MODE[111:0]</obj_property>
+      <obj_property name="ObjectShortName">TST_MEM_INSTR_MODE[111:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/EYE_TEST">
+      <obj_property name="ElementShortName">EYE_TEST[39:0]</obj_property>
+      <obj_property name="ObjectShortName">EYE_TEST[39:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/DATA_PATTERN">
+      <obj_property name="ElementShortName">DATA_PATTERN[63:0]</obj_property>
+      <obj_property name="ObjectShortName">DATA_PATTERN[63:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/CMD_PATTERN">
+      <obj_property name="ElementShortName">CMD_PATTERN[63:0]</obj_property>
+      <obj_property name="ObjectShortName">CMD_PATTERN[63:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/BEGIN_ADDRESS">
+      <obj_property name="ElementShortName">BEGIN_ADDRESS[31:0]</obj_property>
+      <obj_property name="ObjectShortName">BEGIN_ADDRESS[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/END_ADDRESS">
+      <obj_property name="ElementShortName">END_ADDRESS[31:0]</obj_property>
+      <obj_property name="ObjectShortName">END_ADDRESS[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/PRBS_EADDR_MASK_POS">
+      <obj_property name="ElementShortName">PRBS_EADDR_MASK_POS[31:0]</obj_property>
+      <obj_property name="ObjectShortName">PRBS_EADDR_MASK_POS[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/COL_WIDTH">
+      <obj_property name="ElementShortName">COL_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">COL_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/CS_WIDTH">
+      <obj_property name="ElementShortName">CS_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CS_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/DM_WIDTH">
+      <obj_property name="ElementShortName">DM_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">DM_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/DQ_WIDTH">
+      <obj_property name="ElementShortName">DQ_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">DQ_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/DQS_WIDTH">
+      <obj_property name="ElementShortName">DQS_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">DQS_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/DQS_CNT_WIDTH">
+      <obj_property name="ElementShortName">DQS_CNT_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">DQS_CNT_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/DRAM_WIDTH">
+      <obj_property name="ElementShortName">DRAM_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">DRAM_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/ECC">
+      <obj_property name="ElementShortName">ECC[23:0]</obj_property>
+      <obj_property name="ObjectShortName">ECC[23:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/RANKS">
+      <obj_property name="ElementShortName">RANKS[31:0]</obj_property>
+      <obj_property name="ObjectShortName">RANKS[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/ODT_WIDTH">
+      <obj_property name="ElementShortName">ODT_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ODT_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/ROW_WIDTH">
+      <obj_property name="ElementShortName">ROW_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ROW_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/ADDR_WIDTH">
+      <obj_property name="ElementShortName">ADDR_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">ADDR_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/BURST_MODE">
+      <obj_property name="ElementShortName">BURST_MODE[7:0]</obj_property>
+      <obj_property name="ObjectShortName">BURST_MODE[7:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/CA_MIRROR">
+      <obj_property name="ElementShortName">CA_MIRROR[23:0]</obj_property>
+      <obj_property name="ObjectShortName">CA_MIRROR[23:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/CLKIN_PERIOD">
+      <obj_property name="ElementShortName">CLKIN_PERIOD[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CLKIN_PERIOD[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/SIM_BYPASS_INIT_CAL">
+      <obj_property name="ElementShortName">SIM_BYPASS_INIT_CAL[31:0]</obj_property>
+      <obj_property name="ObjectShortName">SIM_BYPASS_INIT_CAL[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/TCQ">
+      <obj_property name="ElementShortName">TCQ[31:0]</obj_property>
+      <obj_property name="ObjectShortName">TCQ[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/RST_ACT_LOW">
+      <obj_property name="ElementShortName">RST_ACT_LOW[31:0]</obj_property>
+      <obj_property name="ObjectShortName">RST_ACT_LOW[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="other" fp_name="/sim_tb_top/REFCLK_FREQ">
+      <obj_property name="ElementShortName">REFCLK_FREQ</obj_property>
+      <obj_property name="ObjectShortName">REFCLK_FREQ</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/tCK">
+      <obj_property name="ElementShortName">tCK[31:0]</obj_property>
+      <obj_property name="ObjectShortName">tCK[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/nCK_PER_CLK">
+      <obj_property name="ElementShortName">nCK_PER_CLK[31:0]</obj_property>
+      <obj_property name="ObjectShortName">nCK_PER_CLK[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/DEBUG_PORT">
+      <obj_property name="ElementShortName">DEBUG_PORT[23:0]</obj_property>
+      <obj_property name="ObjectShortName">DEBUG_PORT[23:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/DRAM_TYPE">
+      <obj_property name="ElementShortName">DRAM_TYPE[31:0]</obj_property>
+      <obj_property name="ObjectShortName">DRAM_TYPE[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="other" fp_name="/sim_tb_top/TPROP_DQS">
+      <obj_property name="ElementShortName">TPROP_DQS</obj_property>
+      <obj_property name="ObjectShortName">TPROP_DQS</obj_property>
+   </wvobject>
+   <wvobject type="other" fp_name="/sim_tb_top/TPROP_DQS_RD">
+      <obj_property name="ElementShortName">TPROP_DQS_RD</obj_property>
+      <obj_property name="ObjectShortName">TPROP_DQS_RD</obj_property>
+   </wvobject>
+   <wvobject type="other" fp_name="/sim_tb_top/TPROP_PCB_CTRL">
+      <obj_property name="ElementShortName">TPROP_PCB_CTRL</obj_property>
+      <obj_property name="ObjectShortName">TPROP_PCB_CTRL</obj_property>
+   </wvobject>
+   <wvobject type="other" fp_name="/sim_tb_top/TPROP_PCB_DATA">
+      <obj_property name="ElementShortName">TPROP_PCB_DATA</obj_property>
+      <obj_property name="ObjectShortName">TPROP_PCB_DATA</obj_property>
+   </wvobject>
+   <wvobject type="other" fp_name="/sim_tb_top/TPROP_PCB_DATA_RD">
+      <obj_property name="ElementShortName">TPROP_PCB_DATA_RD</obj_property>
+      <obj_property name="ObjectShortName">TPROP_PCB_DATA_RD</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/MEMORY_WIDTH">
+      <obj_property name="ElementShortName">MEMORY_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">MEMORY_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/NUM_COMP">
+      <obj_property name="ElementShortName">NUM_COMP[31:0]</obj_property>
+      <obj_property name="ObjectShortName">NUM_COMP[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/ECC_TEST">
+      <obj_property name="ElementShortName">ECC_TEST[23:0]</obj_property>
+      <obj_property name="ObjectShortName">ECC_TEST[23:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/ERR_INSERT">
+      <obj_property name="ElementShortName">ERR_INSERT[23:0]</obj_property>
+      <obj_property name="ObjectShortName">ERR_INSERT[23:0]</obj_property>
+   </wvobject>
+   <wvobject type="other" fp_name="/sim_tb_top/REFCLK_PERIOD">
+      <obj_property name="ElementShortName">REFCLK_PERIOD</obj_property>
+      <obj_property name="ObjectShortName">REFCLK_PERIOD</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/RESET_PERIOD">
+      <obj_property name="ElementShortName">RESET_PERIOD[31:0]</obj_property>
+      <obj_property name="ObjectShortName">RESET_PERIOD[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="other" fp_name="/sim_tb_top/SYSCLK_PERIOD">
+      <obj_property name="ElementShortName">SYSCLK_PERIOD</obj_property>
+      <obj_property name="ObjectShortName">SYSCLK_PERIOD</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_idel_down_all">
+      <obj_property name="ElementShortName">dbg_idel_down_all</obj_property>
+      <obj_property name="ObjectShortName">dbg_idel_down_all</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_idel_down_cpt">
+      <obj_property name="ElementShortName">dbg_idel_down_cpt</obj_property>
+      <obj_property name="ObjectShortName">dbg_idel_down_cpt</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_idel_up_all">
+      <obj_property name="ElementShortName">dbg_idel_up_all</obj_property>
+      <obj_property name="ObjectShortName">dbg_idel_up_all</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_idel_up_cpt">
+      <obj_property name="ElementShortName">dbg_idel_up_cpt</obj_property>
+      <obj_property name="ObjectShortName">dbg_idel_up_cpt</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_sel_all_idel_cpt">
+      <obj_property name="ElementShortName">dbg_sel_all_idel_cpt</obj_property>
+      <obj_property name="ObjectShortName">dbg_sel_all_idel_cpt</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_sel_idel_cpt">
+      <obj_property name="ElementShortName">dbg_sel_idel_cpt[0:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_sel_idel_cpt[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_sel_pi_incdec">
+      <obj_property name="ElementShortName">dbg_sel_pi_incdec</obj_property>
+      <obj_property name="ObjectShortName">dbg_sel_pi_incdec</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_byte_sel">
+      <obj_property name="ElementShortName">dbg_byte_sel[1:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_byte_sel[1:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_pi_f_inc">
+      <obj_property name="ElementShortName">dbg_pi_f_inc</obj_property>
+      <obj_property name="ObjectShortName">dbg_pi_f_inc</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_pi_f_dec">
+      <obj_property name="ElementShortName">dbg_pi_f_dec</obj_property>
+      <obj_property name="ObjectShortName">dbg_pi_f_dec</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_pi_counter_read_val">
+      <obj_property name="ElementShortName">dbg_pi_counter_read_val[5:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_pi_counter_read_val[5:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_po_counter_read_val">
+      <obj_property name="ElementShortName">dbg_po_counter_read_val[8:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_po_counter_read_val[8:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_cpt_tap_cnt">
+      <obj_property name="ElementShortName">dbg_cpt_tap_cnt[11:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_cpt_tap_cnt[11:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_dq_idelay_tap_cnt">
+      <obj_property name="ElementShortName">dbg_dq_idelay_tap_cnt[9:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_dq_idelay_tap_cnt[9:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_calib_top">
+      <obj_property name="ElementShortName">dbg_calib_top[255:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_calib_top[255:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_cpt_first_edge_cnt">
+      <obj_property name="ElementShortName">dbg_cpt_first_edge_cnt[11:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_cpt_first_edge_cnt[11:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_cpt_second_edge_cnt">
+      <obj_property name="ElementShortName">dbg_cpt_second_edge_cnt[11:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_cpt_second_edge_cnt[11:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_rd_data_offset">
+      <obj_property name="ElementShortName">dbg_rd_data_offset[5:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_rd_data_offset[5:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_phy_rdlvl">
+      <obj_property name="ElementShortName">dbg_phy_rdlvl[255:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_phy_rdlvl[255:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_phy_wrcal">
+      <obj_property name="ElementShortName">dbg_phy_wrcal[99:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_phy_wrcal[99:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_final_po_fine_tap_cnt">
+      <obj_property name="ElementShortName">dbg_final_po_fine_tap_cnt[11:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_final_po_fine_tap_cnt[11:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_final_po_coarse_tap_cnt">
+      <obj_property name="ElementShortName">dbg_final_po_coarse_tap_cnt[5:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_final_po_coarse_tap_cnt[5:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_phy_wrlvl">
+      <obj_property name="ElementShortName">dbg_phy_wrlvl[255:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_phy_wrlvl[255:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_phy_init">
+      <obj_property name="ElementShortName">dbg_phy_init[255:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_phy_init[255:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_prbs_rdlvl">
+      <obj_property name="ElementShortName">dbg_prbs_rdlvl[255:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_prbs_rdlvl[255:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_dqs_found_cal">
+      <obj_property name="ElementShortName">dbg_dqs_found_cal[255:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_dqs_found_cal[255:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_pi_phaselock_start">
+      <obj_property name="ElementShortName">dbg_pi_phaselock_start</obj_property>
+      <obj_property name="ObjectShortName">dbg_pi_phaselock_start</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_pi_phaselocked_done">
+      <obj_property name="ElementShortName">dbg_pi_phaselocked_done</obj_property>
+      <obj_property name="ObjectShortName">dbg_pi_phaselocked_done</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_pi_phaselock_err">
+      <obj_property name="ElementShortName">dbg_pi_phaselock_err</obj_property>
+      <obj_property name="ObjectShortName">dbg_pi_phaselock_err</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_pi_dqsfound_start">
+      <obj_property name="ElementShortName">dbg_pi_dqsfound_start</obj_property>
+      <obj_property name="ObjectShortName">dbg_pi_dqsfound_start</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_pi_dqsfound_done">
+      <obj_property name="ElementShortName">dbg_pi_dqsfound_done</obj_property>
+      <obj_property name="ObjectShortName">dbg_pi_dqsfound_done</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_pi_dqsfound_err">
+      <obj_property name="ElementShortName">dbg_pi_dqsfound_err</obj_property>
+      <obj_property name="ObjectShortName">dbg_pi_dqsfound_err</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_wrcal_start">
+      <obj_property name="ElementShortName">dbg_wrcal_start</obj_property>
+      <obj_property name="ObjectShortName">dbg_wrcal_start</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_wrcal_done">
+      <obj_property name="ElementShortName">dbg_wrcal_done</obj_property>
+      <obj_property name="ObjectShortName">dbg_wrcal_done</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_wrcal_err">
+      <obj_property name="ElementShortName">dbg_wrcal_err</obj_property>
+      <obj_property name="ObjectShortName">dbg_wrcal_err</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_pi_dqs_found_lanes_phy4lanes">
+      <obj_property name="ElementShortName">dbg_pi_dqs_found_lanes_phy4lanes[11:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_pi_dqs_found_lanes_phy4lanes[11:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_pi_phase_locked_phy4lanes">
+      <obj_property name="ElementShortName">dbg_pi_phase_locked_phy4lanes[11:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_pi_phase_locked_phy4lanes[11:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_oclkdelay_calib_start">
+      <obj_property name="ElementShortName">dbg_oclkdelay_calib_start</obj_property>
+      <obj_property name="ObjectShortName">dbg_oclkdelay_calib_start</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_oclkdelay_calib_done">
+      <obj_property name="ElementShortName">dbg_oclkdelay_calib_done</obj_property>
+      <obj_property name="ObjectShortName">dbg_oclkdelay_calib_done</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_phy_oclkdelay_cal">
+      <obj_property name="ElementShortName">dbg_phy_oclkdelay_cal[255:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_phy_oclkdelay_cal[255:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_oclkdelay_rd_data">
+      <obj_property name="ElementShortName">dbg_oclkdelay_rd_data[127:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_oclkdelay_rd_data[127:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_rd_data_edge_detect">
+      <obj_property name="ElementShortName">dbg_rd_data_edge_detect[1:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_rd_data_edge_detect[1:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_rddata">
+      <obj_property name="ElementShortName">dbg_rddata[127:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_rddata[127:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_rddata_valid">
+      <obj_property name="ElementShortName">dbg_rddata_valid</obj_property>
+      <obj_property name="ObjectShortName">dbg_rddata_valid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_rdlvl_done">
+      <obj_property name="ElementShortName">dbg_rdlvl_done[1:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_rdlvl_done[1:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_rdlvl_err">
+      <obj_property name="ElementShortName">dbg_rdlvl_err[1:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_rdlvl_err[1:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_rdlvl_start">
+      <obj_property name="ElementShortName">dbg_rdlvl_start[1:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_rdlvl_start[1:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_wrlvl_fine_tap_cnt">
+      <obj_property name="ElementShortName">dbg_wrlvl_fine_tap_cnt[11:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_wrlvl_fine_tap_cnt[11:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_wrlvl_coarse_tap_cnt">
+      <obj_property name="ElementShortName">dbg_wrlvl_coarse_tap_cnt[5:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_wrlvl_coarse_tap_cnt[5:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_tap_cnt_during_wrlvl">
+      <obj_property name="ElementShortName">dbg_tap_cnt_during_wrlvl[5:0]</obj_property>
+      <obj_property name="ObjectShortName">dbg_tap_cnt_during_wrlvl[5:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_wl_edge_detect_valid">
+      <obj_property name="ElementShortName">dbg_wl_edge_detect_valid</obj_property>
+      <obj_property name="ObjectShortName">dbg_wl_edge_detect_valid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_wrlvl_done">
+      <obj_property name="ElementShortName">dbg_wrlvl_done</obj_property>
+      <obj_property name="ObjectShortName">dbg_wrlvl_done</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_wrlvl_err">
+      <obj_property name="ElementShortName">dbg_wrlvl_err</obj_property>
+      <obj_property name="ObjectShortName">dbg_wrlvl_err</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sim_tb_top/u_ip_top/u_rvlab_mig/u_rvlab_mig_mig/dbg_wrlvl_start">
+      <obj_property name="ElementShortName">dbg_wrlvl_start</obj_property>
+      <obj_property name="ObjectShortName">dbg_wrlvl_start</obj_property>
+   </wvobject>
+</wave_config>
