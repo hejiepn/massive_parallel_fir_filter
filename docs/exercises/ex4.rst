@@ -21,7 +21,9 @@ Tasks
 
 **1. Explore the example**
 
-*rvlab/src/rtl/student/student_dma.sv* contains a TL-UL host implementing memset which fills a given memory area with a constant value.  The module *student_dma* is already instantiated in *rvlab/src/rtl/student/student.sv* and connected as a host and device to the main TL-UL crossbar. Its CPU accessible registers are defined in *rvlab/src/design/reggen/student_dma.json*.
+*rvlab/src/rtl/student/student_dma.sv* contains a TL-UL host implementing memset which fills a given memory area with a constant value.  The module *student_dma* is already instantiated in *rvlab/src/rtl/student/student.sv* and connected as a host and device to the main TL-UL crossbar. Its CPU accessible registers are defined in *rvlab/src/design/reggen/student_dma.json*:
+
+.. reggen:: student_dma
   
 Note: To simplify the operation of the bus master module only 32-bit accesses aligned to 4-byte boundaries are
 used. Smaller accesses would involve more complex logic.
@@ -38,7 +40,7 @@ offset  size  name     description
 
 Simulate and test by running::
 
-  flow systb_student.sim_rtl_questa
+  flow systb_.sim_rtl_questa
 
 
 **2. Hardware implementation**

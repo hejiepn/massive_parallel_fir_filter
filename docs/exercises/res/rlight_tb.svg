@@ -25,8 +25,8 @@
      showgrid="false"
      showguides="true"
      inkscape:zoom="4.2333334"
-     inkscape:cx="148.70079"
-     inkscape:cy="123.42519"
+     inkscape:cx="145.03937"
+     inkscape:cy="123.18897"
      inkscape:window-width="2560"
      inkscape:window-height="1552"
      inkscape:window-x="0"
@@ -255,9 +255,28 @@
        transform="translate(0,0.49058533)"><tspan
          x="90.185929"
          y="67.06221"
-         id="tspan3667"><tspan
+         id="tspan10147"><tspan
            style="font-weight:bold;-inkscape-font-specification:'sans-serif, Normal'"
-           id="tspan3665">student_rlight</tspan></tspan></text>
+           id="tspan10145">student_rlight</tspan></tspan></text>
+    <rect
+       style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.183635;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       id="rect31-1"
+       width="16.935028"
+       height="15.741085"
+       x="59.639893"
+       y="65.18177" />
+    <text
+       xml:space="preserve"
+       style="font-style:normal;font-weight:normal;font-size:2.11667px;line-height:1.25;font-family:sans-serif;text-align:center;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect31-1);fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
+       x="57.256622"
+       y="28.312382"
+       id="text18446-1"
+       transform="translate(0.01032002,0.68178273)"><tspan
+         x="60.088261"
+         y="67.054397"
+         id="tspan10151"><tspan
+           style="font-weight:bold"
+           id="tspan10149">tlul_test_host</tspan></tspan></text>
     <rect
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.0862873;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
        id="rect31-8"
@@ -274,27 +293,27 @@
        transform="translate(0,1.717014)"><tspan
          x="83.534116"
          y="71.945022"
-         id="tspan3671"><tspan
+         id="tspan10155"><tspan
            style="font-weight:bold"
-           id="tspan3669">tlul_adapter
+           id="tspan10153">tlul_adapter
 </tspan></tspan><tspan
          x="88.21084"
          y="74.590858"
-         id="tspan3675"><tspan
+         id="tspan10159"><tspan
            style="font-weight:bold"
-           id="tspan3673">_reg</tspan></tspan></text>
+           id="tspan10157">_reg</tspan></tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:2.11667px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;white-space:pre;shape-inside:url(#rect31-1);fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
        x="45.376709"
        y="28.312382"
        id="text18446-0"
-       transform="translate(0,0.490585)"><tspan
-         x="0"
-         y="0"
-         id="tspan3679"><tspan
+       transform="translate(12.47123,8.45451)"><tspan
+         x="68.107422"
+         y="67.054397"
+         id="tspan10163"><tspan
            style="font-weight:bold;-inkscape-font-specification:'sans-serif, Normal';text-align:center;text-anchor:middle"
-           id="tspan3677">
+           id="tspan10161">
 </tspan></tspan></text>
     <rect
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:0.296498;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
@@ -312,9 +331,9 @@
        transform="translate(0,0.490585)"><tspan
          x="86.512411"
          y="63.241897"
-         id="tspan3683"><tspan
+         id="tspan10167"><tspan
            style="font-weight:bold"
-           id="tspan3681">student_rlight_tb</tspan></tspan></text>
+           id="tspan10165">student_rlight_tb</tspan></tspan></text>
     <text
        xml:space="preserve"
        transform="scale(0.26458333)"
@@ -329,15 +348,15 @@
        transform="translate(1.4484121,10.881971)"><tspan
          x="58.65625"
          y="63.241897"
-         id="tspan3687"><tspan
+         id="tspan10171"><tspan
            style="font-style:italic"
-           id="tspan3685">tlul_write(...)
+           id="tspan10169">put_word(...)
 </tspan></tspan><tspan
          x="58.65625"
          y="65.887733"
-         id="tspan3691"><tspan
+         id="tspan10175"><tspan
            style="font-style:italic"
-           id="tspan3689">tlul_read(...)</tspan></tspan></text>
+           id="tspan10173">get_word(...)</tspan></tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:0.25;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#TriangleInL);marker-end:url(#TriangleOutL)"
        d="m 74.97789,74.694076 6.139468,0.0065"
@@ -362,17 +381,17 @@
        transform="translate(124.60128,75.3261)"><tspan
          x="0"
          y="0"
-         id="tspan3693">LED[7:0]</tspan></text>
+         id="tspan10177">LED[7:0]</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:2.11667px;line-height:1.25;font-family:sans-serif;white-space:pre;shape-inside:url(#rect31-3-5);fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
        x="79.977219"
        y="58.552139"
        id="text98692-8-0"
-       transform="translate(75.375176,78.411424)"><tspan
+       transform="translate(74.316842,78.411424)"><tspan
          x="0"
          y="0"
-         id="tspan3695">TL-UL</tspan></text>
+         id="tspan10179">TL-UL</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:2.11667px;line-height:1.25;font-family:sans-serif;text-align:center;white-space:pre;shape-inside:url(#rect31-3-5);fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.264583"
@@ -382,11 +401,11 @@
        transform="translate(100.1282,77.531338)"><tspan
          x="0"
          y="0"
-         id="tspan3697">register
+         id="tspan10181">register
 </tspan><tspan
          x="0"
          y="2.6458374"
-         id="tspan3699">bus</tspan></text>
+         id="tspan10183">bus</tspan></text>
     <text
        xml:space="preserve"
        style="font-style:normal;font-weight:normal;font-size:3.52778px;line-height:1.25;font-family:sans-serif;fill:#000000;fill-opacity:1;stroke:none;stroke-width:0.265;stroke-miterlimit:4;stroke-dasharray:none"

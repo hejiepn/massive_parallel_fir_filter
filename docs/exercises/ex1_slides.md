@@ -55,8 +55,7 @@ style: |
 
 ---
 ## **Support**
-- `rvlab/doc/_build/html/index.html` !!
-  `/home/rvlab/docs/index.html`
+- `/home/rvlab/docs/index.html` !!!
 - IT (workstations, EDA tools, licenses .. )
   - Adela Westedt: adela.westedt@tu-berlin.de, 24248, EN435a 
   - Rene Hartman: rene.hartmann@tu-berlin.de, 25351, EN435a
@@ -94,15 +93,19 @@ style: |
 ```verilog
 localparam logic [3:0] ADDR_REGA = 4'h0;
 localparam logic [3:0] ADDR_REGB = 4'h4;
+
 logic [31:0] regA;
 logic [ 7:0] regB;
+
 always_comb begin
   rdata = '0;  // !!!
-  case (addr)
-    ADDR_REGA:  rdata[31:0] = regA;
-    ADDR_REGB:  rdata[ 7:0] = regB;
-    default:    rdata       = '0;
-  endcase
+  if (re) begin
+    case (addr)
+      ADDR_REGA:  rdata[31:0] = regA;
+      ADDR_REGB:  rdata[ 7:0] = regB;
+      default:    rdata       = '0;
+    endcase
+  end
 end
 ```
 
@@ -129,43 +132,49 @@ end
 
 ---
 ## **Demo FSM**
+![bg right:70% 80%](res/ex1_demo_fsm_timing.svg)
+
+---
+## **Demo FSM**
 ![bg  vertical right:60% 98%](res/ex1_demo_fsm_timing.png)
 
 ```verilog
-  enum logic[1:0] {idle, swap, count} state;
-  logic [7:0] led;
-  logic [1:0] cnt;
-  always_ff @(posedge clk_i, negedge rst_ni) begin
-    if (~rst_ni) begin
-      state   <= idle;
-      led     <= 8'b10101010;
-      cnt     <= '0;
-    end else begin
-        case (state)
-          idle: begin
-            if (regB[0] == 1'b1) begin
-              led   <= regA[15:8];
-              state <= swap;
-            end
+enum logic[1:0] {idle, swap, count} state;
+logic [7:0] led;
+logic [1:0] cnt;
+always_ff @(posedge clk_i, negedge rst_ni) begin
+  if (~rst_ni) begin
+    state   <= idle;
+    led     <= 8'b10101010;
+    cnt     <= '0;
+  end else begin
+      case (state)
+        idle: begin
+          if (regB[0] == 1'b1) begin
+            led   <= regA[15:8];
+            state <= swap;
           end
-          swap: begin
-            led[7:4] <= led[3:0];
-            led[3:0] <= led[7:4];
-            cnt      <= 2'd2;
-            state    <= count;
+        end
+        swap: begin
+          led[7:4] <= led[3:0];
+          led[3:0] <= led[7:4];
+          cnt      <= 2'd2;
+          state    <= count;
+        end
+        count: begin
+          if (cnt != 0) begin
+            cnt <= cnt - 1;
           end
-          count: begin
-            if (cnt != 0) begin
-              cnt <= cnt - 1;
-            end
-            else begin 
-              state <= idle;
-            end
+          else begin 
+            state <= idle;
           end
-          default: state <= idle;
-        endcase;
-    end // if (~rst_ni) else
-  end 
+        end
+        default: begin
+          state <= idle;
+        end
+      endcase;
+  end // if (~rst_ni) else
+end 
 ```
 
 ---
@@ -210,7 +219,7 @@ Detailed instructions for X2GO on ISIS page.
 3. Start with the 1st exercise sheet:
    `firefox /home/rvlab/docs/index.html`
 
-*(No support: If you want to run rvlab on your own machine see rvlab/README.rst.)*
+*(**No** support: If you want to run rvlab on your own machine see rvlab/README.rst.)*
 
 ---
 # **Appendix**

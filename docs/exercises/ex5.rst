@@ -16,6 +16,7 @@ Objectives
 
 - create hierarchical interconnects for TL-UL
 - cascaded IRQs: apply architectures of peripheral modules and interrupt controllers
+- work as a team
 
 Preparation
 -----------
@@ -37,7 +38,7 @@ Implementation guidelines
 - module name: "student_tlul_mux.sv"
 - the interface must use the structs defined in the package tlul_pkg (*rvlab/src/rtl/tlul/pkg/tlul_pkg.sv*)
 - the number of devices (1-16) must be configurable by a parameter
-- the module must be purely combinational, i.e. do not use any flip flops
+- the module must be **purely combinational**, i.e. do not use any flip flops
 - Hierarchical address decoding: The address range of the *tl_device_peri* TL-UL port of the student module is defined by the main TL-UL xbar in conjunction with the peripheral TL-UL xbar. Please refer to *rvlab/src/design/tlgen/xbar_main.hjson* and *rvlab/src/design/tlgen/xbar_peri.hjson* for the resulting address range (or look into :ref:`memorymap`). Your student_tlul_mux should divide this address range into 16 equally sized ranges for the (up to) 16 connected TL-UL devices. For this **your student_tlul_mux must only evaluate (decode) 4 adress bits**.
 
 Test your multiplexer with the provided test bench *student_tlul_mux_tb.sv* before integrating it into *student.sv*::
@@ -53,22 +54,26 @@ Design an interrupt controller based on the principles presented in the exercise
 ======= ====  ========  =============================================================================
 address mode  name      description
 ======= ====  ========  =============================================================================
-0x0     r/w   all_en    0: suppresses all outgoing interrupt requests
-0x4     r/w   mask      mask(n) = 1 <=> irq(n) enabled
-0x4     w     mask_set  mask_set(n) = 1 <=> set bit n in mask
-0x4     w     mask_clr  mask_clr(n) = 1 <=> clear bit n in mask
-0x8     r     status    status(n) = 1 <=> irq(n) is asserted
-0xC     r     irq_no    n < IRQ_MAX: irq_no = n, irq(n) = 1 and there is no m < n with irq(m) = 1 and mask(m) = 1. 
+0x00    r/w   all_en    0: suppresses all outgoing interrupt requests
+0x04    r/w   mask      mask(n) = 1 <=> irq(n) enabled
+0x08    w     mask_set  mask_set(n) = 1 <=> set bit n in mask
+0x0C    w     mask_clr  mask_clr(n) = 1 <=> clear bit n in mask
+0x10    r     status    status(n) = 1 <=> irq(n) is asserted
+0x14    r     irq_no    n < IRQ_MAX: irq_no = n, irq(n) = 1 and there is no m < n with irq(m) = 1 and mask(m) = 1. 
                         n = IRQ_MAX: no pending unmasked irq
+0x18    r/w   test      0: regular operation; 1: all irq inputs are wired to the test_irq register
+0x1C    r/w   test_irq  see test
 ======= ====  ========  =============================================================================
+
+Note: If the irq controller is finished before the TL-UL multiplexer, temporarily implement the later as a 1:1 connection between its input ant the output to the irq controller.  
 
 **4. Interrupt controller: HAL**
 
-Write a HAL which isolates all accesses to the registers of the interrupt controller. These functions are time-critical as they are often used inside an interrupt handler. Therefore they should either be declared as extern __inline__ or even better be implemented as macros. In both cases the C header file has to contain not only the declarations but also the implementations.
+Write a HAL (*student_irq_ctrl.c/h*) which isolates all accesses to the registers of the interrupt controller. These functions are time-critical as they are often used inside an interrupt handler. Therefore they should either be declared as extern __inline__ or even better be implemented as macros. In both cases the C header file has to contain not only the declarations but also the implementations.
 
 **5. Interrupt handler**
 
-Extend the interrupt handlers *base_int_ctrl_top irq handler()* in *base_int_ctrl.c* with branches to the appropriate handlers depending on the value of the register irq_no. Implement these branches with a jump table (in ANSI C: array of function pointers). Provide functions *get_irq(...)* and *set_irq(...)* to read and write those tables during run time. These tables should be initialized with “dummy” functions during load time, i.e. before any program execution starts.
+Implement the top level interrupt handlers *student_irq_ctrl_top_handler()* with branches to the appropriate handlers depending on the value of the register irq_no. Implement these branches with a jump table (in ANSI C: array of function pointers). Provide functions *student_irq_ctrl_get(...)* and *student_irq_ctrl_set(...)* to read and write those tables during run time. These tables should be initialized with “dummy” functions during load time, i.e. before any program execution starts.
 
 **5. Software driven test of all components**
 

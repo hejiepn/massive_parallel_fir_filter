@@ -10,7 +10,7 @@ Objectives
 
 - logic synthesis and P&R
 
-  - use synthesis logfiles to identify (and fix) non synthesizable HDL  
+  - use synthesis log files to identify (and fix) non synthesizable HDL  
   - interpret timing reports and locate reported paths in the design  
 
 - netlist simulation
@@ -22,7 +22,7 @@ Objectives
 Preparation
 -----------
 
-* Explore the rvlab HDL design: Traverse the design hierarchy of rvlab from the top level test bench *system_tb* through the *fpga core* to your *student_rlight*. At leach level make yourself familiar with the instances instantiated and their major connections.
+* Explore the rvlab HDL design: Traverse the design hierarchy of rvlab from the top level test bench *system_tb* through *fpga core* and through *student* to your *rlight*. At leach level make yourself familiar with the instances instantiated and their major connections.
 
 * Read the tutorial :ref:`synthesis_tutorial`.
 
@@ -47,7 +47,7 @@ Deliverables_ below).
 
 The following command starts a simulation which uses the JTAG interface to upload your software into the design and executes it::
 
-  flow systb_minimal.sim_rtl_questa
+  flow systb_rlight.sim_rtl_questa
 
 
 **2. Logic synthesis and place & route**
@@ -87,7 +87,7 @@ All previous simulations only tested the functionality as described in HDL. Howe
 
 Run a netlist simulation using QuestaSim with the software developed in task 1 to generate the Deliverables_::
 
-  flow systb_minimal.sim_pnrtime_questa 
+  flow systb_rlight.sim_pnrtime_questa 
 
 
 Deliverables

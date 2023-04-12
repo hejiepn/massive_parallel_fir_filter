@@ -34,17 +34,20 @@ module student_rlight_tb;
 
     // write and read pattern register 2x:
 
-    bus.put_word(32'h00000000, 32'h000000FF);
     bus.get_word(32'h00000000, rdata);
-    $display("read pattern: 0x%08x", rdata);
-    
-    bus.wait_cycles(20);
+    $display("read RegA: 0x%08x", rdata);
 
-    bus.put_word(32'h00000000, 32'h000000AA);
+    bus.put_word(32'h00000000, 32'h12345678);
     bus.get_word(32'h00000000, rdata);
-    $display("read pattern: 0x%08x", rdata);
+    $display("read RegA: 0x%08x", rdata);
     
-    bus.wait_cycles(20);
+    bus.wait_cycles(2);
+
+    bus.put_word(32'h00000004, 32'hFFFFFF01);
+    bus.get_word(32'h00000004, rdata);
+    $display("read RegB: 0x%08x", rdata);
+    
+    bus.wait_cycles(10);
     
     // ...
 

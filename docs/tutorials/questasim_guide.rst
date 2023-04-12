@@ -14,7 +14,7 @@ Example: Running light from :ref:`ex1`
 
 *Using the flow*::
 
-    flow rlight_tb.sim_rtl_questa
+    flow student_rlight_tb.sim_rtl_questa
 
 
 *Manual*::

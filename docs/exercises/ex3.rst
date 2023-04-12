@@ -77,7 +77,7 @@ and the disassembled memory image (*sw.disasm*). This skill becomes very importa
 
 Start the simulation as follows::
 
-  flow systb_minimal.sim_rtl_questa
+  flow systb_rlight.sim_rtl_questa
 
 
 Deliverables
