@@ -1,0 +1,12 @@
+{signal: [
+  {name: 'clk',   wave: 'p.....'},
+
+  {name: 'addr', wave: 'x34x5x', data: ['adrA', 'adrB', 'adrC']},
+
+  {name: 're',    wave: '011010'},
+  {name: 'rdata', wave: 'x34x5x', data: ['rdA', 'rdB', 'rdC']},
+
+  {name: 'we',    wave: '0.....'},
+  {name: 'wdata', wave: 'x.....'},
+  {name: 'be',    wave: 'xxxxxx'},
+]}

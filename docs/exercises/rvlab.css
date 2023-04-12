@@ -1,0 +1,16 @@
+/* @theme rvlab */
+
+@import 'gaia';
+
+section {
+    padding-top: 35px;
+    padding-bottom: 0px;
+} 
+ul {
+    margin-top:    0px;
+    margin-bottom: 0px;
+}
+ol {
+    margin-top:    0px;
+    margin-bottom: 0px;
+}
