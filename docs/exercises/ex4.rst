@@ -40,7 +40,7 @@ offset  size  name     description
 
 Simulate and test by running::
 
-  flow systb_.sim_rtl_questa
+  flow systb_dma.sim_rtl_questa
 
 
 **2. Hardware implementation**
@@ -50,7 +50,7 @@ The module should use the maximum bandwidth available from the TL-UL interface, 
 
 **3. Software implementation**
 
-A sample implementation of the memset function is available in student_dma.c/h. The function memset_soft is a complete software implementation of memset, memset_hard uses the hardware implementation to fill a memory area. There are already stubs for memcpy_soft and memcpy_hard. Extend memcpy_soft to contain a complete software implementation of mem copy with the same functionality as your hardware implementation. Complete memcpy_hard so it invokes your hardware implementation.
+A sample implementation of the memset function is available in *rvlab/src/sw/dma/student_dma.c/h*. The function memset_soft is a complete software implementation of memset, memset_hard uses the hardware implementation to fill a memory area. There are already stubs for memcpy_soft and memcpy_hard. Extend memcpy_soft to contain a complete software implementation of mem copy with the same functionality as your hardware implementation. Complete memcpy_hard so it invokes your hardware implementation.
 
 **4. Test cases**
 

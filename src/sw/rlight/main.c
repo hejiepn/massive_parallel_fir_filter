@@ -1,15 +1,9 @@
 #include <stdio.h>
 #include "rvlab.h"
 
-#define RLIGHT_PATTERN   0x10000000
-#define RLIGHT_MODE      0x10000004
-#define RLIGHT_PRESCALER 0x10000008
-#define RLIGHT_OUTPUT    0x1000000c
+#define REGA   0x10000000
+#define REGB   0x10000004
 
-#define MODE_OFF 0
-#define MODE_ROTLEFT 1
-#define MODE_ROTRIGHT 2
-#define MODE_PINGPONG 3
 
 static void delay_cycles(int n_cycles) {
     REG32(RV_TIMER_CTRL(0)) = (1<<RV_TIMER_CTRL_ACTIVE0_LSB);
@@ -23,11 +17,14 @@ int main(void) {
 
     // Example:
 
-    REG32(RLIGHT_PATTERN) = 0b10101010;
-    delay_cycles(1000);
+    printf("REGA 0x%08x\n", REG32(REGA));
+    REG32(REGA) = 0x12345678;
+    printf("REGA 0x%08x\n", REG32(REGA));
+    delay_cycles(2);
 
-    REG32(RLIGHT_PATTERN) = 0b00010111;
-    delay_cycles(1000);
-
+    REG32(REGB) = 0xFFFFFF01;
+    printf("REGB 0x%08x\n", REG32(REGB));
+    delay_cycles(10);
+    
     return 0;
 }

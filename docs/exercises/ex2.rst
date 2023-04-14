@@ -22,7 +22,7 @@ Objectives
 Preparation
 -----------
 
-* Explore the rvlab HDL design: Traverse the design hierarchy of rvlab from the top level test bench *system_tb* through *fpga core* and through *student* to your *rlight*. At leach level make yourself familiar with the instances instantiated and their major connections.
+* Explore the rvlab HDL design: Traverse the design hierarchy of rvlab from the top level test bench *system_tb* through *fpga core* and through *student* to your *student_rlight*. At leach level make yourself familiar with the instances instantiated and their major connections.
 
 * Read the tutorial :ref:`synthesis_tutorial`.
 
@@ -41,7 +41,7 @@ Tasks
 
 Your design *student_rlight* is already instantiated in the rvlab SoC. So no changes to the HDL are required.
 
-The software template for this exercise is located in *rvlab/src/minimal/main.c*. 
+The software template for this exercise is located in *rvlab/src/rlight/main.c*. 
 Modify it to read and write all registers of your module at least once and test all modes of the running light with different parameters (see 
 Deliverables_ below).
 
