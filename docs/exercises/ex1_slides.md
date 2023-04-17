@@ -21,7 +21,7 @@ style: |
 
 ---
 # **RISC-V Lab**
-# Ex1: Introduction
+# Ex1: IntroductionVerilog Background
 ![](res/rlight_soft.svg)
 
 
@@ -129,19 +129,13 @@ always_ff @(posedge clk_i, negedge rst_ni) begin
   end // if (~rst_ni) else
 end 
 ```
-
 ---
 ## **Demo FSM**
-![bg right:70% 80%](res/ex1_demo_fsm_timing.svg)
-
----
-## **Demo FSM**
-![bg  vertical right:60% 98%](res/ex1_demo_fsm_timing.png)
+![bg  vertical right:60% 85%](res/ex1_demo_fsm.drawio.svg)
 
 ```verilog
 enum logic[1:0] {idle, swap, count} state;
-logic [7:0] led;
-logic [1:0] cnt;
+logic [7:0] led;  logic [1:0] cnt;
 always_ff @(posedge clk_i, negedge rst_ni) begin
   if (~rst_ni) begin
     state   <= idle;
@@ -169,13 +163,53 @@ always_ff @(posedge clk_i, negedge rst_ni) begin
             state <= idle;
           end
         end
-        default: begin
-          state <= idle;
-        end
+        default: begin state <= idle; end
       endcase;
   end // if (~rst_ni) else
 end 
 ```
+---
+## **Demo FSM**
+![bg  vertical right:60% 98%](res/ex1_demo_fsm_timing.png)
+
+```verilog
+enum logic[1:0] {idle, swap, count} state;
+logic [7:0] led;  logic [1:0] cnt;
+always_ff @(posedge clk_i, negedge rst_ni) begin
+  if (~rst_ni) begin
+    state   <= idle;
+    led     <= 8'b10101010;
+    cnt     <= '0;
+  end else begin
+      case (state)
+        idle: begin
+          if (regB[0] == 1'b1) begin
+            led   <= regA[15:8];
+            state <= swap;
+          end
+        end
+        swap: begin
+          led[7:4] <= led[3:0];
+          led[3:0] <= led[7:4];
+          cnt      <= 2'd2;
+          state    <= count;
+        end
+        count: begin
+          if (cnt != 0) begin
+            cnt <= cnt - 1;
+          end
+          else begin 
+            state <= idle;
+          end
+        end
+        default: begin state <= idle; end
+      endcase;
+  end // if (~rst_ni) else
+end 
+```
+---
+## **Demo FSM**
+![bg right:70% 80%](res/ex1_demo_fsm_timing.svg)
 
 ---
 ## **RTL Simulation with Questa Sim**
@@ -203,11 +237,11 @@ end
 2. Each group comes forward & registers
 3. Each group receives one account for the msc network
    user: rvlab[01-20] / password: 
-4. Walk to EN4141 / Door code: 
+4. Walk to EN414 / door code: 
    or 
    i) connect to TUBIT VPN
-   ii) log in using [wiki.x2go.org](wiki.x2go.org)
-   iii) X2GO server: msclab.msc.tu-berlin.de, desktop: XFCE
+   ii) log in using [wiki.x2go.org](wiki.x2go.org) on msclab.msc.tu-berlin.de
+   desktop: XFCE
 5. Change password immediately: `passwd`
 Detailed instructions for X2GO on ISIS page.
 
@@ -218,6 +252,8 @@ Detailed instructions for X2GO on ISIS page.
    `git clone https://git.tu-berlin.de/msc/rvlab`  
 3. Start with the 1st exercise sheet:
    `firefox /home/rvlab/docs/index.html`
+4. Update at the beginning of each exercise (Tue 14:00)
+   `cd rvlab; git pull`
 
 *(**No** support: If you want to run rvlab on your own machine see rvlab/README.rst.)*
 
