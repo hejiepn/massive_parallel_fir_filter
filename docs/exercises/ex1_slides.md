@@ -21,7 +21,7 @@ style: |
 
 ---
 # **RISC-V Lab**
-# Ex1: IntroductionVerilog Background
+# Ex1: Introduction
 ![](res/rlight_soft.svg)
 
 
