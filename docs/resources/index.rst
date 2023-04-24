@@ -5,7 +5,8 @@ Resources
 
 Xilinx Hardware & Design Tools
 ------------------------------
-
+- `7 Series Product Tables and Product Selection Guide (XMP101)`_ The last page contains links to the most important user guides (CLBs, rams, DSPs, IOs, ...)
+- `Vivado Design Suite 7 Series FPGA and Zynq-7000 SoC Libraries Guide UG953 (v2021.2) October 22, 2021`_ Instance templates for all library primitives
 - `UltraFast Design Methodology Timing Closure Quick Reference Guide (UG1292)`_
 - `Vivado Design Suite Tcl Command Reference Guide (UG835)`_
 - `Vivado Design Suite Properties Reference Guide (UG912)`_
@@ -49,6 +50,9 @@ The following projects are not integrated into rvlab but could be useful for stu
 - `verilog-ethernet <https://github.com/alexforencich/verilog-ethernet>`_
 - For HDMI output: `display_controller <https://github.com/projf/display_controller>`_
 
+
+.. _7 Series Product Tables and Product Selection Guide (XMP101): https://docs.xilinx.com/v/u/en-US/7-series-product-selection-guide
+.. _Vivado Design Suite 7 Series FPGA and Zynq-7000 SoC Libraries Guide UG953 (v2021.2) October 22, 2021: https://www.xilinx.com/content/dam/xilinx/support/documents/sw_manuals/xilinx2021_2/ug953-vivado-7series-libraries.pdf
 
 .. _UltraFast Design Methodology Timing Closure Quick Reference Guide (UG1292): https://www.xilinx.com/content/dam/xilinx/support/documents/sw_manuals/xilinx2022_1/ug1292-ultrafast-timing-closure-quick-reference.pdf
 .. _Vivado Design Suite Tcl Command Reference Guide (UG835): https://docs.xilinx.com/r/en-US/ug835-vivado-tcl-commands
