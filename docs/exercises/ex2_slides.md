@@ -35,9 +35,13 @@ style: |
 ---
 # **Xilinx Series 7 (condensed)**
 ## **Overview**
+![bg vertical right:50% 85%](res/ex2_x7_architecture.jpeg)
+*  common architecture for all 7 series
+* columns with
+    * IO
+    * slice / CLB
+    * Hard macros: DSP, BRAM, ...
 
-
-*from/overview: "7 Series FPGAs Data Sheet: Overview DS180 (v2.6.1) September 8, 2020"*
 
 ---
 ## **IO Tile**
@@ -62,7 +66,7 @@ T  I  O      IO
 Note: rvlab wrapper inverts T !
 ```
 * IBUFDS / OBUFDS (HDMI)
-* 
+
 *from/details: "7 Series FPGAs SelectIO Resources User Guide (UG471)"*
 
 ---
@@ -105,7 +109,7 @@ Questions
 ![bg vertical right:50% 60%](res/ex2_x7_bram.png)
 - synchronous read & write
 - true dual port
-- 1x 36kb or 2x 18kb
+- 1x 36kb or 2x 18k
 - aspect ratio configurable
 - cascade: 2x32kx1 => 64kx1
 - XC7A200T: 365 (13140 Kbit)
@@ -119,7 +123,7 @@ Questions
 ## **How to Use**
 1. automatic inference by synthesis (preferred) 
 
-2. if synthesis fails instantiate "primitive*"Vivado Design Suite 7 Series FPGA and Zynq-7000 SoC Libraries Guide UG953 (v2021.2) October 22, 2021"*" from library
+2. if synthesis fails instantiate "primitive" from library
  - DSP slices (esp. MAC, mul always works)
 
 3. instantiate "primitives" from library
@@ -163,7 +167,7 @@ endmodule
 Instance templates are in the: *"Vivado Design Suite 7 Series FPGA and Zynq-7000 SoC Libraries Guide UG953 (v2021.2) October 22, 2021"* (see Resources)
 
 ---
-## **Hardware O(n)**
+## **Hardware O(N)**
 +C, -C, +1, -1, +,-,*, /, <<, >>, |, &, ~, 1:N mux, M:N mux, sin,cos, >=, <=, ==
 
 O(k):
@@ -178,9 +182,48 @@ don't use:
 
 ---
 # **FPGA Design Flow**
+![bg right:73% 75%](res/ex2_vivado_flow.svg)
+
+---
+## **XDC (excerpt!)**
+
+```tcl
+# IO Placement
+set_property -dict { PACKAGE_PIN R4    IOSTANDARD LVCMOS33 } [get_ports { clk_100mhz_i }];
+# Clock input
+create_clock -add -name clk_100mhz -period 10.00 -waveform {0 5} [get_ports clk_100mhz_i]
+create_generated_clock -name sys_clk [get_pin clkmgr_i/mmcm_i/CLKOUT0]
+
+# JTAG via FT2232H
+set_property -dict ...
+...
+create_clock -add -name tck -period 20.00 -waveform {0 10} [get_ports jtag_tck_i]
+set_output_delay -clock tck 0.0 [get_ports "jtag_tdo_o"]
+set_input_delay -clock tck 10.0 [get_ports "jtag_tdi_i jtag_tms_i"]
+set_input_delay -clock tck 0.0 [get_ports "jtag_trst_ni"]
+
+# Inputs without timing constraints; the following commands remove the warnings:
+set_false_path -from [get_ports "jtag_trst_ni"]
+
+# Inter-clock paths: tck, sys_clk and their derived clocks are asynchronous from all others
+set_clock_groups -group [get_clocks tck] -asynchronous
+set_clock_groups -group [get_clocks clk] -asynchronous
+
+... (lots of IO placements)
+
+```
 
 
 ---
-# **Netlist simulation**
+# **Netlist simulation with Questa Sim**
+- Inputs
+  - verilog netlist of the design (from P&R)
+  - standard delay file (SDF) (from P&R)
+  - verilog models of FPGA primitives (LUT, FFs, BRAM, ...)
+  - (same as RTL simulation: test bench & tcl scripts)
+- Outputs
+  - value trace of all signals showing actual timing
+  - timing (setup / hold) warnings of the FPGA primitives
 
----
+`flow systb_rlight.sim_pnrtime_questa`
+
