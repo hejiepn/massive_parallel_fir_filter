@@ -17,3 +17,5 @@ Exercises are now separated from the project part. The :ref:`project` section ex
 Slides
 ------
 :download:`Exercise 1 Slides<ex1_slides.pdf>`
+
+:download:`Exercise 2 Slides<ex2_slides.pdf>`
