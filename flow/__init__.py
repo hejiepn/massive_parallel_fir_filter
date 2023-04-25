@@ -20,6 +20,7 @@ sw_dirs = [
     "minimal",
     "test_sim_ddr",
     "test_rvlab",
+    "test_irq",
     "rlight",
     "dma",
     "project",
