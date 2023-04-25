@@ -22,7 +22,7 @@ module student (
     default: '0
   };
 
-  assign irq_o         = '1;
+  assign irq_o         = '0;
   assign tl_host_o   = '{a_opcode: tlul_pkg::PutFullData, default: '0};
   assign tl_device_fast_o = '{d_opcode: tlul_pkg::AccessAck, default: '0};
 
