@@ -95,8 +95,11 @@ _start:
     
     jal hostio_init
     
-    
+    csrs mstatus, 0x8 // global interrupt enable
+
     jal main
+
+    csrc mstatus, 0x8 // global interrupt disable
 
     lui  t0,     %hi(hostio + 0x800)
     addi t0, t0, %lo(hostio + 0x800)
@@ -143,17 +146,13 @@ irq_entry:
 	sw         t4,0x6c(sp)
 	sw         t5,0x70(sp)
 	sw         t6,0x74(sp)
-	//csrrs      a1,mepc,zero
 	sw         a1,0x78(sp)
-	//csrrs      a0,mcause,zero
-	//csrrs      a2,mtval,zero
 	lw         t0,0x7c(sp)
 	
 	jal        irq_handler
 	
 # restore the saved registers before exiting IRQ
 	lw         t0,0x78(sp)
-	//csrrw      zero,mepc,t0
 	lw         t6,0x74(sp)
 	lw         t5,0x70(sp)
 	lw         t4,0x6c(sp)

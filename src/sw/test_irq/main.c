@@ -1,29 +1,42 @@
 #include <stdio.h>
 #include "rvlab.h"
 
+#define IRQ_EXTERNAL 11
+#define IRQ_TIMER 7
+
 void irq_handler(void) {
     fputs("I am interrupt\n", stdout);
-    REG32(RV_TIMER_INTR_STATE0(0)) = 1; // clears the timer interrupt
+    // clears the timer interrupt
+    REG32(RV_TIMER_INTR_STATE0(0)) = 1; 
 	REG32(RV_TIMER_INTR_ENABLE0(0)) = 0;
 }
 
 static void run_timer_irq(int n_cycles) {
-    REG32(RV_TIMER_CTRL(0)) = (1<<RV_TIMER_CTRL_ACTIVE0_LSB);
+    // set current timer value
     REG32(RV_TIMER_TIMER_V_LOWER0(0)) = 0;
     REG32(RV_TIMER_TIMER_V_UPPER0(0)) = 0;
+    // set timer value to compare current value against
     REG32(RV_TIMER_COMPARE_LOWER0_0(0)) = n_cycles;
     REG32(RV_TIMER_COMPARE_UPPER0_0(0)) = 0;
+	// turn the timer on
+    REG32(RV_TIMER_CTRL(0)) = (1<<RV_TIMER_CTRL_ACTIVE0_LSB);
+}
+
+inline void irq_enable(int mask) {
+	asm volatile ("csrs mie, %0":: "r" (mask));
+}
+
+inline void irq_disable(int mask) {
+	asm volatile ("csrc mie, %0":: "r" (mask));
 }
 
 int main(void) {
-	asm volatile ("csrs mie, %0":: "r" (0x800)); // enables external interrupts
-	asm volatile ("csrs mie, %0":: "r" (0x80)); // enables timer interrupts
-	asm volatile ("csrs mstatus, 0x8");
-	
+	irq_enable((1<<IRQ_TIMER) | (1<<IRQ_EXTERNAL));	
 
     int i = 1234;
     int counter = 0;
     while(counter < 5) {
+        // enables the timer interrupt
         REG32(RV_TIMER_INTR_ENABLE0(0)) = 1;
         run_timer_irq(5);
     	counter++;
