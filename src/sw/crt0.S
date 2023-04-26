@@ -6,15 +6,15 @@
     nop
     nop
     nop
-    nop
-    nop
-    nop
-    nop
-    nop
-    nop
-    nop
-    nop  
-    jal x0, irq_entry
+    nop #3 irq_software_i
+    nop #4
+    nop #5
+    nop #6
+    nop #7 irq_timer_i
+    nop #8
+    nop #9
+    nop #10
+    jal x0, irq_entry #11 irq_external_i
     nop
     nop
     nop
