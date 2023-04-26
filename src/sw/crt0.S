@@ -3,50 +3,39 @@
     .option norvc
     .org 0
     
-    nop
-    nop
-    nop
-    nop #3 irq_software_i
-    nop #4
-    nop #5
-    nop #6
-    nop #7 irq_timer_i
-    nop #8
-    nop #9
-    nop #10
-    jal x0, irq_entry #11 irq_external_i
-    nop
-    nop
-    nop
-    nop
-    nop
-    nop
-    nop
-    nop
-    nop
-    nop
-    nop
-    nop
-    nop
-    nop
-    nop
-    nop
-    nop
-    nop
-    nop
-    jal x0, irq_exception
-
-    // reset vector
-    .org 0x80
-    jal x0, _start
-
-    // illegal instruction exception
-    .org 0x84
-    jal x0, irq_exception
-
-    // ecall handler
-    .org 0x88
-    jal x0, irq_exception
+    jal x0, irq_exception   //  0: exceptions (illegal instruction, ecall, instruction access fault, ...)
+    nop                     //  1
+    nop                     //  2
+    nop                     //  3: irq_software_i
+    nop                     //  4
+    nop                     //  5
+    jal x0, irq_exception   //  6
+    jal x0, irq_entry       //  7: irq_timer_i
+    nop                     //  8
+    nop                     //  9
+    jal x0, irq_exception   // 10
+    jal x0, irq_entry       // 11: irq_external_i
+    nop                     // 12
+    nop                     // 13
+    nop                     // 14
+    nop                     // 15
+    nop                     // 16
+    nop                     // 17
+    nop                     // 18
+    nop                     // 19
+    nop                     // 20
+    nop                     // 21
+    nop                     // 22
+    nop                     // 23
+    nop                     // 24
+    nop                     // 25
+    nop                     // 26
+    nop                     // 27
+    nop                     // 28
+    nop                     // 29
+    nop                     // 30
+    jal x0, irq_exception   // 31
+    jal x0, _start          // 32: reset vector
 
     .option pop
 
@@ -103,9 +92,9 @@ _start:
 
     lui  t0,     %hi(hostio + 0x800)
     addi t0, t0, %lo(hostio + 0x800)
-    sw a0, 4(t0) # _hostid_start.retval = return value of main
+    sw a0, 4(t0) // _hostid_start.retval = return value of main
     addi t1, zero, 1
-    sw t1, 0(t0) # _hostid_start.flags = 1;
+    sw t1, 0(t0) // _hostid_start.flags = 1;
 
 
 irq_exception:
@@ -151,7 +140,7 @@ irq_entry:
 	
 	jal        irq_handler
 	
-# restore the saved registers before exiting IRQ
+    // restore the saved registers before exiting IRQ
 	lw         t0,0x78(sp)
 	lw         t6,0x74(sp)
 	lw         t5,0x70(sp)
