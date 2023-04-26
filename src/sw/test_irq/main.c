@@ -1,9 +1,6 @@
 #include <stdio.h>
 #include "rvlab.h"
 
-#define IRQ_EXTERNAL 11
-#define IRQ_TIMER 7
-
 void irq_handler(void) {
     fputs("I am interrupt\n", stdout);
     // clears the timer interrupt
@@ -20,14 +17,6 @@ static void run_timer_irq(int n_cycles) {
     REG32(RV_TIMER_COMPARE_UPPER0_0(0)) = 0;
 	// turn the timer on
     REG32(RV_TIMER_CTRL(0)) = (1<<RV_TIMER_CTRL_ACTIVE0_LSB);
-}
-
-inline void irq_enable(int mask) {
-	asm volatile ("csrs mie, %0":: "r" (mask));
-}
-
-inline void irq_disable(int mask) {
-	asm volatile ("csrc mie, %0":: "r" (mask));
 }
 
 int main(void) {

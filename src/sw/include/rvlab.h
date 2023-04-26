@@ -1,6 +1,9 @@
 #ifndef _RVLAB_H
 #define _RVLAB_H
 
+#define IRQ_TIMER 7
+#define IRQ_EXTERNAL 11
+
 #define DDR3_BASE_ADDR 0x80000000
 #define DDR3_SIZE      0x20000000
 
