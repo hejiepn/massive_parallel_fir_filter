@@ -18,6 +18,15 @@
 #define write_csr(reg, val) ({ \
   asm volatile ("csrw " reg ", %0" :: "rK"(val)); })
 
+
+inline void irq_enable(int mask) {
+	asm volatile ("csrs mie, %0":: "r" (mask));
+}
+
+inline void irq_disable(int mask) {
+	asm volatile ("csrc mie, %0":: "r" (mask));
+}
+
 /*
 #define MCYCLE (0xB00)
 
