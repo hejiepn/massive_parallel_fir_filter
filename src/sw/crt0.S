@@ -3,39 +3,39 @@
     .option norvc
     .org 0
     
-    jal x0, irq_error       //  0: Exceptions (illegal instruction, ecall, instruction access fault, ...)
-    nop                     //  1
-    nop                     //  2
-    nop                     //  3
-    nop                     //  4
-    nop                     //  5
-    jal x0, irq_error       //  6
-    jal x0, irq_entry       //  7: Machine timer interrupt (irq_timer_i)
-    nop                     //  8
-    nop                     //  9
-    jal x0, irq_error       // 10
-    jal x0, irq_entry       // 11: Machine external interrupt (irq_external_i)
-    nop                     // 12
-    nop                     // 13
-    nop                     // 14
-    nop                     // 15
-    nop                     // 16
-    nop                     // 17
-    nop                     // 18
-    nop                     // 19
-    nop                     // 20
-    nop                     // 21
-    nop                     // 22
-    nop                     // 23
-    nop                     // 24
-    nop                     // 25
-    nop                     // 26
-    nop                     // 27
-    nop                     // 28
-    nop                     // 29
-    nop                     // 30
-    jal x0, irq_error       // 31
-    jal x0, _start          // 32: Reset vector / global entry point
+    j irq_error     //  0: Exceptions (illegal instruction, ecall, instruction access fault, ...)
+    nop             //  1
+    nop             //  2
+    nop             //  3
+    nop             //  4
+    nop             //  5
+    j irq_error     //  6
+    j irq_entry     //  7: Machine timer interrupt (irq_timer_i)
+    nop             //  8
+    nop             //  9
+    j irq_error     // 10
+    j irq_entry     // 11: Machine external interrupt (irq_external_i)
+    nop             // 12
+    nop             // 13
+    nop             // 14
+    nop             // 15
+    nop             // 16
+    nop             // 17
+    nop             // 18
+    nop             // 19
+    nop             // 20
+    nop             // 21
+    nop             // 22
+    nop             // 23
+    nop             // 24
+    nop             // 25
+    nop             // 26
+    nop             // 27
+    nop             // 28
+    nop             // 29
+    nop             // 30
+    j irq_error     // 31
+    j _start        // 32: Reset vector / global entry point
 
     .option pop
 
