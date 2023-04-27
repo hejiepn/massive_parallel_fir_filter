@@ -3,18 +3,18 @@
     .option norvc
     .org 0
     
-    jal x0, irq_exception   //  0: exceptions (illegal instruction, ecall, instruction access fault, ...)
+    jal x0, irq_error       //  0: Exceptions (illegal instruction, ecall, instruction access fault, ...)
     nop                     //  1
     nop                     //  2
-    nop                     //  3: irq_software_i
+    nop                     //  3
     nop                     //  4
     nop                     //  5
-    jal x0, irq_exception   //  6
-    jal x0, irq_entry       //  7: irq_timer_i
+    jal x0, irq_error       //  6
+    jal x0, irq_entry       //  7: Machine timer interrupt (irq_timer_i)
     nop                     //  8
     nop                     //  9
-    jal x0, irq_exception   // 10
-    jal x0, irq_entry       // 11: irq_external_i
+    jal x0, irq_error       // 10
+    jal x0, irq_entry       // 11: Machine external interrupt (irq_external_i)
     nop                     // 12
     nop                     // 13
     nop                     // 14
@@ -34,16 +34,17 @@
     nop                     // 28
     nop                     // 29
     nop                     // 30
-    jal x0, irq_exception   // 31
-    jal x0, _start          // 32: reset vector
+    jal x0, irq_error       // 31
+    jal x0, _start          // 32: Reset vector / global entry point
 
     .option pop
 
     .global _start
 _start:
 
+    //  x0 == zero
     li  x1, 0
-    // x2 == sp
+    //  x2 == sp
     li  x3, 0
     li  x4, 0
     li  x5, 0
@@ -97,7 +98,7 @@ _start:
     sw t1, 0(t0) // _hostid_start.flags = 1;
 
 
-irq_exception:
+irq_error:
 end_loop:
     j end_loop
 
@@ -108,8 +109,9 @@ irq_entry:
 
     // save registers to irq stack
     addi sp,sp,-0x80
+    //  x0 == zero
 	sw  x1,  0x00(sp)
-    // x2 == sp
+    //  x2 == sp
 	sw  x3,  0x04(sp)
 	sw  x4,  0x08(sp)
 	sw  x5,  0x0c(sp)
@@ -143,8 +145,9 @@ irq_entry:
 	jal irq_handler
 	
     // restore registers from irq stack
-	lw  x1,  0x00(sp)
-    // x2 == sp
+	//  x0 == zero
+    lw  x1,  0x00(sp)
+    //  x2 == sp
     lw  x3,  0x04(sp)
     lw  x4,  0x08(sp)
     lw  x5,  0x0c(sp)
