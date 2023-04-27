@@ -73,7 +73,7 @@ Write a HAL (*student_irq_ctrl.c/h*) which isolates all accesses to the register
 
 **5. Interrupt handler**
 
-Implement the top level interrupt handlers *student_irq_ctrl_top_handler()* with branches to the appropriate handlers depending on the value of the register irq_no. Implement these branches with a jump table (in ANSI C: array of function pointers). Provide functions *student_irq_ctrl_get(...)* and *student_irq_ctrl_set(...)* to read and write those tables during run time. These tables should be initialized with “dummy” functions during load time, i.e. before any program execution starts.
+Implement the top level interrupt handlers *student_irq_ctrl_top_handler()* with branches to the appropriate handlers depending on the value of the register irq_no. Implement these branches with a jump table (in ANSI C: array of function pointers). Provide functions *student_irq_ctrl_get(...)* and *student_irq_ctrl_set(...)* to read and write those tables during run time. These tables should be initialized with “dummy” functions during load time, i.e. before any program execution starts. Refer to *rvlab/src/sw/test_irq/main.c* for a simple example of an irq handler.
 
 **5. Software driven test of all components**
 
