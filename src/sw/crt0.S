@@ -75,11 +75,12 @@ _start:
     li  x30,0
     li  x31,0
     
-    lui  gp,     %hi(_irq_stack_top)
-    addi gp, gp, %lo(_irq_stack_top)
-	csrrw      zero,mscratch,gp
-	li gp,0
+    // write irq thread stack pointer to mscratch CSR
+    lui sp,      %hi(_irq_stack_top)
+    addi sp, sp, %lo(_irq_stack_top)
+	csrrw zero, mscratch, sp
 
+    // initialize main thread stack pointer
     lui  sp,     %hi(_main_stack_top)
     addi sp, sp, %lo(_main_stack_top)
     
