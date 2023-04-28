@@ -32,7 +32,7 @@ set_false_path -from [get_ports "jtag_trst_ni"]
 set_clock_groups -group [get_clocks tck] -asynchronous
 
 # sys_clk and derived clocks are asynchronous from all others
-set_clock_groups -group [get_clocks clk] -asynchronous
+set_clock_groups -group [get_clocks sys_clk] -asynchronous
 
 # Basic user I/O
 # --------------

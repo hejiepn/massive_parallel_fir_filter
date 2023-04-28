@@ -10,6 +10,7 @@ Xilinx Hardware & Design Tools
 - `UltraFast Design Methodology Timing Closure Quick Reference Guide (UG1292)`_
 - `Vivado Design Suite Tcl Command Reference Guide (UG835)`_
 - `Vivado Design Suite Properties Reference Guide (UG912)`_
+- `Vivado Design Suite User Guide: Synthesis (UG901) <https://docs.xilinx.com/r/en-US/ug901-vivado-synthesis>`_
 
 Digilent Nexys Video FPGA Board:
 
