@@ -19,6 +19,7 @@ Digilent Nexys Video FPGA Board:
 RISC-V System
 -------------
 
+- `RISC-V card <https://github.com/jameslzhu/riscv-card>`_
 - `RISC-V Instruction Set Manual Vol. I: Unprivileged ISA <https://github.com/riscv/riscv-isa-manual/releases/download/Ratified-IMAFDQC/riscv-spec-20191213.pdf>`_
 - `RISC-V Instruction Set Manual Vol. II: Privileged ISA <https://github.com/riscv/riscv-isa-manual/releases/download/Priv-v1.12/riscv-privileged-20211203.pdf>`_
 - `TileLink Spec`_ (:download:`local PDF copy<res/tilelink-spec-1.8.0.pdf>`)
@@ -27,7 +28,6 @@ RISC-V System
 - OpenTitan's `Crossbar Generation tool manual <https://opentitan.org/book/util/tlgen/index.html>`_ (differs in details from the version used in rvlab!)
 
 - `Ibex Documentation <https://ibex-core.readthedocs.io/en/latest/index.html>`_
-- `Ibex Github page <https://github.com/lowRISC/ibex>`_
 
 SystemVerilog
 -------------
