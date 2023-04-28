@@ -5,7 +5,7 @@ SECTIONS
 {
   . = 0x00000000;
 
-  .text.boot : { *(.text.boot) } 
+  .text.boot : { *(.text.boot) }
 
   . = 0x400;
   .text.lib : { *libc.a:*(.text .text.*) }
