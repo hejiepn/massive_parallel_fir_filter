@@ -6,11 +6,11 @@ Resources
 Xilinx Hardware & Design Tools
 ------------------------------
 - `7 Series Product Tables and Product Selection Guide (XMP101)`_ The last page contains links to the most important user guides (CLBs, rams, DSPs, IOs, ...)
+- `Vivado Design Suite User Guide: Synthesis (UG901) <https://docs.xilinx.com/r/en-US/ug901-vivado-synthesis>`_ HDL templates for inferring block rams (inferring as (simpler) alternative to instantiate library primitives). Only works for Vivado.
 - `Vivado Design Suite 7 Series FPGA and Zynq-7000 SoC Libraries Guide UG953 (v2021.2) October 22, 2021`_ Instance templates for all library primitives
 - `UltraFast Design Methodology Timing Closure Quick Reference Guide (UG1292)`_
 - `Vivado Design Suite Tcl Command Reference Guide (UG835)`_
 - `Vivado Design Suite Properties Reference Guide (UG912)`_
-- `Vivado Design Suite User Guide: Synthesis (UG901) <https://docs.xilinx.com/r/en-US/ug901-vivado-synthesis>`_
 
 Digilent Nexys Video FPGA Board:
 
@@ -20,7 +20,7 @@ Digilent Nexys Video FPGA Board:
 RISC-V System
 -------------
 
-- `RISC-V card <https://github.com/jameslzhu/riscv-card>`_
+- `RISC-V Reference card <https://github.com/jameslzhu/riscv-card>`_
 - `RISC-V Instruction Set Manual Vol. I: Unprivileged ISA <https://github.com/riscv/riscv-isa-manual/releases/download/Ratified-IMAFDQC/riscv-spec-20191213.pdf>`_
 - `RISC-V Instruction Set Manual Vol. II: Privileged ISA <https://github.com/riscv/riscv-isa-manual/releases/download/Priv-v1.12/riscv-privileged-20211203.pdf>`_
 - `TileLink Spec`_ (:download:`local PDF copy<res/tilelink-spec-1.8.0.pdf>`)

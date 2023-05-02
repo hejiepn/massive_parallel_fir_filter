@@ -23,9 +23,11 @@ Objectives
 
 Preparation
 -----------
-
+* Read the :ref:`Design Reference` to make yourself familiar with the rvlab design.
+* Read the :ref:`software` tutorial.
+* Read the "RISC-V reference card" (skipping sections RV32A, RV32F, RV32C) linked on the :ref:`resources` page.
 * Study the flow for centralized register definitions in a hard/software co-design as described in the OpenTitan Reggen Manual linked on the :ref:`resources` page. 
-* Read the chapter :ref:`Design Reference` to make yourself familiar with the rvlab design.
+
 
 Tasks
 -----
