@@ -30,8 +30,8 @@ style: |
 2. IBEX CPU
 3. SW structure & flow
 4. Register Tool
-5. HAL Drivers
-6. ANSI-C Traps & Pitfalls
+5. HAL
+6. ANSI-C 4 HW
 
 ---
 # **RISC(-V): Principles**
@@ -85,11 +85,11 @@ Parts of "Privileged ISA" used in rvlab
 # **SW structure**
 ![bg vertical right:50% 100%](res/soft_minimal.svg)
 * crt0.S: startup code in ASM
-  creates environment for C 
-* baselib
-  * clib
-  * hostio:
-    stdio <-> mem <-> JTAG  
+  creates environment for C
+  - sets irq/trap handlers
+  - sets stack pointers
+* baselib / clib
+  hostio: stdio <-> mem <-> JTAG  
 * Hardware Abstraction Layer (HAL)
 * application
 ---
@@ -267,7 +267,6 @@ dir = (shiftcfg >> REGDEMO_SHIFTCFG_DIR_LSB) &
 amt = (shiftcfg >> REGDEMO_SHIFTCFG_AMT_LSB) &
       REGDEMO_SHIFTCFG_AMT_MASK;
 ```
-
 ---
 # **HAL Drivers**
 * Goal: Maximal *"information hiding"* (implementation details of your HW) for maximum *orthogonality*:
@@ -294,7 +293,7 @@ unsigend int  ll_get_pattern() ;
 **Improve !**
 
 ---
-# ANSI C for HW
+# **ANSI C for HW**
 
 ```C
 // absolute values in enums

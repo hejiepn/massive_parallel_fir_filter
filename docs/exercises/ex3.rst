@@ -92,7 +92,7 @@ Wave views should be zoomed in as much as possible to only show the sections spe
 **1. Questions**
   #. to 4: What is the highest speed of the running light your software can handle ?
   #. to 4: How many clock cycles does your application require for a complete pass of its main loop?
-  #. to 4: How many clock cycles after the rising edge of the nres is the stack pointer of the IRQ initialized?
+  #. to 4: How many clock cycles after the 1st instruction in ctrt0.S is the stack pointer of the IRQ initialized?
 
 **2. Deliverables of task 4**
   #. the register definitions of your running light (generated HTML)
