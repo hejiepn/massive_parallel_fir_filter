@@ -28,7 +28,7 @@ module student_dma (
     READ_DESC_SEND,
     READ_DESC_RECV,
     MEMSET_WRITING, // ready to try to write next thing
-    MEMSET_WAITING // still trying to send next thing
+    MEMSET_WAIT_RESP // still trying to send next thing
   } state_dma_t;
   
   state_dma_t current_state;
@@ -45,6 +45,7 @@ typedef enum logic [2:0] {
   logic [31:0] src_adr;
   logic [31:0] dst_adr;
   logic [31:0] length;
+  logic [31:0] length_recv;
   logic [31:0] offset;
   logic cmd;
   logic still_sending;
@@ -81,11 +82,11 @@ typedef enum logic [2:0] {
     			next_state = MEMSET_WRITING;
 		end
 		MEMSET_WRITING: begin
-			next_state = length > 0 ? MEMSET_WAITING : IDLE;
+			if (length == 0) next_state = MEMSET_WAIT_RESP;
+			if (length_recv == 0 && length == 0) next_state = IDLE;
 		end
-		MEMSET_WAITING: begin
-			if (write_done) next_state = MEMSET_WRITING;
-			if (write_done && (length == 0)) next_state = IDLE;
+		MEMSET_WAIT_RESP: begin
+			if (length_recv == 0) next_state = IDLE;
 		end
 		default: begin
 			$display("dma fsm default case");
@@ -108,6 +109,7 @@ typedef enum logic [2:0] {
       cmd <= '0;
       now_dadr <= '0;
       length <= '0;
+      length_recv <= '0;
     end else begin
       	  if (reg2hw.cmd.qe) cmd <= reg2hw.cmd.q;
       	  
@@ -157,8 +159,10 @@ typedef enum logic [2:0] {
 					desc_response_received <= '1;
     				if (offset == 0)
     					operation <= tl_host_i.d_data;
-    				if (offset == 4)
+    				if (offset == 4) begin
     					length <= tl_host_i.d_data;
+    					length_recv <= tl_host_i.d_data;
+    				end
     				if (offset == 8)
     					src_adr <= tl_host_i.d_data;
     				if (offset == 12) begin
@@ -172,7 +176,6 @@ typedef enum logic [2:0] {
 			
     		MEMSET_WRITING: begin
     			status <= STATUS_MEMSET_BUSY;
-				if (tl_host_i.a_ready) begin
 					tl_host_o <= '{a_opcode: tlul_pkg::PutFullData, default: '0};
 					tl_host_o.a_valid <= '1;
 					tl_host_o.a_size <= 2; // Request size (requested size is 2^a_size, thus 0 = byte, 1 = 16b, 2 = 32b, 3 = 64b, etc)
@@ -181,15 +184,19 @@ typedef enum logic [2:0] {
 					tl_host_o.a_mask <= '1; // mask not needed here
 					tl_host_o.a_data <= src_adr;
 					tl_host_o.d_ready <= '1;
+				if (tl_host_i.a_ready) begin
+    				dst_adr <= dst_adr + 4;
+    				length <= length - 4;
+				end
+				if (tl_host_i.d_valid) begin
+					length_recv <= length_recv - 4;
 				end
     		end
-    		MEMSET_WAITING: begin
+    		MEMSET_WAIT_RESP: begin
     			status <= STATUS_MEMSET_BUSY;
-    			if(tl_host_i.d_valid == 1) begin
-    				write_done <= 1;
-    				length <= length - 4;
-    				dst_adr <= dst_adr + 4;
-    			end
+				if (tl_host_i.d_valid) begin
+					length_recv <= length_recv - 4;
+				end
     		end
     		default: begin //same as IDLE
     			status <= STATUS_IDLE;

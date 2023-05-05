@@ -31,17 +31,32 @@ void memcpy_hard(void *dest, void *src, unsigned int length);
 
 void memcpy_soft(void *dest, void *src, unsigned int length);
 
-int buf[16];
-int main(void) {
-	for (int i = 0; i < 16; i++) {
+int buf[18];
+
+void memtest_setup() {
+	for (int i = 0; i < 18; i++) {
 		buf[i] = 0;
 	}
-    
-	memset_hard(&buf, 55, 16);
-	//memset_soft(&buf, 55, 16);
-    for (int i = 0; i < 5; i++) {
-    	printf("%u\n", buf[i]);
-    }
+	buf[0] = 0xcafe;
+	buf[17] = 0xbeef;
+}
 
-    return 0;
+int memset_test() {
+	int return_value = 0;
+	memset_hard(buf+1, 55, 16);
+	for (int i = 0; i < 18; i++) {
+		printf("%x ", buf[i]);
+	}
+	if((buf[0] != 0xcafe) || (buf[17] != 0xbeef)) {
+		printf("\nMemset test failed");
+		return_value = 1;
+	}
+	printf("\n");
+	return return_value;
+}
+int main(void) {
+	
+	memtest_setup();
+	
+    return memset_test();
 }
