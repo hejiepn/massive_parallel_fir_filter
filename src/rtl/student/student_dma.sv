@@ -35,7 +35,13 @@ module student_dma (
   state_dma_t next_state;
 
   logic [31:0] now_dadr;
-  logic [1:0] status;
+  
+typedef enum logic [2:0] {
+    STATUS_IDLE = 0,
+    STATUS_READING_DESC = 1,
+    STATUS_MEMSET_BUSY = 2
+  } dma_status_t;
+  dma_status_t status;
   logic [31:0] src_adr;
   logic [31:0] dst_adr;
   logic [31:0] length;
@@ -44,7 +50,7 @@ module student_dma (
   logic still_sending;
   logic read_desc;
   logic do_operation;
-  logic set_or_copy;
+  logic operation;
   logic desc_response_received;
   logic write_done;
 
@@ -93,23 +99,21 @@ module student_dma (
   assign hw2reg.length.d = length;
   assign hw2reg.src_adr.d = src_adr;
   assign hw2reg.dst_adr.d = dst_adr;
+  
+  assign read_desc = reg2hw.now_dadr.qe;
   always_ff @(posedge clk_i, negedge rst_ni) begin
     if (~rst_ni) begin
-      status <= IDLE;
       src_adr <= '0;
       dst_adr <= '0;
       cmd <= '0;
       now_dadr <= '0;
       length <= '0;
-      read_desc <= 0;
     end else begin
-    	  read_desc <= 0;
       	  if (reg2hw.cmd.qe) cmd <= reg2hw.cmd.q;
       	  
       if (current_state == IDLE) begin
       	  if(reg2hw.now_dadr.qe == 1) begin
       	  	  now_dadr <= reg2hw.now_dadr.q;
-      	  	  read_desc <= reg2hw.now_dadr.qe;
       	  end
       end
     end
@@ -123,16 +127,18 @@ module student_dma (
     	tl_host_o <= '{a_opcode: tlul_pkg::PutFullData, default: '0};
 
     	do_operation <= '0;
-    	set_or_copy <= '0;
+    	operation <= '0;
     	desc_response_received <= '0;
     	write_done <= '0;
+    	status <= STATUS_IDLE;
     end else begin
 		do_operation <= '0;
 		tl_host_o.a_valid <= '0;
 		desc_response_received <= '0;
 		write_done <= '0;
-    	case(current_state)
+    	case(next_state)
 			READ_DESC_SEND: begin
+    			status <= STATUS_READING_DESC;
 				if (tl_host_i.a_ready) begin
 					tl_host_o <= '{a_opcode: tlul_pkg::Get, default: '0};
 					tl_host_o.a_valid <= '1;
@@ -146,10 +152,11 @@ module student_dma (
     			end
 			end
 			READ_DESC_RECV: begin
+    			status <= STATUS_READING_DESC;
     			if(tl_host_i.d_valid == 1) begin
 					desc_response_received <= '1;
     				if (offset == 0)
-    					set_or_copy <= tl_host_i.d_data;
+    					operation <= tl_host_i.d_data;
     				if (offset == 4)
     					length <= tl_host_i.d_data;
     				if (offset == 8)
@@ -164,6 +171,7 @@ module student_dma (
 			end
 			
     		MEMSET_WRITING: begin
+    			status <= STATUS_MEMSET_BUSY;
 				if (tl_host_i.a_ready) begin
 					tl_host_o <= '{a_opcode: tlul_pkg::PutFullData, default: '0};
 					tl_host_o.a_valid <= '1;
@@ -176,6 +184,7 @@ module student_dma (
 				end
     		end
     		MEMSET_WAITING: begin
+    			status <= STATUS_MEMSET_BUSY;
     			if(tl_host_i.d_valid == 1) begin
     				write_done <= 1;
     				length <= length - 4;
@@ -183,6 +192,7 @@ module student_dma (
     			end
     		end
     		default: begin //same as IDLE
+    			status <= STATUS_IDLE;
     			tl_host_o <= '{a_opcode: tlul_pkg::PutFullData, default: '0};
     			tl_host_o.d_ready <= '1;
     			offset <= '0;
