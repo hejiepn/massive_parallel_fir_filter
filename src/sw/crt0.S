@@ -2,7 +2,7 @@
     .option push
     .option norvc
     .org 0
-    
+
     j irq_error     //  0: Exceptions (illegal instruction, ecall, instruction access fault, ...)
     nop             //  1
     nop             //  2
@@ -74,18 +74,18 @@ _start:
     li  x29,0
     li  x30,0
     li  x31,0
-    
+
     // write irq thread stack pointer to mscratch CSR
     lui sp,      %hi(_irq_stack_top)
     addi sp, sp, %lo(_irq_stack_top)
-	csrrw zero, mscratch, sp
+    csrrw zero, mscratch, sp
 
     // initialize main thread stack pointer
     lui  sp,     %hi(_main_stack_top)
     addi sp, sp, %lo(_main_stack_top)
-    
+
     jal hostio_init
-    
+
     csrs mstatus, 0x8 // global interrupt enable
 
     jal main
@@ -106,47 +106,47 @@ end_loop:
 
 irq_entry:
     // swap main thread sp with irq sp
-	csrrw sp,mscratch,sp
+    csrrw sp,mscratch,sp
 
     // save registers to irq stack
     addi sp,sp,-0x80
     //  x0 == zero
-	sw  x1,  0x00(sp)
+    sw  x1,  0x00(sp)
     //  x2 == sp
-	sw  x3,  0x04(sp)
-	sw  x4,  0x08(sp)
-	sw  x5,  0x0c(sp)
-	sw  x6,  0x10(sp)
-	sw  x7,  0x14(sp)
-	sw  x8,  0x18(sp)
-	sw  x9,  0x1c(sp)
-	sw  x10, 0x20(sp)
-	sw  x11, 0x24(sp)
-	sw  x12, 0x28(sp)
-	sw  x13, 0x2c(sp)
-	sw  x14, 0x30(sp)
-	sw  x15, 0x34(sp)
-	sw  x16, 0x38(sp)
-	sw  x17, 0x3c(sp)
-	sw  x18, 0x40(sp)
-	sw  x19, 0x44(sp)
-	sw  x20, 0x48(sp)
-	sw  x21, 0x4c(sp)
-	sw  x22, 0x50(sp)
-	sw  x23, 0x54(sp)
-	sw  x24, 0x58(sp)
-	sw  x25, 0x5c(sp)
-	sw  x26, 0x60(sp)
-	sw  x27, 0x64(sp)
-	sw  x28, 0x68(sp)
-	sw  x29, 0x6c(sp)
-	sw  x30, 0x70(sp)
-	sw  x31, 0x74(sp)
-	
-	jal irq_handler
-	
+    sw  x3,  0x04(sp)
+    sw  x4,  0x08(sp)
+    sw  x5,  0x0c(sp)
+    sw  x6,  0x10(sp)
+    sw  x7,  0x14(sp)
+    sw  x8,  0x18(sp)
+    sw  x9,  0x1c(sp)
+    sw  x10, 0x20(sp)
+    sw  x11, 0x24(sp)
+    sw  x12, 0x28(sp)
+    sw  x13, 0x2c(sp)
+    sw  x14, 0x30(sp)
+    sw  x15, 0x34(sp)
+    sw  x16, 0x38(sp)
+    sw  x17, 0x3c(sp)
+    sw  x18, 0x40(sp)
+    sw  x19, 0x44(sp)
+    sw  x20, 0x48(sp)
+    sw  x21, 0x4c(sp)
+    sw  x22, 0x50(sp)
+    sw  x23, 0x54(sp)
+    sw  x24, 0x58(sp)
+    sw  x25, 0x5c(sp)
+    sw  x26, 0x60(sp)
+    sw  x27, 0x64(sp)
+    sw  x28, 0x68(sp)
+    sw  x29, 0x6c(sp)
+    sw  x30, 0x70(sp)
+    sw  x31, 0x74(sp)
+
+    jal irq_handler
+
     // restore registers from irq stack
-	//  x0 == zero
+    //  x0 == zero
     lw  x1,  0x00(sp)
     //  x2 == sp
     lw  x3,  0x04(sp)
@@ -178,11 +178,10 @@ irq_entry:
     lw  x29, 0x6c(sp)
     lw  x30, 0x70(sp)
     lw  x31, 0x74(sp)
-	addi sp,sp, 0x80
-	
+    addi sp,sp, 0x80
+
     // swap main thread sp with irq sp
     csrrw sp,mscratch,sp
 
     // return to main thread
-	mret
-	
+    mret

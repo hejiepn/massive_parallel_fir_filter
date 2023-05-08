@@ -23,8 +23,6 @@ module student (
   };
 
   assign irq_o         = '0;
-  assign tl_host_o   = '{a_opcode: tlul_pkg::PutFullData, default: '0};
-  assign tl_device_fast_o = '{d_opcode: tlul_pkg::AccessAck, default: '0};
 
   student_rlight rlight_i (
     .clk_i,
@@ -32,6 +30,14 @@ module student (
     .tl_o (tl_device_peri_o),
     .tl_i (tl_device_peri_i),
     .led_o(led)
+  );
+    student_dma dma_i (
+    .clk_i,
+    .rst_ni,
+    .tl_o (tl_device_fast_o),
+    .tl_i (tl_device_fast_i),
+    .tl_host_o,
+    .tl_host_i
   );
 
 endmodule
