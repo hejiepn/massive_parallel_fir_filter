@@ -34,28 +34,42 @@ void memcpy_hard(void *dest, void *src, unsigned int length);
 
 void memcpy_soft(void *dest, void *src, unsigned int length);
 
-int buf[18];
+int buf[64];
 
 void memtest_setup() {
-	for (int i = 0; i < 18; i++) {
+	for (int i = 0; i < 64; i++) {
 		buf[i] = 0;
 	}
 	buf[0] = 0xcafe;
-	buf[17] = 0xbeef;
+	buf[63] = 0xbeef;
 }
 
 int memset_test() {
-	int return_value = 0;
-	memset_hard(buf+1, 55, 16);
-	for (int i = 0; i < 18; i++) {
+	int errcnt;
+	int n_writes = 4;
+	memset_hard(buf+1, 55, n_writes*sizeof(int));
+	for (int i = 0; i < 64; i++) {
+		int val_expected;
+		if(i==0) {
+			val_expected = 0xcafe;
+		} else if (i<(1+n_writes)) {
+			val_expected = 55;
+		} else if (i<63) {
+			val_expected = 0;
+		} else { // i == 63
+			val_expected = 0xbeef;
+		}
+		int val_read = buf[i];
+		if(val_read != val_expected) {
+			printf("Error after memset: buf[%i] was %i != %i\n", i, val_read, val_expected);
+			errcnt++;
+		}
 		printf("%x ", buf[i]);
 	}
-	if((buf[0] != 0xcafe) || (buf[17] != 0xbeef)) {
-		printf("\nMemset test failed");
-		return_value = 1;
+	if(errcnt == 0) {
+		printf("[pass] memset.\n");
 	}
-	printf("\n");
-	return return_value;
+	return errcnt;
 }
 int main(void) {
 	

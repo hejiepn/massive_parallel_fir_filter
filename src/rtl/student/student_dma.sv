@@ -108,7 +108,7 @@ module student_dma (
           next_state = IDLE;  // <-- memcpy not implemented yet.
       end
       MEMSET_WRITING: begin
-        if (length == 0) next_state = MEMSET_WAIT_RESP;
+        if (length == 0 && tl_host_i.a_ready && tl_host_o.a_valid) next_state = MEMSET_WAIT_RESP;
         if (length_recv == 0 && length == 0) next_state = IDLE;
       end
       MEMSET_WAIT_RESP: begin
@@ -201,14 +201,17 @@ module student_dma (
           status <= STATUS_MEMSET_BUSY;
           tl_host_o.a_opcode <= tlul_pkg::PutFullData;
           tl_host_o.a_valid <= '1;
-          tl_host_o.a_size <= 2; // Request size (requested size is 2^a_size, thus 0 = byte, 1 = 16b, 2 = 32b, 3 = 64b, etc)
-
-          tl_host_o.a_address <= dst_adr;
           tl_host_o.a_data <= src_adr;
-          if (tl_host_i.a_ready) begin
+
+          if (tl_host_i.a_ready && tl_host_o.a_valid) begin
             dst_adr <= dst_adr + 4;
             length  <= length - 4;
+            tl_host_o.a_address <= dst_adr + 4;
           end
+          else begin
+            tl_host_o.a_address <= dst_adr;
+          end
+
           if (tl_host_i.d_valid) begin
             length_recv <= length_recv - 4;
           end
