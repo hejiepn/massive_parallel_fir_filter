@@ -392,14 +392,17 @@ module rvlab_test_utils(
       end
     end
 
-
-
     if(rx_line_buf.len()>0) begin
       putc("\n");
       $display("(Missing newline at end of output.)");
     end
     tu.dm_sba_read(HOSTIO_RETVAL, hostio_retval, errcnt);
     $display("Execution finished. Return value: %d", hostio_retval);
+
+    if(hostio_retval) begin
+      errcnt += 1;
+    end
+
   endtask
 
 endmodule

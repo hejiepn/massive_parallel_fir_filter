@@ -1,5 +1,5 @@
 {
-  name: "rvlab_student_tl_host"
+  name: "student_dma"
   clock_primary: sys_clk
   bus_device: tlul
   bus_host: none

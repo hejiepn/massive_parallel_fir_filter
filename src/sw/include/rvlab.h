@@ -18,6 +18,9 @@
 #include "reggen/rv_timer.h"
 #define RV_TIMER0_BASE_ADDR 0x1f000000
 
+#include "reggen/student_dma.h"
+#define STUDENT_DMA0_BASE_ADDR 0x20000000
+
 // Add includes for additional register definition headers
 // and define corresponding _BASE_ADDR values here.
 
