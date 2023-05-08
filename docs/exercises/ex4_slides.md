@@ -59,7 +59,7 @@ Slave can stop a transfer anytime (ready, ack ...)
 
 ---
 # **Prevent blockade of master & OCI**
-
+docs/exercises/res/ex4_tlul_a.svg
 1. Master provides additional information to the slave
    e.g. amount & addresses next ("burst" access)
 
@@ -128,7 +128,7 @@ Examples
 
 ---
 ## **Decouple: TL-UL: a channel**
-![width:900px](res/ex4_tlul_a_wavedrom.svg)
+![width:900px](res/ex4_tlul_a.svg)
 
 ---
 ## **Decouple: TL-UL: d channel**
@@ -159,7 +159,7 @@ table {
 th {
 }
 </style>
-
+docs/exercises/res/ex4_tlul_a.svg
 Topology           | connections  | simultaneous| comment
 -------------------|--------------|-------------|-------------
 (shared) bus       |  M:S, 1:S    | 1           | e.g. (legacy) PCB
