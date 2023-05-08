@@ -73,6 +73,19 @@ module student_dma (
 
   assign cmd_stop_strobe = reg2hw.cmd.qe && reg2hw.cmd.q;
 
+  always_ff @(posedge clk_i, negedge rst_ni) begin
+    if(~rst_ni) begin
+        
+    end
+    else begin
+
+    end
+
+ 
+  end
+
+  // DMA Finite State Machine
+  // ------------------------
     
   always_ff @(posedge clk_i, negedge rst_ni) begin
     if (~rst_ni) begin
@@ -81,6 +94,8 @@ module student_dma (
       current_state <= next_state;
     end
   end
+
+  // Next state:
   
   always_comb begin
   	next_state = current_state;
@@ -91,7 +106,9 @@ module student_dma (
 			 end
   	 end
   		READ_DESC_SEND: begin
-  			next_state = READ_DESC_RECV;
+            if(tl_host_i.a_ready) begin
+  			   next_state = READ_DESC_RECV;
+            end
   		end
   		READ_DESC_RECV: begin
       		if(desc_response_received)
@@ -109,30 +126,15 @@ module student_dma (
   			if (length_recv == 0) next_state = IDLE;
   		end
   		default: begin
-  			$display("dma fsm default case");
-  			next_state = current_state;
+  			next_state = IDLE;
   		end
     endcase
 	 
-   if (cmd_stop_strobe) next_state = IDLE;
+    if (cmd_stop_strobe) next_state = IDLE;
   end
   
+  // Registered outputs:
 
-  always_ff @(posedge clk_i, negedge rst_ni) begin
-    if (~rst_ni) begin
-      src_adr <= '0;
-      dst_adr <= '0;
-      now_dadr <= '0;
-      length <= '0;
-      length_recv <= '0;
-    end else begin	  
-      if (current_state == IDLE) begin
-      	  
-      end
-    end
-  end
-  
-  // TL-UL host handling
   always_ff @(posedge clk_i, negedge rst_ni) begin
     if (~rst_ni) begin
     	tl_host_o <= '{
@@ -145,55 +147,55 @@ module student_dma (
     	desc_read_finished <= '0;
       still_sending <= 0;
     	offset <= '0;
-    	operation <= '0;
+    	operation <= DESC_OP_MEMSET;
     	desc_response_received <= '0;
     	write_done <= '0;
     	status <= STATUS_IDLE;
-    	
+    	src_adr <= '0;
+        dst_adr <= '0;
+         length <= '0;
+      length_recv <= '0;
+      now_dadr <= '0;
     end else begin
-      tl_host_o <= '{
-        a_opcode: tlul_pkg::PutFullData,
-        a_mask: '1,
-        a_source: '0,
-        a_valid: '0,
-        default: '0
-      };
-      status <= STATUS_IDLE;
-  		desc_read_finished <= '0;
-  		tl_host_o.a_valid <= '0;
-      tl_host_o.a_source <= 8'h30000000;
+        tl_host_o <= '{
+            a_opcode: tlul_pkg::PutFullData,
+            a_mask: '1,
+            a_source: '0,
+            a_valid: '0,
+            a_size: 2,  // Request size (requested size is 2^a_size, thus 0 = byte, 1 = 16b, 2 = 32b, 3 = 64b, etc)
+            d_ready: '1, // always ready
+            default: '0
+        };
+        status <= STATUS_IDLE;
+  		
+        desc_read_finished <= '0;
   		desc_response_received <= '0;
-  		write_done <= '0;
-      tl_host_o.a_mask <= '1; // mask not needed here
-    	case(next_state)
-        IDLE: begin
-          if(desc_addr_write) begin
-            now_dadr <= reg2hw.now_dadr.q;
-          end
-          
-          tl_host_o <= '{a_opcode: tlul_pkg::PutFullData, default: '0};
-          tl_host_o.d_ready <= '1;
-          offset <= '0;
-        end
+        write_done <= '0;
+        
+        case(next_state)
+            IDLE: begin  
+              offset <= '0;
+            end
 			READ_DESC_SEND: begin
-    		status <= STATUS_READING_DESC;
-				if (tl_host_i.a_ready) begin
-					tl_host_o <= '{a_opcode: tlul_pkg::Get, default: '0};
-					tl_host_o.a_valid <= '1;
-					tl_host_o.a_size <= 2; // Request size (requested size is 2^a_size, thus 0 = byte, 1 = 16b, 2 = 32b, 3 = 64b, etc)
-					tl_host_o.a_source <= 32'h30000000;
-					tl_host_o.a_address <= now_dadr + offset;
-					tl_host_o.a_data <= src_adr;
-					tl_host_o.d_ready <= '1;
-					
-    			end
+        		status <= STATUS_READING_DESC;
+                if(desc_addr_write) begin
+                    now_dadr <= reg2hw.now_dadr.q;
+                    tl_host_o.a_address <= reg2hw.now_dadr.q;
+                end
+                else begin
+                    tl_host_o.a_address <= now_dadr + offset;
+                end
+
+				tl_host_o.a_opcode <= tlul_pkg::Get;
+				tl_host_o.a_valid <= '1;
+				tl_host_o.a_data <= src_adr;
 			end
 			READ_DESC_RECV: begin
     			status <= STATUS_READING_DESC;
-    			if(tl_host_i.d_valid == 1) begin
+    			if(tl_host_i.d_valid) begin
 					desc_response_received <= '1;
     				if (offset == 0)
-    					operation <= tl_host_i.d_data;
+    					operation <= dma_desc_operation_t'(tl_host_i.d_data);
     				if (offset == 4) begin
     					length <= tl_host_i.d_data;
     					length_recv <= tl_host_i.d_data;
@@ -211,13 +213,12 @@ module student_dma (
 			
     		MEMSET_WRITING: begin
     			status <= STATUS_MEMSET_BUSY;
-					tl_host_o <= '{a_opcode: tlul_pkg::PutFullData, default: '0};
+					tl_host_o.a_opcode <= tlul_pkg::PutFullData;
 					tl_host_o.a_valid <= '1;
 					tl_host_o.a_size <= 2; // Request size (requested size is 2^a_size, thus 0 = byte, 1 = 16b, 2 = 32b, 3 = 64b, etc)
 					
 					tl_host_o.a_address <= dst_adr;
 					tl_host_o.a_data <= src_adr;
-					tl_host_o.d_ready <= '1;
 				if (tl_host_i.a_ready) begin
     				dst_adr <= dst_adr + 4;
     				length <= length - 4;
