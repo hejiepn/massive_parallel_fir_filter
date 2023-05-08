@@ -40,7 +40,7 @@ Tasks
 
 The register definitions of the predefined hardware components are in *rvlab/src/design/reggen/*.
 
-#. Add a definition for your running light (*student_rlight.json*).
+#. Add a definition for your running light (*student_rlight.hjson*).
 #. Run the reggen tool to generate the Verilog, C and HTML files::
 
     flow reggen.generate
