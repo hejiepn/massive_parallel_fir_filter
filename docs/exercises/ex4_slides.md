@@ -21,7 +21,7 @@ style: |
 
 ---
 # **RISC-V Lab**
-# Ex3: On Chip Interconnects
+# Ex4: On Chip Interconnects
 
 ---
 # **Content**
@@ -135,8 +135,8 @@ Examples
 ![width:900px](res/ex4_tlul_d_wavedrom.svg)
 
 ---
-## **Decouple: TL-UL: rules**
-* prevent deadlock & combinational loops
+## **Decouple: TL-UL: Rules**
+* goal: prevent deadlock & combinational loop
 * "4.1 Flow Control Rules"
   - valid must never depend on ready
     (no comb. path from ready to any control / data signal)
@@ -145,7 +145,7 @@ Examples
   - prio(response) > prio(request)
   - ...
 
-Please read the TL-UL specification for TL-UL !
+Please read the TL-UL specification!
 
 ---
 # **Topologies: Extremes**
@@ -173,17 +173,12 @@ point 2 point      |    1:1       | 1           |
 * many intermediates topologies: ring, cube  , ...
 * hierarchical structures using (sparse) crossbars
   * sparse = subset of (M,S)
-  * extremes: 1:N, M:1 
+  * extremes: 1:N ("bus"), M:1 
 
 ---
 ## **Toplogies: Examples**
 ![width:420px](../design_ref/rvlab_core.svg)
 ![bg right:50% 86%](res/ex4_stm32f745ig.png)
-
----
-## **Toplogies: Implementation**
-
-
 
 ---
 # **Single Master**
@@ -210,3 +205,34 @@ Ex.: SPI without DMA handled by 400 MHz R7 ARM in an SoC ⇒<20 Mbit
 * interconnect latency to peri hidden from CPU  
 
 ---
+## **Implementation: Tristate**
+![bg right:25% 100%](res/ex4_impl_3state.svg)
+* lines (data, address, ...) used bidirectionaly
+* used in: PCB design  
+  - orders of magnitude fewer components
+  - limits on package pin count and routing
+  - mostly for medium (SQI, PSRAM) to slow (I2C) components 
+* on chip: **=> Tristate not suitable.** 
+  - limitations order of magnitude higher
+  - high design effort,  (e.g. 2 phase clk, asyn. delays, bus holders ...) 
+  -  not supported by EDA tools 
+
+---
+## **Implementation: Multiplexed**
+![bg horizontal: 60%](res/ex4_impl_mux_1n.svg)
+![bg horizontal: 90%](res/ex4_impl_mux_mn.svg)
+
+---
+## **Implementation: Flat address decoding**
+* every module places its registers at absolut addresses in total address space
+* (unnecessary) high delay & gate count
+* non existent orthogonality
+
+![width:650px](res/ex4_impl_adec_flat.svg)
+
+---
+## **Impl.: Hierarchical address decoding**
+* every module  places its registers relative to address 0, i.e. it  only decodes the **lowermost** address bits **used by itself**
+* a further signal indicates a module access
+
+![width:650px](res/ex4_impl_adec_hier.svg)
