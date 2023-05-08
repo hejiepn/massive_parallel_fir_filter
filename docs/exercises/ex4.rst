@@ -30,13 +30,14 @@ used. Smaller accesses would involve more complex logic.
 
 The descriptor is as follows:
 
-======  ====  =======  ============================================================
-offset  size  name     description
-======  ====  =======  ============================================================
-0x0     0x4   length   number of bytes to be set. 
-0x4     0x4   src_adr  memset: fill value. memcpy: 1st address of the source buffer
-0x8     0x4   dst_adr  1st address of the destination buffer
-======  ====  =======  ============================================================
+======  ====  =========  ============================================================
+offset  size  name       description
+======  ====  =========  ============================================================
+0x0     0x4   operation  0 = memset, 1 = memcpy
+0x4     0x4   length     number of bytes to be set 
+0x8     0x4   src_adr    memset: fill value. memcpy: 1st address of the source buffer
+0xc     0x4   dst_adr    1st address of the destination buffer
+======  ====  =========  ============================================================
 
 Simulate and test by running::
 
@@ -50,18 +51,17 @@ The module should use the maximum bandwidth available from the TL-UL interface, 
 
 **3. Software implementation**
 
-A sample implementation of the memset function is available in *rvlab/src/sw/dma/student_dma.c/h*. The function memset_soft is a complete software implementation of memset, memset_hard uses the hardware implementation to fill a memory area. There are already stubs for memcpy_soft and memcpy_hard. Extend memcpy_soft to contain a complete software implementation of mem copy with the same functionality as your hardware implementation. Complete memcpy_hard so it invokes your hardware implementation.
+Sample implementations of the memset function are available in *rvlab/src/sw/dma/memset.c/h*. The function memset_soft is a complete software implementation of memset, memset_dma uses the hardware implementation to fill a memory area. *rvlab/src/sw/dma/memcpy.c/h* provides stubs for memcpy_soft and memcpy_dma. Extend memcpy_soft to contain a complete software implementation of mem copy with the same functionality as your hardware implementation. Complete memcpy_dma so it invokes your hardware implementation.
 
 **4. Test cases**
 
-There are test cases for memset in student_dma.c. Add appropriate test cases for your memcpy function!
+Small test cases for memset_soft, memset_dma, memcpy_soft and and memcpy_dma are provided in *dma/main.c*.
 
-Make sure you do not overwrite any substantial information, like the stack, data or code of your mini application. A small test_area is already allocated on the stack by the memset test case, which also contains two cookies to check whether the memory function corrupts any data out of the testing area. You can re-use this testing area for your memcpy test case, too.
+If you encounter problems, feel free to modify the test cases or add own tests. Make sure you do not overwrite any substantial information, like the stack, data or code of your mini application.
 
 **5. Benchmarking**
 
 Compare the speed of the software implementation of memcpy and memset with the speed of the hardware component for the scenarios listed in the Deliverables_.  Measure the cycles from the write of the now_dadr register until the status register becomes 0 again.
-
 
 Deliverables
 ------------

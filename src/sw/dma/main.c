@@ -1,79 +1,145 @@
 #include <stdio.h>
 #include "rvlab.h"
+#include "memset.h"
+#include "memcpy.h"
 
-#define DMA_OP_MEMSET 0
-#define DMA_OP_MEMCPY 1
+// Test memset
+// -----------
 
-struct descriptor {
-  unsigned int operation;
-  unsigned int length;
-  unsigned int src_adr;
-  unsigned int dst_adr;
-};
+static int test_memset_singlecase(uint32_t length_words, uint32_t pattern, void (*func_memset)(void *, uint32_t, uint32_t), int print_cycles) {
+    int errcnt = 0;
+    unsigned int buf[64];
+    int mcycle_start, mcycle_end;
+    
+    for (int i = 0; i < 64; i++) {
+            buf[i] = 0;
+    }
+    buf[0] = 0xcafe;
+    buf[63] = 0xbeef;
+    
+    mcycle_start = read_csr("mcycle");
+    (*func_memset)(buf+1, pattern, length_words*sizeof(int));
+    mcycle_end = read_csr("mcycle");
 
-void memset_hard(void * ptr, unsigned int value, unsigned int length) { //size_t?
-	volatile struct descriptor d;
-	
-    d.operation = DMA_OP_MEMSET;
-    d.dst_adr = ptr;
-    d.src_adr = value;
-	d.length = length;
-	
-	REG32(STUDENT_DMA_NOW_DADR(0)) = &d;
-	while(REG32(STUDENT_DMA_STATUS(0)) != 0);
+    if(print_cycles) {
+        printf("cycles count for %i words: %i\n", length_words, mcycle_end - mcycle_start);
+    }
+
+    for (int i = 0; i < 64; i++) {
+        int val_expected;
+        if(i==0) {
+            val_expected = 0xcafe;
+        } else if (i<(1+length_words)) {
+            val_expected = pattern;
+        } else if (i<63) {
+            val_expected = 0;
+        } else { // i == 63
+            val_expected = 0xbeef;
+        }
+        int val_read = buf[i];
+        //printf("%x ", buf[i]);
+        if(val_read != val_expected) {
+            printf("Error: buf[%i] was %i != %i\n", i, val_read, val_expected);
+            errcnt++;
+        }
+    }
+    return errcnt;
 }
 
-void memset_soft(void * ptr, int value, unsigned int length) { //size_t?
-	int * ptr_i = (int*) ptr;
-	for (int i = 0; i < (length/sizeof(int)); i++) {
-		ptr_i[i] = value;
-	}
+int test_memset(void (*func_memset)(void *, uint32_t, uint32_t)) {
+    int errcnt = 0;
+
+    errcnt += test_memset_singlecase(4, 0x55, func_memset, 0);
+    errcnt += test_memset_singlecase(50, 0x12345678, func_memset, 1);
+    errcnt += test_memset_singlecase(1, 0xffffffff, func_memset, 0);
+
+    return errcnt;
 }
 
-void memcpy_hard(void *dest, void *src, unsigned int length);
+// Test memcpy
+// -----------
 
-void memcpy_soft(void *dest, void *src, unsigned int length);
+static int test_memcpy_singlecase(uint32_t length_words, void *src_buf, void (*func_memcpy)(void *, void *, uint32_t), int print_cycles) {
+    int errcnt = 0;
+    unsigned int buf[64];
+    int mcycle_start, mcycle_end;
 
-int buf[64];
 
-void memtest_setup() {
-	for (int i = 0; i < 64; i++) {
-		buf[i] = 0;
-	}
-	buf[0] = 0xcafe;
-	buf[63] = 0xbeef;
+    for (int i = 0; i < 64; i++) {
+            buf[i] = 0;
+    }
+    buf[0] = 0xcafe;
+    buf[63] = 0xbeef;
+    
+    mcycle_start = read_csr("mcycle");
+    (*func_memcpy)(buf+1, src_buf, length_words*sizeof(int));
+    mcycle_end = read_csr("mcycle");
+    
+    if(print_cycles) {
+        printf("cycles count for %i words: %i\n", length_words, mcycle_end - mcycle_start);
+    }
+
+    for (int i = 0; i < 64; i++) {
+        int val_expected;
+        if(i==0) {
+            val_expected = 0xcafe;
+        } else if (i<(1+length_words)) {
+            val_expected = ((uint32_t *)src_buf)[i-1];
+        } else if (i<63) {
+            val_expected = 0;
+        } else { // i == 63
+            val_expected = 0xbeef;
+        }
+        int val_read = buf[i];
+        //printf("%x ", buf[i]);
+        if(val_read != val_expected) {
+            printf("Error: buf[%i] was %i != %i\n", i, val_read, val_expected);
+            errcnt++;
+        }
+    }
+    return errcnt;
 }
 
-int memset_test() {
-	int errcnt;
-	int n_writes = 4;
-	memset_hard(buf+1, 55, n_writes*sizeof(int));
-	for (int i = 0; i < 64; i++) {
-		int val_expected;
-		if(i==0) {
-			val_expected = 0xcafe;
-		} else if (i<(1+n_writes)) {
-			val_expected = 55;
-		} else if (i<63) {
-			val_expected = 0;
-		} else { // i == 63
-			val_expected = 0xbeef;
-		}
-		int val_read = buf[i];
-		if(val_read != val_expected) {
-			printf("Error after memset: buf[%i] was %i != %i\n", i, val_read, val_expected);
-			errcnt++;
-		}
-		printf("%x ", buf[i]);
-	}
-	if(errcnt == 0) {
-		printf("[pass] memset.\n");
-	}
-	return errcnt;
+int test_memcpy(void (*func_memcpy)(void *, void *, uint32_t)) {
+    int errcnt = 0;
+
+    uint32_t src_buf[64];
+    for(int i=0;i<64;i++) {
+        src_buf[i] = 0x11223300 + i;
+    }
+
+    errcnt += test_memcpy_singlecase(4, src_buf, func_memcpy, 0);
+    errcnt += test_memcpy_singlecase(50, src_buf, func_memcpy, 1);
+    errcnt += test_memcpy_singlecase(1, src_buf + 30, func_memcpy, 0);
+
+    return errcnt;
 }
+
+// Main
+// ----
+
 int main(void) {
-	
-	memtest_setup();
-	
-    return memset_test();
+    int res, retval=0;
+
+    printf("test memset_soft:\n");    
+    res = test_memset(memset_soft);
+    retval += res;
+    printf("--> %s\n", res?"fail":"pass");
+
+    printf("test memset_dma:\n");
+    res = test_memset(memset_dma);
+    retval += res;
+    printf("--> %s\n", res?"fail":"pass");
+
+    printf("test memcpy_soft:\n");
+    res = test_memcpy(memcpy_soft);
+    retval += res;
+    printf("--> %s\n", res?"fail":"pass");
+
+    printf("test memcpy_dma:\n");
+    res = test_memcpy(memcpy_dma);
+    retval += res;
+    printf("--> %s\n", res?"fail":"pass");
+
+    return retval;
 }

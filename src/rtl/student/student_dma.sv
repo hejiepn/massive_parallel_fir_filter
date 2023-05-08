@@ -109,7 +109,6 @@ module student_dma (
       end
       MEMSET_WRITING: begin
         if (length == 0 && tl_host_i.a_ready && tl_host_o.a_valid) next_state = MEMSET_WAIT_RESP;
-        if (length_recv == 0 && length == 0) next_state = IDLE;
       end
       MEMSET_WAIT_RESP: begin
         if (length_recv == 0) next_state = IDLE;
@@ -185,7 +184,7 @@ module student_dma (
             if (offset == 0) begin
               operation <= dma_desc_op_t'(tl_host_i.d_data);
             end else if (offset == 4) begin
-              length      <= tl_host_i.d_data;
+              length      <= tl_host_i.d_data - 4;
               length_recv <= tl_host_i.d_data;
             end else if (offset == 8) begin
               src_adr <= tl_host_i.d_data;
