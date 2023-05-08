@@ -35,7 +35,9 @@ style: |
 
 ---
 # **Basics**
-* purpose: *exchange data* between N on chip components.
+* requirement: *exchange data* between N on chip components.
+  * issues: on chip delays, O(N²) for full orthogonality
+  * performance metrics: throughput & latency
 * **common logical model** of all components: hardware resources (registers, memory) mapped into "flat" address space
 * primarily standardized **interface**, not topology
 * maximizes **reuse** ("lego") of
@@ -52,14 +54,14 @@ Classes of nodes
 ![bg right:50% 100%](res/ex4_buswait_wavedrom.svg)
 
 Slave can stop a transfer anytime (ready, ack ...)
-=> master / bus blocked
+=> master / OCI blocked
 => loss of throughput (& latency)
 
 ---
-# **Prevent blockade of master & interconnect**
+# **Prevent blockade of master & OCI**
 
 1. Master provides additional information to the slave
-   e.g. which addresses will be next, such as "burst" access
+   e.g. amount & addresses next ("burst" access)
 
 2. Split transfer
 Master releases bus for new transfers during the wait period and the transfer is resumed later (often not feasible / too complex)
@@ -67,7 +69,7 @@ Master releases bus for new transfers during the wait period and the transfer is
 3. Pipelining
 
 4. Decouple request from action (read/write)   
-   -> message based NoC)
+   -> message based (NoC)
 
 ---
 ## **Pipelining**
@@ -76,9 +78,10 @@ Master releases bus for new transfers during the wait period and the transfer is
 
 **0 pipeline stages**
   - 0..1 transfers in flight
+  - latency: 0 cycles
   - combinational loop
     master -> slave -> master 
-    (adr/ctrl -> "ready" / data (read)
+    (adr/ctrl -> "ready" / data(r)
 
 ---
 ## **Pipelining**
@@ -88,7 +91,8 @@ Master releases bus for new transfers during the wait period and the transfer is
 
 **1 pipeline stage**
   - 0..2 transfers in flight
-  - hold by slaves hols the *next* transfer
+  - latency: 0 cycle
+  - hold by slaves holds the *next* transfer
 
 **1 read / 0 write pipeline stages**
   - used by SPSRAM
@@ -99,8 +103,10 @@ Master releases bus for new transfers during the wait period and the transfer is
 
 ---
 ## **Pipelining: 2 stages**
-* becomes very complex (es. crossbars)
-* may be too long / short, depending on slave
+* very complex (esp. crossbars)
+* for some cases 
+  - too long (e.g. CPU 2 SRAM)
+  - too short (e.g. CPU 2 far away peripheral)
 
 => need "variable" pipeline depth
 
@@ -109,10 +115,9 @@ Master releases bus for new transfers during the wait period and the transfer is
 ---
 ## **Decouple**
 **decouple action (read/write) from bus transaction**
-* "bus read/write" = request message + response message
+* "bus read/write" => request message + response message
 * independent channels for request & response
-* handshaking for messages, not action
-
+* handshaking for messages, not actions
 
 => bus latencies do not impact throughput
 => 0..∞ simultaneous transactions
@@ -128,6 +133,19 @@ Examples
 ---
 ## **Decouple: TL-UL: d channel**
 ![width:900px](res/ex4_tlul_d_wavedrom.svg)
+
+---
+## **Decouple: TL-UL: rules**
+* prevent deadlock & combinational loops
+* "4.1 Flow Control Rules"
+  - valid must never depend on ready
+    (no comb. path from ready to any control / data signal)
+  - ...
+* "4.2 Deadlock Freedom"
+  - prio(response) > prio(request)
+  - ...
+
+Please read the TL-UL specification for TL-UL !
 
 ---
 # **Topologies: Extremes**
@@ -161,6 +179,11 @@ point 2 point      |    1:1       | 1           |
 ## **Toplogies: Examples**
 ![width:420px](../design_ref/rvlab_core.svg)
 ![bg right:50% 86%](res/ex4_stm32f745ig.png)
+
+---
+## **Toplogies: Implementation**
+
+
 
 ---
 # **Single Master**

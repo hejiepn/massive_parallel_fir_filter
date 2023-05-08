@@ -3,7 +3,7 @@
   signal: [  
   {name: 'clk',         wave: 'p....'},
   {name: 'ctrl / adr',  wave: '345..', data: ['CA0', 'CA1', 'CA2']},
-  {name: 'data (r/w)',  wave: '34xx5', data: ['DW0', 'DW1', 'DW2']},    
+  {name: 'data (r/w)',  wave: '34xx5', data: ['D0',  'D1',  'D2']},    
   {name: 'ready',       wave: '110.1'}
   ],
   head:{
