@@ -1,8 +1,11 @@
 #include <stdio.h>
 #include "rvlab.h"
 
+#define DMA_OP_MEMSET 0
+#define DMA_OP_MEMCPY 1
+
 struct descriptor {
-  unsigned int set_or_copy; // memset is 0, memcpy is 1
+  unsigned int operation;
   unsigned int length;
   unsigned int src_adr;
   unsigned int dst_adr;
@@ -11,7 +14,7 @@ struct descriptor {
 void memset_hard(void * ptr, unsigned int value, unsigned int length) { //size_t?
 	volatile struct descriptor d;
 	
-    d.set_or_copy = 1;
+    d.operation = DMA_OP_MEMSET;
     d.dst_adr = ptr;
     d.src_adr = value;
 	d.length = length;

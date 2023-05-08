@@ -121,21 +121,32 @@ add wave -noupdate /system_tb/board/DUT/core_i/tl_bram_main_h2d
 add wave -noupdate /system_tb/board/DUT/core_i/tl_bram_main_d2h
 add wave -noupdate -divider {Running Light}
 add wave -noupdate /system_tb/board/DUT/core_i/student_i/rlight_i/led_o
-add wave -noupdate /system_tb/board/DUT/core_i/student_i/rlight_i/reg_addr
-add wave -noupdate /system_tb/board/DUT/core_i/student_i/rlight_i/reg_we
-add wave -noupdate /system_tb/board/DUT/core_i/student_i/rlight_i/reg_re
-add wave -noupdate /system_tb/board/DUT/core_i/student_i/rlight_i/reg_wdata
-add wave -noupdate /system_tb/board/DUT/core_i/student_i/rlight_i/reg_rdata
-add wave -noupdate /system_tb/board/DUT/core_i/student_i/rlight_i/pattern
-add wave -noupdate /system_tb/board/DUT/core_i/student_i/rlight_i/mode
-add wave -noupdate /system_tb/board/DUT/core_i/student_i/rlight_i/prescaler
-add wave -noupdate /system_tb/board/DUT/core_i/student_i/rlight_i/prescaler_counter
-add wave -noupdate /system_tb/board/DUT/core_i/student_i/rlight_i/prescaler_strobe
-add wave -noupdate /system_tb/board/DUT/core_i/student_i/rlight_i/shift_amount
-add wave -noupdate /system_tb/board/DUT/core_i/student_i/rlight_i/shift_direction
-add wave -noupdate /system_tb/board/DUT/core_i/student_i/rlight_i/rotate
 add wave -noupdate /system_tb/board/DUT/core_i/student_i/rlight_i/state
-add wave -noupdate /system_tb/board/DUT/core_i/student_i/rlight_i/next
+add wave -noupdate -divider DMA
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dma_i/clk_i
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dma_i/rst_ni
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dma_i/tl_i
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dma_i/tl_o
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dma_i/tl_host_i
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dma_i/tl_host_o
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dma_i/reg2hw
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dma_i/hw2reg
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dma_i/current_state
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dma_i/next_state
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dma_i/now_dadr
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dma_i/status
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dma_i/src_adr
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dma_i/dst_adr
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dma_i/length
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dma_i/length_recv
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dma_i/offset
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dma_i/still_sending
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dma_i/desc_addr_write
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dma_i/desc_read_finished
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dma_i/operation
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dma_i/desc_response_received
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dma_i/write_done
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dma_i/cmd_stop_strobe
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {40160000000 fs} 0}
 quietly wave cursor active 1
@@ -153,4 +164,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {0 fs} {160734 ns}
+WaveRestoreZoom {0 fs} {125496 ns}
