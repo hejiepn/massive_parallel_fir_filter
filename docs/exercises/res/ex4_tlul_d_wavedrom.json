@@ -1,0 +1,15 @@
+{ head:{text:'d channel (response device -> host)'},
+  signal: [  
+  ['device -> host',
+  {name: 'clk',                 wave: 'p........'},
+  {name: 'd_opcode',            wave: 'x3x4.4x5x', data: ['AAD', 'AA', 'AAD', 'Get', 'C4']},  
+  {name: 'd_*',                 wave: 'x3x4.4x5x', data: ['C0',  'C1',  'C2', 'C3', 'C4']},
+  {name: 'd_data',              wave: 'x3xxx4x5x', data: ['DR0',       'DR2', 'DR3']},  
+  {name: 'd_valid',             wave: '0101..010'},
+  ],
+  ['h→d', 
+  {name: 'd_ready',             wave: 'x1x01.x1x'}
+  ]
+  ],
+  foot:{tock:1},   
+}
