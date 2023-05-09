@@ -105,12 +105,11 @@ Master releases bus for new transfers during the wait period and the transfer is
 ## **Pipelining: 2 stages**
 * very complex (esp. crossbars)
 * for some cases 
-  - too long (e.g. CPU 2 SRAM)
-  - too short (e.g. CPU 2 far away peripheral)
+  - too long (e.g. 2p CPU 2 SRAM)
+  - too short (e.g. cache 2 xDR)
 
 => need "variable" pipeline depth
-
-![bg vertical right:50% 90%](res/ex4_2ps_wavedrom.svg)
+![bg vertical right:50% 100%](res/ex4_2ps_wavedrom.svg)
 
 ---
 ## **Decouple**
@@ -170,6 +169,8 @@ point 2 point      |    1:1       | 1           |
 
 ---
 ## **Topologies: Hierarchical**
+![bg right:50% 100%](./res/ex4_topology_typ.svg)
+
 * many intermediates topologies: ring, cube  , ...
 * hierarchical structures using (sparse) crossbars
   * sparse = subset of (M,S)
@@ -196,9 +197,9 @@ Ex.: SPI without DMA handled by 400 MHz R7 ARM in an SoC ⇒<20 Mbit
 ---
 # **Multi Master**
 ![bg right:50% 90%](res/ex4_multi_master.svg)
-1. peri -> RAM
+1. PERI -> RAM
 2. CPU switches pointers
-3. RAM -> peri
+3. RAM -> PERI
 
 * peri works on (complex) data structures (e.g.  descriptors, linked lists, instructions)
 * CPU works in parallel
