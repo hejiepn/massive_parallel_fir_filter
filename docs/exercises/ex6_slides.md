@@ -127,7 +127,7 @@ Not all projects are sufficient for 4 persons !
 
 ---
 # **Project Flow**
-
+![bg right:71% 72%](res/ex6_project_flow.svg)
 
 ---
 # **Partitioning**
@@ -147,7 +147,7 @@ Test: How many parts need to be changed if functionality X is added or the envir
 - simple, easy to understand (optimal: state less)
 - hide implementation
 
-## **Applied to HW design**
+**Applied to HW design**
 * TL-UL is standardized and visible => use for module communication
 * preference
   1. CPU<->Peri or Peri<->RAM (DMA)
@@ -212,7 +212,7 @@ if (x = 0) // wrong
   }
 ```
 
----
+---docs/exercises/res/ex6_project_flow.svg
 ## **C Traps & Pitfalls**
 ```C
 #define abs(x) x>0?x:-x
