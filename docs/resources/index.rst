@@ -34,7 +34,7 @@ SystemVerilog
 -------------
 
 - `System Verilog for synthesis <https://verilogguide.readthedocs.io/en/latest/verilog/systemverilog.html>`_
-- `Verilog Language reference manual (LRM) <https://ieeexplore.ieee.org/document/8299595>`_ (the authorative source to consult for in depth questions, e.g. how a certain language element is to be handeled by a simulator).
+- `Verilog Language reference manual (LRM) <https://ieeexplore.ieee.org/document/8299595>`_ (the authoritative source to consult for in depth questions, e.g. how a certain language element is to be handeled by a simulator).
 
 
 TUB
@@ -49,8 +49,11 @@ Recommended External IP
 The following projects are not integrated into rvlab but could be useful for student projects:
 
 - `verilog-ethernet <https://github.com/alexforencich/verilog-ethernet>`_
-- For HDMI output: `display_controller <https://github.com/projf/display_controller>`_
+- HDMI output 
 
+  - basic explanation & (overly simplified - do not use) implementation: `fpga4fun <https://www.fpga4fun.com/HDMI.html>`_
+  - DVI only, no sound: `display_controller <https://github.com/projf/display_controller>`_
+  - HDMI, with sound: `hdmi <https://github.com/hdl-util/hdmi>`_
 
 .. _7 Series Product Tables and Product Selection Guide (XMP101): https://docs.xilinx.com/v/u/en-US/7-series-product-selection-guide
 .. _Vivado Design Suite 7 Series FPGA and Zynq-7000 SoC Libraries Guide UG953 (v2021.2) October 22, 2021: https://www.xilinx.com/content/dam/xilinx/support/documents/sw_manuals/xilinx2021_2/ug953-vivado-7series-libraries.pdf
@@ -64,3 +67,5 @@ The following projects are not integrated into rvlab but could be useful for stu
 
 .. _Modulbeschreibung: https://moseskonto.tu-berlin.de/moses/modultransfersystem/bolognamodule/beschreibung/anzeigen.html?nummer=41097&version=1&sprache=1
 .. _MSC Website: https://www.tu.berlin/msc/studium-lehre/lehrveranstaltungen-sose/soc
+
+.. _FROM_BLINKER_TO_RISCV: https://github.com/BrunoLevy/learn-fpga/tree/master/FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV

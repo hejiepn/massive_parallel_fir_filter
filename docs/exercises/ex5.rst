@@ -68,7 +68,7 @@ address mode  name      description
 0x1C    r/w   test_irq  see test
 ======= ====  ========  =============================================================================
 
-Note: If the irq controller is finished before the TL-UL multiplexer, temporarily implement the later as a 1:1 connection between its input ant the output to the irq controller.  
+Note: If the irq controller is finished before the TL-UL multiplexer, temporarily implement the later as a 1:1 connection between its input and (only) the output to the irq controller.  
 
 **4. Interrupt controller: HAL**
 

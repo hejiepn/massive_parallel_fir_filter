@@ -45,25 +45,28 @@ style: |
 * ... (see "Design Reference")
 
 ---
-## **Project building blocks: Components**
+## **Project building blocks: HW**
 - Interfaces: I2C, SPI, PCM Highway, I2S (audio)
 - MIDI (Keyboard, Sound equipment)
-- ADCs / DACs, Irda ...
+- IC: ADCs / DACs, H drivers, Irda ...
+- HDMI camera (in lab: 1920x1080, 60 fps)
 - RGB cameras & displays
 - **modules from Aliexpress, ebay**
-- historic: disk drives, PS2 keyboard & mouse
-- modell servos (PWM), stepper motors / DC motors
+- historic: disk drives, PS2 keyboard & mouse, ...
+- mechanics: modell servos (PWM), stepper/DC motors, ...
 
 ---
 ## **Project building blocks: IP cores**
 
 - OpenTitan: TL-UL peripherals
-- Opencores.org: Interfaces (USB, Ethernet, ...), Arithmetic units
-- Pulp Platform: Interconnects, Peripherals, ....
-- CPU Cores: Ibex, OpenHW, Rocket/Boom, Ariane, ...
-- Special: Spiral FFT, ...
+- Opencores.org: Interfaces (USB, Ethernet), Arithmetic units, 8/16bit CPUs, ...
+- Pulp Platform: AXI & logarithmic interconnects, Peripherals, ....
+- RISC-V CPUs: OpenHW, T-Head Semi (AliB), Chips Alliance (WD), (picorv32, FEMTORV32)
+- LiteX (Python!), SpinalHDL(VexRiscV)
+- Special: Spiral FFT, fpganes, 
+- SW: DOOM, ...
 
-Make sure the testbench of the IP works before *planing* its use!
+Make sure the **testbench of the IP works** *before* planing its use!
 
 ---
 # **Project Ideas**
@@ -83,19 +86,19 @@ Make sure the testbench of the IP works before *planing* its use!
 e.g. Ethercat like network, man in the middle attack
 - **Multi core system: standard CPUs or specialized cores**
 ray tracer, particle simulator, fractals, neural networks...
-- **Graphics card (game, demo)**
+- **Game/demo: Graphics card  (+ sound)**
 triangle shader (3D pipeline!), 2D: fill, line, circle, sprites
 - **Real time video processing**
 object tracking, edge extraction,... frame or line buffered
-- **Low latency audio processing**
-time domain (massively parallel FIR) or frequency domain (FFT)
+- **Low latency audio processing** 
+time  (massively parallel FIR) or frequency domain (FFT)
 
 ---
 ## **Project Ideas: A**
 - **Software defined radio / Modulated data transmission**
-Radio with PCB with high speed DAC,  data via laser pointer
+100MS/s DAC PCB /  data via laser pointer
 - **malloc() in parallel HW**
-- **Gameboy port**
+- **Gameboy Advanced*
   video & sound, sw loader, ...
 - **Rotary display**
   string of 32 leds on custom PCB + motor + slip rings
@@ -103,25 +106,28 @@ Radio with PCB with high speed DAC,  data via laser pointer
   laser printer motors & mirrors (good) / stepper motors (bad)
 
 ---
-## **Project Ideas: NEW A**
+## **Project Ideas: new A**
 * multi core real time processing (graphics card, audio, network?)
-* P4 switch
-* minimal but complete 3d pipeline (must know algorithms before)
-* real time use of DDR3 (e.g.as video memory)
-  * adapt DDR3 TL-UL adapter, ...
-* integrate open source DDR3 controller
+* (P4?) switch - build FMC card with e.g. 3x ETH
+* minimal 3d pipeline (must know algorithms before)
+* real time use of DDR3 (e.g. as video memory)
+* integrate LARGE core (T-Head C910, Rocket, ...)
 * SW defined multi phase DCDC converter
+* RVLAB
+  - switch to open source DDR3 controller
+  - port to different FPGA/PCB (e.g. Tang Nano 20k)
 
 ---
 ## **Project Ideas: B**
-- Encryper / Decrypter (DES / AES / ChaCha) + IO (can be A)
+- Encryper / Decrypter (DES / AES / ChaChan/ TRIT) + IO (can be A)
 - Logic analyzer/ mixed signal oscilloscope
 - Multi axis robot control ("Spider" walking with 18 servos)
 
 ## **Project Ideas: C**
-- (Stepper) Motor control, Force Feedback Joystick(*)
+- SD card defragger (mostly SW)
+- (Stepper) motor control, force feedback joystick
 - Theremin
-- weather station
+- weather station with LED matrix display
 
 Not all projects are sufficient for 4 persons !
 
@@ -148,10 +154,10 @@ Test: How many parts need to be changed if functionality X is added or the envir
 - hide implementation
 
 **Applied to HW design**
-* TL-UL is standardized and visible => use for module communication
+* TL-UL is standardized and visible => use for communication between independent peripherals
 * preference
-  1. CPU<->Peri or Peri<->RAM (DMA)
-  2. module to module over TL-UL
+  1. CPU<->peri or peri<->RAM (DMA)
+  2. peri to peri over "register bus" (ex1.) or TL-UL
   3. proprietary connection between modules
 
 ---
@@ -172,6 +178,7 @@ May not be used during normal operation. Ban from normal HAL, if possible make t
 * advanced (real SoC)
   - individual gated clk for every module
   - individual nreset for every module
+
 
 ---
 # **C Traps & Pitfalls**
