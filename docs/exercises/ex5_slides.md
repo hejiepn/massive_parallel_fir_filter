@@ -135,18 +135,31 @@ Interrupt_Handler() {
   - SW interlock (e.g. via "test & set command") - overhead too large
 
 ## **IRQ controller: mask set/clr**
-* allows enabling / disabling of IRQs without disabling all IRQs
+* allows enabling / disabling of IRQs without disabling IRQs
 
 ---
-## **IRQ controller: hierarchical**
-
+## **IRQ ctrl: hierarchical**
+![bg right:60% 90%](res/ex5_irq_hierachical.svg)
+* "IRQ controller" same for aggregation and in peripheral
+* top level  "IRQ controller" can be different (PLIC)
 
 ---
-# **Peripherals with IRQ**
+# **Peripherals with IRQ: "no" FIFO**
+![width:700px](res/ex5_irq_peri_1fifo.svg)
+* di / do is where two masters meet !
+* (actually: FIFO of length=1)
 
 ---
-## **Peripherals with IRQ**
+## **Peripherals with IRQ: with FIFO**
+![width:700px](res/ex5_irq_peri_fifo.svg)
 
+---
+## **Peripherals with IRQ: data & control flow**
+![width:700px](res/ex5_irq_flow.drawio.svg)
+
+**NEVER SPLITT HANDLING AND TAKING BACK OF AN IRQ**
+  - couple the IRQ to the state
+  - explicit clear only for (error) events or event counters ("acknowledge", reading / clearing is the change of state)
 
 ---
 # **ANSI C for IRQs**
