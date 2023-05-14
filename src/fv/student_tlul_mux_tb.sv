@@ -55,7 +55,7 @@ module student_tlul_mux_tb #(
 
     // write and read pattern register 2x:
     for (int j = 0; j < CONNECTED_SLAVES; j=j+1) begin
-    	//assumption is addresses are fifth bit
+    	//assumption is addresses are fifth bit and onward
     	addr = j << 4; // remove blocking or irrelevant?
     	wdata = j + 1;
     	bus.put_word(addr, wdata);
