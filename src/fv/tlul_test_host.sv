@@ -43,6 +43,10 @@ module tlul_test_host (
     tl_o.d_ready <= '1;
     @(posedge clk_i);
     tl_o <= TlIdle;  // a_valid <= '0;
+    while (tl_i.d_valid != 1) begin
+    	@(posedge clk_i);
+    	$display("Waiting for response to be d_valid = 1");
+    end
     if (tl_i.d_error) begin
       $display("Warning: response d_error was %p.", tl_i.d_error);
     end
@@ -74,10 +78,6 @@ module tlul_test_host (
     tl_o.a_size    <= 2;  // 2^2 = 4 byte access
     tl_o.a_mask    <= 4'b1111;
     do_transaction();
-    while (tl_i.d_valid != 1) begin
-    	@(posedge clk_i);
-    	$display("Waiting for response to be d_valid = 1");
-    end
     rdata <= tl_i.d_data;
     if (tl_i.d_opcode != tlul_pkg::AccessAckData) begin
       $display("Warning: put response d_opcode was %p.", tl_i.d_opcode);

@@ -11,6 +11,9 @@ module dummy_device (
   logic [31:0] reg_1;
   logic [31:0] reg_2;
   logic [31:0] reg_3;
+  
+  assign reg_2 = reg_0 + reg_1;
+  assign reg_3 = reg_0 * reg_1;
 
   always_ff @(posedge clk_i, negedge rst_ni) begin
     if (~rst_ni) begin
@@ -18,8 +21,6 @@ module dummy_device (
       delay <= '0;
       reg_0 <= '0;
       reg_1 <= '0;
-      reg_2 <= '0;
-      reg_3 <= '0;
     end else begin
       tl_o.a_ready <= !delay;
       tl_o.d_valid <= delay;
@@ -28,9 +29,8 @@ module dummy_device (
       end
       if (tl_i.a_valid && (delay == 0)) begin
 	    tl_o.d_size <= tl_i.a_size;
-	    //tl_o.d_source <= tl_o.a_source;
-	    //tl_o.d_sink <= tl_o.a_sink;
-        delay <= '1;
+	    tl_o.d_source <= tl_i.a_source;
+	    delay <= '1;
         case (tl_i.a_opcode)
           tlul_pkg::PutFullData,tlul_pkg::PutPartialData: begin
           	  tl_o.d_opcode <= tlul_pkg::AccessAck;
@@ -40,12 +40,6 @@ module dummy_device (
               	  end
               	  4: begin
               	  	reg_1 <= tl_i.a_data;
-              	  end
-              	  8: begin
-              	  	reg_2 <= tl_i.a_data;
-              	  end
-              	  12: begin
-              	  	reg_3 <= tl_i.a_data;
               	  end
               	  default: ;
               endcase
