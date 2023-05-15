@@ -21,7 +21,7 @@ Objectives
 Preparation
 -----------
 
-* read the chapter "Exceptions and Interrupts" from the Ibex Documentation linked on the :ref:`resources` page.
+* read the chapter "Exceptions and Interrupts" in the "Ibex Reference Guide" from the Ibex Documentation linked on the :ref:`resources` page.
 * look up the CSRs used in *rvlab/src/sw/crt0.S* and *rvlab/src/sw/include/regaccess.h* in the "RISC-V Instruction Set Manual Vol. II: Privileged ISA", in the chapter "Machine-Level ISA" linked on the :ref:`resources` page.
 
 Tasks
