@@ -74,14 +74,14 @@ module student_tlul_mux_tb;
       addr = j << 4;
       bus.get_word(addr + SHIFTIN_OFFSET, res);
       expected_value = j + 1;
-      if (res != expected_value) begin
+      if (res !== expected_value) begin
         $error("SHIFTIN is incorrect: should be %u, is %u", expected_value, res);
         errcnt = errcnt + 1;
       end
 
       bus.get_word(addr + SHIFTOUT_OFFSET, res);
       expected_value = (j + 1) << 1;
-      if (res != expected_value) begin
+      if (res !== expected_value) begin
         $error("SHIFTOUT is incorrect: should be %u, is %u", expected_value, res);
         errcnt = errcnt + 1;
       end
