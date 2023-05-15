@@ -1,8 +1,8 @@
 module tlul_test_host (
-  input  logic              clk_i,
-  output logic              rst_no,
-  input  tlul_pkg::tl_d2h_t tl_i,
-  output tlul_pkg::tl_h2d_t tl_o
+    input  logic              clk_i,
+    output logic              rst_no,
+    input  tlul_pkg::tl_d2h_t tl_i,
+    output tlul_pkg::tl_h2d_t tl_o
 );
 
   localparam tlul_pkg::tl_h2d_t TlIdle = '{a_opcode: tlul_pkg::PutFullData, default: '0};
@@ -42,7 +42,11 @@ module tlul_test_host (
     tl_o.a_valid <= '0;
     tl_o.d_ready <= '1;
     @(posedge clk_i);
-    tl_o <= TlIdle;  // a_valid <= '0;
+    //tl_o <= TlIdle;  // a_valid <= '0;
+    while (!tl_i.d_valid) begin
+      @(posedge clk_i);
+      $display("Waiting for response to be d_valid = 1");
+    end
     if (tl_i.d_error) begin
       $display("Warning: response d_error was %p.", tl_i.d_error);
     end
