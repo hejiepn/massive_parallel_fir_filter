@@ -42,8 +42,8 @@ module tlul_test_host (
     tl_o.a_valid <= '0;
     tl_o.d_ready <= '1;
     @(posedge clk_i);
-    tl_o <= TlIdle;  // a_valid <= '0;
-    while (tl_i.d_valid != 1) begin
+    //tl_o <= TlIdle;  // a_valid <= '0;
+    while (!tl_i.d_valid) begin
     	@(posedge clk_i);
     	$display("Waiting for response to be d_valid = 1");
     end
