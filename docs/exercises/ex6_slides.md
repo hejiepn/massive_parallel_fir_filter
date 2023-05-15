@@ -219,7 +219,7 @@ if (x = 0) // wrong
   }
 ```
 
----docs/exercises/res/ex6_project_flow.svg
+---
 ## **C Traps & Pitfalls**
 ```C
 #define abs(x) x>0?x:-x
@@ -235,6 +235,5 @@ if (x > 0 && y > 0)
 else
   assert(y > x);
 ```
-
 from: Andrew Koenig: C Traps und Pitfalls, Addison-Wesley
 The book is recommended reading !

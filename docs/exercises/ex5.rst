@@ -75,8 +75,8 @@ Note: If the irq controller is finished before the TL-UL multiplexer, temporaril
 Write a HAL (*student_irq_ctrl.c/h*) which isolates all accesses to the registers of the interrupt controller. These functions are time-critical as they are often used inside an interrupt handler. Therefore they should either be declared as extern __inline__ or even better be implemented as macros. In both cases the C header file has to contain not only the declarations but also the implementations.
 
 **5. Interrupt handler**
-
-Implement the top level interrupt handlers *student_irq_ctrl_top_handler()* with branches to the appropriate handlers depending on the value of the register irq_no. Implement these branches with a jump table (in ANSI C: array of function pointers). Provide functions *student_irq_ctrl_get(...)* and *student_irq_ctrl_set(...)* to read and write those tables during run time. These tables should be initialized with “dummy” functions during load time, i.e. before any program execution starts. Refer to *rvlab/src/sw/test_irq/main.c* for a simple example of an irq handler.
+Add a call to a new interrupt handler *student_irq_ctrl_top_handler()* for the external irq input of the Ibex CPU to *src/sw/crt0.S*. Also add an empty *weak* implementation to *src/sw/baselibc/src/irq.c* to avoid breaking the exisiting software.
+Implement *student_irq_ctrl_top_handler()* with branches to the appropriate handlers depending on the value of the register irq_no. Implement these branches with a jump table (in ANSI C: array of function pointers). Provide functions *student_irq_ctrl_get(...)* and *student_irq_ctrl_set(...)* to read and write those tables during run time. These tables should be initialized with “dummy” functions during load time, i.e. before any program execution starts. Refer to *rvlab/src/sw/test_irq/main.c* for a simple example of an irq handler.
 
 **5. Software driven test of all components**
 
@@ -84,7 +84,6 @@ Test your interrupt controller and the associated HAL thoroughly. A single incon
 
 Some of the sensible test cases:
 
-- Does an interrupt request appear simultaneously, after exactly one clock cycle, at the irq_out output as well as in all status and no registers ?
 - Do all prioritization circuits work correctly ? Test at least the following pattern sequence: irq[31:0] = 0, 100...0, 110...0, ..., 111...11, 111...110, 111...100, ... ,0.
 - Does the mask register suppress the interrupt lines correctly ? Assert all interrupt lines and write a sequence similar to the one above to the mask registers.
 
@@ -114,7 +113,7 @@ All deliverables should be submitted in a single PDF file.
 
 **2. Source texts**
 
-#. Verilog of your 1:N bus multiplexer and TL-UL irq controller (excluding any generated code)
+#. Verilog of your 1:N bus multiplexer and irq controller (excluding any generated code)
 #. HTML of the IRQ controller's CPU accessible registers
 #. C of the irq controller’s HAL
 #. C of the irq table modification functions
