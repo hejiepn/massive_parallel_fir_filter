@@ -76,7 +76,7 @@ while {
 * IRQ types
   * vectored (address for each IRQ)  
   * prioritized
-  * nested / incorruptible IRQs
+  * nested / interruptible IRQs
 
 ---
 ## **System Level: Level IRQ protocol**
@@ -118,12 +118,7 @@ h1 {
 // linear vs. constant effort
 Interrupt_Handler() {
   if (status & irq0_mask) irq0_handler()
-  if (stat<style scoped>
-h1 {
-  color: red;
-}
-</style>
-us & irq1_mask) irq1_handler()
+  if (status & irq1_mask) irq1_handler()
   ...
 }
 
