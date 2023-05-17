@@ -1,3 +1,5 @@
+.. _high_level:
+
 High Level Design
 =================
 
@@ -25,11 +27,7 @@ Contains at least
 * all SW modules (HALs, libraries, major application components)
 * all relationships between SW modules. Exception: Shared libraries can be displayed separately.
 * show which SW module(s) access which HW module
-* show if a module runs in an IRQ (use e.g. colors)
-
-For example you can use a diagram as in ex3 ("SW structure"), extending it by the peripherals & HALs of your project.
-
-Modules
+* showguidlines s
 -------
 
 Functionality, interface and verification of each module.
@@ -57,8 +55,32 @@ HW module Y
 
 Extension PCB / hardware build for this project.
 
-* functionality: schematic. This needs to be reviewed by the tutor before connecting to the FPGA board !
+* functionality: schematic
 * interface: label all connections on the PCB as in the schematic to allow reuse in future projects.
+
+PCB checklist
+
+* power supply
+
+  - case a:  only use the IO supply provided on the PMOD / FMC connectors
+  - case b: use of any external supply or any DCDC converter requires galvanic isolation of all signals (e.g. using ADUM)
+    (due to power sequencing requirement of the FPGA, sensitivity to any other voltage than the IO voltage)
+
+* schematic review of tutor
+
+* direction / pin mapping check *before* connecting to FPGA
+
+  * extension PCB: power up separately (i.e. not connected to FPGA).     
+    
+    * output pin check: Measure voltage at every output pin.
+    * input pin check; Connect every input pin **via a 10k resistor** to VDD and VSS and measure the voltage (should be VDD and VSS, respectively)
+
+  * FPGA
+
+    * output pin check: Measure voltage at every output pin.
+    * input pin check; Connect every input pin **via a 10k resistor** to VDD and VSS **from the PMOD** and measure the voltage (should be VDD and VSS, respectively)
+
+   
 
 SW module Z
 ~~~~~~~~~~~

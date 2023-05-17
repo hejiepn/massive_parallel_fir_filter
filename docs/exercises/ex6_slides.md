@@ -10,15 +10,10 @@ style: |
     padding-top: 35px;
     padding-bottom: 0px;
   } 
-  ul {
+  ul, ol{
     margin-top:    0px;  
     margin-bottom: 0px;
   }
-  ol {
-    margin-top:    0px;
-    margin-bottom: 0px;
-  }
-
 ---
 # **RISC-V Lab**
 # Ex6: Specification
@@ -29,7 +24,8 @@ style: |
 2. Project Ideas
 3. Project Flow
 4. Partitioning & Interfaces
-5. C Traps & Pitfalls
+5. Basic Architectures
+6. C Traps & Pitfalls
 
 ---
 # **Project building blocks: Nexsys Video**
@@ -37,8 +33,8 @@ style: |
 * audio stereo in/out
 * 100/1000M Ethernet
 * USB 2 (uart, parallel/SPI, PS/2)
-* sdcard, 8 LED, 8 DIP
-* OLED display 128x32
+* OLED display 128x32, 8 LED, 8 DIP
+* sdcard
 * connectors for extension PCBs
   * 4x PMOD = 4*8 IOs (3.3V)
   * FMC LPC (lots of IOs)
@@ -46,12 +42,12 @@ style: |
 
 ---
 ## **Project building blocks: HW**
-- Interfaces: I2C, SPI, PCM Highway, I2S (audio)
-- MIDI (Keyboard, Sound equipment)
-- IC: ADCs / DACs, H drivers, Irda ...
+- Interfaces: I2C, SPI, PCM Highway, I2S (audio), MIDI 
+- ICs: ADCs / DACs, h drivers, Irda ...
 - HDMI camera (in lab: 1920x1080, 60 fps)
-- RGB cameras & displays
+- RGB cameras (OV7670) & displays
 - **modules from Aliexpress, ebay**
+  - e.g. 64 x 64 RGB Led matrix (12288 LEDs!)
 - historic: disk drives, PS2 keyboard & mouse, ...
 - mechanics: modell servos (PWM), stepper/DC motors, ...
 
@@ -59,13 +55,12 @@ style: |
 ## **Project building blocks: IP cores**
 
 - OpenTitan: TL-UL peripherals
-- Opencores.org: Interfaces (USB, Ethernet), Arithmetic units, 8/16bit CPUs, ...
-- Pulp Platform: AXI & logarithmic interconnects, Peripherals, ....
-- RISC-V CPUs: OpenHW, T-Head Semi (AliB), Chips Alliance (WD), (picorv32, FEMTORV32)
+- Opencores.org: Interfaces (USB, Ethernet), ALUs, 8/16bit CPUs, ...
+- Pulp Platform: AXI & logarithmic interconnects, peripherals, ....
+- more RISC-V CPUs: OpenHW, T-Head Semi (Alibaba), Chips Alliance (Western Digital), picorv32, FEMTORV32
 - LiteX (Python!), SpinalHDL(VexRiscV)
 - Special: Spiral FFT, fpganes, 
-- SW: DOOM, ...
-
+<!-- - Gaiser research (extremely high quality but VHDL / AHBL) -->
 Make sure the **testbench of the IP works** *before* planing its use!
 
 ---
@@ -82,65 +77,56 @@ Make sure the **testbench of the IP works** *before* planing its use!
 
 ---
 ## **Project Ideas: A**
-- **Real Time Ethernet - process Ethernet frames on the fly**
-e.g. Ethercat like network, man in the middle attack
-- **Multi core system: standard CPUs or specialized cores**
+- **Multi core network: standard CPUs or specialized cores**
 ray tracer, particle simulator, fractals, neural networks...
-- **Game/demo: Graphics card  (+ sound)**
+- **Video real time processing**
+"play" tetris, lollipop tracking, TV ambient light, edge extraction, ...
+- **Game / Demo: Graphics card  (+ sound)**
+3d demo, (new: Doom), ...
 triangle shader (3D pipeline!), 2D: fill, line, circle, sprites
-- **Real time video processing**
-object tracking, edge extraction,... frame or line buffered
-- **Low latency audio processing** 
-time  (massively parallel FIR) or frequency domain (FFT)
+- **Audio low latency processing** 
+hall or mouse effect, sound 2 disc drives, sound 2 midi,morse decoder, spectrum analyzer
+time  (massively parallel FIR or IIR) or frequency domain (FFT)
 
 ---
 ## **Project Ideas: A**
-- **Software defined radio / Modulated data transmission**
+- **Real Time Ethernet - process Ethernet frames on the fly**
+e.g. Ethercat like, TCP/IP man in the middle attack
+- **Software Defined Radio / Modulated data transmission**
 100MS/s DAC PCB /  data via laser pointer
 - **malloc() in parallel HW**
-- **Gameboy Advanced*
-  video & sound, sw loader, ...
+- **Emulator: VHDL boy** (new: nesfpga, amiga, ...)
 - **Rotary display**
   string of 32 leds on custom PCB + motor + slip rings
-- **Laser Beamer (very difficult mechanics!)**
+- **Laser beamer (very difficult mechanics!)**
   laser printer motors & mirrors (good) / stepper motors (bad)
 
 ---
 ## **Project Ideas: new A**
+* **"Nexsys Video" peripherals: HDMI in & out, ADAU1761, OLED**
 * multi core real time processing (graphics card, audio, network?)
-* (P4?) switch - build FMC card with e.g. 3x ETH
+* (P4?) Ethernet switch - build FMC card with e.g. 3x ETH
 * minimal 3d pipeline (must know algorithms before)
 * real time use of DDR3 (e.g. as video memory)
-* integrate LARGE core (T-Head C910, Rocket, ...)
+* LARGE core (T-Head C910, Rocket, ...)
 * SW defined multi phase DCDC converter
 * RVLAB
-  - switch to open source DDR3 controller
+  - switch to open source: DDR3, Verilator, F4PGA
   - port to different FPGA/PCB (e.g. Tang Nano 20k)
 
 ---
 ## **Project Ideas: B**
-- Encryper / Decrypter (DES / AES / ChaChan/ TRIT) + IO (can be A)
-- Logic analyzer/ mixed signal oscilloscope
-- Multi axis robot control ("Spider" walking with 18 servos)
-
-## **Project Ideas: C**
-- SD card defragger (mostly SW)
-- (Stepper) motor control, force feedback joystick
-- Theremin
-- weather station with LED matrix display
-
-Not all projects are sufficient for 4 persons !
-
----
-# **Project Flow**
-![bg right:71% 72%](res/ex6_project_flow.svg)
-
+- encryper / decrypter (DES / AES / ChaCha + IO (can be A)
+- bitcoin miner, TROIKA Hash
+- logic analyzer/ mixed signal oscilloscope
+- multi axis robot control ("spider" walking with 18 servos)S
 ---
 # **Partitioning**
 Criteria
 * functionality: manage complexity „divide and conquer“
 * performance: latency and throughput
 * timing, resource sharing, ...
+
 
 Main issue: complexity => main principle: **Orthogonality**
 * single, clearly defined task per module
@@ -175,10 +161,79 @@ Test: How many parts need to be changed if functionality X is added or the envir
 * internal module register readable for debug (e.g. state registers). 
 May not be used during normal operation. Ban from normal HAL, if possible make them only visible in a debug mode.
 
-* advanced (real SoC)
-  - individual gated clk for every module
+* advanced ("real" SoC)
+  - individual gated clk for every module for power saving
   - individual nreset for every module
+  - ...
 
+---
+# **Basic Architectures**
+## **Using (any) peripheral**
+1. Read the "Nexys Video Reference Manual"
+2. Read the IC's data sheet, esp. the timing diagram (s/h times!)
+3. Search the net for examples: Verilog, Arduino libraries, ...
+
+---
+## **Interfacing "slow" peripherals**
+
+1. peri IO synchronous to clk from FPGA
+   AND f(peripheral clock) <= 2x f(fpga internal 
+   e.g. I2S, xSPI, OLED, ...
+   => FPGA knows when its inputs are valid
+
+2. peri IO synchronous to clk from peri
+  AND f(peripheral clock) < ~4x f(fpga internal clock)
+  => FPGA needs to sample peri clk to know when its inputs are valid
+  
+=> use design running *only* on fpga internal clock
+   (basically same as lauflicht)
+
+
+---
+### **"slow" peripherals (1)**
+![bg right:35% 100%](res/ex6_arch_peri_slow_1.drawio.svg)
+
+* Ex: ADAU1761 @ fs=25/512=48.828
+  bclk=25/512*64=3.125 MHz  
+* all IO directly from/to dFF !
+* unmask inputs only when valid !
+  (input DFFs are X most of the time)
+
+![width:500px](res/ex6_arch_peri_slow_adau1761.png)
+
+---
+### **"slow" peripherals (2)**
+![bg right:35% 100%](res/ex6_arch_peri_slow_2.drawio.svg)
+
+* "input synchronizer" for peri clk
+  * 1..2 clk cycles delay
+  * "detects" when peri clk rises / falls
+  * outputs decides when to
+    unmask FPGA inputs / set outputs
+* all IO directly from/to FF !
+* unmask inputs only when valid !
+  (input DFFs are X most of the time)
+
+---
+## **"Fast" peripherals**
+* f(peripheral clock) > 0.5 f(fpga internal)
+* e.g. Ethernet (GMII), RGB camera, HDMI
+
+=> new clock domain in FPGA:
+  * instantiate BUFG to drive clk of new domain
+  * synchronize nres (opt: add BUFG to drive nres of new domain)
+  * add clock constraints to XDC (frequency, false paths)
+  * add clock crossings to "rest" of design
+
+---
+### **"Fast" peripherals: streaming**
+
+![width:1000px](res/ex6_arch_peri_fast.drawio.svg)
+
+---
+### **"Fast" peripherals: (frame) buffer**
+
+![width:800px](res/ex6_arch_peri_fast_dpram.drawio.svg)
 
 ---
 # **C Traps & Pitfalls**

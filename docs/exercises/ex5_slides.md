@@ -16,7 +16,7 @@ style: |
   }
 ---
 # **RISC-V Lab**
-# Ex4: Interrrupts
+# Ex5: Interrrupts
 
 ---
 # **Content**

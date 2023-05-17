@@ -26,4 +26,4 @@ Slides
 
 :download:`Exercise 5 Slides<ex5_slides.pdf>`
 
-:download:`Exercise 6 Slides (preliminary)<ex6_slides.pdf>`
+:download:`Exercise 6 Slides<ex6_slides.pdf>`

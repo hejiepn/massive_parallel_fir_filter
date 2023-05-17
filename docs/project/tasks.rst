@@ -32,14 +32,19 @@ When all hardware modules are verified individually write a "mini application" w
 
 Perform a netlist simulation of this "mini application" running on the P&R netlist.
 
-    .. note::
-        A sucessfull netlist simulation of your *entire* project is a prerequisite before any FPGA board access !
-
 
 5. FPGA upload & application development
 ----------------------------------------
 
-Develop the final application on the FPGA board.
+Prerequisites for FPGA board access:
+
+* successful netlist simulation of "mini application" (see above)
+* review by tutor of synthesis, P&R & bitgen transcripts & reports (warning & error messages)
+* if you build your own PCB: see PCB checklist in :ref:`high_level`
+
+Read the :ref:`fpga_upload` tutorial, esp. the notes regarding handling of the FPGA board. 
+
+Develop the final application on the FPGA board. 
 
 
 6. Live demonstration

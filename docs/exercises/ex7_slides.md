@@ -21,31 +21,15 @@ style: |
 
 ---
 # **RISC-V Lab**
-# Ex7: Architecture(s)
+# Ex7: Mid term Presentation(s)
 
 ---
 # **Content**
-1. Application specific Architectures
+1. Application specific architectures
 2. Mid Term presentation
 
 ---
-# **Application specific Architectures**
-
-## **RX / TX data from a FAST external clock**
-f(clk peripheral) > 4x internal FPGA clock
-
-Examples
-* Ethernet: GMII Interface
-* RGB Camera / Display
-* (HDMI)
-* ...
-
----
-## **RX / TX data from a FAST external clock**
-* instantiate clock buffer (BUFG)
-* synchrone the reset to the new clock
-* constrain clk in XDC file
-* clock domain crossing: 
+# **Application specific architectures**
 
 ---
 # **Mid term presentation**
@@ -74,10 +58,10 @@ DONT: Copy bullet points from your functional spec.:
   - 200k long FIR filter, latency < 5ms
 
 DO: Create a **vision** and explain the **challenge**
-  - Hall effect generator (headline)
+  - hall effect generator (headline)
   - **pictures** of church and organ
   - **sound / video** file
-  - challenges: very long FIR filter (200k for church)
+  - **challenges**: very long FIR filter (200k for church)
     @ short latency (5ms for organist)
     
 ---
