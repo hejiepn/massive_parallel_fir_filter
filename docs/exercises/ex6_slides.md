@@ -23,9 +23,8 @@ style: |
 1. Project building blocks
 2. Project Ideas
 3. Project Flow
-4. Partitioning & Interfaces
-5. Basic Architectures
-6. C Traps & Pitfalls
+4. Project Specification
+5. C Traps & Pitfalls
 
 ---
 # **Project building blocks: Nexsys Video**
@@ -103,13 +102,13 @@ e.g. Ethercat like, TCP/IP man in the middle attack
 
 ---
 ## **Project Ideas: new A**
-* **"Nexsys Video" peripherals: HDMI in & out, ADAU1761, OLED**
+* **"Nexsys Video" peripherals: HDMI in & out, ADAU1761, ETH**
 * multi core real time processing (graphics card, audio, network?)
 * (P4?) Ethernet switch - build FMC card with e.g. 3x ETH
 * minimal 3d pipeline (must know algorithms before)
 * real time use of DDR3 (e.g. as video memory)
 * LARGE core (T-Head C910, Rocket, ...)
-* SW defined multi phase DCDC converter
+* SW defined multi phase DCDC converter (custom PCB)
 * RVLAB
   - switch to open source: DDR3, Verilator, F4PGA
   - port to different FPGA/PCB (e.g. Tang Nano 20k)
@@ -234,6 +233,47 @@ May not be used during normal operation. Ban from normal HAL, if possible make t
 ### **"Fast" peripherals: (frame) buffer**
 
 ![width:800px](res/ex6_arch_peri_fast_dpram.drawio.svg)
+
+---
+## **Architecture: Global DMA**
+![bg right:50% 95%](res/ex6_arch_dma_global.drawio.svg)
+* route data / processing via xbar_main
+* CPU needs to access data
+* large external memory used
+* reuse of internal memory
+
+---
+## **Architecture: Local DMA**
+![bg right:50% 95%](res/ex6_arch_dma_local.drawio.svg)
+* bandwidth of SRAM limits performance -> multiple
+* dedicated TU-UL xbar or SW conrolled SRAM MUX
+
+---
+## **Arch: Multi core**
+![bg right:45% 95%](res/ex6_arch_mcore.drawio.svg)
+##### "interconnect" = 1:N (TL-UL)
+* map SRAMs of cores into global address map
+* 50% of SRAM bandwidth lost
+* routing & area limits number of cores
+* timing/latency limits BW 4 Ibex
+* f(core) >> f(system)
+
+---
+## **Arch: Multi core**
+![bg right:45% 95%](res/ex6_arch_mcore.drawio.svg)
+##### "interconnect" = sparse
+* indirect access to SRAM of cores via "interconnect"
+* ring -> many cores (but high latency, BW/N)    
+* 2D, 3D matrix -> routing
+* log network (!)
+* ...
+* f(core) >> f(system)
+
+---
+## **Arch: Multi core**
+![bg right:50% 95%](res/ex6_arch_mcore_local_dp.drawio.svg)
+
+Using both ports for each core still possible.
 
 ---
 # **C Traps & Pitfalls**

@@ -25,8 +25,9 @@ style: |
 
 ---
 # **Content**
-1. Application specific architectures
-2. Mid Term presentation
+1. Peripherals
+2. Basic Architectures
+3. Mid Term presentation
 
 ---
 # **Application specific architectures**
