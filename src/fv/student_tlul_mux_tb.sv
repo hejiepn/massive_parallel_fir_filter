@@ -63,7 +63,10 @@ module student_tlul_mux_tb;
     errcnt = '0;
 
     for (int j = 0; j < CONNECTED_SLAVES; j = j + 1) begin
-      addr  = j << 4;
+      //assumption is that bottom 6 bits are for internal addressing
+      //inside the TL-UL MUX devices
+      //feel free to change this if you require more/less
+      addr  = j << 6;
       wdata = j + 1;
       bus.put_word(addr + SHIFTIN_OFFSET, wdata);
       bus.put_word(addr + SHIFTCFG_OFFSET, 6'b000010);
@@ -71,7 +74,8 @@ module student_tlul_mux_tb;
 
 
     for (int j = 0; j < CONNECTED_SLAVES; j = j + 1) begin
-      addr = j << 4;
+      //the assumption here is same as before
+      addr = j << 6;
       bus.get_word(addr + SHIFTIN_OFFSET, res);
       expected_value = j + 1;
       if (res != expected_value) begin
