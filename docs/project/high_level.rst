@@ -27,8 +27,10 @@ Contains at least
 * all SW modules (HALs, libraries, major application components)
 * all relationships between SW modules. Exception: Shared libraries can be displayed separately.
 * show which SW module(s) access which HW module
-* showguidlines s
--------
+
+
+Module specification
+--------------------
 
 Functionality, interface and verification of each module.
 

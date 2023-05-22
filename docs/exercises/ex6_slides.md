@@ -38,6 +38,9 @@ style: |
   * 4x PMOD = 4*8 IOs (3.3V)
   * FMC LPC (lots of IOs)
 * ... (see "Design Reference")
+  * add clock constraints to XDC (frequency, false paths)
+  * add clock crossings to "rest" of design
+
 
 ---
 ## **Project building blocks: HW**
@@ -98,7 +101,11 @@ e.g. Ethercat like, TCP/IP man in the middle attack
 - **Rotary display**
   string of 32 leds on custom PCB + motor + slip rings
 - **Laser beamer (very difficult mechanics!)**
-  laser printer motors & mirrors (good) / stepper motors (bad)
+  laser printer motors & mirrors (good) / stepper ---## **Using (any) peripheral**
+1. Read the "Nexys Video Reference Manual"
+2. Read the IC's data sheet, esp. the timing diagram (s/h times!)
+3. Search the net for examples: Verilog, Arduino libraries, ...
+
 
 ---
 ## **Project Ideas: new A**
@@ -119,10 +126,23 @@ e.g. Ethercat like, TCP/IP man in the middle attack
 - bitcoin miner, TROIKA Hash
 - logic analyzer/ mixed signal oscilloscope
 - multi axis robot control ("spider" walking with 18 servos)S
+
+
+---
+# **Project Flow**
+![bg right:70% 70%](res/ex6_project_flow.svg)
+
+---
+# **Project Specification**
+
+## Why ?
+## Agree what to build between customer and design house!
+
+
 ---
 # **Partitioning**
 Criteria
-* functionality: manage complexity „divide and conquer“
+* complexity: „divide and conquer“
 * performance: latency and throughput
 * timing, resource sharing, ...
 
@@ -147,7 +167,7 @@ Test: How many parts need to be changed if functionality X is added or the envir
 
 ---
 * CPU is always master!
-  At any time the CPU can set a module into a defined states (e.g.off)
+  At any time the CPU can set a module into a defined states (e.g. off)
 
 * consistent register structure
   - across register bits, registers within a module and modules
@@ -165,115 +185,6 @@ May not be used during normal operation. Ban from normal HAL, if possible make t
   - individual nreset for every module
   - ...
 
----
-# **Basic Architectures**
-## **Using (any) peripheral**
-1. Read the "Nexys Video Reference Manual"
-2. Read the IC's data sheet, esp. the timing diagram (s/h times!)
-3. Search the net for examples: Verilog, Arduino libraries, ...
-
----
-## **Interfacing "slow" peripherals**
-
-1. peri IO synchronous to clk from FPGA
-   AND f(peripheral clock) <= 2x f(fpga internal 
-   e.g. I2S, xSPI, OLED, ...
-   => FPGA knows when its inputs are valid
-
-2. peri IO synchronous to clk from peri
-  AND f(peripheral clock) < ~4x f(fpga internal clock)
-  => FPGA needs to sample peri clk to know when its inputs are valid
-  
-=> use design running *only* on fpga internal clock
-   (basically same as lauflicht)
-
-
----
-### **"slow" peripherals (1)**
-![bg right:35% 100%](res/ex6_arch_peri_slow_1.drawio.svg)
-
-* Ex: ADAU1761 @ fs=25/512=48.828
-  bclk=25/512*64=3.125 MHz  
-* all IO directly from/to dFF !
-* unmask inputs only when valid !
-  (input DFFs are X most of the time)
-
-![width:500px](res/ex6_arch_peri_slow_adau1761.png)
-
----
-### **"slow" peripherals (2)**
-![bg right:35% 100%](res/ex6_arch_peri_slow_2.drawio.svg)
-
-* "input synchronizer" for peri clk
-  * 1..2 clk cycles delay
-  * "detects" when peri clk rises / falls
-  * outputs decides when to
-    unmask FPGA inputs / set outputs
-* all IO directly from/to FF !
-* unmask inputs only when valid !
-  (input DFFs are X most of the time)
-
----
-## **"Fast" peripherals**
-* f(peripheral clock) > 0.5 f(fpga internal)
-* e.g. Ethernet (GMII), RGB camera, HDMI
-
-=> new clock domain in FPGA:
-  * instantiate BUFG to drive clk of new domain
-  * synchronize nres (opt: add BUFG to drive nres of new domain)
-  * add clock constraints to XDC (frequency, false paths)
-  * add clock crossings to "rest" of design
-
----
-### **"Fast" peripherals: streaming**
-
-![width:1000px](res/ex6_arch_peri_fast.drawio.svg)
-
----
-### **"Fast" peripherals: (frame) buffer**
-
-![width:800px](res/ex6_arch_peri_fast_dpram.drawio.svg)
-
----
-## **Architecture: Global DMA**
-![bg right:50% 95%](res/ex6_arch_dma_global.drawio.svg)
-* route data / processing via xbar_main
-* CPU needs to access data
-* large external memory used
-* reuse of internal memory
-
----
-## **Architecture: Local DMA**
-![bg right:50% 95%](res/ex6_arch_dma_local.drawio.svg)
-* bandwidth of SRAM limits performance -> multiple
-* dedicated TU-UL xbar or SW conrolled SRAM MUX
-
----
-## **Arch: Multi core**
-![bg right:45% 95%](res/ex6_arch_mcore.drawio.svg)
-##### "interconnect" = 1:N (TL-UL)
-* map SRAMs of cores into global address map
-* 50% of SRAM bandwidth lost
-* routing & area limits number of cores
-* timing/latency limits BW 4 Ibex
-* f(core) >> f(system)
-
----
-## **Arch: Multi core**
-![bg right:45% 95%](res/ex6_arch_mcore.drawio.svg)
-##### "interconnect" = sparse
-* indirect access to SRAM of cores via "interconnect"
-* ring -> many cores (but high latency, BW/N)    
-* 2D, 3D matrix -> routing
-* log network (!)
-* ...
-* f(core) >> f(system)
-
----
-## **Arch: Multi core**
-![bg right:50% 95%](res/ex6_arch_mcore_local_dp.drawio.svg)
-
-Using both ports for each core still possible.
 
 ---
 # **C Traps & Pitfalls**
