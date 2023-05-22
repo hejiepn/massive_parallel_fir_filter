@@ -51,6 +51,14 @@ module student_tlul_mux_tb;
       .tl_o  (tl_host_h2d)
   );
 
+  //this assumes that bus.reset() is done as first call
+  //the negedge is here to prevent assertion errors before the reset
+  assert property (@(negedge clk) !$isunknown(tl_host_d2h));
+  assert property (@(negedge clk) !$isunknown(tl_host_h2d));
+  assert property (@(negedge clk) !$isunknown(tl_device_d2h));
+  assert property (@(negedge clk) !$isunknown(tl_device_h2d));
+
+
   initial begin
     logic [31:0] res;
     logic [31:0] wdata;
