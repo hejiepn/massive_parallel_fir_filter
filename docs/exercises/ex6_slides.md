@@ -101,11 +101,7 @@ e.g. Ethercat like, TCP/IP man in the middle attack
 - **Rotary display**
   string of 32 leds on custom PCB + motor + slip rings
 - **Laser beamer (very difficult mechanics!)**
-  laser printer motors & mirrors (good) / stepper ---## **Using (any) peripheral**
-1. Read the "Nexys Video Reference Manual"
-2. Read the IC's data sheet, esp. the timing diagram (s/h times!)
-3. Search the net for examples: Verilog, Arduino libraries, ...
-
+  laser printer motors & mirrors (good) / stepper
 
 ---
 ## **Project Ideas: new A**
