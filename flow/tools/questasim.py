@@ -85,9 +85,9 @@ def simulate(
 
     compile(src_files, cwd, 'work', include_dirs, defines, timescale)
 
-    if not wave_do.exists():
-        with open(wave_do, "x") as f:
-            f.write("\n")
+
+    if not isinstance(wave_do, (list, tuple)):
+        wave_do = [wave_do]
 
     with Vsim(sdf, libs, plusargs, top_module, cwd=cwd, interact=(not batch_mode)) as vsim:
         if vcd_out:
@@ -95,7 +95,11 @@ def simulate(
             vsim("vcd add -r /*")
         #vsim.echo("Hello, world!")
         if not batch_mode:
-            vsim.do(str(wave_do))
+            for dofile in wave_do: 
+                if not dofile.exists():
+                    with open(dofile, "x") as f:
+                        f.write("\n")
+                vsim.do(str(dofile))
             fn_enc = tclobj.encode(str(wave_do))
 
             vsim(f'add button "Save Wave Format" {{write format wave {fn_enc}; echo "Wave format saved to {fn_enc}."}} NoDisable {{-bg #0c0}}')
