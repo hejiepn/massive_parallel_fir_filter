@@ -57,7 +57,7 @@ The following projects are not integrated into rvlab but could (i.e. no guarante
 
 - HDMI input
 
-  - litevideo (part of LiteX project, python rendered verilog): `https://github.com/litex-hub/litevideo`_
+  - `litevideo <https://github.com/litex-hub/litevideo>`_ (part of LiteX project, python rendered verilog): 
 
 .. _7 Series Product Tables and Product Selection Guide (XMP101): https://docs.xilinx.com/v/u/en-US/7-series-product-selection-guide
 .. _Vivado Design Suite 7 Series FPGA and Zynq-7000 SoC Libraries Guide UG953 (v2021.2) October 22, 2021: https://www.xilinx.com/content/dam/xilinx/support/documents/sw_manuals/xilinx2021_2/ug953-vivado-7series-libraries.pdf

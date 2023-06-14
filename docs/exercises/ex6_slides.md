@@ -41,7 +41,6 @@ style: |
   * add clock constraints to XDC (frequency, false paths)
   * add clock crossings to "rest" of design
 
-
 ---
 ## **Project building blocks: HW**
 - Interfaces: I2C, SPI, PCM Highway, I2S (audio), MIDI 
@@ -107,11 +106,14 @@ e.g. Ethercat like, TCP/IP man in the middle attack
 ## **Project Ideas: new A**
 * **"Nexsys Video" peripherals: HDMI in & out, ADAU1761, ETH**
 * multi core real time processing (graphics card, audio, network?)
+  * github.com/vortexgpgpu/vortex (1..64 cores 1024 threads)
 * (P4?) Ethernet switch - build FMC card with e.g. 3x ETH
 * minimal 3d pipeline (must know algorithms before)
 * real time use of DDR3 (e.g. as video memory)
-* LARGE core (T-Head C910, Rocket, ...)
 * SW defined multi phase DCDC converter (custom PCB)
+
+---
+## **Project Ideas: new A**
 * RVLAB
   - switch to open source: DDR3, Verilator, F4PGA
   - port to different FPGA/PCB (e.g. Tang Nano 20k)
