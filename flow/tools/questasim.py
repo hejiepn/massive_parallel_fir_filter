@@ -100,7 +100,7 @@ def simulate(
                     with open(dofile, "x") as f:
                         f.write("\n")
                 vsim.do(str(dofile))
-            fn_enc = tclobj.encode(str(wave_do))
+            fn_enc = tclobj.encode(str(wave_do[-1])) # assumption: last dofile in list is the one containing the wave view
 
             vsim(f'add button "Save Wave Format" {{write format wave {fn_enc}; echo "Wave format saved to {fn_enc}."}} NoDisable {{-bg #0c0}}')
 
