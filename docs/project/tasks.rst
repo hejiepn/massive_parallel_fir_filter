@@ -51,6 +51,7 @@ Develop the final application on the FPGA board.
 ---------------------
 
 All features promised in the function specification have to be presented to the tutor.
+Alternatively, submit a video showing all features. This can be the video of the presentation (if it demonstrates all promised features) or a 2nd "boring" video covering all features.
 
 7. Presentations
 ----------------
@@ -65,7 +66,7 @@ Two presentations are scheduled
     * final date to complete the project, only the project documentation can be handed in afterwards.
     * each team member must be present
     * strict time limit per group
-    * include a (short) video demonstrating the project
+    * show a (short) video demonstrating the project
 
 8. Project documentation
 ------------------------

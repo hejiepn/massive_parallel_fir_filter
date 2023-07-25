@@ -31,3 +31,5 @@ Slides
 :download:`Exercise 7 Slides <ex7_slides.pdf>`
 
 :download:`Exercise 8 Slides <ex8_slides.pdf>`
+
+:download:`Exercise 9 Slides <ex9_slides.pdf>`
