@@ -93,5 +93,7 @@ Each deliverables should be submitted as a single PDF file.
     #. for 7: slides of the mid term presentation (4 days before mid term presentation)
 
     #. for 7: slides & video of the final presentation (one week before final presentation)
+    
+    #. project documentation: "Requirements and functional specification" and "High level design" chapter from above plus results chapter.  
 
-    #. project itself & project documentation (git pull request)
+    #. project itself (as zip/tar.gz archive): Please run flow --clean and remove the .git (and .vscode) directotries before creating the archive. The archive should also include the slides of the mid term & final presentations & project documentation (pdfs only, no videos)

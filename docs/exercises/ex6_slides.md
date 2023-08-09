@@ -29,7 +29,7 @@ style: |
 ---
 # **Project building blocks: Nexsys Video**
 * HDMI video in/out
-* audio stereo in/out
+* audio stereo in/out (analog)
 * 100/1000M Ethernet
 * USB 2 (uart, parallel/SPI, PS/2)
 * OLED display 128x32, 8 LED, 8 DIP
@@ -42,10 +42,16 @@ style: |
   * add clock crossings to "rest" of design
 
 ---
-## **Project building blocks: HW**
+## **Project building blocks: Lab HW**
+- HDMI camera (1920x1080, 60 fps)
+- 128 x64 led matrix +  PMOD adapter
+- microphone array (Sipeed: 6 + 1 mics + 12x SK9822 LED)
+- "Dual Shock" gamepads + PMOD adapter
+
+---
+## **Project building blocks: new HW**
 - Interfaces: I2C, SPI, PCM Highway, I2S (audio), MIDI 
 - ICs: ADCs / DACs, h drivers, Irda ...
-- HDMI camera (in lab: 1920x1080, 60 fps)
 - RGB cameras (OV7670) & displays
 - **modules from Aliexpress, ebay**
   - e.g. 64 x 64 RGB Led matrix (12288 LEDs!)

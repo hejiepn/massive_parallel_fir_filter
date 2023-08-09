@@ -13,7 +13,7 @@ Contains at least
 * operating environment (e.g. hardware connected to the FPGA)
 * all connections to the environment using descriptive signal names 
 * all HDL modules 
-* all connections between the HDL modules using descriptive signal names
+* all major connections between the HDL modules using descriptive signal names
 
 Focus should be the student level and your modules, the rest of the (supplied) rvlab shall be drawn in an abstracted manner.
 
@@ -47,6 +47,7 @@ Mandatory for each verilog module
   * generated HTML of the register definitions (if the module has CPU accessible registers)
   * DMA descriptors (for TL-UL hosts)  
   * block memory layout (if used, e.g. video memory)
+  * module ports are *not* required, as the major ports should already be visible on the "Hardware top level block diagram" and minor signals are not part of the high level design. 
 
 * verification plan: bullet points of the tests to be performed by your C code
 
