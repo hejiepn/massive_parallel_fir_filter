@@ -18,7 +18,7 @@ package top_pkg;
     logic hdmi_tx_rsda;
     logic hdmi_tx_hpd;
 
-    logic ac_dac_sdata;
+    logic ac_adc_sdata;
     logic scl;
     logic sda;
 
@@ -64,7 +64,7 @@ package top_pkg;
     logic       hdmi_tx_rscl_oe;  // output enable. 0 = High-Z, 1 = drive output to 0
     logic       hdmi_tx_rsda_oe;  // output enable. 0 = High-Z, 1 = drive output to 0
 
-    logic ac_adc_sdata;
+    logic ac_dac_sdata;
     logic ac_bclk;
     logic ac_lrclk;
     logic ac_mclk;

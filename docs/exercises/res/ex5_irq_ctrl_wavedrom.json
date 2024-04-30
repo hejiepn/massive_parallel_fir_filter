@@ -1,0 +1,10 @@
+{ signal: [  
+  {name: 'irq0',   wave: '0.1...0.'},
+  {name: 'irq1',   wave: '01.0....'},
+  {name: 'irq2',   wave: '01......'},
+  {name: 'irq',    wave: '01......'},
+  {name: 'irq_no', wave: '234...5.', data: ['16','1','0', '2']},  
+  {name: 'CPU',    wave: '23..4.5.', data: ['norm','ISR1','ISR0', 'ISR2']},  
+  ],
+  foot:{tock:1},   
+}

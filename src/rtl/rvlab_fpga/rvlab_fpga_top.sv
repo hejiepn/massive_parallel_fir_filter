@@ -39,11 +39,11 @@ module rvlab_fpga_top (
   output wire oled_vbat,
   output wire oled_vdd,
 
-  output wire ac_adc_sdata,
+  input wire ac_adc_sdata,
   output wire ac_bclk,
   output wire ac_lrclk,
   output wire ac_mclk,
-  input  wire ac_dac_sdata,
+  output  wire ac_dac_sdata,
 
   output wire sd_sck,
   output wire sd_mosi,
@@ -222,11 +222,11 @@ module rvlab_fpga_top (
   // Audio codec
   // -----------
 
-  assign ac_adc_sdata            = userio_f2b.ac_adc_sdata;
+  assign ac_dac_sdata            = userio_f2b.ac_dac_sdata;
   assign ac_bclk                 = userio_f2b.ac_bclk;
   assign ac_lrclk                = userio_f2b.ac_lrclk;
   assign ac_mclk                 = userio_f2b.ac_mclk;
-  assign userio_b2f.ac_dac_sdata = ac_dac_sdata;
+  assign userio_b2f.ac_adc_sdata = ac_adc_sdata;
 
   // SD card
   // -------

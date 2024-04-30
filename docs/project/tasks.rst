@@ -32,20 +32,26 @@ When all hardware modules are verified individually write a "mini application" w
 
 Perform a netlist simulation of this "mini application" running on the P&R netlist.
 
-    .. note::
-        A sucessfull netlist simulation of your *entire* project is a prerequisite before any FPGA board access !
-
 
 5. FPGA upload & application development
 ----------------------------------------
 
-Develop the final application on the FPGA board.
+Prerequisites for FPGA board access:
+
+* successful netlist simulation of "mini application" (see above)
+* review by tutor of synthesis, P&R & bitgen transcripts & reports (warning & error messages)
+* if you build your own PCB: see PCB checklist in :ref:`high_level`
+
+Read the :ref:`fpga_upload` tutorial, esp. the notes regarding handling of the FPGA board. 
+
+Develop the final application on the FPGA board. 
 
 
 6. Live demonstration
 ---------------------
 
 All features promised in the function specification have to be presented to the tutor.
+Alternatively, submit a video showing all features. This can be the video of the presentation (if it demonstrates all promised features) or a 2nd "boring" video covering all features.
 
 7. Presentations
 ----------------
@@ -60,7 +66,7 @@ Two presentations are scheduled
     * final date to complete the project, only the project documentation can be handed in afterwards.
     * each team member must be present
     * strict time limit per group
-    * include a (short) video demonstrating the project
+    * show a (short) video demonstrating the project
 
 8. Project documentation
 ------------------------
@@ -87,5 +93,7 @@ Each deliverables should be submitted as a single PDF file.
     #. for 7: slides of the mid term presentation (4 days before mid term presentation)
 
     #. for 7: slides & video of the final presentation (one week before final presentation)
+    
+    #. project documentation: "Requirements and functional specification" and "High level design" chapter from above plus results chapter.  
 
-    #. project itself & project documentation (git pull request)
+    #. project itself (as zip/tar.gz archive): Please run flow --clean and remove the .git (and .vscode) directotries before creating the archive. The archive should also include the slides of the mid term & final presentations & project documentation (pdfs only, no videos)

@@ -1,0 +1,16 @@
+{ head:{text:'a channel (requests host -> device)'},
+  signal: [  
+  ['a channel',
+  ['host -> device',
+  {name: 'clk',                 wave: 'p........'},
+  {name: 'a_opcode',            wave: 'x3x44x5.x', data: ['Get', 'Put', 'Get', 'Get', 'C4']},
+  {name: 'a_address',           wave: 'x3x44x5.x', data: ['A0',  'A1',  'A2', 'A3', 'A4']},
+  {name: 'a_*',                 wave: 'x3x44x5.x', data: ['C0',  'C1',  'C2', 'C3', 'C4']},
+  {name: 'a_data',              wave: 'x.x4x...x', data: [       'DW1',       'DW3', 'DW4']},  
+  {name: 'a_valid',             wave: '0101101.0'},
+  ],
+  ['d→h', 
+  {name: 'a_ready',             wave: 'x1x11x01x'}
+  ]
+  ]
+]}

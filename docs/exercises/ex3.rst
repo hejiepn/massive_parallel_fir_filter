@@ -23,9 +23,11 @@ Objectives
 
 Preparation
 -----------
-
+* Read the :ref:`Design Reference` to make yourself familiar with the rvlab design.
+* Read the :ref:`software` tutorial.
+* Read the "RISC-V reference card" (skipping sections RV32A, RV32F, RV32C) linked on the :ref:`resources` page.
 * Study the flow for centralized register definitions in a hard/software co-design as described in the OpenTitan Reggen Manual linked on the :ref:`resources` page. 
-* Read the chapter :ref:`Design Reference` to make yourself familiar with the rvlab design.
+
 
 Tasks
 -----
@@ -38,7 +40,7 @@ Tasks
 
 The register definitions of the predefined hardware components are in *rvlab/src/design/reggen/*.
 
-#. Add a definition for your running light (*student_rlight.json*).
+#. Add a definition for your running light (*student_rlight.hjson*).
 #. Run the reggen tool to generate the Verilog, C and HTML files::
 
     flow reggen.generate
@@ -90,7 +92,7 @@ Wave views should be zoomed in as much as possible to only show the sections spe
 **1. Questions**
   #. to 4: What is the highest speed of the running light your software can handle ?
   #. to 4: How many clock cycles does your application require for a complete pass of its main loop?
-  #. to 4: How many clock cycles after the rising edge of the nres is the stack pointer of the IRQ initialized?
+  #. to 4: How many clock cycles after the 1st instruction in ctrt0.S is the stack pointer of the IRQ initialized?
 
 **2. Deliverables of task 4**
   #. the register definitions of your running light (generated HTML)

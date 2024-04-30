@@ -19,3 +19,17 @@ Slides
 :download:`Exercise 1 Slides<ex1_slides.pdf>`
 
 :download:`Exercise 2 Slides<ex2_slides.pdf>`
+
+:download:`Exercise 3 Slides<ex3_slides.pdf>`
+
+:download:`Exercise 4 Slides<ex4_slides.pdf>`
+
+:download:`Exercise 5 Slides<ex5_slides.pdf>`
+
+:download:`Exercise 6 Slides<ex6_slides.pdf>`
+
+:download:`Exercise 7 Slides <ex7_slides.pdf>`
+
+:download:`Exercise 8 Slides <ex8_slides.pdf>`
+
+:download:`Exercise 9 Slides <ex9_slides.pdf>`
