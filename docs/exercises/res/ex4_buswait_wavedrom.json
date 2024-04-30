@@ -1,0 +1,12 @@
+{signal: [
+  ['M-> S',
+  {name: 'clk',                     wave: 'p.......'},
+  {name: 'ctrl (r/w, strobe,...)',  wave: 'x57x7..x', data: ['C0', 'C1', 'C2']},
+  {name: 'address',                 wave: 'x57x7..x', data: ['A0', 'A1', 'A2']},
+  {name: 'data write',              wave: 'x5x.....', data: ['DW0', 'DW1', 'DW2']},  
+  ],
+  ['S->M',
+  {name: 'data read',               wave: 'x.7x..7x', data: ['DR1', 'DR2']},
+  {name: 'ready',                   wave: 'x11x001x'}
+  ]
+]}

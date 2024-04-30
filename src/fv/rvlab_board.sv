@@ -24,11 +24,11 @@ module rvlab_board (
   output wire oled_vbat,
   output wire oled_vdd,
 
-  output wire ac_adc_sdata,
+  output wire ac_dac_sdata,
   output wire ac_bclk,
   output wire ac_lrclk,
   output wire ac_mclk,
-  input  wire ac_dac_sdata,
+  input  wire ac_adc_sdata,
 
   output wire sd_sck,
   output wire sd_mosi,

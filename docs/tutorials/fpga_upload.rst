@@ -3,6 +3,15 @@
 FPGA Upload
 ===========
 
+    .. note::
+        1. absolutely **no probing** (oscilloscope, voltmeter, logic analyzer) on the FPGA board ! Connect measurement equipment only to PMOD connectors!
+        2. **never connect any supply or ground** to an (PMOD) FPGA IO! If you need a fixed logic level connect a supply pin of the PMOD connector **via a resistor** (e.g. 4.7k) to the IO !
+        3. Every hardware connected to the board must be cleared by the tutor - especially self build PCBs !
+ 
+*Mechanical pressure over time creates micro interruptions (in solder pads and internal layers). If you want to probe any FPGA IO (e.g. to to an on board device) mirror the FPGA IO in your design to a second FPGA IO of a PMOD connector. For the same reason the push buttons may not be used.*
+
+*A power supply is very low ohmic - connecting it to a wrong place (e.g. output) even briefly will kill the FPGA.*
+
 Load bitstream
 --------------
 

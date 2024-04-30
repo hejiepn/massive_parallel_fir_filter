@@ -76,6 +76,7 @@ module student_rlight (
 
   // Demo FSM. Replace with your rlight
   // ----------------------------------
+  /*
   enum logic[1:0] {idle, swap, count} state;
   logic [7:0] led;
   logic [1:0] cnt;
@@ -112,6 +113,53 @@ module student_rlight (
         endcase;
     end // if (~rst_ni) else
   end 
+ */
+ // Demo FSM. Replace with your rlight
+  // ----------------------------------
+  enum logic[1:0] {pp, rl, rr, sp} state;
+  logic [7:0] led;
+
+  always_ff @(regB, negedge rst_ni) begin
+    if (~rst_ni) begin
+      state   <= pp;
+      led     <= 8'b10101010;
+    end // if
+    else begin
+      case (regB)
+        0: begin
+          state   <= pp;
+        end //0
+        1: begin
+          state   <= rl;
+        end //1
+        2: begin
+          state   <= rr;
+        end // 2
+        3: begin
+          state   <= sp;
+        end // 3
+        default: begin
+          state <= pp;
+        end // default
+      endcase
+    end // else
+  end // always_ff
+
+  always_ff @(posedge clk_i) begin
+    case (state)
+      pp: begin
+          led   <= regA[15:8];
+      end // pp
+      rl: begin
+      end // rl
+      rr: begin
+      end // rr
+      sp: begin
+      end // sp
+      default: begin
+      end // default
+    endcase
+  end //  always_ff
  
   assign led_o = led; // output assignment
 

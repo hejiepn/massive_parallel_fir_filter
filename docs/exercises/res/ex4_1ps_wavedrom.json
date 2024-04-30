@@ -1,0 +1,11 @@
+{ 
+  head:{
+  text:'1 pipeline stage'
+  },
+  signal: [  
+  {name: 'clk',         wave: 'p.....'},
+  {name: 'ctrl / adr',  wave: '3456..7', data: ['CA0', 'CA1', 'CA2', 'CA3','CA4']},
+  {name: 'data (r/w)',  wave: 'x34xx56', data: ['D0',  'D1',  'D2',  'D3']},    
+  {name: 'ready',       wave: 'x110.1.'}
+  ]
+}

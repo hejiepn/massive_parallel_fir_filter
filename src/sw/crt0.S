@@ -19,7 +19,7 @@
     nop             // 13
     nop             // 14
     nop             // 15
-    nop             // 16
+    nop             // 16 16..31: Vendor specific IRQs. Ibex: 16..30: External fast IRQs
     nop             // 17
     nop             // 18
     nop             // 19
@@ -34,7 +34,7 @@
     nop             // 28
     nop             // 29
     nop             // 30
-    j irq_error     // 31
+    j irq_error     // 31  Ibex: NMI
     j _start        // 32: Reset vector / global entry point
 
     .option pop

@@ -30,14 +30,14 @@ used. Smaller accesses would involve more complex logic.
 
 The descriptor is as follows:
 
-======  ====  =========  ============================================================
+======  ====  =========  ==================================================================================
 offset  size  name       description
-======  ====  =========  ============================================================
+======  ====  =========  ==================================================================================
 0x0     0x4   operation  0 = memset, 1 = memcpy
-0x4     0x4   length     number of bytes to be set 
-0x8     0x4   src_adr    memset: fill value. memcpy: 1st address of the source buffer
-0xc     0x4   dst_adr    1st address of the destination buffer
-======  ====  =========  ============================================================
+0x4     0x4   length     number of bytes to be set (multiple of 4)
+0x8     0x4   src_adr    memset: fill value. memcpy: 1st address of the source buffer (32 bit word aligned)
+0xc     0x4   dst_adr    1st address of the destination buffer (32 bit word aligned)
+======  ====  =========  ==================================================================================
 
 Simulate and test by running::
 
@@ -47,7 +47,7 @@ Simulate and test by running::
 **2. Hardware implementation**
 
 Extend the module to implement a function called memcpy, which copies one memory area to another. The register and descriptor definitions remain unchanged.
-The module should use the maximum bandwidth available from the TL-UL interface, i.e. there should always be **simultaneous** (pending) read and write transactions. Use a (short) FIFO between read and write processes to achieve this.
+The module should use the maximum bandwidth available from the TL-UL interface, i.e. there should always be **simultaneous** (pending) read and write transactions. Use a (short) FIFO (use e.g. *src/rtl/prim/prim_fifo_sync.sv*) between read and write processes to achieve this.
 
 **3. Software implementation**
 
