@@ -1,4 +1,4 @@
-module student_rlight_tb;
+module rlight_tb_newly;
   logic clk;
   logic rst_n;
   logic [7:0] led;
