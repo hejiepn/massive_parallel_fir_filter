@@ -1,4 +1,4 @@
-module student_rlight (
+module rlight_with_func (
   input logic clk_i,
   input logic rst_ni,
 
@@ -37,6 +37,9 @@ module student_rlight (
   localparam logic [3:0] ADDR_REGA = 4'h0;
   localparam logic [3:0] ADDR_REGB = 4'h4;
 
+  localparam logic [7:0] DEFAULT_LED_PATTERN = 8'h33; // initial led pattern
+  localparam integer LED_DELAY = 3; 
+
   logic [31:0] regA;
   logic [ 7:0] regB;
 
@@ -74,72 +77,37 @@ module student_rlight (
   end 
 
 
-  // Demo FSM. Replace with your rlight
-  // ----------------------------------
-  /*
-  enum logic[1:0] {idle, swap, count} state;
-  logic [7:0] led;
-  logic [1:0] cnt;
-  always_ff @(posedge clk_i, negedge rst_ni) begin
-    if (~rst_ni) begin
-      state   <= idle;
-      led     <= 8'b10101010;
-      cnt     <= '0;
-    end else begin
-        case (state)
-          idle: begin
-            if (regB[0] == 1'b1) begin
-              led   <= regA[15:8];
-              state <= swap;
-            end
-          end
-          swap: begin
-            led[7:4] <= led[3:0];
-            led[3:0] <= led[7:4];
-            cnt      <= 2'd2;
-            state    <= count;
-          end
-          count: begin
-            if (cnt != 0) begin
-              cnt <= cnt - 1;
-            end
-            else begin 
-              state <= idle;
-            end
-          end
-          default: begin
-            state <= idle;
-          end
-        endcase;
-    end // if (~rst_ni) else
-  end 
- */
  // Demo FSM. Replace with your rlight
   // ----------------------------------
-  enum logic[1:0] {pp, rl, rr, sp} state;
-  logic [7:0] led;
+  enum logic[1:0] {ping_pong, rot_left, rot_right, stop} state; 
+    logic [7:0] led;
+    logic [2:0] cnt;
+    logic [3:0] cnt_pp;
+    logic [7:0] temp_pp;
 
   always_ff @(regB, negedge rst_ni) begin
     if (~rst_ni) begin
-      state   <= pp;
-      led     <= 8'b10101010;
-    end // if
-    else begin
+      state   <= ping_pong;
+		  led     <= DEFAULT_LED_PATTERN;
+		  cnt     <= LED_DELAY;
+      cnt_pp <= '0;
+      temp_pp [7:0] <= 8'b00000000;
+    end else begin
       case (regB)
         0: begin
-          state   <= pp;
-        end //0
+          state   <= ping_pong;
+        end // 0
         1: begin
-          state   <= rl;
-        end //1
+          state   <= rot_left;
+        end // 1
         2: begin
-          state   <= rr;
+          state   <= rot_right;
         end // 2
         3: begin
-          state   <= sp;
+          state   <= stop;
         end // 3
         default: begin
-          state <= pp;
+          state <= ping_pong;
         end // default
       endcase
     end // else
@@ -147,17 +115,65 @@ module student_rlight (
 
   always_ff @(posedge clk_i) begin
     case (state)
-      pp: begin
-          led   <= regA[15:8];
-      end // pp
-      rl: begin
-      end // rl
-      rr: begin
-      end // rr
-      sp: begin
-      end // sp
+      ping_pong: begin
+				if(cnt != 0) begin
+					cnt <= cnt - 1;
+				end 
+				else begin
+          if (cnt_pp[3] == 'b0) begin
+              temp_pp[7:1] <= temp_pp[6:0];
+              temp_pp[0] <= led[7];
+              led[7:1] <= led[6:0];
+              cnt_pp <= cnt_pp + 1;
+              if (cnt_pp[2:0] == 3'b110) begin
+                  cnt_pp[3] <= 'b1;
+              end
+          end
+          else begin
+              led[6:0] <= led[7:1];
+              led[7] <= temp_pp[0];
+              temp_pp[6:0] <= temp_pp[7:1];
+              cnt_pp <= cnt_pp - 1;
+              if (cnt_pp[2:0] == 3'b000) begin
+                  cnt_pp[3] <='b0;
+              end
+          end
+          regA[15:8] <= led[7:0];
+					cnt <= LED_DELAY;
+        end
+			end
+			rot_left: begin
+				if(cnt != 0) begin
+					cnt <= cnt - 1;
+				end 
+				else begin
+					led[0] <= led[7];
+					led[7:1] <= led[6:0];
+					regA[15:8] <= led[7:0]; //keep track of led pattern
+					cnt <= LED_DELAY;
+				end
+			end
+
+			rot_right: begin
+				if(cnt != 0) begin
+						cnt <= cnt - 1;
+				end 
+				else begin
+					led[7] <= led[0];
+					led[6:0] <= led[7:1];
+					regA[15:8] <= led[7:0]; //keep track of led pattern
+					cnt <= LED_DELAY;
+				end
+			end
+
+			stop: begin
+
+			end
+
       default: begin
-      end // default
+
+      end
+
     endcase
   end //  always_ff
  
