@@ -13,7 +13,7 @@ module rlight_tb_newly;
     #10000;
   end
 
-  student_rlight DUT (
+  rlight_with_func DUT (
     .clk_i (clk),
     .rst_ni(rst_n),
     .tl_i  (tl_h2d),
