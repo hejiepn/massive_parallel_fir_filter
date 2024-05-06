@@ -47,8 +47,25 @@ module student_rlight_tb;
     bus.get_word(32'h00000004, rdata);
     $display("read RegB: 0x%08x", rdata);
     
-    bus.wait_cycles(10);
+    bus.wait_cycles(5);
     
+    bus.put_word(32'h00000004, 32'hFFFFFF02);
+    bus.get_word(32'h00000004, rdata);
+    $display("read RegB: 0x%08x", rdata);
+    
+    bus.wait_cycles(5);
+    
+    bus.put_word(32'h00000004, 32'hFFFFFF03);
+    bus.get_word(32'h00000004, rdata);
+    $display("read RegB: 0x%08x", rdata);
+    
+    bus.wait_cycles(5);
+    
+    bus.put_word(32'h00000004, 32'hFFFFFF00);
+    bus.get_word(32'h00000004, rdata);
+    $display("read RegB: 0x%08x", rdata);
+    
+    bus.wait_cycles(5);
     // ...
 
     $finish;
