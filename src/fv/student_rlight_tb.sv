@@ -32,44 +32,62 @@ module student_rlight_tb;
     logic [31:0] rdata;
     bus.reset();
 
-    // write and read pattern register 2x:
-
-    bus.get_word(32'h00000000, rdata);
-    $display("read RegA: 0x%08x", rdata);
-
-    bus.put_word(32'h00000000, 32'h12345678);
-    bus.get_word(32'h00000000, rdata);
-    $display("read RegA: 0x%08x", rdata);
-    
-    bus.wait_cycles(2);
-
+ //start with rotate left
     bus.put_word(32'h00000004, 32'hFFFFFF01);
     bus.get_word(32'h00000004, rdata);
     $display("read RegB: 0x%08x", rdata);
-    
     bus.wait_cycles(5);
-    
-    bus.put_word(32'h00000004, 32'hFFFFFF02);
+
+//While the running light is running with a pause time of 5 cycles: A write access (writing 0x42) to the delay register followed by a read access.
+
+    bus.put_word(32'h00000008, 32'hFFFFFF42);
+    bus.get_word(32'h00000008, rdata);
+    $display("read RegC: 0x%08x", rdata);
+    bus.wait_cycles(5);
+
+//Two complete cycles with the following configurations: #. mode=right, initial pattern=11111110, pause = 1 cycle #. mode=ping-pong, initial pattern=10000000, pause = 0 cycles (i.e. the pattern changes every clock cycle)
+
+    bus.put_word(32'h00000000, 32'hFFFFFFFE);
+    bus.get_word(32'h00000000, rdata);
+    $display("read RegA: 0x%08x", rdata);
+
+    bus.put_word(32'h00000008, 32'hFFFFFF01);
+    bus.get_word(32'h00000008, rdata);
+    $display("read RegC: 0x%08x", rdata);
+
+    bus.put_word(32'h00000004, 32'hFFFFFF02); //rotate right
     bus.get_word(32'h00000004, rdata);
     $display("read RegB: 0x%08x", rdata);
-    
+
     bus.wait_cycles(5);
-    
-    bus.put_word(32'h00000004, 32'hFFFFFF03);
+
+    bus.put_word(32'h00000000, 32'hFFFFFF80);
+    bus.get_word(32'h00000000, rdata);
+    $display("read RegA: 0x%08x", rdata);
+
+    bus.put_word(32'h00000008, 32'hFFFFFF00);
+    bus.get_word(32'h00000008, rdata);
+    $display("read RegC: 0x%08x", rdata);
+
+    bus.put_word(32'h00000004, 32'hFFFFFF00);//ping pong
     bus.get_word(32'h00000004, rdata);
     $display("read RegB: 0x%08x", rdata);
+
+    bus.wait_cycles(5);
+
+//A read access to the pattern register which clearly shows the delayed arrival of the data at register bus after the rising clock edge.
+
+    bus.get_word(32'h00000008, rdata);
+    $display("read RegC: 0x%08x", rdata);
     
     bus.wait_cycles(5);
-    
-    bus.put_word(32'h00000004, 32'hFFFFFF00);
-    bus.get_word(32'h00000004, rdata);
-    $display("read RegB: 0x%08x", rdata);
-    
-    bus.wait_cycles(5);
-    // ...
+ 
 
     $finish;
   end
 
 
 endmodule
+
+
+

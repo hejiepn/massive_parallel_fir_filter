@@ -36,10 +36,18 @@ module student_rlight (
 
   localparam logic [3:0] ADDR_REGA = 4'h0;
   localparam logic [3:0] ADDR_REGB = 4'h4;
-  localparam integer cnt_delay = 3;
+  localparam logic [3:0] ADDR_REGC = 4'h8;
+  
+  localparam integer reset_cnt_delay = 3;
+  localparam logic [7:0] reset_led_pattern = 8'b00111100;
+  localparam logic [31:0] reset_register_pattern = 32'h0000FFFF;
+  localparam logic [7:0] reset_register_mode = 8'h00;
+
 
   logic [31:0] regA;
   logic [ 7:0] regB;
+  logic [ 7:0] regC;
+
 
   // Bus reads
   // ---------
@@ -50,122 +58,133 @@ module student_rlight (
       case (addr)
         ADDR_REGA:  rdata[31:0] = regA;
         ADDR_REGB:  rdata[ 7:0] = regB;
+        ADDR_REGC:  rdata[ 7:0] = regC;
         default:    rdata       = '0;
       endcase
     end
   end
-
 
   // Bus writes
   // ----------
 
   always_ff @(posedge clk_i, negedge rst_ni) begin
     if (~rst_ni) begin
-      regA   <= 32'h0000AFFE; // reset value
-      regB   <= '0;           // reset value
+      regA   <= reset_register_pattern; // reset value
+      regB   <= reset_register_mode; // reset value
+      regC   <= reset_cnt_delay; // reset value
     end else begin
       if (we) begin
         case (addr)
           ADDR_REGA: regA <= wdata[31:0];
           ADDR_REGB: regB <= wdata[ 7:0];
+          ADDR_REGC: regC <= wdata[ 7:0];
           default: ;
         endcase
       end // if(we)
     end // if (~rst_ni) else
   end 
 
-
   // Demo FSM. Replace with your rlight
   // ----------------------------------
-  enum logic[1:0] {ping_pong, rot_left, rot_right, stop} state; 
+  enum logic[1:0] {ping_pong, rot_left, rot_right, stop} mode; 
     logic [7:0] led;
-    logic [2:0] cnt;
+    logic [7:0] cnt;
+    logic [7:0] cnt_pre_value;
     logic [3:0] cnt_pp;
     logic [7:0] temp_pp;
+    logic [31:0] pattern_pre;
 
   always_ff @(posedge clk_i, negedge rst_ni) begin
   	if (~rst_ni) begin
-	      state   <= ping_pong;
-	      led     <= 8'hfe;
-	      cnt     <= cnt_delay;
+	      mode   <= ping_pong;
+	      led     <= reset_led_pattern;
+	      cnt     <= reset_cnt_delay;
+	      cnt_pre_value <= reset_cnt_delay;
 	      cnt_pp <= '0;
 	      temp_pp [7:0] <= 8'b00000000;
+              pattern_pre <= reset_register_pattern;
     	end //if ~rst_ni
     	else begin
     	      case (regB)
 		    	0: begin
-			  state   <= ping_pong;
+			  mode   <= ping_pong;
 			end // 0
 			1: begin
-			  state   <= rot_left;
+			  mode   <= rot_left;
 			end // 1
 			2: begin
-			  state   <= rot_right;
+			  mode   <= rot_right;
 			end // 2
 			3: begin
-			  state   <= stop;
+			  mode   <= stop;
 			end // 3
 			default: begin
-			  state <= ping_pong;
+			  mode <= ping_pong;
 			end // default
 	      endcase
-	      case (state)
-    		//ping pong
-      			ping_pong: begin
-				if(cnt != 0) begin
-				cnt <= cnt - 1;
-				end 
-				else begin
-					if (cnt_pp[3] == 'b0) begin
-					      temp_pp[7:1] <= temp_pp[6:0];
-					      temp_pp[0] <= led[7];
-					      led[7:1] <= led[6:0];
-					      cnt_pp <= cnt_pp + 1;
-					      if (cnt_pp[2:0] == 3'b110) begin
-						  cnt_pp[3] <= 'b1;
-				      		end
-				  	end
-				  	else begin
-					      led[6:0] <= led[7:1];
-					      led[7] <= temp_pp[0];
-					      temp_pp[6:0] <= temp_pp[7:1];
-					      cnt_pp <= cnt_pp - 1;
-					      if (cnt_pp[2:0] == 3'b000) begin
-						  cnt_pp[3] <='b0;
-					      end
-          				end
-				cnt <= cnt_delay;
-        			end//else
+// delay register check
+	      if (regC != cnt_pre_value) begin
+	      	cnt <= regC;
+	      	cnt_pre_value <= regC;
+	      end
+	      else if (cnt == 0) begin
+	      	cnt <= regC;
+	      end
+// pattern register check
+              if (regA != pattern_pre) begin
+                 pattern_pre <= regA;
+                 led[7:0] <= regA[7:0];
+              end
+	      case (mode)
+	      		ping_pong: begin
+				if(cnt == 0) begin
+				    if (cnt_pp[3] == 'b0) begin
+					temp_pp[7:1] <= temp_pp[6:0];
+					temp_pp[0] <= led[7];
+					led[7:1] <= led[6:0];
+					cnt_pp <= cnt_pp + 1;
+					if (cnt_pp[2:0] == 3'b110) begin
+				           cnt_pp[3] <= 'b1;
+				        end
+				    end
+				    else begin
+				       led[6:0] <= led[7:1];
+				       led[7] <= temp_pp[0];
+				       temp_pp[6:0] <= temp_pp[7:1];
+				       cnt_pp <= cnt_pp - 1;
+				       if (cnt_pp[2:0] == 3'b000) begin
+					  cnt_pp[3] <='b0;
+				       end
+          			    end
+        			end//if
+                                else begin
+                                   cnt -= 1;
+                                end //else
      			end//ping_pong
-     		//rot_left
-     			rot_left: begin
-				if(cnt != 0) begin
-				   cnt <= cnt - 1;
-				end 
-				else begin
+	      		rot_right: begin
+                                 if(cnt == 0) begin
+                                    led[7] <= led[0];
+		               	    led[6:0] <= led[7:1];
+			       	 end 
+			       	 else begin	
+                                   cnt -= 1;
+				 end
+	      		end//rot_right
+			rot_left: begin
+				if(cnt == 0) begin
 				   led[0] <= led[7];
 				   led[7:1] <= led[6:0];
-				   cnt <= cnt_delay;
+				end
+				else begin
+				   cnt -= 1;
 				end
 			end//rot_left	
-		//rot_right
-			rot_right: begin
-				if(cnt != 0) begin
-					cnt <= cnt - 1;
-			       	end 
-			       	else begin
-					led[7] <= led[0];
-					led[6:0] <= led[7:1];
-					cnt <= cnt_delay;
-				end
-			end//rot_right
 			stop: begin
-			    
+		
 			end//stop
 			default: begin
 			
 			end//default
-
     		endcase
     	end //else ~rst_ni
   end //  always_ff
