@@ -55,12 +55,12 @@ module student_rlight (
   localparam logic [3:0] ADDR_REGC = 4'h8;
   
   localparam integer reset_cnt_delay = 3;
-  localparam logic [7:0] reset_led_pattern = 8'b00111100;
-  localparam logic [31:0] reset_register_pattern = 32'h0000FFFF;
+  localparam logic [7:0] reset_led_pattern = 8'h3C;
+  localparam logic [31:0] reset_register_pattern = 32'h00003C3C;
   localparam logic [7:0] reset_register_mode = 8'h00;
 
 
-  logic [31:0] regA;
+  logic [ 7:0] regA;
   logic [ 7:0] regB;
   logic [ 7:0] regC;
 
@@ -120,12 +120,10 @@ module student_rlight (
 
  always_ff @(posedge clk_i, negedge rst_ni) begin
     if (~rst_ni) begin
-      hw2reg.rega.d <= reset_register_pattern;
+      hw2reg.rega.d <= reset_led_pattern;
       hw2reg.regb.d <= reset_register_mode;
       hw2reg.regc.d <= reset_cnt_delay;
-      //regA = reset_register_pattern;
-      //regB = reset_register_mode;
-      //regC = reset_cnt_delay;
+      hw2reg.regd.d <= reset_led_pattern;
     end
     else begin
        if (hw2reg.rega.de) begin
@@ -148,7 +146,7 @@ module student_rlight (
     logic [7:0] cnt_pre_value;
     logic [3:0] cnt_pp;
     logic [7:0] temp_pp;
-    logic [31:0] pattern_pre;
+    logic [7:0] pattern_pre;
 
   always_ff @(posedge clk_i, negedge rst_ni) begin
   	if (~rst_ni) begin
@@ -158,7 +156,7 @@ module student_rlight (
 	      cnt_pre_value <= reset_cnt_delay;
 	      cnt_pp <= '0;
 	      temp_pp [7:0] <= 8'b00000000;
-              pattern_pre <= reset_register_pattern;
+              pattern_pre <= reset_led_pattern;
     	end //if ~rst_ni
     	else begin
     	      case (regB)
@@ -189,7 +187,7 @@ module student_rlight (
 // pattern register check
               if (regA != pattern_pre) begin
                  pattern_pre <= regA;
-                 led[7:0] <= regA[7:0];
+                 led <= regA;
               end
 	      case (mode)
 	      		ping_pong: begin
@@ -242,9 +240,10 @@ module student_rlight (
 			
 			end//default
     		endcase
+        hw2reg.regd.d <= led; //keep track of led status
     	end //else ~rst_ni
   end //  always_ff
- 
+
   assign led_o = led; // output assignment
 
 endmodule

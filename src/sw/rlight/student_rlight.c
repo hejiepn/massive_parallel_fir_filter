@@ -30,5 +30,10 @@ int student_rlight_test(void) {
         retval = 1;
     printf("set RegC: %i (%s)\n", readword, correct?"correct":"WRONG");
 
+    correct = (readword = REG32(STUDENT_RLIGHT_REGD(0))) == 0x3C;
+    if(!correct)
+        retval = 1;
+    printf("read RegD: %i (%s)\n", readword, correct?"correct":"WRONG");
+
     return retval;
 }
