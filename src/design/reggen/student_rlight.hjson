@@ -1,0 +1,39 @@
+{
+  name: "student_rlight"
+  clock_primary: "sys_clk"
+  bus_device: "tlul"
+  regwidth: "32"
+  registers: [
+    {
+      name: "RegA"
+      desc: "led pattern register"
+      swaccess: "rw"
+      hwaccess: "hrw"
+      hwqe : "true"
+      fields: [
+        {bits: "31:0", name: "led_pattern", desc: "sets the led pattern"}
+      ]
+    }
+    {
+      name: "RegB"
+      desc: "mode register"
+      swaccess: "rw"
+      hwaccess: "hrw"
+      hwqe : "true"
+      fields: [
+        {bits: "7:0", name: "mode", desc: "sets the actual mode of the running light"}
+      ]
+    }
+    {
+      name: "RegC"
+      desc: "pause register"
+      swaccess: "rw"
+      hwaccess: "hrw"
+      hwqe : "true"
+      fields:
+      [
+        {bits: "7:0", name: "pause", desc: "sets the pause cycles"}
+      ]
+    }
+  ]
+}

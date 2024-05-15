@@ -8,12 +8,13 @@ module student_rlight (
   output logic [7:0] led_o
 );
 
-
+/*
   logic [3:0] addr;
   logic we;
   logic re;
   logic [31:0] wdata;
   logic [31:0] rdata;
+  
 
   tlul_adapter_reg #(
     .RegAw(4),
@@ -33,7 +34,22 @@ module student_rlight (
     .rdata_i(rdata),
     .error_i('0)
   );
+  */
+  
+  import student_rlight_reg_pkg::*;
+  student_rlight_reg2hw_t reg2hw; //write
+  student_rlight_hw2reg_t hw2reg; //read
 
+  student_rlight_reg_top student_rlight_reggen_module(
+  .clk_i,
+  .rst_ni,
+  .tl_i,
+  .tl_o,
+  .reg2hw,
+  .hw2reg,
+  .devmode_i('0)
+  );
+  
   localparam logic [3:0] ADDR_REGA = 4'h0;
   localparam logic [3:0] ADDR_REGB = 4'h4;
   localparam logic [3:0] ADDR_REGC = 4'h8;
@@ -48,7 +64,7 @@ module student_rlight (
   logic [ 7:0] regB;
   logic [ 7:0] regC;
 
-
+/*
   // Bus reads
   // ---------
 
@@ -63,7 +79,22 @@ module student_rlight (
       endcase
     end
   end
+*/
 
+//register reads
+  always_comb begin
+       if (reg2hw.rega.qe) begin
+           regA <= reg2hw.rega.q;
+       end;
+       if (reg2hw.regb.qe) begin
+           regB <= reg2hw.regb.q;
+       end;
+       if (reg2hw.regc.qe) begin
+           regC <= reg2hw.regc.q;
+       end;
+   end
+
+/*
   // Bus writes
   // ----------
 
@@ -83,8 +114,33 @@ module student_rlight (
       end // if(we)
     end // if (~rst_ni) else
   end 
+*/
 
-  // Demo FSM. Replace with your rlight
+//register write
+
+ always_ff @(posedge clk_i, negedge rst_ni) begin
+    if (~rst_ni) begin
+      hw2reg.rega.d <= reset_register_pattern;
+      hw2reg.regb.d <= reset_register_mode;
+      hw2reg.regc.d <= reset_cnt_delay;
+      //regA = reset_register_pattern;
+      //regB = reset_register_mode;
+      //regC = reset_cnt_delay;
+    end
+    else begin
+       if (hw2reg.rega.de) begin
+           hw2reg.rega.d <= regA;
+       end;
+       if (hw2reg.regb.de) begin
+           hw2reg.regb.d <= regB;
+       end;
+       if (hw2reg.regc.de) begin
+           hw2reg.regc.d <= regC;
+       end;
+    end // else (~rst_ni)
+ end 
+
+ // Demo FSM. Replace with your rlight
   // ----------------------------------
   enum logic[1:0] {ping_pong, rot_left, rot_right, stop} mode; 
     logic [7:0] led;

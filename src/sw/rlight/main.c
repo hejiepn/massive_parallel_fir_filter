@@ -1,10 +1,17 @@
 #include <stdio.h>
+#include <stdbool.h>
 #include "rvlab.h"
+
+#include "student_rlight.h"
 
 #define REGA   0x10000000
 #define REGB   0x10000004
 #define REGC   0x10000008
 
+typedef struct {
+    int n_tests;
+    int n_pass;
+} test_summary_t;
 
 static void delay_cycles(int n_cycles) {
     REG32(RV_TIMER_CTRL(0)) = (1<<RV_TIMER_CTRL_ACTIVE0_LSB);
@@ -12,7 +19,48 @@ static void delay_cycles(int n_cycles) {
     while(REG32(RV_TIMER_TIMER_V_LOWER0(0)) < n_cycles);
 }
 
+//test function from regDemo
+void test_report(test_summary_t *s, char *name, int status) {
+    char *status_str;
+    
+    s->n_tests++;
+    
+    if(status) {
+        status_str = "FAIL";
+    } else {
+        status_str = "PASS";
+        s->n_pass++;
+    }
+
+    printf("[%s] test %i: %s\n\n", status_str, s->n_tests, name);
+}
+
+//test function from regDemo
+int test_summary(test_summary_t *s) {
+    printf("SUMMARY: %i / %i tests passed.\n", s->n_pass, s->n_tests);
+    if(s->n_tests == s->n_pass) {
+        printf("All tests passed successfully.\n");
+        return 0;
+    } else {
+        printf("ERROR: Some tests failed.\n");
+        return 1;
+    }
+}
+
 int main(void) {
+    test_summary_t s;
+    s.n_tests = 0;
+    s.n_pass = 0;
+
+    test_report(&s, "student_rlight_test", student_rlight_test());
+    
+    return test_summary(&s);
+}
+
+
+
+//test functions from ex.2
+/* 
 
     // Implement tests here.
 
@@ -56,5 +104,5 @@ int main(void) {
     printf("REGA 0x%08x\n", REG32(REGA));
     delay_cycles(5);
     
-    return 0;
-}
+*/
+
