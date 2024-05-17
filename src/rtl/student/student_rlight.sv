@@ -240,7 +240,7 @@ module student_rlight (
 			
 			end//default
     		endcase
-        hw2reg.regd.d <= led; //keep track of led status
+        hw2reg.regd.d <= led; //keep track of actual led status
     	end //else ~rst_ni
   end //  always_ff
 
