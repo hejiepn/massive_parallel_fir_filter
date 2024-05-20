@@ -54,7 +54,7 @@ module student_rlight (
   localparam logic [3:0] ADDR_REGB = 4'h4;
   localparam logic [3:0] ADDR_REGC = 4'h8;
   
-  localparam integer reset_cnt_delay = 3;
+  localparam logic [31:0] reset_cnt_delay = 32'h00000064; //decimal 100
   localparam logic [7:0] reset_led_pattern = 8'h3C;
   localparam logic [31:0] reset_register_pattern = 32'h00003C3C;
   localparam logic [7:0] reset_register_mode = 8'h00;
@@ -62,7 +62,7 @@ module student_rlight (
 
   logic [ 7:0] regA;
   logic [ 7:0] regB;
-  logic [ 7:0] regC;
+  logic [ 31:0] regC;
 
 /*
   // Bus reads
@@ -142,8 +142,8 @@ module student_rlight (
   // ----------------------------------
   enum logic[1:0] {ping_pong, rot_left, rot_right, stop} mode; 
     logic [7:0] led;
-    logic [7:0] cnt;
-    logic [7:0] cnt_pre_value;
+    logic [31:0] cnt;
+    logic [31:0] cnt_pre_value;
     logic [3:0] cnt_pp;
     logic [7:0] temp_pp;
     logic [7:0] pattern_pre;
@@ -159,9 +159,9 @@ module student_rlight (
               pattern_pre <= reset_led_pattern;
     	end //if ~rst_ni
     	else begin
-    	      case (regB)
-		    	0: begin
-			  mode   <= ping_pong;
+		  case (regB)
+			0: begin
+		  	mode   <= ping_pong;
 			end // 0
 			1: begin
 			  mode   <= rot_left;
@@ -185,64 +185,64 @@ module student_rlight (
 	      	cnt <= regC;
 	      end
 // pattern register check
-              if (regA != pattern_pre) begin
-                 pattern_pre <= regA;
-                 led <= regA;
-              end
+          if (regA != pattern_pre) begin
+             pattern_pre <= regA;
+             led <= regA;
+          end
 	      case (mode)
 	      		ping_pong: begin
-				if(cnt == 0) begin
-				    if (cnt_pp[3] == 'b0) begin
-					temp_pp[7:1] <= temp_pp[6:0];
-					temp_pp[0] <= led[7];
-					led[7:1] <= led[6:0];
-					cnt_pp <= cnt_pp + 1;
-					if (cnt_pp[2:0] == 3'b110) begin
-				           cnt_pp[3] <= 'b1;
-				        end
-				    end
-				    else begin
-				       led[6:0] <= led[7:1];
-				       led[7] <= temp_pp[0];
-				       temp_pp[6:0] <= temp_pp[7:1];
-				       cnt_pp <= cnt_pp - 1;
-				       if (cnt_pp[2:0] == 3'b000) begin
-					  cnt_pp[3] <='b0;
-				       end
-          			    end
-        			end//if
-                                else begin
-                                   cnt -= 1;
-                                end //else
+					if(cnt == 0) begin
+						if (cnt_pp[3] == 'b0) begin
+						temp_pp[7:1] <= temp_pp[6:0];
+						temp_pp[0] <= led[7];
+						led[7:1] <= led[6:0];
+						cnt_pp <= cnt_pp + 1;
+							if (cnt_pp[2:0] == 3'b110) begin
+						       cnt_pp[3] <= 'b1;
+						    end
+						end
+						else begin
+						   led[6:0] <= led[7:1];
+						   led[7] <= temp_pp[0];
+						   temp_pp[6:0] <= temp_pp[7:1];
+						   cnt_pp <= cnt_pp - 1;
+						   	if (cnt_pp[2:0] == 3'b000) begin
+						  		cnt_pp[3] <='b0;
+						   	end
+		      			end
+					end//if
+		            else begin
+		               cnt -= 1;
+		            end //else
      			end//ping_pong
 	      		rot_right: begin
-                                 if(cnt == 0) begin
-                                    led[7] <= led[0];
-		               	    led[6:0] <= led[7:1];
-			       	 end 
-			       	 else begin	
-                                   cnt -= 1;
-				 end
+		            if(cnt == 0) begin
+		                led[7] <= led[0];
+		   	    		led[6:0] <= led[7:1];
+	   	 			end 
+				   	else begin	
+		           		cnt -= 1;
+				 	end
 	      		end//rot_right
-			rot_left: begin
-				if(cnt == 0) begin
-				   led[0] <= led[7];
-				   led[7:1] <= led[6:0];
-				end
-				else begin
-				   cnt -= 1;
-				end
-			end//rot_left	
-			stop: begin
+				rot_left: begin
+					if(cnt == 0) begin
+					   led[0] <= led[7];
+					   led[7:1] <= led[6:0];
+					end
+					else begin
+				   	cnt -= 1;
+					end
+				end//rot_left	
+				stop: begin
 		
-			end//stop
-			default: begin
+				end//stop
+				default: begin
 			
-			end//default
-    		endcase
+				end//default
+		endcase
         hw2reg.regd.d <= led; //keep track of actual led status
     	end //else ~rst_ni
-  end //  always_ff
+	end //  always_ff
 
   assign led_o = led; // output assignment
 
