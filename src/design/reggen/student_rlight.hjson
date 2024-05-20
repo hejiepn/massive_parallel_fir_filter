@@ -32,7 +32,7 @@
       hwqe : "true"
       fields:
       [
-        {bits: "7:0", name: "pause", desc: "sets the pause cycles"}
+        {bits: "31:0", name: "pause", desc: "sets the pause cycles"}
       ]
     }
     {
