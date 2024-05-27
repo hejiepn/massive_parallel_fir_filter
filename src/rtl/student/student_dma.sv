@@ -1,4 +1,4 @@
-module student_dma (
+module student_dma ( //this works, not, but state transitions work quite well// (tl_host_i.d_opcode == tlul_pkg::AccessAckData)) eingefügt
   input  logic              clk_i    ,
   input  logic              rst_ni   ,
   input  tlul_pkg::tl_h2d_t tl_i     ,
@@ -60,14 +60,15 @@ module student_dma (
   logic                 rvalid; //~fifo_empty output
   logic                 wready; //~fifo_full output
   logic                 rready; //fifo_rd_en input
-  logic [         31:0] wdata ; //fifo_w_data input
-  logic [         31:0] rdata ; //fifo_r_data output
-  logic [$clog2(4)-1:0] depth ; // FIFO depth of 4 output
+  logic [31:0] wdata ; //fifo_w_data input
+  logic [31:0] rdata ; //fifo_r_data output
+  logic  [2:0]     depth ; // FIFO depth of 4 output
 
 
   prim_fifo_sync #(
     .Width(32),
-    .Depth(4 )
+  .Pass(1'b1),   // Pass-Through-Mode aktivieren
+    .Depth(4)
   ) fifo_sync_i (
     .clk_i       ,
     .rst_ni      ,
@@ -136,7 +137,7 @@ module student_dma (
       READ_DESC_RECV : begin
         if (desc_response_received) next_state = READ_DESC_SEND;
         if (desc_read_finished && (operation == DESC_OP_MEMSET)) next_state = MEMSET_WRITING;
-        if (desc_read_finished && (operation == DESC_OP_MEMCPY)) next_state = MEMCPY_WRITING;
+        if (desc_read_finished && (operation == DESC_OP_MEMCPY)) next_state = MEMCPY_READING;
       end //READ_DESC_RECV
       MEMSET_WRITING : begin
         if (length == 0 && tl_host_i.a_ready && tl_host_o.a_valid) next_state = MEMSET_WAIT_RESP;
@@ -146,23 +147,21 @@ module student_dma (
       end //MEMSET_WAIT_RESP
       // memcpy_writing: writes to the dst addr via TL_UL the data read from FIFO buffer
       MEMCPY_WRITING : begin
-        if (tl_host_i.a_ready && tl_host_o.a_valid && rvalid) begin
           if(length == 0) begin
             next_state = MEMCPY_WAIT_RESP;
-          end else if (rvalid && rready) begin
+          end else if (rready) begin
+            $display("change to memcpy_reading");
             next_state = MEMCPY_READING;
           end
-        end
       end //MEMCPY_WRITING
       //memcpy_reading: reads data from src addr via TL_UL and writes it into FIFO buffer
       MEMCPY_READING : begin
-        if (tl_host_i.a_ready && tl_host_o.a_valid && wready) begin
           if (length == 0) begin
             next_state = MEMCPY_WAIT_RESP;
-          end else if (wready && wvalid) begin
+          end else if (wvalid) begin
+            $display("change to memcpy_writing");
             next_state = MEMCPY_WRITING;
           end
-        end
       end //MEMCPY_READING
       MEMCPY_WAIT_RESP : begin
         if (length_recv == 0) next_state = IDLE;
@@ -281,39 +280,53 @@ module student_dma (
         // memcpy_writing: writes to the dst addr via TL_UL the data, that it reads from FIFO buffer
         MEMCPY_WRITING: begin
           status <= STATUS_MEMCPY_BUSY;
-          rready <= 1; // Indicate readiness to read from FIFO
-		  
-          tl_host_o.a_opcode <= tlul_pkg::PutFullData;
-          tl_host_o.a_valid <= '1;
-          tl_host_o.a_data <= rdata;
+          $display("MEMCPY_writing");
+          if(rvalid) begin
+            rready <= 1; // Indicate readiness to read from FIFO
+            tl_host_o.a_opcode <= tlul_pkg::PutFullData;
+            tl_host_o.a_valid <= '1;
+            tl_host_o.a_data <= rdata;
+            $display("read data out of fifo %d",rdata);
+            $display("write data to dst add %d",dst_adr);
 
-          if (tl_host_i.a_ready && tl_host_o.a_valid) begin
-            dst_adr <= dst_adr + 4;
-            length  <= length - 4;
-            tl_host_o.a_address <= dst_adr + 4;
+
+            if (tl_host_i.a_ready && tl_host_o.a_valid) begin
+              dst_adr <= dst_adr + 4;
+              length  <= length - 4;
+              tl_host_o.a_address <= dst_adr + 4;
+            end else begin
+              tl_host_o.a_address <= dst_adr;
+            end
+            if (tl_host_i.d_valid && (tl_host_i.d_opcode == tlul_pkg::AccessAck)) begin
+              length_recv <= length_recv - 4;
+            end
           end else begin
-            tl_host_o.a_address <= dst_adr;
-          end
-          if (tl_host_i.d_valid) begin
-            length_recv <= length_recv - 4;
+            $display("fifo is empty");
           end
         end //memcpy_writing
           //memcpy_reading: reads data from src addr via TL_UL and write the received data into FIFO buffer
         MEMCPY_READING: begin
+          $display("MEMCPY_READING");
           status <= STATUS_MEMCPY_BUSY;
-          tl_host_o.a_opcode <= tlul_pkg::Get;
-          tl_host_o.a_valid <= '1;
-          tl_host_o.a_address <= src_adr;
+          if(wready) begin
+            tl_host_o.a_opcode <= tlul_pkg::Get;
+            tl_host_o.a_valid <= '1;
+            tl_host_o.a_address <= src_adr;
+            $display("get data from src add %d",src_adr);
 
-          if (tl_host_i.a_ready && tl_host_o.a_valid) begin
-            src_adr <= src_adr + 4;
-            length <= length - 4;
-            tl_host_o.a_address <= src_adr + 4;
-          end
-          if (tl_host_i.d_valid) begin //tl_host_i.d_ready is set to be always 1 see  tl_host_o init
-            length_recv <= length_recv - 4;
-            wdata <= tl_host_i.d_data;
-            wvalid <= 1;
+
+            if (tl_host_i.a_ready && tl_host_o.a_valid) begin
+              src_adr <= src_adr + 4;
+              //length <= length - 4;
+              tl_host_o.a_address <= src_adr + 4;
+            end else if (tl_host_i.d_valid && (tl_host_i.d_opcode == tlul_pkg::AccessAckData)) begin //tl_host_i.d_ready is set to be always 1 see  tl_host_o init
+              //length_recv <= length_recv - 4;
+              wdata <= tl_host_i.d_data;
+              wvalid <= 1;
+              $display("put data into fifo %d",wdata);
+            end
+          end else begin
+              $display("fifo is full");
           end
         end //MEMCPY_READING
 

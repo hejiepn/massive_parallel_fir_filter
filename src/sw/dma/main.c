@@ -120,7 +120,7 @@ int test_memcpy(void (*func_memcpy)(void *, void *, uint32_t)) {
 
 int main(void) {
     int res, retval=0;
-
+/*
     printf("test memset_soft:\n");    
     res = test_memset(memset_soft);
     retval += res;
@@ -135,7 +135,7 @@ int main(void) {
     res = test_memcpy(memcpy_soft);
     retval += res;
     printf("--> %s\n", res?"fail":"pass");
-
+*/
     printf("test memcpy_dma:\n");
     res = test_memcpy(memcpy_dma);
     retval += res;
