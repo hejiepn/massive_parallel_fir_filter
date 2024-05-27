@@ -1,4 +1,4 @@
-module student_dma (
+module student_dma ( //state transistion based only on depth level now
   input  logic              clk_i    ,
   input  logic              rst_ni   ,
   input  tlul_pkg::tl_h2d_t tl_i     ,
@@ -60,13 +60,14 @@ module student_dma (
   logic                 rvalid; //~fifo_empty output
   logic                 wready; //~fifo_full output
   logic                 rready; //fifo_rd_en input
-  logic [         31:0] wdata ; //fifo_w_data input
-  logic [         31:0] rdata ; //fifo_r_data output
-  logic [$clog2(4)-1:0] depth ; // FIFO depth of 4 output
+  logic [31:0] wdata ; //fifo_w_data input
+  logic [31:0] rdata ; //fifo_r_data output
+  logic [2:0] depth ; // FIFO depth of 4 output
 
 
   prim_fifo_sync #(
     .Width(32),
+	.Pass(1'b1),   // Pass-Through-Mode aktivieren
     .Depth(4 )
   ) fifo_sync_i (
     .clk_i       ,
@@ -146,23 +147,19 @@ module student_dma (
       end //MEMSET_WAIT_RESP
       // memcpy_writing: writes to the dst addr via TL_UL the data read from FIFO buffer
       MEMCPY_WRITING : begin
-        if (tl_host_i.a_ready && tl_host_o.a_valid && rvalid) begin
           if(length == 0) begin
             next_state = MEMCPY_WAIT_RESP;
-          end else if (rvalid && rready) begin
+          end else if (depth == 1) begin
             next_state = MEMCPY_READING;
           end
-        end
       end //MEMCPY_WRITING
       //memcpy_reading: reads data from src addr via TL_UL and writes it into FIFO buffer
       MEMCPY_READING : begin
-        if (tl_host_i.a_ready && tl_host_o.a_valid && wready) begin
           if (length == 0) begin
             next_state = MEMCPY_WAIT_RESP;
-          end else if (wready && wvalid) begin
+          end else if (depth == 3) begin
             next_state = MEMCPY_WRITING;
           end
-        end
       end //MEMCPY_READING
       MEMCPY_WAIT_RESP : begin
         if (length_recv == 0) next_state = IDLE;
@@ -215,8 +212,8 @@ module student_dma (
       desc_read_finished <= '0;
       desc_response_received <= '0;
       write_done <= '0;
-      wvalid <= '0;
-      rready <= '0;
+      //wvalid <= '0;
+      //rready <= '0;
 
 
       case (next_state)
@@ -281,25 +278,24 @@ module student_dma (
         // memcpy_writing: writes to the dst addr via TL_UL the data, that it reads from FIFO buffer
         MEMCPY_WRITING: begin
           status <= STATUS_MEMCPY_BUSY;
-          rready <= 1; // Indicate readiness to read from FIFO
-
-		  if(rvalid) begin
+          
+		  if(rvalid && (depth > 1)) begin
+			rready <= 1;
 			tl_host_o.a_opcode <= tlul_pkg::PutFullData;
 			tl_host_o.a_valid <= '1;
 			tl_host_o.a_data <= rdata;
+			tl_host_o.a_address <= dst_adr;
 
 			if (tl_host_i.a_ready && tl_host_o.a_valid) begin
 				dst_adr <= dst_adr + 4;
 				length  <= length - 4;
 				tl_host_o.a_address <= dst_adr + 4;
-			end else begin
-				tl_host_o.a_address <= dst_adr;
-			end
-			if (tl_host_i.d_valid) begin
-				length_recv <= length_recv - 4;
 			end
 		  end else begin
-			tl_host_o.a_valid <= 0;
+			rready <= 0;
+		  end
+		  if (tl_host_i.d_valid) begin
+			  length_recv <= length_recv - 4;
 		  end
         end //memcpy_writing
           //memcpy_reading: reads data from src addr via TL_UL and write the received data into FIFO buffer
@@ -333,6 +329,8 @@ module student_dma (
         default: begin
         end //default
       endcase
+	 rready <= 0;
+
     end //else from always_ff
   end //always_ff
 endmodule

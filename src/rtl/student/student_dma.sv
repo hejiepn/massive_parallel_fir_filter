@@ -282,6 +282,7 @@ module student_dma (
         MEMCPY_WRITING: begin
           status <= STATUS_MEMCPY_BUSY;
           rready <= 1; // Indicate readiness to read from FIFO
+		  
           tl_host_o.a_opcode <= tlul_pkg::PutFullData;
           tl_host_o.a_valid <= '1;
           tl_host_o.a_data <= rdata;
