@@ -13,4 +13,20 @@ module student_tlul_mux #(
 
   // Implement TL-UL multiplexer here.
 
+  always_comb begin
+      case (tl_host_i.a_address[23:20])
+        0: begin
+            tl_device_i[0] <= tl_host_i;
+            $display("case no: %d",tl_host_i.a_address);
+            $display("tl_host_i %d", tl_host_i.a_address);
+        end
+        1: begin
+            tl_device_i[1] <= tl_host_i;
+            $display("case no: %d",tl_host_i.a_address);
+            $display("tl_host_i %d", tl_host_i.a_address);
+        end
+        default: ;
+        endcase
+    end
+
 endmodule

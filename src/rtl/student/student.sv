@@ -24,11 +24,27 @@ module student (
 
   assign irq_o         = '0;
 
+  localparam integer mux_num = 2;
+
+  tlul_pkg::tl_h2d_t device_select_o [mux_num-1:0];
+  tlul_pkg::tl_d2h_t device_select_i [mux_num-1:0] ;
+
+     student_tlul_mux #(
+    .NUM(mux_num)
+    ) tlul_mux_i (
+    .clk_i,
+    .rst_ni,
+    .tl_host_o(tl_device_peri_o),
+    .tl_host_i(tl_device_peri_i),
+    .tl_device_o(device_select_i),
+    .tl_device_i(device_select_o)
+  );
+
   student_rlight rlight_i (
     .clk_i,
     .rst_ni,
-    .tl_o (tl_device_peri_o),
-    .tl_i (tl_device_peri_i),
+    .tl_o (device_select_i[0]),
+    .tl_i (device_select_o[0]),
     .led_o(led)
   );
     student_dma dma_i (
@@ -39,5 +55,6 @@ module student (
     .tl_host_o,
     .tl_host_i
   );
+ 
 
 endmodule

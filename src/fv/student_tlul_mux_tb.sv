@@ -1,5 +1,5 @@
 module student_tlul_mux_tb;
-  localparam CONNECTED_SLAVES = 2;
+  localparam CONNECTED_SLAVES = 1;
 
   logic clk;
   logic rst_n;
