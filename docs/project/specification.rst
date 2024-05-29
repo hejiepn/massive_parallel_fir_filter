@@ -14,6 +14,11 @@ As *short* as possible. In most cases *1-3 sentences* are sufficient.
 
 Example "Pacman": Aim of the project is the implementation of the video game "Pacman" for exhibition at TUB pupils' day to advocate SoC design.
 
+**Executive summary of customer requirements ("Lastenheft", "Pflichtenheft")**
+
+* Project: FPGA IN MUSIC AND AUDIO PROCESSING
+* Content: Aim of the project is the implementation of different audio processing techniques to manipulate the output audio to the chosen mode based on the input audio.
+
 Functional Specification
 ------------------------
 
