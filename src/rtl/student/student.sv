@@ -47,6 +47,7 @@ module student (
     .tl_i (device_select_o[0]),
     .led_o(led)
   );
+
     student_dma dma_i (
     .clk_i,
     .rst_ni,
@@ -56,5 +57,4 @@ module student (
     .tl_host_i
   );
  
-
 endmodule
