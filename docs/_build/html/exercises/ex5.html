@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ex.5: Hierarchical buses and cascaded interrupts &mdash; RISC-V Lab  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/reg_html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Project" href="../project/index.html" />
+    <link rel="prev" title="Ex. 4: DMA / TL-UL host implementation" href="ex4.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            RISC-V Lab
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Exercise Sheets &amp; Slides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ex1.html">Ex. 1: HDL entry and simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ex2.html">Ex. 2: Logic synthesis, P&amp;R and netlist simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ex3.html">Ex. 3: Software development and system simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ex4.html">Ex. 4: DMA / TL-UL host implementation</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Ex.5: Hierarchical buses and cascaded interrupts</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#objectives">Objectives</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preparation">Preparation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tasks">Tasks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deliverables">Deliverables</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#slides">Slides</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../project/index.html">Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../design_ref/index.html">Design Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../resources/index.html">Resources</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">RISC-V Lab</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Exercise Sheets &amp; Slides</a></li>
+      <li class="breadcrumb-item active">Ex.5: Hierarchical buses and cascaded interrupts</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/exercises/ex5.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ex-5-hierarchical-buses-and-cascaded-interrupts">
+<span id="ex5"></span><h1>Ex.5: Hierarchical buses and cascaded interrupts<a class="headerlink" href="#ex-5-hierarchical-buses-and-cascaded-interrupts" title="Permalink to this heading"></a></h1>
+<p>The functionality implemented in <a class="reference internal" href="ex3.html#ex3"><span class="std std-ref">Ex. 3: Software development and system simulation</span></a> with “polling” software should now be realized with interrupts, thereby dramatically reducing the CPU load. This requires two new hardware modules: A secondary interrupt controller and a bus multiplexer. These two modules should be designed to be flexible to allow them to be reused later on in your own project. The integration of these two modules with the running light and the TL-UL Host forms the (extensible) top level for your own project.</p>
+<figure class="align-center" id="id1">
+<a class="reference internal image-reference" href="../_images/student_irq.svg"><img alt="../_images/student_irq.svg" src="../_images/student_irq.svg" width="600" /></a>
+<figcaption>
+<p><span class="caption-text">The toplevel for your project created in this exercise.</span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
+</figcaption>
+</figure>
+<section id="objectives">
+<h2>Objectives<a class="headerlink" href="#objectives" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>create hierarchical interconnects for TL-UL</p></li>
+<li><p>cascaded IRQs: apply architectures of peripheral modules and interrupt controllers</p></li>
+<li><p>work as a team</p></li>
+</ul>
+</section>
+<section id="preparation">
+<h2>Preparation<a class="headerlink" href="#preparation" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>read the chapter “Exceptions and Interrupts” in the “Ibex Reference Guide” from the Ibex Documentation linked on the <a class="reference internal" href="../resources/index.html#resources"><span class="std std-ref">Resources</span></a> page.</p></li>
+<li><p>look up the CSRs used in <em>rvlab/src/sw/crt0.S</em> and <em>rvlab/src/sw/include/regaccess.h</em> in the “RISC-V Instruction Set Manual Vol. II: Privileged ISA”, in the chapter “Machine-Level ISA” linked on the <a class="reference internal" href="../resources/index.html#resources"><span class="std std-ref">Resources</span></a> page.</p></li>
+</ul>
+</section>
+<section id="tasks">
+<h2>Tasks<a class="headerlink" href="#tasks" title="Permalink to this heading"></a></h2>
+<p><strong>1. Project top level</strong></p>
+<p>This exercise should be solved in a “top down” approach so your team members can work in parallel on tasks 2-4.</p>
+<p>Start with modifying <em>student.sv</em> to create the structure as shown in the diagram above. You need to define the (extensible) interfaces for the TL-UL 1:N multiplexer and IRQ controller.  Once your group has agreed on the interfaces and created the student top level it can start working in parallel on tasks 2 and 3.</p>
+<p><strong>2. 1:N bus multiplexer for TL-UL</strong></p>
+<p>Implementation guidelines</p>
+<ul class="simple">
+<li><p>support TL-UL</p></li>
+<li><p>module name: “student_tlul_mux.sv”</p></li>
+<li><p>the interface must use the structs defined in the package tlul_pkg (<em>rvlab/src/rtl/tlul/pkg/tlul_pkg.sv</em>)</p></li>
+<li><p>the number of devices (1-16) must be configurable by a parameter</p></li>
+<li><p>the module must be <strong>purely combinational</strong>, i.e. do not use any flip flops</p></li>
+<li><p>Hierarchical address decoding: The address range of the <em>tl_device_peri</em> TL-UL port of the student module is defined by the main TL-UL xbar in conjunction with the peripheral TL-UL xbar. Please refer to <em>rvlab/src/design/tlgen/xbar_main.hjson</em> and <em>rvlab/src/design/tlgen/xbar_peri.hjson</em> for the resulting address range (or look into <a class="reference internal" href="../design_ref/memory_map.html#memorymap"><span class="std std-ref">Memory Map</span></a>). Your student_tlul_mux should divide this address range into 16 equally sized ranges for the (up to) 16 connected TL-UL devices. For this <strong>your student_tlul_mux must only evaluate (decode) 4 adress bits</strong>.</p></li>
+</ul>
+<p>Test your multiplexer with the provided test bench <em>student_tlul_mux_tb.sv</em> before integrating it into <em>student.sv</em>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">flow</span> <span class="n">student_tlul_mux_tb</span><span class="o">.</span><span class="n">sim_rtl_questa</span>
+</pre></div>
+</div>
+<p>After integration into rvlab adapt the base address definitions in <em>src/sw/include/rvlab.h</em> and use software to test the access for the running light and the TL-UL host.</p>
+<p><strong>3. IRQ controller: hardware</strong></p>
+<p>Design an interrupt controller based on the principles presented in the exercise. It should aggregate 1-32 incoming interrupt lines in any imaginable configuration to the outgoing interrupt line. The number of incoming interrupt lines should be made configurable at compile time using the parameter IRQ_MAX. The interrupt controller should have the following register interface:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>address</p></th>
+<th class="head"><p>mode</p></th>
+<th class="head"><p>name</p></th>
+<th class="head"><p>description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x00</p></td>
+<td><p>r/w</p></td>
+<td><p>all_en</p></td>
+<td><p>0: suppresses all outgoing interrupt requests</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x04</p></td>
+<td><p>r/w</p></td>
+<td><p>mask</p></td>
+<td><p>mask(n) = 1 &lt;=&gt; irq(n) enabled</p></td>
+</tr>
+<tr class="row-even"><td><p>0x08</p></td>
+<td><p>w</p></td>
+<td><p>mask_set</p></td>
+<td><p>mask_set(n) = 1 &lt;=&gt; set bit n in mask</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x0C</p></td>
+<td><p>w</p></td>
+<td><p>mask_clr</p></td>
+<td><p>mask_clr(n) = 1 &lt;=&gt; clear bit n in mask</p></td>
+</tr>
+<tr class="row-even"><td><p>0x10</p></td>
+<td><p>r</p></td>
+<td><p>status</p></td>
+<td><p>status(n) = 1 &lt;=&gt; irq(n) is asserted</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x14</p></td>
+<td><p>r</p></td>
+<td><p>irq_no</p></td>
+<td><p>n &lt; IRQ_MAX: irq_no = n, irq(n) = 1 and there is no m &lt; n with irq(m) = 1 and mask(m) = 1.
+n = IRQ_MAX: no pending unmasked irq</p></td>
+</tr>
+<tr class="row-even"><td><p>0x18</p></td>
+<td><p>r/w</p></td>
+<td><p>test</p></td>
+<td><p>0: regular operation; 1: all irq inputs are wired to the test_irq register</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x1C</p></td>
+<td><p>r/w</p></td>
+<td><p>test_irq</p></td>
+<td><p>see test</p></td>
+</tr>
+</tbody>
+</table>
+<p>Note: If the irq controller is finished before the TL-UL multiplexer, temporarily implement the later as a 1:1 connection between its input and (only) the output to the irq controller.</p>
+<p><strong>4. Interrupt controller: HAL</strong></p>
+<p>Write a HAL (<em>student_irq_ctrl.c/h</em>) which isolates all accesses to the registers of the interrupt controller. These functions are time-critical as they are often used inside an interrupt handler. Therefore they should either be declared as extern __inline__ or even better be implemented as macros. In both cases the C header file has to contain not only the declarations but also the implementations.</p>
+<p><strong>5. Interrupt handler</strong>
+Add a call to a new interrupt handler <em>student_irq_ctrl_top_handler()</em> for the external irq input of the Ibex CPU to <em>src/sw/crt0.S</em>. Also add an empty <em>weak</em> implementation to <em>src/sw/baselibc/src/irq.c</em> to avoid breaking the exisiting software.
+Implement <em>student_irq_ctrl_top_handler()</em> with branches to the appropriate handlers depending on the value of the register irq_no. Implement these branches with a jump table (in ANSI C: array of function pointers). Provide functions <em>student_irq_ctrl_get(…)</em> and <em>student_irq_ctrl_set(…)</em> to read and write those tables during run time. These tables should be initialized with “dummy” functions during load time, i.e. before any program execution starts. Refer to <em>rvlab/src/sw/test_irq/main.c</em> for a simple example of an irq handler.</p>
+<p><strong>5. Software driven test of all components</strong></p>
+<p>Test your interrupt controller and the associated HAL thoroughly. A single incongruity can lead to errors in your project which are almost impossible to find.</p>
+<p>Some of the sensible test cases:</p>
+<ul class="simple">
+<li><p>Do all prioritization circuits work correctly ? Test at least the following pattern sequence: irq[31:0] = 0, 100…0, 110…0, …, 111…11, 111…110, 111…100, … ,0.</p></li>
+<li><p>Does the mask register suppress the interrupt lines correctly ? Assert all interrupt lines and write a sequence similar to the one above to the mask registers.</p></li>
+</ul>
+<p>Those test cases are best stimulated with a small C program which has direct control over all interrupt lines during a test mode. Implement this test mode with two additional registers accessible by the CPU: A 32 bit test register to stimulate the interrupt lines and a 1 bit register controlling a multiplexer switching the interrupt lines either to the test register or to their regular sources. Obviously interrupts have to be disabled in the RISC-V CPU during these tests.</p>
+<p><strong>6. Interrupt controlled running light</strong></p>
+<p>The functionality of the running light should be exactly the same as in <a class="reference internal" href="ex3.html#ex3"><span class="std std-ref">Ex. 3: Software development and system simulation</span></a>. However now all processing should take place in interrupt handlers. In the remaining time the CPU should compute something else, i.e. stay in an endless loop in the main program (e.g. while(1);) . Simply “or” the two outermost LEDs on each side to generate the interrupts, i.e. irq_left is active as long as at least one of the two outermost left LEDs is switched on.</p>
+<a class="reference internal image-reference" href="../_images/rlight_irq.svg"><img alt="../_images/rlight_irq.svg" class="align-center" src="../_images/rlight_irq.svg" width="300" /></a>
+</section>
+<section id="deliverables">
+<h2>Deliverables<a class="headerlink" href="#deliverables" title="Permalink to this heading"></a></h2>
+<p>All deliverables should be submitted in a single PDF file.</p>
+<p><strong>1. Questions</strong></p>
+<ol class="arabic simple">
+<li><p>of 2: How big (in kB) is the address range for each of the 16 TL-UL devices inside your student module ?</p></li>
+<li><p>of 2: Which address bits did your 1:N bus multiplexer decode ?</p></li>
+<li><p>of 6: How many cycles pass after one of the outermost gray LEDs light up until the application writes to the mode register ?</p></li>
+<li><p>of 6: Which problems occur in the specified implementation when the change frequency of the running light is too high ? How would a more robust (maybe even elegant?) solution would look like ? Of course the running light itself may be modified as well.</p></li>
+<li><p>Adding IRQ support to the memcpy bus master. How would the IRQ signal be generated ? Which basic steps would the IRQ handler perform ?</p></li>
+</ol>
+<p><strong>2. Source texts</strong></p>
+<ol class="arabic simple">
+<li><p>Verilog of your 1:N bus multiplexer and irq controller (excluding any generated code)</p></li>
+<li><p>HTML of the IRQ controller’s CPU accessible registers</p></li>
+<li><p>C of the irq controller’s HAL</p></li>
+<li><p>C of the irq table modification functions</p></li>
+<li><p>C of the irq handler and your running light IRQ handlers</p></li>
+</ol>
+<p><strong>3. Wave Views</strong></p>
+<p>The wave views should be zoomed in as much as possible to only show the sections specified below. They should contain at least the clk signal, the irq output and TL-UL interface of student.sv, the LEDs, and the mode register of the running light.</p>
+<ol class="arabic simple">
+<li><p>Interrupt controlled running light: View showing the lighting up of an outermost “Grey” LED and the subsequent write access of the interrupt handler to the mode register.</p></li>
+</ol>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ex4.html" class="btn btn-neutral float-left" title="Ex. 4: DMA / TL-UL host implementation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../project/index.html" class="btn btn-neutral float-right" title="Project" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

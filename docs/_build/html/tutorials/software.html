@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Software &mdash; RISC-V Lab  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/reg_html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="FPGA Upload" href="fpga_upload.html" />
+    <link rel="prev" title="Design Flow Recipes" href="flow.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            RISC-V Lab
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../exercises/index.html">Exercise Sheets &amp; Slides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/index.html">Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../design_ref/index.html">Design Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="setup/index.html">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flow.html">Design Flow Recipes</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Software</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#adding-programs">Adding programs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#host-i-o">Host I/O</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#initializing-ddr3">Initializing DDR3</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Dynamic memory management</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="fpga_upload.html">FPGA Upload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="questasim_guide.html">QuestaSim Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="systemverilog_hdl.html">SystemVerilog HDL</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../resources/index.html">Resources</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">RISC-V Lab</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">Software</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tutorials/software.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="software">
+<span id="id1"></span><h1>Software<a class="headerlink" href="#software" title="Permalink to this heading"></a></h1>
+<p>Multiple programs are defined and can be built from the rvlab codebase:</p>
+<ul class="simple">
+<li><p><strong>rlight</strong> – student program for running light (exercises 2, 3 and possibly exercise 5)</p></li>
+<li><p><strong>dma</strong> – student program for exercise 4</p></li>
+<li><p><strong>project</strong> – student program for project work (and exercise 5?)</p></li>
+<li><p><strong>minimal</strong> – minimal example program, can be used as template when adding programs</p></li>
+<li><p><strong>monitor</strong> – simple shell-like interface for interactive reading / writing of main memory</p></li>
+<li><p><strong>test_rvlab</strong> – tests various system components (simulation and FPGA). If the DDR3 memory controller is found, a time-intensive DDR3 memory test (infeasible for simulation) is performed.</p></li>
+<li><p><strong>test_sim_ddr</strong> – minimal test of DDR3 memory functionality, intended for RTL simulation with included DDR3 memory controller</p></li>
+</ul>
+<p>Each program corresponds to one subfolder in <em>/src/sw</em>.
+In addition to that, the <em>/src/sw</em> folder contains following resources shared by all programs:</p>
+<ul class="simple">
+<li><p><strong>crt0.S</strong> – Assembly code for system boot and interrupt handling</p></li>
+<li><p><strong>link.ld</strong> – Linker script</p></li>
+<li><p><strong>baselibc</strong> – Minimal libc implementation</p></li>
+</ul>
+<p>The provided libc provides some noteforthy functionality besides basic functions like <em>memset</em>, <em>sprintf</em> and <em>strlen</em>:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="#dynamic-memory-management"><span class="std std-ref">Initializing DDR3</span></a></p></li>
+<li><p><a class="reference internal" href="#host-io"><span class="std std-ref">Host I/O</span></a></p></li>
+<li><p>predefined interrupt service routines</p></li>
+</ul>
+<section id="adding-programs">
+<h2>Adding programs<a class="headerlink" href="#adding-programs" title="Permalink to this heading"></a></h2>
+<p>To define a new program <em>“myprog”</em>, create the folder <em>/src/sw/myprog</em> and place source code in it. You can place one or multiple .c and .S (assembly) files in this folder.</p>
+<p>To define the progarm for <em>flow</em>, add “myprog” to the list <em>sw_dirs</em> in <em>/flow/__init__.py</em>.</p>
+</section>
+<section id="host-i-o">
+<span id="host-io"></span><h2>Host I/O<a class="headerlink" href="#host-i-o" title="Permalink to this heading"></a></h2>
+<p><strong>stdout</strong> and <strong>stdin</strong>, the C standard output and standard input streams, are available for communication with the testbench or the host computer connected to the FPGA.</p>
+<p>Both stdout and stdin are implemented with ring buffers (software FIFOs) allocated in main BRAM. The data that Ibex writes to the stdout ring buffer is read by the testbench or host computer by system bus access through the RISC-V debug module. For stdin, this process is reversed.</p>
+<p>When the stdout ring buffer is full, writes to stdout block until pending data is read by the debugger. Writes to stdout can block indefinitely when no debugger is attached to the system.</p>
+<p>Key source files for host I/O;</p>
+<ul class="simple">
+<li><p><em>/src/sw/baselibc/hostio.c</em> – implements stdout/stdin ring buffers on RISC-V CPU</p></li>
+<li><p><em>/src/fv/rvlab_test_utils.sv</em> – During simulation, task <em>wait_prog</em> reads lines from stdout via JTAG and prints them to simulator output. (Newlines are required!)</p></li>
+<li><p><em>/flow/tools/openocd.py</em> – When running programs on the <a class="reference internal" href="../design_ref/fpga_board.html#fpga-board"><span class="std std-ref">FPGA Board</span></a>, this Python script connects stdin and stdout of the FPGA system to the host machine. JTAG-based memory accesses are performed via OpenOCD’s RPC interface.</p></li>
+</ul>
+</section>
+<section id="initializing-ddr3">
+<span id="dynamic-memory-management"></span><h2>Initializing DDR3<a class="headerlink" href="#initializing-ddr3" title="Permalink to this heading"></a></h2>
+<p>The DDR3 memory controller must be initialized before use. If you want to use DDR3 memory in your project, feel free to copy <em>init.c</em> and <em>init.h</em> from <em>/src/sw/monitor</em> into your program path and call <code class="code docutils literal notranslate"><span class="pre">ddr_init();</span></code> to initialize the memory controller.</p>
+<p>DDR3 initialization will fail during RTL simulations without DDR3 enabled. Simulation of the DDR3 memory is only feasible pre-synthesis using the special <em>sim_rtl_questa_ddr</em> (or <em>sim_rtl_xsim_ddr</em>) target. Pre-synthesis, a shortened memory reset and calibration sequence is used. Post-synthesis, the full reset and calibration sequence would be used, which is infeasible in terms of simulation time.</p>
+</section>
+<section id="id2">
+<h2>Dynamic memory management<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h2>
+<p>The provided libc comes with a simple malloc implementation for dynamic memory management. Before it can be used, <code class="code docutils literal notranslate"><span class="pre">add_malloc_block</span></code> needs to be called to add memory to the pool of available memory.</p>
+<p>Example, using the entire DDR3 memory as memory pool:</p>
+<div class="highlight-c notranslate"><div class="highlight"><pre><span></span><span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdlib.h&gt;</span>
+<span class="cp">#include</span><span class="w"> </span><span class="cpf">&lt;stdio.h&gt;</span>
+
+<span class="p">...</span>
+
+<span class="n">add_malloc_block</span><span class="p">(</span><span class="mh">0x80000000</span><span class="p">,</span><span class="w"> </span><span class="mh">0x20000000</span><span class="p">);</span>
+<span class="kt">char</span><span class="w"> </span><span class="o">*</span><span class="n">myAlloc</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">malloc</span><span class="p">(</span><span class="mi">100</span><span class="p">);</span>
+<span class="n">printf</span><span class="p">(</span><span class="s">&quot;myAlloc = %08x</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">,</span><span class="w"> </span><span class="n">myAlloc</span><span class="p">);</span>
+<span class="n">free</span><span class="p">(</span><span class="n">myAlloc</span><span class="p">);</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="flow.html" class="btn btn-neutral float-left" title="Design Flow Recipes" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="fpga_upload.html" class="btn btn-neutral float-right" title="FPGA Upload" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
