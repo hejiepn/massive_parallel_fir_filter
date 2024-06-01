@@ -7,10 +7,10 @@ module student (
 
   output logic irq_o,
 
-  input  tlul_pkg::tl_h2d_t tl_device_peri_i,
   output tlul_pkg::tl_d2h_t tl_device_peri_o,
-  input  tlul_pkg::tl_h2d_t tl_device_fast_i,
+  input  tlul_pkg::tl_h2d_t tl_device_peri_i,
   output tlul_pkg::tl_d2h_t tl_device_fast_o,
+  input  tlul_pkg::tl_h2d_t tl_device_fast_i,
 
   input  tlul_pkg::tl_d2h_t tl_host_i,
   output tlul_pkg::tl_h2d_t tl_host_o
@@ -24,6 +24,7 @@ module student (
 
   assign irq_o         = '0;
 
+  logic [31:0] irq_i;
   localparam integer mux_num = 2;
 
   tlul_pkg::tl_h2d_t device_select_o [mux_num-1:0];
@@ -34,8 +35,8 @@ module student (
     ) tlul_mux_i (
     .clk_i,
     .rst_ni,
-    .tl_host_o(tl_device_peri_o),
-    .tl_host_i(tl_device_peri_i),
+    .tl_mux_o(tl_device_peri_o),
+    .tl_mux_i(tl_device_peri_i),
     .tl_device_o(device_select_i),
     .tl_device_i(device_select_o)
   );
@@ -48,7 +49,18 @@ module student (
     .led_o(led)
   );
 
-    student_dma dma_i (
+  student_irq_ctrl #(
+	.N(32)
+  ) irq_ctrl (
+	.clk_i,
+	.rst_ni,
+	.irq_i(irq_i),
+	.irq_en_o(irq_o),
+	.tl_o (device_select_i[1]),
+	.tl_i (device_select_o[1])
+  );
+
+  student_dma dma_i (
     .clk_i,
     .rst_ni,
     .tl_o (tl_device_fast_o),

@@ -18,7 +18,7 @@
       name: "mask"
       desc: "mask(n) = 1 <=> irq(n) enabled"
       swaccess: "rw"
-      hwaccess: "hro"
+      hwaccess: "hrw"
       fields: [
         {bits: "31:0", name: "mask", desc: "value"}
       ]
