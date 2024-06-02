@@ -24,14 +24,14 @@ module student (
 
   //logic irq_o_i;
 
-  //assign irq_o = irq_o_i;
+  //assign irq_o = irq_o_i; // this was misleading
 
 
   logic [31:0] irq_i;
   localparam integer mux_num = 2;
 
-  tlul_pkg::tl_h2d_t device_select_i [mux_num-1:0];
-  tlul_pkg::tl_d2h_t device_select_o [mux_num-1:0] ;
+  tlul_pkg::tl_d2h_t tl_device_output [mux_num-1:0] ;
+  tlul_pkg::tl_h2d_t tl_device_input [mux_num-1:0];
 
      student_tlul_mux #(
     .NUM(mux_num)
@@ -40,16 +40,8 @@ module student (
     .rst_ni,
     .tl_host_o(tl_device_peri_o),
     .tl_host_i(tl_device_peri_i),
-    .tl_device_o(device_select_o),
-    .tl_device_i(device_select_i)
-  );
-
-  student_rlight rlight_i (
-    .clk_i,
-    .rst_ni,
-    .tl_o(device_select_o[0]),
-    .tl_i(device_select_i[0]),
-    .led_o(led)
+    .tl_device_o(tl_device_output),
+    .tl_device_i(tl_device_input)
   );
 
   student_irq_ctrl #(
@@ -59,9 +51,18 @@ module student (
 	.rst_ni,
 	.irq_i(irq_i),
 	.irq_en_o(irq_o),
-	.tl_o(device_select_o[1]),
-	.tl_i(device_select_i[1])
+	.tl_o(tl_device_output[0]),
+	.tl_i(tl_device_input[0])
   );
+
+  student_rlight rlight_i (
+    .clk_i,
+    .rst_ni,
+    .tl_o(tl_device_output[1]),
+    .tl_i(tl_device_input[1]),
+    .led_o(led)
+  );
+
 
   student_dma dma_i (
     .clk_i,
