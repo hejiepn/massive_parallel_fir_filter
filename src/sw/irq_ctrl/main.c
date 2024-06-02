@@ -100,6 +100,7 @@ void student_irq_ctrl_handler_init(void) {
     for (uint32_t i = 0; i < MAX_IRQ; i++) {
         irq_handlers[i] = dummy_handler;
     }
+	printf("handler init done");
 }
 
 /**********************************************************************************/
@@ -123,6 +124,9 @@ int main(void) {
     // disable/enable interrupts globally for the test
 	//irq_ctrl_disable();
 	irq_ctrl_enable();
+
+	while(1):
+	;
 
 
     // Run prioritization test

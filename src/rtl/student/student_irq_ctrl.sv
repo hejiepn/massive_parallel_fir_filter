@@ -33,26 +33,27 @@ module student_irq_ctrl #(
     // Mask and status register logic
     always_ff @(posedge clk_i, negedge rst_ni) begin
         if (~rst_ni) begin
-            hw2reg.mask.d <= '0;
-			hw2reg.status.d <= '0;
+			hw2reg.mask.de <= '1;
+			irq_input <= '0;
         end else begin
 			if(tl_i.a_valid) begin 
 				$display("interrupt address has been called");
-				hw2reg.mask.de <= '1;
 				hw2reg.mask.d <= (reg2hw.mask.q | reg2hw.mask_set.q) & ~reg2hw.mask_clr.q;
-				hw2reg.status.de <= '1;
-				hw2reg.status.d <= irq_i;
 				$display("mask is %b",hw2reg.mask.d);
-				$display("status is %b",hw2reg.status.d);
-			end else begin
-				hw2reg.mask.de <= '0;
-				hw2reg.status.de <= '0;
+				if (reg2hw.test.q == 1'b1) begin
+					irq_input <= reg2hw.test_irq.q;
+				end else begin
+					irq_input <= irq_i;
+				end
 			end
         end
     end
 
-	//assign irq_input based on test register
-	assign irq_input = (reg2hw.test.q == 1'b1) ? reg2hw.test_irq.q : irq_i;
+	//status register logic
+	always_comb begin
+		hw2reg.status.de = '1;
+		hw2reg.status.d = irq_input;
+	end
 
     // IRQ masking logic assign is a combinatorial logic statement
     assign irq_masked = irq_input & reg2hw.mask.q;
