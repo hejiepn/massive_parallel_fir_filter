@@ -31,35 +31,10 @@ always_comb begin
         end
 	end
 	tl_host_o = tl_device_o[selected_device];
-	$display("tl_host_o is %b",tl_device_o[selected_device]);
 	for (int i = 0; i < NUM; i++) begin
 			tl_device_i[i] = '0;
 		end
         tl_device_i[selected_device] = tl_host_i;
-		$display("tl_device_i is %b",tl_device_i[selected_device]);
-		$display("tl_host_i is %b",tl_host_i);
     end
 
 endmodule
-
-
-/*
-  always_comb begin
-	selected_device = '0;
-      case (tl_host_i.a_address[23:20])
-        0: begin
-            tl_device_i[0] <= tl_host_i;
-            $display("case no: %d",tl_host_i.a_address);
-            $display("tl_host_i %d", tl_host_i.a_address);
-        end
-        1: begin
-            tl_device_i[1] <= tl_host_i;
-            $display("case no: %d",tl_host_i.a_address);
-            $display("tl_host_i %d", tl_host_i.a_address);
-        end
-        default: ;
-        endcase
-    end
-
-endmodule
-*/
