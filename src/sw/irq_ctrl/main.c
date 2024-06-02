@@ -28,6 +28,8 @@ void run_prioritization_test(void) {
         0xFFFFFFFC,  // 111...100
         0x00000000   // 0
     };
+	printf("rq_patterns[0] is 0x%08x\n", irq_patterns[0]);
+
     
     for (int i = 0; i < sizeof(irq_patterns) / sizeof(irq_patterns[0]); i++) {
         set_test_irq(irq_patterns[i]);
@@ -41,7 +43,8 @@ void run_mask_test(void) {
         0xAAAAAAAA,  // Alternate enable/disable
         0x55555555,  // Alternate enable/disable
     };
-    
+	printf("mask_patterns[0] is 0x%08x\n", mask_patterns[0]);
+
     for (int i = 0; i < sizeof(mask_patterns) / sizeof(mask_patterns[0]); i++) {
         // Write the pattern to the mask register
         irq_ctrl_set_mask(mask_patterns[i]);

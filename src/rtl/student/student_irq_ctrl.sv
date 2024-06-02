@@ -38,14 +38,19 @@ module student_irq_ctrl #(
         end else begin
 			hw2reg.mask.d <= (reg2hw.mask.q | reg2hw.mask_set.q) & ~reg2hw.mask_clr.q;
 			hw2reg.status.d <= irq_i;
+			$display("mask is %b",hw2reg.mask.d);
+			$display("status is %b",hw2reg.status.d);
         end
     end
 
 	//assign irq_input based on test register
 	assign irq_input = (reg2hw.test.q == 1'b1) ? reg2hw.test_irq.q : irq_i;
+	$display("test reg is %d",reg2hw.test.q);
+
 
     // IRQ masking logic assign is a combinatorial logic statement
     assign irq_masked = irq_input & reg2hw.mask.q;
+	$display("irq_masked is %b",irq_masked);
 
     // Priority and irq_no encoder
     always_comb begin
@@ -64,5 +69,7 @@ module student_irq_ctrl #(
 
 	// IRQ enable logic
 	assign irq_en_o = (|irq_masked) & reg2hw.all_en.q;
+	$display("irq_en_o is %b",irq_en_o);
+
 
 endmodule
