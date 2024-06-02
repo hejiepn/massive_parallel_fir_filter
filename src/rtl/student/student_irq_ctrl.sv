@@ -10,7 +10,7 @@ module student_irq_ctrl #(
 	output tlul_pkg::tl_d2h_t tl_o,  //slave output (this module's response)
   	input  tlul_pkg::tl_h2d_t tl_i  //master input (incoming request)
 );
-    logic [$clog2(N+1)-1:0] irq__no;  // current IRQ number with one extra bit for 'N'
+    //logic [$clog2(N+1)-1:0] irq__no;  // current IRQ number with one extra bit for 'N'
     logic [N-1:0] irq_masked;
 	logic found;
     logic [N-1:0] irq_input;
@@ -36,25 +36,31 @@ module student_irq_ctrl #(
             hw2reg.mask.d <= '0;
 			hw2reg.status.d <= '0;
         end else begin
-			hw2reg.mask.d <= (reg2hw.mask.q | reg2hw.mask_set.q) & ~reg2hw.mask_clr.q;
-			hw2reg.status.d <= irq_i;
-			$display("mask is %b",hw2reg.mask.d);
-			$display("status is %b",hw2reg.status.d);
+			if(tl_i.a_valid) begin 
+				$display("interrupt address has been called");
+				hw2reg.mask.de <= '1;
+				hw2reg.mask.d <= (reg2hw.mask.q | reg2hw.mask_set.q) & ~reg2hw.mask_clr.q;
+				hw2reg.status.de <= '1;
+				hw2reg.status.d <= irq_i;
+				$display("mask is %b",hw2reg.mask.d);
+				$display("status is %b",hw2reg.status.d);
+			end else begin
+				hw2reg.mask.de <= '0;
+				hw2reg.status.de <= '0;
+			end
         end
     end
 
 	//assign irq_input based on test register
 	assign irq_input = (reg2hw.test.q == 1'b1) ? reg2hw.test_irq.q : irq_i;
-	$display("test reg is %d",reg2hw.test.q);
-
 
     // IRQ masking logic assign is a combinatorial logic statement
     assign irq_masked = irq_input & reg2hw.mask.q;
-	$display("irq_masked is %b",irq_masked);
 
     // Priority and irq_no encoder
     always_comb begin
 		found = 0;
+		hw2reg.irq_no.de = '1;
         for (int i = 0; i < N; i++) begin
             if (irq_masked[i]) begin
                 hw2reg.irq_no.d = i;
@@ -69,7 +75,5 @@ module student_irq_ctrl #(
 
 	// IRQ enable logic
 	assign irq_en_o = (|irq_masked) & reg2hw.all_en.q;
-	$display("irq_en_o is %b",irq_en_o);
-
 
 endmodule
