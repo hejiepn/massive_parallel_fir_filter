@@ -22,7 +22,10 @@ module student (
     default: '0
   };
 
-  assign irq_o         = '0;
+  logic irq_o_i;
+
+  assign irq_o = irq_o_i;
+
 
   logic [31:0] irq_i;
   localparam integer mux_num = 2;
@@ -44,8 +47,8 @@ module student (
   student_rlight rlight_i (
     .clk_i,
     .rst_ni,
-    .tl_o (device_select_i[0]),
-    .tl_i (device_select_o[0]),
+    .tl_o(device_select_i[0]),
+    .tl_i(device_select_o[0]),
     .led_o(led)
   );
 
@@ -55,16 +58,16 @@ module student (
 	.clk_i,
 	.rst_ni,
 	.irq_i(irq_i),
-	.irq_en_o(irq_o),
-	.tl_o (device_select_i[1]),
-	.tl_i (device_select_o[1])
+	.irq_en_o(irq_o_i),
+	.tl_o(device_select_i[1]),
+	.tl_i(device_select_o[1])
   );
 
   student_dma dma_i (
     .clk_i,
     .rst_ni,
-    .tl_o (tl_device_fast_o),
-    .tl_i (tl_device_fast_i),
+    .tl_o(tl_device_fast_o),
+    .tl_i(tl_device_fast_i),
     .tl_host_o,
     .tl_host_i
   );

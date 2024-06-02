@@ -1,4 +1,4 @@
-module irq_controller #(
+module student_irq_ctrl #(
 	parameter int N = 16
 ) (
     input logic clk_i,
@@ -8,11 +8,12 @@ module irq_controller #(
 	output logic irq_en_o, 			// IRQ enable output
 
 	output tlul_pkg::tl_d2h_t tl_o,  //slave output (this module's response)
-  	input  tlul_pkg::tl_h2d_t tl_i,  //master input (incoming request)
+  	input  tlul_pkg::tl_h2d_t tl_i  //master input (incoming request)
 );
-    logic [$clog2(N+1)-1:0] irq__no,  // current IRQ number with one extra bit for 'N'
+    logic [$clog2(N+1)-1:0] irq__no;  // current IRQ number with one extra bit for 'N'
     logic [N-1:0] irq_masked;
 	logic found;
+    logic [N-1:0] irq_input;
 
 	import irq_ctrl_reg_pkg::*;
 
@@ -26,12 +27,12 @@ module irq_controller #(
 	.tl_o,
 	.reg2hw,
 	.hw2reg,
-	devmode_i('0)
+	.devmode_i('0)
 	);
 
     // Mask and status register logic
     always_ff @(posedge clk_i, negedge rst_ni) begin
-        if (~reset) begin
+        if (~rst_ni) begin
             hw2reg.mask.d <= '0;
 			hw2reg.status.d <= '0;
         end else begin
@@ -41,7 +42,7 @@ module irq_controller #(
     end
 
 	//assign irq_input based on test register
-	assign irq_input = (reg2hw.test.q = 1'b1) ? reg2hw.test_irq.q : irq_i;
+	assign irq_input = (reg2hw.test.q == 1'b1) ? reg2hw.test_irq.q : irq_i;
 
     // IRQ masking logic assign is a combinatorial logic statement
     assign irq_masked = irq_input & reg2hw.mask.q;
