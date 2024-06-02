@@ -28,11 +28,10 @@ void run_prioritization_test(void) {
         0xFFFFFFFC,  // 111...100
         0x00000000   // 0
     };
-	printf("rq_patterns[0] is 0x%08x\n", irq_patterns[0]);
-
     
     for (int i = 0; i < sizeof(irq_patterns) / sizeof(irq_patterns[0]); i++) {
         set_test_irq(irq_patterns[i]);
+		printf("run_prio_patterns[%d] is 0x%08x\n",i, irq_patterns[i]);
     }
 }
 
@@ -43,11 +42,12 @@ void run_mask_test(void) {
         0xAAAAAAAA,  // Alternate enable/disable
         0x55555555,  // Alternate enable/disable
     };
-	printf("mask_patterns[0] is 0x%08x\n", mask_patterns[0]);
 
     for (int i = 0; i < sizeof(mask_patterns) / sizeof(mask_patterns[0]); i++) {
         // Write the pattern to the mask register
         irq_ctrl_set_mask(mask_patterns[i]);
+		printf("mask_patterns[%d] is 0x%08x\n",i, mask_patterns[i]);
+
         // Set an interrupt pattern to test masking
         set_test_irq(0xFFFFFFFF);
     }
@@ -113,19 +113,23 @@ int main(void) {
     
     // Set a test IRQ handler for demonstration
     student_irq_ctrl_set_handler(0, test_irq_handler);
-    
-    // disable/enable interrupts globally for the test
-	irq_ctrl_disable();
-	//irq_ctrl_enable();
 
 	//activate test mode
 	irq_ctrl_set_test_mode(true);
 
+	irq_ctrl_set_test_irq(0x00000001); //irq handler 0
+	irq_ctrl_set_mask(0xffffffff);
+
+    // disable/enable interrupts globally for the test
+	//irq_ctrl_disable();
+	irq_ctrl_enable();
+
+
     // Run prioritization test
-    run_prioritization_test();
+    //run_prioritization_test();
 
     // Run mask test
-    run_mask_test();
+    //run_mask_test();
 
     return 0;
 }
