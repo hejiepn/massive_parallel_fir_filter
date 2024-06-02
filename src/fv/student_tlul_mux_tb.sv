@@ -1,5 +1,5 @@
 module student_tlul_mux_tb;
-  localparam CONNECTED_SLAVES = 1;
+  localparam CONNECTED_SLAVES = 16;
 
   logic clk;
   logic rst_n;
@@ -63,7 +63,7 @@ module student_tlul_mux_tb;
     errcnt = '0;
 
     for (int j = 0; j < CONNECTED_SLAVES; j = j + 1) begin
-      addr  = j << 4;
+      addr  = j << 20;
       wdata = j + 1;
       bus.put_word(addr + SHIFTIN_OFFSET, wdata);
       bus.put_word(addr + SHIFTCFG_OFFSET, 6'b000010);
@@ -71,13 +71,15 @@ module student_tlul_mux_tb;
 
 
     for (int j = 0; j < CONNECTED_SLAVES; j = j + 1) begin
-      addr = j << 4;
+      addr = j << 20;
       bus.get_word(addr + SHIFTIN_OFFSET, res);
       expected_value = j + 1;
       if (res !== expected_value) begin
         $error("SHIFTIN is incorrect: should be %u, is %u", expected_value, res);
         errcnt = errcnt + 1;
-      end
+	  end else begin
+		$display("SHIFTIN is correct: should be %u, is %u", expected_value, res);
+	  end
 
       bus.get_word(addr + SHIFTOUT_OFFSET, res);
       expected_value = (j + 1) << 1;
