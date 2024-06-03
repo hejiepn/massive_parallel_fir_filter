@@ -24,7 +24,6 @@ sw_dirs = [
     "rlight",
     "dma",
     "project",
-	"irq_ctrl",
 ]
 
 flow['libc'] = Libc(dependency_map={'reggen': 'reggen'})

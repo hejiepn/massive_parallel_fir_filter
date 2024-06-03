@@ -26,7 +26,7 @@
     {
       name: "mask_set"
       desc: "mask_set(n) = 1 <=> set bit n in mask"
-      swaccess: "rw1s"
+      swaccess: "rw"
       hwaccess: "hro"
       fields:
       [
@@ -36,7 +36,7 @@
 	{
 	 name: "mask_clr"
 	 desc: "mask_clr(n) = 1 <=> clear bit n in mask"
-	 swaccess: "rw1c"
+	 swaccess: "rw"
 	 hwaccess: "hro"
 	 fields:
 	 [
