@@ -20,7 +20,7 @@ extern irq_handler_t irq_handlers[];
 extern const int max_irq_handlers;
 
 //student_irq_ctrl_top_handler
-void student_irq_ctrl_top_handler(void) {
+void irq_handler(void) {
 	fputs("I am student_irq_ctrl_top_handler\n", stdout);
     uint32_t irq_no = GET_IRQ_CTRL_IRQ_NO(0);
 
