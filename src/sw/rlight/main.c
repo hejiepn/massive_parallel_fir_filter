@@ -19,7 +19,6 @@ void irq_handler_0(void) {
     printf("Handling IRQ handler 0\n");
     student_rlight_set_mode_right();
     IRQ_CTRL_SET_MASK_CLEAR(0, 0b1);
-    IRQ_CTRL_SET_MASK_SET(0, 0b10);
 }
 
 // Specific handler for IRQ 1
@@ -28,7 +27,22 @@ void irq_handler_1(void) {
     printf("Handling IRQ handler 1\n");
     student_rlight_set_mode_left();
     IRQ_CTRL_SET_MASK_CLEAR(0, 0b10);
-    IRQ_CTRL_SET_MASK_SET(0, 0b1);
+}
+
+// Specific handler for IRQ 1
+void irq_handler_2(void) {
+    fputs("Handling IRQ handler 2\n", stdout); //DOWN
+    printf("Handling IRQ handler 2\n");
+    student_rlight_set_mode_left();
+    IRQ_CTRL_SET_MASK_CLEAR(0, 0b100);
+}
+
+// Specific handler for IRQ 1
+void irq_handler_3(void) {
+    fputs("Handling IRQ handler 3\n", stdout); //DOWN
+    printf("Handling IRQ handler 3\n");
+    student_rlight_set_mode_left();
+    IRQ_CTRL_SET_MASK_CLEAR(0, 0b1000);
 }
 
 // Initialize and configure interrupt handlers
@@ -58,32 +72,25 @@ int main(void) {
     setup_irq_handlers(); // Set up IRQ handlers
     student_irq_ctrl_set(0, irq_handler_0, irq_handlers, MAX_IRQ_HANDLERS);
     student_irq_ctrl_set(1, irq_handler_1, irq_handlers, MAX_IRQ_HANDLERS);
+    student_irq_ctrl_set(2, irq_handler_2, irq_handlers, MAX_IRQ_HANDLERS);
+    student_irq_ctrl_set(3, irq_handler_3, irq_handlers, MAX_IRQ_HANDLERS);
 
     delay_cycles(30);
 
     printf("TEST IRQ MAIN START\n");
 
-    mask_set = 0x00000001;
+    mask_set = 0x0000000f;
     IRQ_CTRL_SET_MASK_SET(0, mask_set);
     mask_clear = 0x00000000;
     IRQ_CTRL_SET_MASK_CLEAR(0, mask_clear);
     IRQ_CTRL_SET_TEST_MODE(0,1);
-    test_irq = 0x00000001;
+    test_irq = 0x0000000f;
     IRQ_CTRL_SET_TEST_IRQ(0, test_irq);
     delay_cycles(300);
     irq_no = GET_IRQ_CTRL_IRQ_NO(0);
     status = GET_IRQ_CTRL_STATUS(0);
 
-    printf("test 1: irq_no is %d and status is 0x%X", irq_no, status);
-
-    test_irq = 0x00000002;
-    IRQ_CTRL_SET_TEST_IRQ(0, test_irq);
-    delay_cycles(300);
-    irq_no = GET_IRQ_CTRL_IRQ_NO(0);
-    status = GET_IRQ_CTRL_STATUS(0);
-
-    printf("test 2: irq_no is %d and status is 0x%X", irq_no, status);
-
+    printf("test 1: irq_no is %d and status is 0x%032X\n", irq_no, status);
 
     printf("TEST IRQ MAIN END\n");
 

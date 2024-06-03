@@ -19,14 +19,14 @@ always_comb begin
 	selected_device='0;
 	if (tl_host_i.a_valid=='1) begin
 		selected_device=tl_host_i.a_address[23:20];
-		$display("selected device by host %b",selected_device);
+		//$display("selected device by host %b",selected_device);
 	end 
 	else begin
 	    for (int i = 0; i < NUM; i++) 
 	    begin
 	      if (tl_device_o[i].d_valid=='1) begin
 			selected_device=i;
-			$display("device response from %b",selected_device);
+			//$display("device response from %b",selected_device);
 	      end
         end
 	end

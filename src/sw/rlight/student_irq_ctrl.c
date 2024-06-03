@@ -23,6 +23,8 @@ extern const int max_irq_handlers;
 void irq_handler(void) {
 	printf("I am student_irq_ctrl_irq_handler\n");
     unsigned int irq_status = GET_IRQ_CTRL_STATUS(0);
+    unsigned int irq_no = GET_IRQ_CTRL_IRQ_NO(0);
+    printf("currently handling irq_no %d\n", irq_no);
 
     for (int i = 0; i < max_irq_handlers; i++) {
         if ((irq_status & (1 << i)) && irq_handlers[i] != NULL) {
