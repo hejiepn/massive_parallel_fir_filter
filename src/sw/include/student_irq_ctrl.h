@@ -2,6 +2,7 @@
 #define STUDENT_IRQ_CTRL_H
 
 #include "rvlab.h"
+#include "stdio.h"
 
 
 // Macro definitions for time-critical operations
@@ -41,12 +42,12 @@ static inline irq_handler_t student_irq_ctrl_get(int irq_number, irq_handler_t* 
 }
 
 static inline void default_irq_handler(void) {
-    fputs("Unhandled interrupt\n", stdout);
+    fputs("Unhandled interrupt, fputs\n", stdout);
 }
 
-static inline void init_irq_handlers(irq_handler_t* irq_table, int max_handlers, irq_handler_t default_handler) {
+static inline void init_irq_handlers(irq_handler_t* irq_table, int max_handlers) {
     for (int i = 0; i < max_handlers; i++) {
-        irq_table[i] = default_handler;  // Initialize all handlers to default
+        irq_table[i] = default_irq_handler;  // Initialize all handlers to default
     }
 }
 

@@ -29,7 +29,7 @@ void student_rlight_set_clock_delay(unsigned int delay) {
 	REG32(REGC) = (delay); 
 }
 rlight_mode student_rlight_get_current_mode(void) {
-	return (rlight_mode)(REG32(REGB) & STUDENT_RLIGHT_REGB_MODE_MASK)
+	return (rlight_mode)(REG32(REGB) & STUDENT_RLIGHT_REGB_MODE_MASK);
 }
 uint32_t student_rlight_get_pattern(void) {
 	return (REG32(REGD) & STUDENT_RLIGHT_REGD_LED_STATUS_MASK);

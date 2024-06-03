@@ -15,7 +15,8 @@ const int max_irq_handlers = MAX_IRQ_HANDLERS;
 
 // Specific handler for IRQ 0
 void irq_handler_0(void) {
-    //fputs("Handling IRQ RIGHT?\n", stdout); //DOWN
+    fputs("Handling IRQ handler 0\n", stdout); //DOWN
+    printf("Handling IRQ handler 0\n");
     student_rlight_set_mode_right();
     IRQ_CTRL_SET_MASK_CLEAR(0, 0b1);
     IRQ_CTRL_SET_MASK_SET(0, 0b10);
@@ -23,7 +24,8 @@ void irq_handler_0(void) {
 
 // Specific handler for IRQ 1
 void irq_handler_1(void) {
-    //fputs("Handling IRQ LEFT\n", stdout);
+    fputs("Handling IRQ handler 1\n", stdout); //DOWN
+    printf("Handling IRQ handler 1\n");
     student_rlight_set_mode_left();
     IRQ_CTRL_SET_MASK_CLEAR(0, 0b10);
     IRQ_CTRL_SET_MASK_SET(0, 0b1);
@@ -31,9 +33,9 @@ void irq_handler_1(void) {
 
 // Initialize and configure interrupt handlers
 void setup_irq_handlers(void) {
-    init_irq_handlers(irq_handlers, MAX_IRQ_HANDLERS, default_irq_handler);
-    student_irq_ctrl_set(0, irq_handler_0, irq_handlers, MAX_IRQ_HANDLERS);
-    student_irq_ctrl_set(1, irq_handler_1, irq_handlers, MAX_IRQ_HANDLERS);
+    init_irq_handlers(irq_handlers, MAX_IRQ_HANDLERS);
+    //student_irq_ctrl_set(0, irq_handler_0, irq_handlers, MAX_IRQ_HANDLERS);
+    //student_irq_ctrl_set(1, irq_handler_1, irq_handlers, MAX_IRQ_HANDLERS);
     IRQ_CTRL_ALL_ENABLE(0);
     irq_enable((1 << IRQ_TIMER) | (1 << IRQ_EXTERNAL));
 }
@@ -45,10 +47,49 @@ static void delay_cycles(int n_cycles) {
 }
 
 int main(void) {
-    
-    printf("RLIGHT MAIN START\n");
-    setup_irq_handlers(); // Set up IRQ handlers
+    uint32_t mask_set;
+    uint32_t mask_clear;
+    uint32_t test_irq;
+    uint32_t status;
+    uint32_t irq_no;
 
+
+    
+    setup_irq_handlers(); // Set up IRQ handlers
+    student_irq_ctrl_set(0, irq_handler_0, irq_handlers, MAX_IRQ_HANDLERS);
+    student_irq_ctrl_set(1, irq_handler_1, irq_handlers, MAX_IRQ_HANDLERS);
+
+    delay_cycles(30);
+
+    printf("TEST IRQ MAIN START\n");
+
+    mask_set = 0x00000001;
+    IRQ_CTRL_SET_MASK_SET(0, mask_set);
+    mask_clear = 0x00000000;
+    IRQ_CTRL_SET_MASK_CLEAR(0, mask_clear);
+    IRQ_CTRL_SET_TEST_MODE(0,1);
+    test_irq = 0x00000001;
+    IRQ_CTRL_SET_TEST_IRQ(0, test_irq);
+    delay_cycles(300);
+    irq_no = GET_IRQ_CTRL_IRQ_NO(0);
+    status = GET_IRQ_CTRL_STATUS(0);
+
+    printf("test 1: irq_no is %d and status is 0x%X", irq_no, status);
+
+    test_irq = 0x00000002;
+    IRQ_CTRL_SET_TEST_IRQ(0, test_irq);
+    delay_cycles(300);
+    irq_no = GET_IRQ_CTRL_IRQ_NO(0);
+    status = GET_IRQ_CTRL_STATUS(0);
+
+    printf("test 2: irq_no is %d and status is 0x%X", irq_no, status);
+
+
+    printf("TEST IRQ MAIN END\n");
+
+
+/*
+    printf("RLIGHT MAIN START\n");
     student_rlight_set_clock_delay(180);
     student_rlight_set_mode_right();
     int pattern = 0b00011000;
@@ -58,7 +99,7 @@ int main(void) {
     pattern = 0b00100100;
     student_rlight_set_pattern(pattern);
     delay_cycles(30000);
-
+*/
     return 0;
 }
 

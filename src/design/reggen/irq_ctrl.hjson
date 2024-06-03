@@ -9,7 +9,7 @@
       desc: "0: suppresses all outgoing interrupt requests, 1: allows outgoing interrupt requests"
       swaccess: "rw"
       hwaccess: "hro"
-      #hwext: "true"
+      hwqe : "true"
       fields: [
         {bits: "0", name: "all_en", desc: "value"}
       ]
@@ -19,6 +19,7 @@
       desc: "mask(n) = 1 <=> irq(n) enabled"
       swaccess: "rw"
       hwaccess: "hrw"
+      hwqe : "true"
       fields: [
         {bits: "31:0", name: "mask", desc: "value"}
       ]
@@ -28,6 +29,7 @@
       desc: "mask_set(n) = 1 <=> set bit n in mask"
       swaccess: "rw"
       hwaccess: "hro"
+      hwqe : "true"
       fields:
       [
         {bits: "31:0", name: "mask_set", desc: "1 = unmasked, 0 = masked"}
@@ -38,6 +40,7 @@
 	 desc: "mask_clr(n) = 1 <=> clear bit n in mask"
 	 swaccess: "rw"
 	 hwaccess: "hro"
+	 hwqe : "true"
 	 fields:
 	 [
 		{bits: "31:0", name: "mask_clr", desc: "1 = clear bit n in mask to 0"}
@@ -48,6 +51,7 @@
 	 desc: "monitor the state of all interrupt lines"
 	 swaccess: "ro"
 	 hwaccess: "hwo"
+	 hwre : "true"
 	 fields:
 	 [
 		{bits: "31:0", name: "status", desc: "status(n) = 1 <=> irq(n) is asserted "}
@@ -58,6 +62,7 @@
 	 desc: "indicate the number (or index) of the currently active highest-priority (lowest index: highest priority) interrupt that is unmasked, If there is no active and unmasked interrupt, irq_no is set to IRQ_MAX"
 	 swaccess: "ro"
 	 hwaccess: "hwo"
+	 hwre	: "true"
 	 fields:
 	 [
 		{bits: "31:0", name: "irq_no", desc: "n < IRQ_MAX: irq_no = n, irq(n) = 1 and there is no m < n with irq(m) = 1 and mask(m) = 1. n = IRQ_MAX: no pending unmasked irq"}
@@ -68,6 +73,7 @@
 	 desc: "choose between test and regular operation mode"
 	 swaccess: "rw"
 	 hwaccess: "hro"
+	 hwqe : "true"
 	 fields:
 	 [
 		{bits: "0", name: "test", desc: "0: regular operation; 1: all irq inputs are wired to the test_irq register"}
@@ -78,6 +84,7 @@
 	 desc: "32 bit test register to stimulate the interrupt lines"
 	 swaccess: "rw"
 	 hwaccess: "hro"
+	 hwqe : "true"
 	 fields:
 	 [
 		{bits: "31:0", name: "test_irq", desc: "simulating irq lines"}

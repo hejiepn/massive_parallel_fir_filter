@@ -15,7 +15,7 @@ module student_irq_ctrl #(
     logic [$clog2(N+1)-1:0] irq_no;  // current IRQ number with one extra bit for 'N'
     logic [N-1:0] irq_masked;
 	logic [N-1:0] status;
-	logic found;
+	//logic found;
 	logic all_en;
 
 	import irq_ctrl_reg_pkg::*;
@@ -52,45 +52,17 @@ module student_irq_ctrl #(
         end
     end
 
+    
+
 	//status, mask and irq_masked register logic
 	always_comb begin
-		hw2reg.status.de = '1;
 		hw2reg.status.d = irq_input;
-		hw2reg.mask.de = '1;
 		hw2reg.mask.d = mask;
-    	//irq_masked = irq_input & reg2hw.mask.q;
-		irq_masked = irq_input & mask;
-		hw2reg.status.de = '0;
-		hw2reg.mask.de = '0;
+		hw2reg.irq_no.d = irq_input & mask; 
+		hw2reg.mask.de <= 1'b1;
+		hw2reg.status.de = 1'b1;
+		hw2reg.irq_no.de = 1'b1;
 	end
-
-	//prio logic 
-	always_ff @(posedge clk_i, negedge rst_ni) begin
-		if(~rst_ni) begin
-			irq_no <= '0;
-			found <= '0;
-		end else begin
-			if(tl_i.a_valid) begin
-				for (int i = 0; i < N; i++) begin
-            		if (irq_masked[i]) begin
-						irq_no <= i;
-						found <= '1;
-						break;
-            		end
-        		end
-				if (~found) begin
-					irq_no <= N;
-				end
-			end
-		end
-	end
-
-    // irq_no encoder setter
-    always_comb begin
-		hw2reg.irq_no.de = '1;
-		hw2reg.irq_no.d = irq_no;
-		hw2reg.irq_no.de = '0;
-    end
 
 	//all_en logic reader
 	always_ff @(posedge clk_i, negedge rst_ni) begin
@@ -104,6 +76,6 @@ module student_irq_ctrl #(
 	end
 
 	// IRQ enable logic
-	assign irq_en_o = (|irq_masked) & all_en;
+	assign irq_en_o = (|(irq_input & mask)) & all_en;
 
 endmodule

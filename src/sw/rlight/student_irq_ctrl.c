@@ -11,7 +11,7 @@ void student_irq_ctrl_init(void) {
     //REG32(IRQ_CTRL_IRQ_NO(0)) = IRQ_CTRL_IRQ_NO_DEFAULT: sw:ro
     REG32(IRQ_CTRL_TEST(0)) = IRQ_CTRL_TEST_DEFAULT;
     REG32(IRQ_CTRL_TEST_IRQ(0)) = IRQ_CTRL_TEST_IRQ_DEFAULT;
-	printf("irq_ctrl reg init done");
+	printf("irq_ctrl reg init done \n");
 
 }
 
@@ -21,12 +21,12 @@ extern const int max_irq_handlers;
 
 //student_irq_ctrl_top_handler
 void irq_handler(void) {
-	fputs("I am student_irq_ctrl_top_handler\n", stdout);
-    uint32_t irq_no = GET_IRQ_CTRL_IRQ_NO(0);
+	printf("I am student_irq_ctrl_irq_handler\n");
+    unsigned int irq_status = GET_IRQ_CTRL_STATUS(0);
 
-	while(irq_no != max_irq_handlers) {
-		printf("Handling IRQ number: %u\n", irq_no);
-		irq_handlers[irq_no]();
-		irq_no = GET_IRQ_CTRL_IRQ_NO(0);
-	}
+    for (int i = 0; i < max_irq_handlers; i++) {
+        if ((irq_status & (1 << i)) && irq_handlers[i] != NULL) {
+            irq_handlers[i]();  // Call the handler if the corresponding bit is set
+        }
+    }
 }
