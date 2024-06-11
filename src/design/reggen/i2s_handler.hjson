@@ -1,0 +1,28 @@
+{
+  name: "filter_module"
+  clock_primary: "sys_clk"
+  bus_device: "tlul"
+  regwidth: "32"
+  registers: [
+    {
+      name: "PCM_RX"
+      desc: "status of PCM RX"
+      swaccess: "ro"
+      hwaccess: "hrw"
+      hwext: "true"
+      fields: [
+        {bits: "15:0", name: "PCM RX", desc: "current sample in"}
+      ]
+    }
+	{
+      name: "PCM_TX"
+      desc: "status of PCM TX"
+      swaccess: "ro"
+      hwaccess: "hrw"
+      hwext: "true"
+      fields: [
+        {bits: "31:0", name: "PCM TX", desc: "current sample out"}
+      ]
+    }
+  ]
+}
