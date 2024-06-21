@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design Flow Recipes &mdash; RISC-V Lab  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/reg_html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Software" href="software.html" />
+    <link rel="prev" title="Setup" href="setup/index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            RISC-V Lab
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../exercises/index.html">Exercise Sheets &amp; Slides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/index.html">Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../design_ref/index.html">Design Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="setup/index.html">Setup</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Design Flow Recipes</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#module-simulation">Module Simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#system-simulation">System Simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fpga-implementation-synthesis-place-and-route">FPGA Implementation (Synthesis, Place and Route)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#netlist-simulation">Netlist Simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#adding-module-level-testbenches">Adding module-level testbenches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#extending-the-crossbar-switches">Extending the crossbar switches</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#behind-the-scenes">Behind the scenes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="software.html">Software</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fpga_upload.html">FPGA Upload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="questasim_guide.html">QuestaSim Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="systemverilog_hdl.html">SystemVerilog HDL</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../resources/index.html">Resources</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">RISC-V Lab</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">Design Flow Recipes</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tutorials/flow.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="design-flow-recipes">
+<span id="design-flow"></span><h1>Design Flow Recipes<a class="headerlink" href="#design-flow-recipes" title="Permalink to this heading"></a></h1>
+<p>The design flow uses <a class="reference external" href="https://pydesignflow.readthedocs.io/">PyDesignFlow</a>. To build task T of block B, run the following command in the <em>rvlab/</em> folder:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">flow</span> <span class="n">B</span><span class="o">.</span><span class="n">T</span>
+</pre></div>
+</div>
+<p>For example, to run RTL simulation using XSIM:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">flow</span> <span class="n">rvlab_tb_minimal</span><span class="o">.</span><span class="n">sim_rtl_xsim</span>
+</pre></div>
+</div>
+<p>When a target such as <em>rvlab_tb_minimal.sim_rtl_xsim</em> is requested, missing targets on which it depends are also built automatically. <strong>Existing dependencies are not re-built, regardless of whether they are up-to-date or not</strong>, unless you invoke <code class="code docutils literal notranslate"><span class="pre">flow</span></code>  the <code class="code docutils literal notranslate"><span class="pre">-R</span></code> flag.</p>
+<p>Running <code class="code docutils literal notranslate"><span class="pre">flow</span></code> without arguments shows a list of all flow targets and their current build status. Build results are placed in the <em>build/</em> subdirectory and are thus strictly separated from user-defined source files.</p>
+<p>To remove all build results, run <code class="code docutils literal notranslate"><span class="pre">flow</span> <span class="pre">--clean</span></code> or delete the <em>build/</em> folder.</p>
+<section id="module-simulation">
+<h2>Module Simulation<a class="headerlink" href="#module-simulation" title="Permalink to this heading"></a></h2>
+<p>Simulate <em>rlight_tb</em> module-level testbench:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">flow</span> <span class="n">rlight_tb</span><span class="o">.</span><span class="n">sim_rtl_questa</span>
+</pre></div>
+</div>
+</section>
+<section id="system-simulation">
+<h2>System Simulation<a class="headerlink" href="#system-simulation" title="Permalink to this heading"></a></h2>
+<p>RTL system simulation with “student” program running on the system:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">flow</span> <span class="n">sw_student</span><span class="o">.</span><span class="n">build</span>
+<span class="n">flow</span> <span class="n">systb_student</span><span class="o">.</span><span class="n">sim_rtl_questa</span>
+</pre></div>
+</div>
+<p>To run other programs on the system, replace <strong>student</strong> with the name of the desired program (see <a class="reference internal" href="software.html#software"><span class="std std-ref">Software</span></a> for available programs and how to add more programs). For example, to run the test_rvlab program, run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">flow</span> <span class="n">sw_test_rvlab</span><span class="o">.</span><span class="n">build</span>
+<span class="n">flow</span> <span class="n">systb_test_rvlab</span><span class="o">.</span><span class="n">sim_rtl_questa</span>
+</pre></div>
+</div>
+<p>By default, RTL (= pre-synthesis) system simulation excludes the DDR3 memory and corresponding memory controller to speed up simulation. Use the <em>sim_rtl_questa_ddr</em> target in the rare case that you need to include the DDR3 memory in your simulation.</p>
+</section>
+<section id="fpga-implementation-synthesis-place-and-route">
+<span id="synthesis-tutorial"></span><h2>FPGA Implementation (Synthesis, Place and Route)<a class="headerlink" href="#fpga-implementation-synthesis-place-and-route" title="Permalink to this heading"></a></h2>
+<p><strong>Check design before implementation:</strong> Before you synthesize your design, please make sure that you only use synthesizable code as described in the <a class="reference internal" href="systemverilog_hdl.html#systemverilog"><span class="std std-ref">SystemVerilog HDL</span></a> tutorial.
+Make sure that no warnings occur during compilation or design loading when you run system simulation with <code class="code docutils literal notranslate"><span class="pre">flow</span> <span class="pre">systb_student</span> <span class="pre">sim_rtl_questa</span></code>.
+Furthermore, it is recommended to run <code class="code docutils literal notranslate"><span class="pre">flow</span> <span class="pre">srcs</span> <span class="pre">lint</span></code> to detect some common SystemVerilog design mistakes.
+It is much easier to debug hardware problems in the early RTL design stage than later in netlist simulation or in hardware!</p>
+<p>Before you go ahead with FPGA implementation, delete any previous implementation results:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">flow</span> <span class="n">rvlab_fpga_top</span> <span class="o">--</span><span class="n">clean</span>
+</pre></div>
+</div>
+<p>To start synthesis, run the following commond:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">flow</span> <span class="n">rvlab_fpga_top</span><span class="o">.</span><span class="n">syn</span>
+</pre></div>
+</div>
+<p>Check the reports generated in <em>/build/rvlab_fpga_top/syn</em>:</p>
+<ul class="simple">
+<li><p><em>rvlab_fpga_top.qor_assessment.txt</em> – checks overall quality of results, should list status “OK” for utilization, clocking, congestion and timing</p></li>
+<li><p><em>rvlab_fpga_top.timing_summary.txt</em> – somewhat detailed timing summary, should show zero “TNS Failing Endpoints” under “Design Timing Summary”. After synthesis, a few hold violations are expected to occur (“THS Failing Endpoints” not zero). After place &amp; route, all hold violations should be resolved and the report should show “All user specified timing constraints are met.”</p></li>
+<li><p><em>rvlab_fpga_top.methodology.txt</em> – lists potential methodologic problems in the design, should show “Violations found: 0”</p></li>
+<li><p><em>rvlab_fpga_top.drc.txt</em> – lists potential design rule check errors or warnings, show show no errors or warnings except for CHECK-1 warning (“Report disabled checks”)</p></li>
+<li><p><em>rvlab_fpga_top.utilization.txt</em> – lists the design’s FPGA resource usage</p></li>
+</ul>
+<p>To run place-and route:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">flow</span> <span class="n">rvlab_fpga_top</span><span class="o">.</span><span class="n">pnr</span>
+</pre></div>
+</div>
+<p>After place-and-route, check the new reports generated in <em>/build/rvlab_fpga_top/pnr</em>.
+If the reports look good, continue with <a class="reference internal" href="#netlist-sim"><span class="std std-ref">Netlist Simulation</span></a>.</p>
+<p>To generate a bitstream from the place and route result, run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">flow</span> <span class="n">rvlab_fpga_top</span><span class="o">.</span><span class="n">bitstream</span>
+</pre></div>
+</div>
+<p>The <a class="reference internal" href="fpga_upload.html#fpga-upload"><span class="std std-ref">FPGA Upload</span></a> tutorial describes how to load bitstream and software into the FPGA.</p>
+</section>
+<section id="netlist-simulation">
+<span id="netlist-sim"></span><h2>Netlist Simulation<a class="headerlink" href="#netlist-simulation" title="Permalink to this heading"></a></h2>
+<p>To run post-implementation netlist simulation with the student software running on the system:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">flow</span> <span class="n">systb_student</span><span class="o">.</span><span class="n">sim_pnrtime_questa</span>
+</pre></div>
+</div>
+</section>
+<section id="adding-module-level-testbenches">
+<h2>Adding module-level testbenches<a class="headerlink" href="#adding-module-level-testbenches" title="Permalink to this heading"></a></h2>
+<p>With <em>rlight_tb</em>, only a single module-level testbench is predefined. To add an additional module-level testbench, place the SystemVerilog testbench code in <em>/src/fv</em> and register the new testbench in the <em>module_tbs</em> list defined in  <em>/flow/__init__.py</em>, for example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">module_tbs</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="s2">&quot;rlight_tb&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;mynewmodule_tb&quot;</span><span class="p">,</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</section>
+<section id="extending-the-crossbar-switches">
+<h2>Extending the crossbar switches<a class="headerlink" href="#extending-the-crossbar-switches" title="Permalink to this heading"></a></h2>
+<p>You can add more host or device ports to the two predefined crossbar switches <em>xbar_main</em> and <em>xbar_peri</em>.</p>
+<p>For a new host port <em>myhost</em> to <em>xbar_main</em>, add the following code to the list of nodes:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;myhost&quot;</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="s2">&quot;host&quot;</span>
+    <span class="n">pipeline</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>You also need to add the desired connections to the <em>connection</em> dictionary below:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">myhost</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;bram_main&quot;</span><span class="p">,</span> <span class="s2">&quot;peri&quot;</span><span class="p">,</span> <span class="s2">&quot;ddr&quot;</span><span class="p">,</span> <span class="s2">&quot;student_device_fast&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>A new TL-UL device <em>mydevice</em> can be added to the node list of either <em>xbar_main</em> or <em>xbar_peri</em> with following code:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="n">name</span><span class="p">:</span> <span class="s2">&quot;mydevice&quot;</span>
+    <span class="nb">type</span><span class="p">:</span> <span class="s2">&quot;device&quot;</span>
+    <span class="n">pipeline</span><span class="p">:</span> <span class="s2">&quot;true&quot;</span>
+    <span class="n">addr_range</span><span class="p">:</span> <span class="p">[{</span><span class="n">base_addr</span><span class="p">:</span> <span class="s2">&quot;0x40000000&quot;</span><span class="p">,</span> <span class="n">size_byte</span><span class="p">:</span> <span class="s2">&quot;0x10000000&quot;</span><span class="p">}]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>Make sure that the specified address range does not overlap with other devices and, in case <em>xbar_peri</em> is extended, the address range lies in the periphery region 0x10000000 - 0x20000000.</p>
+<p>Devices also need to be added to the <em>connection</em> dictionary, for example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">connections</span><span class="p">:</span> <span class="p">{</span>
+    <span class="n">corei</span><span class="p">:</span>        <span class="p">[</span><span class="s2">&quot;bram_main&quot;</span><span class="p">,</span> <span class="s2">&quot;peri&quot;</span><span class="p">,</span> <span class="s2">&quot;ddr&quot;</span><span class="p">,</span> <span class="s2">&quot;student_device_fast&quot;</span><span class="p">,</span> <span class="s2">&quot;mydevice&quot;</span><span class="p">]</span>
+    <span class="n">cored</span><span class="p">:</span>        <span class="p">[</span><span class="s2">&quot;bram_main&quot;</span><span class="p">,</span> <span class="s2">&quot;peri&quot;</span><span class="p">,</span> <span class="s2">&quot;ddr&quot;</span><span class="p">,</span> <span class="s2">&quot;student_device_fast&quot;</span><span class="p">,</span> <span class="s2">&quot;mydevice&quot;</span><span class="p">]</span>
+    <span class="n">dbgsba</span><span class="p">:</span>       <span class="p">[</span><span class="s2">&quot;bram_main&quot;</span><span class="p">,</span> <span class="s2">&quot;peri&quot;</span><span class="p">,</span> <span class="s2">&quot;ddr&quot;</span><span class="p">,</span> <span class="s2">&quot;student_device_fast&quot;</span><span class="p">,</span> <span class="s2">&quot;mydevice&quot;</span><span class="p">]</span>
+    <span class="n">student_host</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;bram_main&quot;</span><span class="p">,</span> <span class="s2">&quot;peri&quot;</span><span class="p">,</span> <span class="s2">&quot;ddr&quot;</span><span class="p">,</span> <span class="s2">&quot;student_device_fast&quot;</span><span class="p">,</span> <span class="s2">&quot;mydevice&quot;</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>After changes to the crossbar configuration are made, regenerate crossbar source files with <code class="code docutils literal notranslate"><span class="pre">flow</span> <span class="pre">xbar.generate</span></code> and connect the new ports in <em>/src/rtl/rvlab_fpga/rvlab_fpga_top.sv</em>.</p>
+</section>
+<section id="behind-the-scenes">
+<h2>Behind the scenes<a class="headerlink" href="#behind-the-scenes" title="Permalink to this heading"></a></h2>
+<p>This list outlines the Python sources located in the <em>/flow</em> directory:</p>
+<ul class="simple">
+<li><p><strong>/flow/__init__.py</strong> – design flow setup, instantiates the blocks that are defined in the other Python files in this directory, contains (extensible) list of programs and list of testbenches</p></li>
+<li><p><strong>/flow/tools</strong> – encapsulates tools used in the design flow</p>
+<ul>
+<li><p><strong>/flow/tools/vivado.py</strong> – makes Vivado functionality accessible in Python via <a class="reference external" href="https://notcl.readthedocs.io/en/latest/">NoTcl</a></p></li>
+<li><p><strong>/flow/tools/build_sw.py</strong> – provides a simple Python interface for building RISC-V ELF binaries and static libraries from C code using GCC</p></li>
+<li><p><strong>/flow/tools/elf2mem.py</strong> – converts RISC-V ELF binaries to full memory images (sw.mem files) and differential images (delta files)</p></li>
+<li><p><strong>/flow/tools/openocd.py</strong> – loads RISC-V ELF binaries into FPGA system using OpenOCD and connects stdout/stdin to host system (see <a class="reference internal" href="software.html#host-io"><span class="std std-ref">Host I/O</span></a>)</p></li>
+<li><p><strong>/flow/tools/pincheck.py</strong>  – checks design pinout before bitstream generation</p></li>
+<li><p><strong>/flow/tools/questasim.py</strong> – provides a simple Python interface for QuestaSim</p></li>
+<li><p><strong>/flow/tools/xsim.py</strong> – provides a simple Python interface for XSim, the simulator that ships with Vivado</p></li>
+<li><p><strong>/flow/tools/reggen</strong> – sources copied from OpenTitan’s reggen</p></li>
+<li><p><strong>/flow/tools/reggen_wrapper.py</strong> – custom wrapper for reggen</p></li>
+<li><p><strong>/flow/tools/reggen_sphinx_ext.py</strong> – automatically generates register documentation for Sphinx using reggen_wrapper</p></li>
+<li><p><strong>/flow/tools/tlgen</strong> – sources copied from OpenTitan’s tlgen</p></li>
+<li><p><strong>/flow/tools/tlgen_wrapper.py</strong> – custom wrapper for tlgen</p></li>
+</ul>
+</li>
+<li><p><strong>/flow/reggen.py</strong> – defines the RegisterGenerator Block</p></li>
+<li><p><strong>/flow/xbar.py</strong> – defines the XbarGenerator Block</p></li>
+<li><p><strong>/flow/sw.py</strong> – defines the Program and Libc Blocks</p></li>
+<li><p><strong>/flow/sources.py</strong> – defines Sources block</p></li>
+<li><p><strong>/flow/module_tb.py</strong> – defines the ModuleTb block used for module testbench simulations</p></li>
+<li><p><strong>/flow/system_tb.py</strong> – defines the SystemTb Block used for system testbench simulations</p></li>
+<li><p><strong>/flow/rvlab_mig.py</strong> – defines the RvlabMig Block used for generating the Xilinx Memory Interface generator (MIG) IP block</p></li>
+<li><p><strong>/flow/simlibs_questa.py</strong> – defines the SimlibsQuesta Block to build Xilinx simulation libraries for QuestaSim</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="setup/index.html" class="btn btn-neutral float-left" title="Setup" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="software.html" class="btn btn-neutral float-right" title="Software" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -2,11 +2,57 @@
 #include <stdbool.h>
 #include "rvlab.h"
 #include "student_rlight.h"
+#include "student_irq_ctrl.h"
 
 //Define the patterns and their shifting logic
 #define INITIAL_PATTERN 0x52  		// Binary: 0101 0010
 #define LED_STATUS_MASK 0x3C      	// binary: 0011 1100
 #define LED_MASK 0x7E 				// binary 0111 1110
+
+#define MAX_IRQ_HANDLERS 2  // Define the number of IRQ handlers
+irq_handler_t irq_handlers[MAX_IRQ_HANDLERS];  // Array of IRQ handlers
+const int max_irq_handlers = MAX_IRQ_HANDLERS;
+
+// Specific handler for IRQ 0
+void irq_handler_0(void) {
+    fputs("Handling IRQ handler 0\n", stdout); //DOWN
+    printf("Handling IRQ handler 0\n");
+    student_rlight_set_mode_right();
+    IRQ_CTRL_SET_MASK_CLEAR(0, 0b1);
+}
+
+// Specific handler for IRQ 1
+void irq_handler_1(void) {
+    fputs("Handling IRQ handler 1\n", stdout); //DOWN
+    printf("Handling IRQ handler 1\n");
+    student_rlight_set_mode_left();
+    IRQ_CTRL_SET_MASK_CLEAR(0, 0b10);
+}
+
+// Specific handler for IRQ 1
+void irq_handler_2(void) {
+    fputs("Handling IRQ handler 2\n", stdout); //DOWN
+    printf("Handling IRQ handler 2\n");
+    student_rlight_set_mode_left();
+    IRQ_CTRL_SET_MASK_CLEAR(0, 0b100);
+}
+
+// Specific handler for IRQ 1
+void irq_handler_3(void) {
+    fputs("Handling IRQ handler 3\n", stdout); //DOWN
+    printf("Handling IRQ handler 3\n");
+    student_rlight_set_mode_left();
+    IRQ_CTRL_SET_MASK_CLEAR(0, 0b1000);
+}
+
+// Initialize and configure interrupt handlers
+void setup_irq_handlers(void) {
+    init_irq_handlers(irq_handlers, MAX_IRQ_HANDLERS);
+    //student_irq_ctrl_set(0, irq_handler_0, irq_handlers, MAX_IRQ_HANDLERS);
+    //student_irq_ctrl_set(1, irq_handler_1, irq_handlers, MAX_IRQ_HANDLERS);
+    IRQ_CTRL_ALL_ENABLE(0);
+    irq_enable((1 << IRQ_TIMER) | (1 << IRQ_EXTERNAL));
+}
 
 static void delay_cycles(int n_cycles) {
     REG32(RV_TIMER_CTRL(0)) = (1<<RV_TIMER_CTRL_ACTIVE0_LSB);
@@ -14,81 +60,55 @@ static void delay_cycles(int n_cycles) {
     while(REG32(RV_TIMER_TIMER_V_LOWER0(0)) < n_cycles);
 }
 
-//ex.3 mini-application
-//change shifting to 1 step at 0110
-//change shifting to 2 steps at 1001
-
-void run_ping_pong_pattern() {
-    unsigned int currentPattern;
-    unsigned int ledStatus;
-    int shiftAmount = 1; //initial shift amount
-    int direction = 1; // Start by shifting right
-    
-    ll_set_pattern(INITIAL_PATTERN);
-
-    while (true) {
-        // Check if the current display cycle is complete
-        currentPattern = ll_get_led_status();
-        ledStatus = currentPattern & LED_STATUS_MASK;
-        if (ledStatus == 0x09) {
-            shiftAmount = 2;
-        } else if (ledStatus == 0x06) {
-        	shiftAmount = 1;
-        }
-
-        // Apply the direction of the shift
-        if (direction == 1) {
-            currentPattern <<= shiftAmount;
-            if (currentPattern & ~LED_MASK) { // If overflow, change direction
-            	currentPattern >>= shiftAmount;
-                direction = -1;
-            }
-        } else {
-            currentPattern >>= shiftAmount;
-            if (currentPattern & ~LED_MASK) {  // If underflow, change direction
-	            currentPattern <<= shiftAmount;
-                direction = 1;
-            }
-        }
-
-        // Update the pattern register with new shifted pattern
-        ll_set_pattern(currentPattern);
-    }
-}
-
-void ll_init() {
-
-	unsigned int getMode;
-    unsigned int getPause;
-    unsigned int getPattern;
-    unsigned int getLed;
-    
-    ll_set_pause(0x1F4);
-    getPause = ll_get_pause();
-    printf("getPause 0x%08x\n", getPause);
-    
-    ll_set_pattern(0xFF);
-    getPattern = ll_get_pattern();
-    printf("getPattern 0x%08x\n", getPattern);
-    
-    getLed = ll_get_led_status();
-    printf("getLed in the beginnning 0x%08x\n", getLed);
-    
-    ll_set_mode(0x01);
-    getMode = ll_get_mode();
-    printf("getMode 0x%08x\n", getMode);
-    
-    delay_cycles(10);
-    
-}
-
 int main(void) {
+    uint32_t mask_set;
+    uint32_t mask_clear;
+    uint32_t test_irq;
+    uint32_t status;
+    uint32_t irq_no;
+
+
     
-    ll_init();
-    run_ping_pong_pattern();
+    setup_irq_handlers(); // Set up IRQ handlers
+    student_irq_ctrl_set(0, irq_handler_0, irq_handlers, MAX_IRQ_HANDLERS);
+    student_irq_ctrl_set(1, irq_handler_1, irq_handlers, MAX_IRQ_HANDLERS);
+    student_irq_ctrl_set(2, irq_handler_2, irq_handlers, MAX_IRQ_HANDLERS);
+    student_irq_ctrl_set(3, irq_handler_3, irq_handlers, MAX_IRQ_HANDLERS);
+
+    delay_cycles(30);
+
+    printf("TEST IRQ MAIN START\n");
+
+    mask_set = 0x0000000f;
+    IRQ_CTRL_SET_MASK_SET(0, mask_set);
+    mask_clear = 0x00000000;
+    IRQ_CTRL_SET_MASK_CLEAR(0, mask_clear);
+    IRQ_CTRL_SET_TEST_MODE(0,1);
+    test_irq = 0x0000000f;
+    IRQ_CTRL_SET_TEST_IRQ(0, test_irq);
+    delay_cycles(300);
+    irq_no = GET_IRQ_CTRL_IRQ_NO(0);
+    status = GET_IRQ_CTRL_STATUS(0);
+
+    printf("test 1: irq_no is %d and status is 0x%032X\n", irq_no, status);
+
+    printf("TEST IRQ MAIN END\n");
+
+
+/*
+    printf("RLIGHT MAIN START\n");
+    student_rlight_set_clock_delay(180);
+    student_rlight_set_mode_right();
+    int pattern = 0b00011000;
+    student_rlight_set_pattern(pattern);
+    delay_cycles(30000);
+
+    pattern = 0b00100100;
+    student_rlight_set_pattern(pattern);
+    delay_cycles(30000);
+*/
     return 0;
 }
-
 
 
 //#define REGA   0x10000000

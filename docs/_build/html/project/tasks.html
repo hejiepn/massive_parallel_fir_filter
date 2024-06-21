@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tasks &mdash; RISC-V Lab  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/reg_html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Requirements &amp; Functional Specification" href="specification.html" />
+    <link rel="prev" title="Project" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            RISC-V Lab
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../exercises/index.html">Exercise Sheets &amp; Slides</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Project</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Tasks</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#specification">1. Specification</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#high-level-design">2. High level design</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#hw-module-creation">3. HW module creation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#system-integration-tests">4. System integration &amp; tests</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#fpga-upload-application-development">5. FPGA upload &amp; application development</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#live-demonstration">6. Live demonstration</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#presentations">7. Presentations</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#project-documentation">8. Project documentation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deliverables">Deliverables</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="specification.html">Requirements &amp; Functional Specification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="high_level.html">High Level Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="results.html">Results</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../design_ref/index.html">Design Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../resources/index.html">Resources</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">RISC-V Lab</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Project</a></li>
+      <li class="breadcrumb-item active">Tasks</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/project/tasks.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="tasks">
+<h1>Tasks<a class="headerlink" href="#tasks" title="Permalink to this heading"></a></h1>
+<p>This exercise sheet describes the tasks until completion your project.</p>
+<section id="specification">
+<h2>1. Specification<a class="headerlink" href="#specification" title="Permalink to this heading"></a></h2>
+<p>Write the sections “Requirements Specification” and “Functional Specification” of your project’s documentation. Use the template <em>rvlab/docs/project/specification.rst</em>. Your project’s size should reflect the number of team members, i.e. have a minimum complexity coordinated with the tutor.</p>
+</section>
+<section id="high-level-design">
+<h2>2. High level design<a class="headerlink" href="#high-level-design" title="Permalink to this heading"></a></h2>
+<p>Fill out the corresponding section <em>RVLAB/docs/project/high_level.rst</em> of the documentation template. As a minimum requirement your project should use interrupts wherever sensible and, at least at one point, a TL-UL host.</p>
+</section>
+<section id="hw-module-creation">
+<h2>3. HW module creation<a class="headerlink" href="#hw-module-creation" title="Permalink to this heading"></a></h2>
+<p>Every team member should develop a (small) Verilog module and the software necessary to integrate the module into the project (HAL and optional higher driver layers).</p>
+<p>Each Verilog module should be accompanied by a C test bench which verifies the entire functionality of the module and the HAL in the rvlab system. For this it may be necessary to add software configurable HW test structures (such as for the IRQ controller) to the design to be able to test the hardware modules in the system simulation as well later on the FPGA.</p>
+<p>Also implement models of the external hardware used and instantiate them in <em>src/fv/rvlab_board.sv</em>. For example if your design uses the Ethernet PHY, the model should emulate the Phys RGMII interface to the FPGA, sending data read from a file and dumping the received data into another file.</p>
+<p>Synthesize and P&amp;R your module as early as possible to find non synthesizable HDL.</p>
+</section>
+<section id="system-integration-tests">
+<h2>4. System integration &amp; tests<a class="headerlink" href="#system-integration-tests" title="Permalink to this heading"></a></h2>
+<p>When all hardware modules are verified individually write a “mini application” with only the minimal possible functionality which uses all hardware modules together as in the final application.</p>
+<p>Perform a netlist simulation of this “mini application” running on the P&amp;R netlist.</p>
+</section>
+<section id="fpga-upload-application-development">
+<h2>5. FPGA upload &amp; application development<a class="headerlink" href="#fpga-upload-application-development" title="Permalink to this heading"></a></h2>
+<p>Prerequisites for FPGA board access:</p>
+<ul class="simple">
+<li><p>successful netlist simulation of “mini application” (see above)</p></li>
+<li><p>review by tutor of synthesis, P&amp;R &amp; bitgen transcripts &amp; reports (warning &amp; error messages)</p></li>
+<li><p>if you build your own PCB: see PCB checklist in <a class="reference internal" href="high_level.html#high-level"><span class="std std-ref">High Level Design</span></a></p></li>
+</ul>
+<p>Read the <a class="reference internal" href="../tutorials/fpga_upload.html#fpga-upload"><span class="std std-ref">FPGA Upload</span></a> tutorial, esp. the notes regarding handling of the FPGA board.</p>
+<p>Develop the final application on the FPGA board.</p>
+</section>
+<section id="live-demonstration">
+<h2>6. Live demonstration<a class="headerlink" href="#live-demonstration" title="Permalink to this heading"></a></h2>
+<p>All features promised in the function specification have to be presented to the tutor.
+Alternatively, submit a video showing all features. This can be the video of the presentation (if it demonstrates all promised features) or a 2nd “boring” video covering all features.</p>
+</section>
+<section id="presentations">
+<h2>7. Presentations<a class="headerlink" href="#presentations" title="Permalink to this heading"></a></h2>
+<p>Two presentations are scheduled</p>
+<ul>
+<li><dl class="simple">
+<dt>Mid term presentation</dt><dd><ul class="simple">
+<li><p>High level design (including modules!)</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><p>Final presentation</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>final date to complete the project, only the project documentation can be handed in afterwards.</p></li>
+<li><p>each team member must be present</p></li>
+<li><p>strict time limit per group</p></li>
+<li><p>show a (short) video demonstrating the project</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</section>
+<section id="project-documentation">
+<h2>8. Project documentation<a class="headerlink" href="#project-documentation" title="Permalink to this heading"></a></h2>
+<p>Complete your project documentation by filling out the template <em>rvlab/docs/project/results.rst</em>.</p>
+</section>
+<section id="deliverables">
+<h2>Deliverables<a class="headerlink" href="#deliverables" title="Permalink to this heading"></a></h2>
+<p>Each deliverables should be submitted as a single PDF file.</p>
+<blockquote>
+<div><ol class="arabic">
+<li><p>for task 1: Requirements and functional specification (due date: one week after the exercise, deadline: two weeks). Please continue working on the project only after your requirements and functional specification has been signed off. This guards against accidentally starting a project too simple (or too complex).</p></li>
+<li><p>for 2: High level design (due date: mid term presentation). It is recommended to hand in the complete high-level design before proceeding to the implementation to make conceptual errors which might manifest only very late in the project cycle more unlikely.</p></li>
+<li><p>for 3: Individual deliverables (due date: before final presentation). Every team member hands in the following components of his/hers HW module in a single pdf for a short personal review:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>module section of the documentation</p></li>
+<li><p>Verilog code (excluding the auto generated code)</p></li>
+<li><p>HAL</p></li>
+<li><p>C test bench</p></li>
+</ul>
+</div></blockquote>
+</li>
+<li><p>for 7: slides of the mid term presentation (4 days before mid term presentation)</p></li>
+<li><p>for 7: slides &amp; video of the final presentation (one week before final presentation)</p></li>
+<li><p>project documentation: “Requirements and functional specification” and “High level design” chapter from above plus results chapter.</p></li>
+<li><p>project itself (as zip/tar.gz archive): Please run flow –clean and remove the .git (and .vscode) directotries before creating the archive. The archive should also include the slides of the mid term &amp; final presentations &amp; project documentation (pdfs only, no videos)</p></li>
+</ol>
+</div></blockquote>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Project" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="specification.html" class="btn btn-neutral float-right" title="Requirements &amp; Functional Specification" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

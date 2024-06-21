@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ex. 2: Logic synthesis, P&amp;R and netlist simulation &mdash; RISC-V Lab  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/reg_html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Ex. 3: Software development and system simulation" href="ex3.html" />
+    <link rel="prev" title="Ex. 1: HDL entry and simulation" href="ex1.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            RISC-V Lab
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Exercise Sheets &amp; Slides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ex1.html">Ex. 1: HDL entry and simulation</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Ex. 2: Logic synthesis, P&amp;R and netlist simulation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#objectives">Objectives</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preparation">Preparation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tasks">Tasks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deliverables">Deliverables</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ex3.html">Ex. 3: Software development and system simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ex4.html">Ex. 4: DMA / TL-UL host implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ex5.html">Ex.5: Hierarchical buses and cascaded interrupts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#slides">Slides</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../project/index.html">Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../design_ref/index.html">Design Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../resources/index.html">Resources</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">RISC-V Lab</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Exercise Sheets &amp; Slides</a></li>
+      <li class="breadcrumb-item active">Ex. 2: Logic synthesis, P&amp;R and netlist simulation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/exercises/ex2.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ex-2-logic-synthesis-p-r-and-netlist-simulation">
+<span id="ex2"></span><h1>Ex. 2: Logic synthesis, P&amp;R and netlist simulation<a class="headerlink" href="#ex-2-logic-synthesis-p-r-and-netlist-simulation" title="Permalink to this heading"></a></h1>
+<section id="objectives">
+<h2>Objectives<a class="headerlink" href="#objectives" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>get an overview of the rvlab HDL design</p></li>
+<li><p>logic synthesis and P&amp;R</p>
+<ul>
+<li><p>use synthesis log files to identify (and fix) non synthesizable HDL</p></li>
+<li><p>interpret timing reports and locate reported paths in the design</p></li>
+</ul>
+</li>
+<li><p>netlist simulation</p>
+<ul>
+<li><p>locate RTL elements in the netlist simulation</p></li>
+<li><p>evaluate timing error messages</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="preparation">
+<h2>Preparation<a class="headerlink" href="#preparation" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>Explore the rvlab HDL design: Traverse the design hierarchy of rvlab from the top level test bench <em>system_tb</em> through <em>fpga core</em> and through <em>student</em> to your <em>student_rlight</em>. At leach level make yourself familiar with the instances instantiated and their major connections.</p></li>
+<li><p>Read the tutorial <a class="reference internal" href="../tutorials/flow.html#synthesis-tutorial"><span class="std std-ref">FPGA Implementation (Synthesis, Place and Route)</span></a>.</p></li>
+<li><p>Use the Xilinx Documentation Navigator (see <a class="reference internal" href="../resources/index.html#resources"><span class="std std-ref">Resources</span></a> page) to get an overview of the available Xilinx documentation.</p></li>
+</ul>
+</section>
+<section id="tasks">
+<h2>Tasks<a class="headerlink" href="#tasks" title="Permalink to this heading"></a></h2>
+<p><strong>Hints</strong></p>
+<ul class="simple">
+<li><p>The following tasks 1-3 build upon each other. Only proceed to the next task when the previous has been completed successfully.</p></li>
+<li><p>You can try out all tasks listed below with the original <em>student_rlight</em> supplied instead of your own running light. Especially this provides a reference for the synthesis and P&amp;R warnings which can be ignored.</p></li>
+</ul>
+<p><strong>1. System simulation with software</strong></p>
+<p>Your design <em>student_rlight</em> is already instantiated in the rvlab SoC. So no changes to the HDL are required.</p>
+<p>The software template for this exercise is located in <em>rvlab/src/rlight/main.c</em>.
+Modify it to read and write all registers of your module at least once and test all modes of the running light with different parameters (see
+<a class="reference internal" href="#deliverables">Deliverables</a> below).</p>
+<p>The following command starts a simulation which uses the JTAG interface to upload your software into the design and executes it:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">flow</span> <span class="n">systb_rlight</span><span class="o">.</span><span class="n">sim_rtl_questa</span>
+</pre></div>
+</div>
+<p><strong>2. Logic synthesis and place &amp; route</strong></p>
+<p>2.1. Perform a logic synthesis of <em>rvlab_fpta_top</em>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">flow</span> <span class="n">rvlab_fpga_top</span><span class="o">.</span><span class="n">syn</span>
+</pre></div>
+</div>
+<p>Examine all generated files in <em>rvlab/build/rvlab_fpga_top/syn</em>.
+Check the synthesis (vivado.log) and timing reports (rvlab_fpga_top.timing_summary.txt) for warning and error messages associated with your <em>student_rlight</em>.</p>
+<p>2.2. Perform a place and route of <em>rvlab_fpga_top</em>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">flow</span> <span class="n">rvlab_fpga_top</span><span class="o">.</span><span class="n">pnr</span>
+</pre></div>
+</div>
+<p>Examine all generated files in <em>rvlab/build/rvlab_fpga_top/pnr</em>.
+Check the place and route reports (vivado.log) for warning and error messages associated with your <em>rvlab_student_rlight</em>.
+Read the timing reports (rvlab_fpga_top.timing_summary.txt) and locate the reported paths in the RTL.</p>
+<p>Examine the resulting schematic and layout with the tool “vivado”:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vivado</span> <span class="n">build</span><span class="o">/</span><span class="n">rvlab_fpga_top</span><span class="o">/</span><span class="n">pnr</span><span class="o">/</span><span class="n">rvlab_fpga_top</span><span class="o">.</span><span class="n">dcp</span> <span class="o">&amp;</span>
+</pre></div>
+</div>
+<p>2.3. Generate the bitfile:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">flow</span> <span class="n">rvlab_fpga_top</span><span class="o">.</span><span class="n">bitstream</span>
+</pre></div>
+</div>
+<p>Examine all generated files in <em>rvlab/build/rvlab_fpga_top/bitstream</em>.
+Check the log file <em>vivado.log</em> for any warning and error messages. Check <em>rvlab_fpga_top.io_report.txt</em> for any unplaced IOs. Any issues might kill the FPGA, so these files need to be signed of by the tutor before any upload.</p>
+<p>Refer to the <a class="reference internal" href="../tutorials/flow.html#synthesis-tutorial"><span class="std std-ref">FPGA Implementation (Synthesis, Place and Route)</span></a> regarding details of the flow for synthesis and P&amp;R.</p>
+<p><strong>3. FPGA netlist simulation</strong></p>
+<p>All previous simulations only tested the functionality as described in HDL. However, these simulations do not allow any judgment whatsoever about the synthesizability of the HDL sources or even the behavior of the resulting circuit. This can only be verified by simulating the netlist and the associated SDF file which are generated by the Place &amp; Route tool from the implemented FPGA structure. This netlist simulation saves one from a hopeless, endless debugging session on the real board.</p>
+<p>Run a netlist simulation using QuestaSim with the software developed in task 1 to generate the <a class="reference internal" href="#deliverables">Deliverables</a>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">flow</span> <span class="n">systb_rlight</span><span class="o">.</span><span class="n">sim_pnrtime_questa</span>
+</pre></div>
+</div>
+</section>
+<section id="deliverables">
+<h2>Deliverables<a class="headerlink" href="#deliverables" title="Permalink to this heading"></a></h2>
+<p>All deliverables should be submitted in a single PDF file.</p>
+<p><strong>1. Questions</strong></p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Which files contain the definition of the TL-UL and board level (DDR3, LED, …) connections ?</p></li>
+<li><p>What is the maximum operating speed in Megahertz of the main clk “clk” after the Place &amp; Route ?</p></li>
+<li><p>Name the three most important differences between functional simulation of the HDL and netlist simulation.</p></li>
+</ol>
+</div></blockquote>
+<p><strong>2. Deliverables of task 3:</strong></p>
+<p><strong>Wave views</strong></p>
+<p>The wave views should be zoomed in as much as possible to only show the sections specified below. At least the following signals should be shown of your running light: clk, LEDs, state, delay counter and register bus at <em>tlul_adapter_reg</em>).</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>While the running light is running with a pause time of 5 cycles: A write access (writing 0x42) to the delay register followed by a read access.</p></li>
+<li><p>Two complete cycles with the following configurations:
+#. mode=right, initial pattern=11111110, pause = 1 cycle
+#. mode=ping-pong, initial pattern=10000000, pause = 0 cycles (i.e. the pattern changes every clock cycle)</p></li>
+<li><p>A read access to the pattern register which clearly shows the delayed arrival of the data at register bus after the rising clock edge.</p></li>
+</ol>
+</div></blockquote>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ex1.html" class="btn btn-neutral float-left" title="Ex. 1: HDL entry and simulation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ex3.html" class="btn btn-neutral float-right" title="Ex. 3: Software development and system simulation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

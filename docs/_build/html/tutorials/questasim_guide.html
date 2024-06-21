@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>QuestaSim Guide &mdash; RISC-V Lab  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/reg_html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="SystemVerilog HDL" href="systemverilog_hdl.html" />
+    <link rel="prev" title="FPGA Upload" href="fpga_upload.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            RISC-V Lab
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../exercises/index.html">Exercise Sheets &amp; Slides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/index.html">Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../design_ref/index.html">Design Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="setup/index.html">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flow.html">Design Flow Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="software.html">Software</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fpga_upload.html">FPGA Upload</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">QuestaSim Guide</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#compiling-loading">Compiling &amp; loading</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tracing-formatting-signals">Tracing  &amp; formatting signals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#run-the-simulation">Run the simulation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#view-the-results">View the results</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#other-features">Other features</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="systemverilog_hdl.html">SystemVerilog HDL</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../resources/index.html">Resources</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">RISC-V Lab</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">QuestaSim Guide</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tutorials/questasim_guide.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="questasim-guide">
+<span id="questa-sim"></span><h1>QuestaSim Guide<a class="headerlink" href="#questasim-guide" title="Permalink to this heading"></a></h1>
+<p>Ultra brief introduction to QuestaSim for new users.</p>
+<p>Prerequisite: QuestaSim installed, environmental variables set and added to $PATH, see <a class="reference internal" href="setup/index.html#setup"><span class="std std-ref">Setup</span></a>.</p>
+<section id="compiling-loading">
+<h2>Compiling &amp; loading<a class="headerlink" href="#compiling-loading" title="Permalink to this heading"></a></h2>
+<p>Example: Running light from <a class="reference internal" href="../exercises/ex1.html#ex1"><span class="std std-ref">Ex. 1: HDL entry and simulation</span></a></p>
+<p><em>Using the flow</em>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">flow</span> <span class="n">student_rlight_tb</span><span class="o">.</span><span class="n">sim_rtl_questa</span>
+</pre></div>
+</div>
+<p><em>Manual</em>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">vlib</span> <span class="n">work</span>                                                                   <span class="c1"># create directory work as the library &quot;work&quot; to complile the source texts to</span>
+<span class="n">vlog</span> <span class="n">src</span><span class="o">/</span><span class="n">rtl</span><span class="o">/</span><span class="n">rvlab_fpga</span><span class="o">/</span><span class="n">pkg</span><span class="o">/</span><span class="n">top_pkg</span><span class="o">.</span><span class="n">sv</span>  <span class="n">src</span><span class="o">/</span><span class="n">rtl</span><span class="o">/</span><span class="n">tlul</span><span class="o">/</span><span class="n">pkg</span><span class="o">/</span><span class="n">tlul_pkg</span><span class="o">.</span><span class="n">sv</span>        <span class="c1"># compile the packages before the files which use them !</span>
+<span class="n">vlog</span> <span class="o">-</span><span class="n">mfcu</span> <span class="n">src</span><span class="o">/</span><span class="n">rtl</span><span class="o">/</span><span class="n">inc</span><span class="o">/</span><span class="n">prim_assert</span><span class="o">.</span><span class="n">sv</span> <span class="n">src</span><span class="o">/</span><span class="n">rtl</span><span class="o">/</span><span class="n">tlul</span><span class="o">/</span><span class="n">tlul_adapter_reg</span><span class="o">.</span><span class="n">sv</span> <span class="n">src</span><span class="o">/</span><span class="n">rtl</span><span class="o">/</span><span class="n">tlul</span><span class="o">/</span><span class="n">tlul_err</span><span class="o">.</span><span class="n">sv</span>
+<span class="n">vlog</span> <span class="n">src</span><span class="o">/</span><span class="n">rtl</span><span class="o">/</span><span class="n">student</span><span class="o">/</span><span class="n">student_rlight</span><span class="o">.</span><span class="n">sv</span> <span class="n">src</span><span class="o">/</span><span class="n">fv</span><span class="o">/</span><span class="n">tlul_test_host</span><span class="o">.</span><span class="n">sv</span> <span class="n">src</span><span class="o">/</span><span class="n">fv</span><span class="o">/</span><span class="n">student_rlight_tb</span><span class="o">.</span><span class="n">sv</span> <span class="c1"># compile the design and testbench</span>
+<span class="n">vsim</span> <span class="n">work</span><span class="o">.</span><span class="n">student_rlight_tb</span>                                                 <span class="c1"># start the simulator and load the design rlight_tb</span>
+</pre></div>
+</div>
+<p>Verilog modules can be compiled in any order as linking happens at run time. Packages must be compiled before use.</p>
+<p>These steps compile student_rlight, start the simulator loading student_rlight_tb (click to enlarge):</p>
+<a class="reference internal image-reference" href="../_images/QuestaSim_design.drawio.svg"><img alt="../_images/QuestaSim_design.drawio.svg" src="../_images/QuestaSim_design.drawio.svg" width="800" /></a>
+</section>
+<section id="tracing-formatting-signals">
+<h2>Tracing  &amp; formatting signals<a class="headerlink" href="#tracing-formatting-signals" title="Permalink to this heading"></a></h2>
+<p>During simulation QuestaSim only records signals which have been added to the wave window:</p>
+<ol class="arabic simple">
+<li><p>The “sim” view contains a hierarchical view of the loaded design.</p></li>
+</ol>
+<p>2/3. All signals of the selected instance are shown in the “Objects” window.</p>
+<ol class="arabic simple" start="4">
+<li><p>Drag &amp; drop the signals you want to trace to the wave window.</p></li>
+<li><p>Format the wave view</p></li>
+</ol>
+<ul class="simple">
+<li><p>use “Combine Signals” to create a vector of individual selected (use shift) signals e.g. in netlist simulation when a vector has been split up into individual flip flops.</p></li>
+<li><p>use “Radix” for e.g. hexadecimal or binary display and “Format” for e.g. analog signals</p></li>
+</ul>
+<ol class="arabic simple" start="6">
+<li><p>Save the Wave formatting. “File -&gt; Save Format”. Save the resulting .do file as <em>src/design/wave/&lt;toplevel name&gt;.do</em> so it is automatically loaded by the flow.</p></li>
+</ol>
+</section>
+<section id="run-the-simulation">
+<h2>Run the simulation<a class="headerlink" href="#run-the-simulation" title="Permalink to this heading"></a></h2>
+<p><cite>I.</cite> restart</p>
+<p><cite>II.</cite> run -all</p>
+</section>
+<section id="view-the-results">
+<h2>View the results<a class="headerlink" href="#view-the-results" title="Permalink to this heading"></a></h2>
+<ol class="upperalpha simple">
+<li><p>Fit the entire simulation run to the wave view.</p></li>
+<li><p>Use click &amp; drag the middle mouse button inside the wave view to zoom.</p></li>
+<li><p>Place a time cursor.</p></li>
+<li><p>Move the cursor to the next edge of the selected signal in the wave view (e.g. to find the next TL-UL transfer).</p></li>
+</ol>
+</section>
+<section id="other-features">
+<h2>Other features<a class="headerlink" href="#other-features" title="Permalink to this heading"></a></h2>
+<p>From the “View” menu</p>
+<ul class="simple">
+<li><p>“Dataflow”: Drag &amp; Drop a signal to trace it through the hierarchy.</p></li>
+<li><p>loads more (Profiler, ….)</p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="fpga_upload.html" class="btn btn-neutral float-left" title="FPGA Upload" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="systemverilog_hdl.html" class="btn btn-neutral float-right" title="SystemVerilog HDL" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FPGA Upload &mdash; RISC-V Lab  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/reg_html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="QuestaSim Guide" href="questasim_guide.html" />
+    <link rel="prev" title="Software" href="software.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            RISC-V Lab
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../exercises/index.html">Exercise Sheets &amp; Slides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/index.html">Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../design_ref/index.html">Design Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="setup/index.html">Setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flow.html">Design Flow Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="software.html">Software</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">FPGA Upload</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#load-bitstream">Load bitstream</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#run-software">Run software</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#debug-via-gdb">Debug via GDB</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="questasim_guide.html">QuestaSim Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="systemverilog_hdl.html">SystemVerilog HDL</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../resources/index.html">Resources</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">RISC-V Lab</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">FPGA Upload</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/tutorials/fpga_upload.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="fpga-upload">
+<span id="id1"></span><h1>FPGA Upload<a class="headerlink" href="#fpga-upload" title="Permalink to this heading"></a></h1>
+<blockquote>
+<div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<ol class="arabic simple">
+<li><p>absolutely <strong>no probing</strong> (oscilloscope, voltmeter, logic analyzer) on the FPGA board ! Connect measurement equipment only to PMOD connectors!</p></li>
+<li><p><strong>never connect any supply or ground</strong> to an (PMOD) FPGA IO! If you need a fixed logic level connect a supply pin of the PMOD connector <strong>via a resistor</strong> (e.g. 4.7k) to the IO !</p></li>
+<li><p>Every hardware connected to the board must be cleared by the tutor - especially self build PCBs !</p></li>
+</ol>
+</div>
+</div></blockquote>
+<p><em>Mechanical pressure over time creates micro interruptions (in solder pads and internal layers). If you want to probe any FPGA IO (e.g. to to an on board device) mirror the FPGA IO in your design to a second FPGA IO of a PMOD connector. For the same reason the push buttons may not be used.</em></p>
+<p><em>A power supply is very low ohmic - connecting it to a wrong place (e.g. output) even briefly will kill the FPGA.</em></p>
+<section id="load-bitstream">
+<h2>Load bitstream<a class="headerlink" href="#load-bitstream" title="Permalink to this heading"></a></h2>
+<p>Make sure the FPGA board power is connected, the POWER switch on the board is turned on and the PROG USB port is connected to the host computer. The red LED below the power connector should be alight.</p>
+<p>To flash the bitstream to the FPGA, use the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">flow</span> <span class="n">rvlab_fpga_top</span><span class="o">.</span><span class="n">program</span>
+</pre></div>
+</div>
+<p>Sometimes, this command fails on the first attempt. It should work on the second attempt.</p>
+</section>
+<section id="run-software">
+<h2>Run software<a class="headerlink" href="#run-software" title="Permalink to this heading"></a></h2>
+<p>After bitstream flashing, the FPGA is in reset state by default.</p>
+<p>To run the <em>monitor</em> program, which provides a simple interface for memory accesses:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">flow</span> <span class="n">sw_monitor</span><span class="o">.</span><span class="n">run</span>
+</pre></div>
+</div>
+<p>To run the <em>student</em> program:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">flow</span> <span class="n">sw_student</span><span class="o">.</span><span class="n">run</span>
+</pre></div>
+</div>
+<p>The <em>run</em> targets also perform a system reset. If the program is stuck, terminate the run command with Ctrl+C and restart it. The physical buttons on the FPGA board <strong>cannot</strong> be used for system reset.</p>
+</section>
+<section id="debug-via-gdb">
+<h2>Debug via GDB<a class="headerlink" href="#debug-via-gdb" title="Permalink to this heading"></a></h2>
+<p><strong>This step is not mandatory!</strong></p>
+<p>After starting the <em>student</em> program with <code class="code docutils literal notranslate"><span class="pre">flow</span> <span class="pre">sw_student</span> <span class="pre">run</span></code>, you can also attach the GNU Debugger (GDB) to your running hardware for in-system debugging including single-stepping and full memory access. To do this, run <code class="code docutils literal notranslate"><span class="pre">riscv-none-embed-gdb</span> <span class="pre">build/sw_student/build/sw.elf</span></code> and establish the connection to OpenOCD with <code class="code docutils literal notranslate"><span class="pre">target</span> <span class="pre">extended-remote</span> <span class="pre">:3333</span></code> (command can also be abbreviated as <code class="code docutils literal notranslate"><span class="pre">tar</span> <span class="pre">ext</span> <span class="pre">:3333</span></code>).</p>
+<p>The program is not stopped by default. Use <code class="code docutils literal notranslate"><span class="pre">step</span></code> for single stepping, <code class="code docutils literal notranslate"><span class="pre">break</span> <span class="pre">cmd_sw</span></code> to set a breakpoint on the <em>cmd_sw</em> function, <code class="code docutils literal notranslate"><span class="pre">continue</span></code> to resume execution etc.</p>
+<p>Further reading:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://people.astro.umass.edu/~weinberg/a732/gdbtut.html">GDB tutorial</a></p></li>
+<li><p><a class="reference external" href="https://sourceware.org/gdb/current/onlinedocs/gdb.html/">GDB documentation</a></p></li>
+</ul>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="software.html" class="btn btn-neutral float-left" title="Software" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="questasim_guide.html" class="btn btn-neutral float-right" title="QuestaSim Guide" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

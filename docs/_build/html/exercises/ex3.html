@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ex. 3: Software development and system simulation &mdash; RISC-V Lab  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/reg_html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Ex. 4: DMA / TL-UL host implementation" href="ex4.html" />
+    <link rel="prev" title="Ex. 2: Logic synthesis, P&amp;R and netlist simulation" href="ex2.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            RISC-V Lab
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Exercise Sheets &amp; Slides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ex1.html">Ex. 1: HDL entry and simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ex2.html">Ex. 2: Logic synthesis, P&amp;R and netlist simulation</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Ex. 3: Software development and system simulation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#objectives">Objectives</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preparation">Preparation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tasks">Tasks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deliverables">Deliverables</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ex4.html">Ex. 4: DMA / TL-UL host implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ex5.html">Ex.5: Hierarchical buses and cascaded interrupts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#slides">Slides</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../project/index.html">Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../design_ref/index.html">Design Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../resources/index.html">Resources</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">RISC-V Lab</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Exercise Sheets &amp; Slides</a></li>
+      <li class="breadcrumb-item active">Ex. 3: Software development and system simulation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/exercises/ex3.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ex-3-software-development-and-system-simulation">
+<span id="ex3"></span><h1>Ex. 3: Software development and system simulation<a class="headerlink" href="#ex-3-software-development-and-system-simulation" title="Permalink to this heading"></a></h1>
+<section id="objectives">
+<h2>Objectives<a class="headerlink" href="#objectives" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>use regtool &amp; reggen</p>
+<ul>
+<li><p>map module requirements to the options of the generated registers</p></li>
+<li><p>integrate the generated HDL &amp; C</p></li>
+</ul>
+</li>
+<li><p>C data structures for “bare metal” programming</p></li>
+<li><p>understand the rvlab software build and upload flow</p></li>
+<li><p>system level simulation with software</p>
+<ul>
+<li><p>trace program execution using the disassembly together with the wave view</p></li>
+<li><p>debug software using the wave view and transcript</p></li>
+</ul>
+</li>
+</ul>
+</section>
+<section id="preparation">
+<h2>Preparation<a class="headerlink" href="#preparation" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>Read the <a class="reference internal" href="../design_ref/index.html#design-reference"><span class="std std-ref">Design Reference</span></a> to make yourself familiar with the rvlab design.</p></li>
+<li><p>Read the <a class="reference internal" href="../tutorials/software.html#software"><span class="std std-ref">Software</span></a> tutorial.</p></li>
+<li><p>Read the “RISC-V reference card” (skipping sections RV32A, RV32F, RV32C) linked on the <a class="reference internal" href="../resources/index.html#resources"><span class="std std-ref">Resources</span></a> page.</p></li>
+<li><p>Study the flow for centralized register definitions in a hard/software co-design as described in the OpenTitan Reggen Manual linked on the <a class="reference internal" href="../resources/index.html#resources"><span class="std std-ref">Resources</span></a> page.</p></li>
+</ul>
+</section>
+<section id="tasks">
+<h2>Tasks<a class="headerlink" href="#tasks" title="Permalink to this heading"></a></h2>
+<p><strong>Hints</strong></p>
+<ul class="simple">
+<li><p>Before starting this exercise you should have completed <a class="reference internal" href="ex2.html#ex2"><span class="std std-ref">Ex. 2: Logic synthesis, P&amp;R and netlist simulation</span></a>, i.e. simulated your running light with software and thus verifying its synthesizability and integration into the rvlab SoC.</p></li>
+</ul>
+<p><strong>1. Register definitions</strong></p>
+<p>The register definitions of the predefined hardware components are in <em>rvlab/src/design/reggen/</em>.</p>
+<ol class="arabic">
+<li><p>Add a definition for your running light (<em>student_rlight.hjson</em>).</p></li>
+<li><p>Run the reggen tool to generate the Verilog, C and HTML files:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">flow</span> <span class="n">reggen</span><span class="o">.</span><span class="n">generate</span>
+</pre></div>
+</div>
+</li>
+<li><p>Replace your current register implementation of <em>student_rlight.sv</em>, i.e. the <em>tul_adapter_reg</em> and the read/write processes operating on the register bus by instantiating the generated RTL from <em>rvlab/build/reggen/generate/rtl/student_rlight_reg_top.v</em>.</p></li>
+<li><p>Add the module’s base address to <em>rvlab/src/sw/include/rvlab.h</em>.</p></li>
+</ol>
+<p>The generated C and HTML files are located in <em>rvlab/build/reggen/generate/include/reggen</em> and  <em>rvlab/build/reggen/generate/html</em>, respectively.</p>
+<blockquote>
+<div><div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>From now on all your software and hardware modules should only use addresses defined with the redgef flow directory.
+You will later need to add more modules in the same way.</p>
+</div>
+</div></blockquote>
+<p><strong>2. Software: Hardware abstraction layer</strong></p>
+<p>Write a small driver for your running light module in separate files (i.e. student_rlight.c and student_rlight.h). It should adhere to the principles discussed in the exercise: This driver should encapsulate all register accesses and addresses, i.e. only use the generated C code to access the hardware.
+It should also provide an abstract view of your hardware module, <strong>hiding all implementation details</strong>.</p>
+<p><strong>3. Software: Mini application</strong></p>
+<p>With the help of software a new running light mode, which is not directly supported by the hardware, shall be implemented. An arbitrary pattern of the inner LEDs shall run in ping-pong mode on the six ’Grey’ LEDs without the two outermost ’White’ LEDs ever lighting up. The pattern “0110” for example would be shifted two steps to the left/right while the pattern “1001” would be shifted only one step. The software should not just simply use a brute force approach and write to the pattern register continuously, but rather poll the status register of the running light and issue the command for a mode change at the right moment.</p>
+<p>The duration how long a pattern is displayed should be determined by the hardware setting (“N”), i.e. not be influenced by the run time of the software. For example when the pause is set to 500 cycles per pattern, each pattern should be displayed exactly for 500 cycles, regardless of any mode change in between.</p>
+<a class="reference internal image-reference" href="../_images/rlight_soft.svg"><img alt="../_images/rlight_soft.svg" src="../_images/rlight_soft.svg" width="400" /></a>
+<p><strong>4. System simulation using software</strong></p>
+<p>Simulate the software developed in task 3 with the start pattern depicted above for at least two complete LED cycles. Set the speed of your running light to a reasonable value to allow the software to remain synchronized. Then increase the speed in further simulation runs until the outermost ’White’ LEDs lights up. Optimize the software to handle a speed as high as possible (without the outer LEDs lighting up).</p>
+<p>Use the Wave View to trace the start up sequence of the CPU and compare the executed instructions with the assembler sources (<em>rvlab/src/sw/crt0.S</em>)
+and the disassembled memory image (<em>sw.disasm</em>). This skill becomes very important when debugging later in the project.</p>
+<p>Start the simulation as follows:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">flow</span> <span class="n">systb_rlight</span><span class="o">.</span><span class="n">sim_rtl_questa</span>
+</pre></div>
+</div>
+</section>
+<section id="deliverables">
+<h2>Deliverables<a class="headerlink" href="#deliverables" title="Permalink to this heading"></a></h2>
+<p>All deliverables should be submitted in a single PDF file.</p>
+<p>Wave views should be zoomed in as much as possible to only show the sections specified below. At least the following signals should be shown of your running light: clk, LEDs, state, delay counter and register bus at <em>tlul_adapter_reg</em>.</p>
+<dl class="simple">
+<dt><strong>1. Questions</strong></dt><dd><ol class="arabic simple">
+<li><p>to 4: What is the highest speed of the running light your software can handle ?</p></li>
+<li><p>to 4: How many clock cycles does your application require for a complete pass of its main loop?</p></li>
+<li><p>to 4: How many clock cycles after the 1st instruction in ctrt0.S is the stack pointer of the IRQ initialized?</p></li>
+</ol>
+</dd>
+<dt><strong>2. Deliverables of task 4</strong></dt><dd><ol class="arabic simple">
+<li><p>the register definitions of your running light (generated HTML)</p></li>
+<li><p>source texts of the .c and .h files you created or modified (driver and mini application) yourself (not the generated source files)</p></li>
+<li><p>a wave view from the system simulation which shows the lightening up of an outermost “grey” LED and the following write access of the software to the mode register</p></li>
+</ol>
+</dd>
+</dl>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ex2.html" class="btn btn-neutral float-left" title="Ex. 2: Logic synthesis, P&amp;R and netlist simulation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ex4.html" class="btn btn-neutral float-right" title="Ex. 4: DMA / TL-UL host implementation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
