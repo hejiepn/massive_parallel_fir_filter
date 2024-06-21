@@ -61,6 +61,8 @@ static void delay_cycles(int n_cycles) {
 }
 
 int main(void) {
+
+/*
     uint32_t mask_set;
     uint32_t mask_clear;
     uint32_t test_irq;
@@ -94,19 +96,19 @@ int main(void) {
 
     printf("TEST IRQ MAIN END\n");
 
-
-/*
+*/
     printf("RLIGHT MAIN START\n");
     student_rlight_set_clock_delay(180);
     student_rlight_set_mode_right();
     int pattern = 0b00011000;
     student_rlight_set_pattern(pattern);
-    delay_cycles(30000);
+    delay_cycles(300);
 
     pattern = 0b00100100;
     student_rlight_set_pattern(pattern);
-    delay_cycles(30000);
-*/
+    delay_cycles(300);
+    printf("RLIGHT MAIN END\n");
+
     return 0;
 }
 
