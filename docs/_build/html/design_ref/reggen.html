@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Generated Registers &mdash; RISC-V Lab  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/reg_html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Clocks and Resets" href="clocks_resets.html" />
+    <link rel="prev" title="Memory Map" href="memory_map.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            RISC-V Lab
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../exercises/index.html">Exercise Sheets &amp; Slides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/index.html">Project</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Design Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="core_overview.html">Core Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fpga_board.html">FPGA Board</a></li>
+<li class="toctree-l2"><a class="reference internal" href="directory_structure.html">Directory Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory_map.html">Memory Map</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Generated Registers</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#register-demo">Register demo</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#ddr3-control">DDR3 control</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#risc-v-timer">RISC-V timer</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="clocks_resets.html">Clocks and Resets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ddr3_memory.html">DDR3 Memory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="flow_reference.html">Design Flow Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../resources/index.html">Resources</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">RISC-V Lab</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Design Reference</a></li>
+      <li class="breadcrumb-item active">Generated Registers</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/design_ref/reggen.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="generated-registers">
+<h1>Generated Registers<a class="headerlink" href="#generated-registers" title="Permalink to this heading"></a></h1>
+<section id="register-demo">
+<h2>Register demo<a class="headerlink" href="#register-demo" title="Permalink to this heading"></a></h2>
+<table class="regdef" id="Reg_shiftout">
+<tr><th class="regdef" colspan=5><div>regdemo.shiftout @ + 0x0</div><div>shifter output</div><div>Reset default = 0x0, mask 0xffffffff</div></th></tr>
+<tr><td colspan=5><table class="regpic"><tr><td class="bitnum">31</td><td class="bitnum">30</td><td class="bitnum">29</td><td class="bitnum">28</td><td class="bitnum">27</td><td class="bitnum">26</td><td class="bitnum">25</td><td class="bitnum">24</td><td class="bitnum">23</td><td class="bitnum">22</td><td class="bitnum">21</td><td class="bitnum">20</td><td class="bitnum">19</td><td class="bitnum">18</td><td class="bitnum">17</td><td class="bitnum">16</td></tr><tr><td class="fname" colspan=16>val...</td>
+</tr>
+<tr><td class="bitnum">15</td><td class="bitnum">14</td><td class="bitnum">13</td><td class="bitnum">12</td><td class="bitnum">11</td><td class="bitnum">10</td><td class="bitnum">9</td><td class="bitnum">8</td><td class="bitnum">7</td><td class="bitnum">6</td><td class="bitnum">5</td><td class="bitnum">4</td><td class="bitnum">3</td><td class="bitnum">2</td><td class="bitnum">1</td><td class="bitnum">0</td></tr><tr><td class="fname" colspan=16>...val</td>
+</tr></table></td></tr>
+<tr><th width=5%>Bits</th><th width=5%>Type</th><th width=5%>Reset</th><th>Name</th><th>Description</th></tr><tr><td class="regbits">31:0</td><td class="regperm">ro</td><td class="regrv">0x0</td><td class="regfn">val</td><td class="regde">value
+</td></tr>
+</table>
+<br><br>
+<table class="regdef" id="Reg_shiftin">
+<tr><th class="regdef" colspan=5><div>regdemo.shiftin @ + 0x4</div><div>Shifter input</div><div>Reset default = 0x0, mask 0xffffffff</div></th></tr>
+<tr><td colspan=5><table class="regpic"><tr><td class="bitnum">31</td><td class="bitnum">30</td><td class="bitnum">29</td><td class="bitnum">28</td><td class="bitnum">27</td><td class="bitnum">26</td><td class="bitnum">25</td><td class="bitnum">24</td><td class="bitnum">23</td><td class="bitnum">22</td><td class="bitnum">21</td><td class="bitnum">20</td><td class="bitnum">19</td><td class="bitnum">18</td><td class="bitnum">17</td><td class="bitnum">16</td></tr><tr><td class="fname" colspan=16>val...</td>
+</tr>
+<tr><td class="bitnum">15</td><td class="bitnum">14</td><td class="bitnum">13</td><td class="bitnum">12</td><td class="bitnum">11</td><td class="bitnum">10</td><td class="bitnum">9</td><td class="bitnum">8</td><td class="bitnum">7</td><td class="bitnum">6</td><td class="bitnum">5</td><td class="bitnum">4</td><td class="bitnum">3</td><td class="bitnum">2</td><td class="bitnum">1</td><td class="bitnum">0</td></tr><tr><td class="fname" colspan=16>...val</td>
+</tr></table></td></tr>
+<tr><th width=5%>Bits</th><th width=5%>Type</th><th width=5%>Reset</th><th>Name</th><th>Description</th></tr><tr><td class="regbits">31:0</td><td class="regperm">rw</td><td class="regrv">0x0</td><td class="regfn">val</td><td class="regde">value
+</td></tr>
+</table>
+<br><br>
+<table class="regdef" id="Reg_shiftcfg">
+<tr><th class="regdef" colspan=5><div>regdemo.shiftcfg @ + 0x8</div><div>Shifter config</div><div>Reset default = 0x0, mask 0x3f</div></th></tr>
+<tr><td colspan=5><table class="regpic"><tr><td class="bitnum">31</td><td class="bitnum">30</td><td class="bitnum">29</td><td class="bitnum">28</td><td class="bitnum">27</td><td class="bitnum">26</td><td class="bitnum">25</td><td class="bitnum">24</td><td class="bitnum">23</td><td class="bitnum">22</td><td class="bitnum">21</td><td class="bitnum">20</td><td class="bitnum">19</td><td class="bitnum">18</td><td class="bitnum">17</td><td class="bitnum">16</td></tr><tr><td class="unused" colspan=16>&nbsp;</td>
+</tr>
+<tr><td class="bitnum">15</td><td class="bitnum">14</td><td class="bitnum">13</td><td class="bitnum">12</td><td class="bitnum">11</td><td class="bitnum">10</td><td class="bitnum">9</td><td class="bitnum">8</td><td class="bitnum">7</td><td class="bitnum">6</td><td class="bitnum">5</td><td class="bitnum">4</td><td class="bitnum">3</td><td class="bitnum">2</td><td class="bitnum">1</td><td class="bitnum">0</td></tr><tr><td class="unused" colspan=10>&nbsp;</td>
+<td class="fname" colspan=5>amt</td>
+<td class="fname" colspan=1>dir</td>
+</tr></table></td></tr>
+<tr><th width=5%>Bits</th><th width=5%>Type</th><th width=5%>Reset</th><th>Name</th><th>Description</th></tr><tr><td class="regbits">0</td><td class="regperm">rw</td><td class="regrv">0x0</td><td class="regfn">dir</td><td class="regde">direction: 0 = left, 1 = right
+</td></tr>
+<tr><td class="regbits">5:1</td><td class="regperm">rw</td><td class="regrv">0x0</td><td class="regfn">amt</td><td class="regde">shift amount
+</td></tr>
+</table>
+<br><br>
+</section>
+<section id="ddr3-control">
+<h2>DDR3 control<a class="headerlink" href="#ddr3-control" title="Permalink to this heading"></a></h2>
+<table class="regdef" id="Reg_temp">
+<tr><th class="regdef" colspan=5><div>ddr_ctrl.temp @ + 0x0</div><div>ADC temperature</div><div>Reset default = 0x0, mask 0xfff</div></th></tr>
+<tr><td colspan=5><table class="regpic"><tr><td class="bitnum">31</td><td class="bitnum">30</td><td class="bitnum">29</td><td class="bitnum">28</td><td class="bitnum">27</td><td class="bitnum">26</td><td class="bitnum">25</td><td class="bitnum">24</td><td class="bitnum">23</td><td class="bitnum">22</td><td class="bitnum">21</td><td class="bitnum">20</td><td class="bitnum">19</td><td class="bitnum">18</td><td class="bitnum">17</td><td class="bitnum">16</td></tr><tr><td class="unused" colspan=16>&nbsp;</td>
+</tr>
+<tr><td class="bitnum">15</td><td class="bitnum">14</td><td class="bitnum">13</td><td class="bitnum">12</td><td class="bitnum">11</td><td class="bitnum">10</td><td class="bitnum">9</td><td class="bitnum">8</td><td class="bitnum">7</td><td class="bitnum">6</td><td class="bitnum">5</td><td class="bitnum">4</td><td class="bitnum">3</td><td class="bitnum">2</td><td class="bitnum">1</td><td class="bitnum">0</td></tr><tr><td class="unused" colspan=4>&nbsp;</td>
+<td class="fname" colspan=12>rdata</td>
+</tr></table></td></tr>
+<tr><th width=5%>Bits</th><th width=5%>Type</th><th width=5%>Reset</th><th>Name</th><th>Description</th></tr><tr><td class="regbits">11:0</td><td class="regperm">ro</td><td class="regrv">0x0</td><td class="regfn">rdata</td><td class="regde">value
+</td></tr>
+</table>
+<br><br>
+<table class="regdef" id="Reg_status">
+<tr><th class="regdef" colspan=5><div>ddr_ctrl.status @ + 0x4</div><div>DDR MIG status</div><div>Reset default = 0x0, mask 0x3</div></th></tr>
+<tr><td colspan=5><table class="regpic"><tr><td class="bitnum">31</td><td class="bitnum">30</td><td class="bitnum">29</td><td class="bitnum">28</td><td class="bitnum">27</td><td class="bitnum">26</td><td class="bitnum">25</td><td class="bitnum">24</td><td class="bitnum">23</td><td class="bitnum">22</td><td class="bitnum">21</td><td class="bitnum">20</td><td class="bitnum">19</td><td class="bitnum">18</td><td class="bitnum">17</td><td class="bitnum">16</td></tr><tr><td class="unused" colspan=16>&nbsp;</td>
+</tr>
+<tr><td class="bitnum">15</td><td class="bitnum">14</td><td class="bitnum">13</td><td class="bitnum">12</td><td class="bitnum">11</td><td class="bitnum">10</td><td class="bitnum">9</td><td class="bitnum">8</td><td class="bitnum">7</td><td class="bitnum">6</td><td class="bitnum">5</td><td class="bitnum">4</td><td class="bitnum">3</td><td class="bitnum">2</td><td class="bitnum">1</td><td class="bitnum">0</td></tr><tr><td class="unused" colspan=14>&nbsp;</td>
+<td class="fname" colspan=1 style="font-size:21.428571428571427%">calib_complete</td>
+<td class="fname" colspan=1 style="font-size:42.857142857142854%">present</td>
+</tr></table></td></tr>
+<tr><th width=5%>Bits</th><th width=5%>Type</th><th width=5%>Reset</th><th>Name</th><th>Description</th></tr><tr><td class="regbits">0</td><td class="regperm">ro</td><td class="regrv">0x0</td><td class="regfn">present</td><td class="regde">DDR / MIG present
+</td></tr>
+<tr><td class="regbits">1</td><td class="regperm">ro</td><td class="regrv">0x0</td><td class="regfn">calib_complete</td><td class="regde">DDR initial calibration complete
+</td></tr>
+</table>
+<br><br>
+<table class="regdef" id="Reg_ctrl">
+<tr><th class="regdef" colspan=5><div>ddr_ctrl.ctrl @ + 0x8</div><div>Control</div><div>Reset default = 0x0, mask 0x1</div></th></tr>
+<tr><td colspan=5><table class="regpic"><tr><td class="bitnum">31</td><td class="bitnum">30</td><td class="bitnum">29</td><td class="bitnum">28</td><td class="bitnum">27</td><td class="bitnum">26</td><td class="bitnum">25</td><td class="bitnum">24</td><td class="bitnum">23</td><td class="bitnum">22</td><td class="bitnum">21</td><td class="bitnum">20</td><td class="bitnum">19</td><td class="bitnum">18</td><td class="bitnum">17</td><td class="bitnum">16</td></tr><tr><td class="unused" colspan=16>&nbsp;</td>
+</tr>
+<tr><td class="bitnum">15</td><td class="bitnum">14</td><td class="bitnum">13</td><td class="bitnum">12</td><td class="bitnum">11</td><td class="bitnum">10</td><td class="bitnum">9</td><td class="bitnum">8</td><td class="bitnum">7</td><td class="bitnum">6</td><td class="bitnum">5</td><td class="bitnum">4</td><td class="bitnum">3</td><td class="bitnum">2</td><td class="bitnum">1</td><td class="bitnum">0</td></tr><tr><td class="unused" colspan=15>&nbsp;</td>
+<td class="fname" colspan=1 style="font-size:33.333333333333336%">mig_rst_n</td>
+</tr></table></td></tr>
+<tr><th width=5%>Bits</th><th width=5%>Type</th><th width=5%>Reset</th><th>Name</th><th>Description</th></tr><tr><td class="regbits">0</td><td class="regperm">rw</td><td class="regrv">0x0</td><td class="regfn">mig_rst_n</td><td class="regde">MIG reset (active low)
+</td></tr>
+</table>
+<br><br>
+</section>
+<section id="risc-v-timer">
+<h2>RISC-V timer<a class="headerlink" href="#risc-v-timer" title="Permalink to this heading"></a></h2>
+<table class="regdef" id="Reg_ctrl">
+<tr><th class="regdef" colspan=5><div>rv_timer.CTRL @ + 0x0</div><div>Control register</div><div>Reset default = 0x0, mask 0x1</div></th></tr>
+<tr><td colspan=5><table class="regpic"><tr><td class="bitnum">31</td><td class="bitnum">30</td><td class="bitnum">29</td><td class="bitnum">28</td><td class="bitnum">27</td><td class="bitnum">26</td><td class="bitnum">25</td><td class="bitnum">24</td><td class="bitnum">23</td><td class="bitnum">22</td><td class="bitnum">21</td><td class="bitnum">20</td><td class="bitnum">19</td><td class="bitnum">18</td><td class="bitnum">17</td><td class="bitnum">16</td></tr><tr><td class="unused" colspan=16>&nbsp;</td>
+</tr>
+<tr><td class="bitnum">15</td><td class="bitnum">14</td><td class="bitnum">13</td><td class="bitnum">12</td><td class="bitnum">11</td><td class="bitnum">10</td><td class="bitnum">9</td><td class="bitnum">8</td><td class="bitnum">7</td><td class="bitnum">6</td><td class="bitnum">5</td><td class="bitnum">4</td><td class="bitnum">3</td><td class="bitnum">2</td><td class="bitnum">1</td><td class="bitnum">0</td></tr><tr><td class="unused" colspan=15>&nbsp;</td>
+<td class="fname" colspan=1 style="font-size:42.857142857142854%">active0</td>
+</tr></table></td></tr>
+<tr><th width=5%>Bits</th><th width=5%>Type</th><th width=5%>Reset</th><th>Name</th><th>Description</th></tr><tr><td class="regbits">0</td><td class="regperm">rw</td><td class="regrv">0x0</td><td class="regfn">active0</td><td class="regde">If 1, timer operates for TIMER0
+</td></tr>
+</table>
+<br><br>
+<table class="regdef" id="Reg_cfg0">
+<tr><th class="regdef" colspan=5><div>rv_timer.CFG0 @ + 0x100</div><div>Configuration for Hart 0</div><div>Reset default = 0x10000, mask 0xff0fff</div></th></tr>
+<tr><td colspan=5><table class="regpic"><tr><td class="bitnum">31</td><td class="bitnum">30</td><td class="bitnum">29</td><td class="bitnum">28</td><td class="bitnum">27</td><td class="bitnum">26</td><td class="bitnum">25</td><td class="bitnum">24</td><td class="bitnum">23</td><td class="bitnum">22</td><td class="bitnum">21</td><td class="bitnum">20</td><td class="bitnum">19</td><td class="bitnum">18</td><td class="bitnum">17</td><td class="bitnum">16</td></tr><tr><td class="unused" colspan=8>&nbsp;</td>
+<td class="fname" colspan=8>step</td>
+</tr>
+<tr><td class="bitnum">15</td><td class="bitnum">14</td><td class="bitnum">13</td><td class="bitnum">12</td><td class="bitnum">11</td><td class="bitnum">10</td><td class="bitnum">9</td><td class="bitnum">8</td><td class="bitnum">7</td><td class="bitnum">6</td><td class="bitnum">5</td><td class="bitnum">4</td><td class="bitnum">3</td><td class="bitnum">2</td><td class="bitnum">1</td><td class="bitnum">0</td></tr><tr><td class="unused" colspan=4>&nbsp;</td>
+<td class="fname" colspan=12>prescale</td>
+</tr></table></td></tr>
+<tr><th width=5%>Bits</th><th width=5%>Type</th><th width=5%>Reset</th><th>Name</th><th>Description</th></tr><tr><td class="regbits">11:0</td><td class="regperm">rw</td><td class="regrv">0x0</td><td class="regfn">prescale</td><td class="regde">Prescaler to generate tick
+</td></tr>
+<tr><td class="regbits">15:12</td><td></td><td></td><td></td><td>Reserved</td></tr><tr><td class="regbits">23:16</td><td class="regperm">rw</td><td class="regrv">0x1</td><td class="regfn">step</td><td class="regde">Incremental value for each tick
+</td></tr>
+</table>
+<br><br>
+<table class="regdef" id="Reg_timer_v_lower0">
+<tr><th class="regdef" colspan=5><div>rv_timer.TIMER_V_LOWER0 @ + 0x104</div><div>Timer value Lower</div><div>Reset default = 0x0, mask 0xffffffff</div></th></tr>
+<tr><td colspan=5><table class="regpic"><tr><td class="bitnum">31</td><td class="bitnum">30</td><td class="bitnum">29</td><td class="bitnum">28</td><td class="bitnum">27</td><td class="bitnum">26</td><td class="bitnum">25</td><td class="bitnum">24</td><td class="bitnum">23</td><td class="bitnum">22</td><td class="bitnum">21</td><td class="bitnum">20</td><td class="bitnum">19</td><td class="bitnum">18</td><td class="bitnum">17</td><td class="bitnum">16</td></tr><tr><td class="fname" colspan=16>v...</td>
+</tr>
+<tr><td class="bitnum">15</td><td class="bitnum">14</td><td class="bitnum">13</td><td class="bitnum">12</td><td class="bitnum">11</td><td class="bitnum">10</td><td class="bitnum">9</td><td class="bitnum">8</td><td class="bitnum">7</td><td class="bitnum">6</td><td class="bitnum">5</td><td class="bitnum">4</td><td class="bitnum">3</td><td class="bitnum">2</td><td class="bitnum">1</td><td class="bitnum">0</td></tr><tr><td class="fname" colspan=16>...v</td>
+</tr></table></td></tr>
+<tr><th width=5%>Bits</th><th width=5%>Type</th><th width=5%>Reset</th><th>Name</th><th>Description</th></tr><tr><td class="regbits">31:0</td><td class="regperm">rw</td><td class="regrv">0x0</td><td class="regfn">v</td><td class="regde">Timer value [31:0]
+</td></tr>
+</table>
+<br><br>
+<table class="regdef" id="Reg_timer_v_upper0">
+<tr><th class="regdef" colspan=5><div>rv_timer.TIMER_V_UPPER0 @ + 0x108</div><div>Timer value Upper</div><div>Reset default = 0x0, mask 0xffffffff</div></th></tr>
+<tr><td colspan=5><table class="regpic"><tr><td class="bitnum">31</td><td class="bitnum">30</td><td class="bitnum">29</td><td class="bitnum">28</td><td class="bitnum">27</td><td class="bitnum">26</td><td class="bitnum">25</td><td class="bitnum">24</td><td class="bitnum">23</td><td class="bitnum">22</td><td class="bitnum">21</td><td class="bitnum">20</td><td class="bitnum">19</td><td class="bitnum">18</td><td class="bitnum">17</td><td class="bitnum">16</td></tr><tr><td class="fname" colspan=16>v...</td>
+</tr>
+<tr><td class="bitnum">15</td><td class="bitnum">14</td><td class="bitnum">13</td><td class="bitnum">12</td><td class="bitnum">11</td><td class="bitnum">10</td><td class="bitnum">9</td><td class="bitnum">8</td><td class="bitnum">7</td><td class="bitnum">6</td><td class="bitnum">5</td><td class="bitnum">4</td><td class="bitnum">3</td><td class="bitnum">2</td><td class="bitnum">1</td><td class="bitnum">0</td></tr><tr><td class="fname" colspan=16>...v</td>
+</tr></table></td></tr>
+<tr><th width=5%>Bits</th><th width=5%>Type</th><th width=5%>Reset</th><th>Name</th><th>Description</th></tr><tr><td class="regbits">31:0</td><td class="regperm">rw</td><td class="regrv">0x0</td><td class="regfn">v</td><td class="regde">Timer value [63:32]
+</td></tr>
+</table>
+<br><br>
+<table class="regdef" id="Reg_compare_lower0_0">
+<tr><th class="regdef" colspan=5><div>rv_timer.COMPARE_LOWER0_0 @ + 0x10c</div><div>Timer value Lower</div><div>Reset default = 0xffffffff, mask 0xffffffff</div></th></tr>
+<tr><td colspan=5><table class="regpic"><tr><td class="bitnum">31</td><td class="bitnum">30</td><td class="bitnum">29</td><td class="bitnum">28</td><td class="bitnum">27</td><td class="bitnum">26</td><td class="bitnum">25</td><td class="bitnum">24</td><td class="bitnum">23</td><td class="bitnum">22</td><td class="bitnum">21</td><td class="bitnum">20</td><td class="bitnum">19</td><td class="bitnum">18</td><td class="bitnum">17</td><td class="bitnum">16</td></tr><tr><td class="fname" colspan=16>v...</td>
+</tr>
+<tr><td class="bitnum">15</td><td class="bitnum">14</td><td class="bitnum">13</td><td class="bitnum">12</td><td class="bitnum">11</td><td class="bitnum">10</td><td class="bitnum">9</td><td class="bitnum">8</td><td class="bitnum">7</td><td class="bitnum">6</td><td class="bitnum">5</td><td class="bitnum">4</td><td class="bitnum">3</td><td class="bitnum">2</td><td class="bitnum">1</td><td class="bitnum">0</td></tr><tr><td class="fname" colspan=16>...v</td>
+</tr></table></td></tr>
+<tr><th width=5%>Bits</th><th width=5%>Type</th><th width=5%>Reset</th><th>Name</th><th>Description</th></tr><tr><td class="regbits">31:0</td><td class="regperm">rw</td><td class="regrv">0xffffffff</td><td class="regfn">v</td><td class="regde">Timer compare value [31:0]
+</td></tr>
+</table>
+<br><br>
+<table class="regdef" id="Reg_compare_upper0_0">
+<tr><th class="regdef" colspan=5><div>rv_timer.COMPARE_UPPER0_0 @ + 0x110</div><div>Timer value Upper</div><div>Reset default = 0xffffffff, mask 0xffffffff</div></th></tr>
+<tr><td colspan=5><table class="regpic"><tr><td class="bitnum">31</td><td class="bitnum">30</td><td class="bitnum">29</td><td class="bitnum">28</td><td class="bitnum">27</td><td class="bitnum">26</td><td class="bitnum">25</td><td class="bitnum">24</td><td class="bitnum">23</td><td class="bitnum">22</td><td class="bitnum">21</td><td class="bitnum">20</td><td class="bitnum">19</td><td class="bitnum">18</td><td class="bitnum">17</td><td class="bitnum">16</td></tr><tr><td class="fname" colspan=16>v...</td>
+</tr>
+<tr><td class="bitnum">15</td><td class="bitnum">14</td><td class="bitnum">13</td><td class="bitnum">12</td><td class="bitnum">11</td><td class="bitnum">10</td><td class="bitnum">9</td><td class="bitnum">8</td><td class="bitnum">7</td><td class="bitnum">6</td><td class="bitnum">5</td><td class="bitnum">4</td><td class="bitnum">3</td><td class="bitnum">2</td><td class="bitnum">1</td><td class="bitnum">0</td></tr><tr><td class="fname" colspan=16>...v</td>
+</tr></table></td></tr>
+<tr><th width=5%>Bits</th><th width=5%>Type</th><th width=5%>Reset</th><th>Name</th><th>Description</th></tr><tr><td class="regbits">31:0</td><td class="regperm">rw</td><td class="regrv">0xffffffff</td><td class="regfn">v</td><td class="regde">Timer compare value [63:32]
+</td></tr>
+</table>
+<br><br>
+<div id="Reg_intr_enable"></div>
+<table class="regdef" id="Reg_intr_enable0">
+<tr><th class="regdef" colspan=5><div>rv_timer.INTR_ENABLE0 @ + 0x114</div><div>Interrupt Enable</div><div>Reset default = 0x0, mask 0x1</div></th></tr>
+<tr><td colspan=5><table class="regpic"><tr><td class="bitnum">31</td><td class="bitnum">30</td><td class="bitnum">29</td><td class="bitnum">28</td><td class="bitnum">27</td><td class="bitnum">26</td><td class="bitnum">25</td><td class="bitnum">24</td><td class="bitnum">23</td><td class="bitnum">22</td><td class="bitnum">21</td><td class="bitnum">20</td><td class="bitnum">19</td><td class="bitnum">18</td><td class="bitnum">17</td><td class="bitnum">16</td></tr><tr><td class="unused" colspan=16>&nbsp;</td>
+</tr>
+<tr><td class="bitnum">15</td><td class="bitnum">14</td><td class="bitnum">13</td><td class="bitnum">12</td><td class="bitnum">11</td><td class="bitnum">10</td><td class="bitnum">9</td><td class="bitnum">8</td><td class="bitnum">7</td><td class="bitnum">6</td><td class="bitnum">5</td><td class="bitnum">4</td><td class="bitnum">3</td><td class="bitnum">2</td><td class="bitnum">1</td><td class="bitnum">0</td></tr><tr><td class="unused" colspan=15>&nbsp;</td>
+<td class="fname" colspan=1>IE0</td>
+</tr></table></td></tr>
+<tr><th width=5%>Bits</th><th width=5%>Type</th><th width=5%>Reset</th><th>Name</th><th>Description</th></tr><tr><td class="regbits">0</td><td class="regperm">rw</td><td class="regrv">0x0</td><td class="regfn">IE0</td><td class="regde">Interrupt Enable for timer for TIMER0
+</td></tr>
+</table>
+<br><br>
+<div id="Reg_intr_state"></div>
+<table class="regdef" id="Reg_intr_state0">
+<tr><th class="regdef" colspan=5><div>rv_timer.INTR_STATE0 @ + 0x118</div><div>Interrupt Status</div><div>Reset default = 0x0, mask 0x1</div></th></tr>
+<tr><td colspan=5><table class="regpic"><tr><td class="bitnum">31</td><td class="bitnum">30</td><td class="bitnum">29</td><td class="bitnum">28</td><td class="bitnum">27</td><td class="bitnum">26</td><td class="bitnum">25</td><td class="bitnum">24</td><td class="bitnum">23</td><td class="bitnum">22</td><td class="bitnum">21</td><td class="bitnum">20</td><td class="bitnum">19</td><td class="bitnum">18</td><td class="bitnum">17</td><td class="bitnum">16</td></tr><tr><td class="unused" colspan=16>&nbsp;</td>
+</tr>
+<tr><td class="bitnum">15</td><td class="bitnum">14</td><td class="bitnum">13</td><td class="bitnum">12</td><td class="bitnum">11</td><td class="bitnum">10</td><td class="bitnum">9</td><td class="bitnum">8</td><td class="bitnum">7</td><td class="bitnum">6</td><td class="bitnum">5</td><td class="bitnum">4</td><td class="bitnum">3</td><td class="bitnum">2</td><td class="bitnum">1</td><td class="bitnum">0</td></tr><tr><td class="unused" colspan=15>&nbsp;</td>
+<td class="fname" colspan=1>IS0</td>
+</tr></table></td></tr>
+<tr><th width=5%>Bits</th><th width=5%>Type</th><th width=5%>Reset</th><th>Name</th><th>Description</th></tr><tr><td class="regbits">0</td><td class="regperm">rw1c</td><td class="regrv">0x0</td><td class="regfn">IS0</td><td class="regde">Interrupt status for timer for TIMER0
+</td></tr>
+</table>
+<br><br>
+<div id="Reg_intr_test"></div>
+<table class="regdef" id="Reg_intr_test0">
+<tr><th class="regdef" colspan=5><div>rv_timer.INTR_TEST0 @ + 0x11c</div><div>Interrupt test register</div><div>Reset default = 0x0, mask 0x0</div></th></tr>
+<tr><td colspan=5><table class="regpic"><tr><td class="bitnum">31</td><td class="bitnum">30</td><td class="bitnum">29</td><td class="bitnum">28</td><td class="bitnum">27</td><td class="bitnum">26</td><td class="bitnum">25</td><td class="bitnum">24</td><td class="bitnum">23</td><td class="bitnum">22</td><td class="bitnum">21</td><td class="bitnum">20</td><td class="bitnum">19</td><td class="bitnum">18</td><td class="bitnum">17</td><td class="bitnum">16</td></tr><tr><td class="unused" colspan=16>&nbsp;</td>
+</tr>
+<tr><td class="bitnum">15</td><td class="bitnum">14</td><td class="bitnum">13</td><td class="bitnum">12</td><td class="bitnum">11</td><td class="bitnum">10</td><td class="bitnum">9</td><td class="bitnum">8</td><td class="bitnum">7</td><td class="bitnum">6</td><td class="bitnum">5</td><td class="bitnum">4</td><td class="bitnum">3</td><td class="bitnum">2</td><td class="bitnum">1</td><td class="bitnum">0</td></tr><tr><td class="unused" colspan=15>&nbsp;</td>
+<td class="fname" colspan=1>T0</td>
+</tr></table></td></tr>
+<tr><th width=5%>Bits</th><th width=5%>Type</th><th width=5%>Reset</th><th>Name</th><th>Description</th></tr><tr><td class="regbits">0</td><td class="regperm">wo</td><td class="regrv">x</td><td class="regfn">T0</td><td class="regde">Interrupt test for timer for TIMER0
+</td></tr>
+</table>
+<br><br>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="memory_map.html" class="btn btn-neutral float-left" title="Memory Map" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="clocks_resets.html" class="btn btn-neutral float-right" title="Clocks and Resets" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

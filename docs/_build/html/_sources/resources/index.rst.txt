@@ -1,0 +1,73 @@
+.. _resources:
+
+Resources
+=========
+
+Xilinx Hardware & Design Tools
+------------------------------
+- `7 Series Product Tables and Product Selection Guide (XMP101)`_ The last page contains links to the most important user guides (CLBs, rams, DSPs, IOs, ...)
+- `Vivado Design Suite User Guide: Synthesis (UG901) <https://docs.xilinx.com/r/en-US/ug901-vivado-synthesis>`_ HDL templates for inferring block rams (inferring as (simpler) alternative to instantiate library primitives). Only works for Vivado.
+- `Vivado Design Suite 7 Series FPGA and Zynq-7000 SoC Libraries Guide UG953 (v2021.2) October 22, 2021`_ Instance templates for all library primitives
+- `Vivado Design Suite Tcl Command Reference Guide (UG835)`_
+- `Vivado Design Suite Properties Reference Guide (UG912)`_
+
+Digilent Nexys Video FPGA Board:
+
+- `Nexys Video Reference Manual <https://digilent.com/reference/programmable-logic/nexys-video/reference-manual>`_ (:download:`local PDF copy<res/nexys-video_rm.pdf>`)
+- `Nexys Video schematic <https://digilent.com/reference/_media/reference/programmable-logic/nexys-video/nexys_video_sch.pdf>`_
+
+RISC-V System
+-------------
+
+- `RISC-V Reference card <https://github.com/jameslzhu/riscv-card>`_
+- `RISC-V Instruction Set Manual Vol. I: Unprivileged ISA <https://github.com/riscv/riscv-isa-manual/releases/download/Ratified-IMAFDQC/riscv-spec-20191213.pdf>`_
+- `RISC-V Instruction Set Manual Vol. II: Privileged ISA <https://github.com/riscv/riscv-isa-manual/releases/download/Priv-v1.12/riscv-privileged-20211203.pdf>`_
+- `TileLink Spec`_ (:download:`local PDF copy<res/tilelink-spec-1.8.0.pdf>`)
+
+- OpenTitan's `Reggen manual <https://opentitan.org/book/util/reggen/index.html>`_ (differs in details from the version used in rvlab!)
+- OpenTitan's `Crossbar Generation tool manual <https://opentitan.org/book/util/tlgen/index.html>`_ (differs in details from the version used in rvlab!)
+
+- `Ibex Documentation <https://ibex-core.readthedocs.io/en/latest/index.html>`_
+
+SystemVerilog
+-------------
+
+- `System Verilog for synthesis <https://verilogguide.readthedocs.io/en/latest/verilog/systemverilog.html>`_
+- `Verilog Language reference manual (LRM) <https://ieeexplore.ieee.org/document/8299595>`_ (the authoritative source to consult for in depth questions, e.g. how a certain language element is to be handeled by a simulator).
+
+
+TUB
+---
+
+- Modulbeschreibung_
+- `MSC Website`_
+
+Recommended External IP
+-----------------------
+
+The following projects are not integrated into rvlab but could (i.e. no guarantee) be useful for student projects:
+
+- `verilog-ethernet <https://github.com/alexforencich/verilog-ethernet>`_
+- HDMI output 
+
+  - basic explanation & (overly simplified - do not use) implementation: `fpga4fun <https://www.fpga4fun.com/HDMI.html>`_
+  - DVI only, no sound: `display_controller <https://github.com/projf/display_controller>`_
+  - HDMI, with sound: `hdmi <https://github.com/hdl-util/hdmi>`_
+
+- HDMI input
+
+  - `litevideo <https://github.com/litex-hub/litevideo>`_ (part of LiteX project, python rendered verilog): 
+
+.. _7 Series Product Tables and Product Selection Guide (XMP101): https://docs.xilinx.com/v/u/en-US/7-series-product-selection-guide
+.. _Vivado Design Suite 7 Series FPGA and Zynq-7000 SoC Libraries Guide UG953 (v2021.2) October 22, 2021: https://www.xilinx.com/content/dam/xilinx/support/documents/sw_manuals/xilinx2021_2/ug953-vivado-7series-libraries.pdf
+
+.. _Vivado Design Suite Tcl Command Reference Guide (UG835): https://docs.xilinx.com/r/en-US/ug835-vivado-tcl-commands
+.. _Vivado Design Suite Properties Reference Guide (UG912): https://docs.xilinx.com/r/en-US/ug912-vivado-properties
+
+.. _TileLink Spec: https://starfivetech.com/uploads/tilelink_spec_1.8.1.pdf
+
+
+.. _Modulbeschreibung: https://moseskonto.tu-berlin.de/moses/modultransfersystem/bolognamodule/beschreibung/anzeigen.html?nummer=41097&version=1&sprache=1
+.. _MSC Website: https://www.tu.berlin/msc/studium-lehre/lehrveranstaltungen-sose/soc
+
+.. _FROM_BLINKER_TO_RISCV: https://github.com/BrunoLevy/learn-fpga/tree/master/FemtoRV/TUTORIALS/FROM_BLINKER_TO_RISCV

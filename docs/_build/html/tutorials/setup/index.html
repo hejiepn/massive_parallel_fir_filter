@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Setup &mdash; RISC-V Lab  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/reg_html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/sphinx_highlight.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Design Flow Recipes" href="../flow.html" />
+    <link rel="prev" title="Tutorials" href="../index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            RISC-V Lab
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../exercises/index.html">Exercise Sheets &amp; Slides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../project/index.html">Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../design_ref/index.html">Design Reference</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../index.html">Tutorials</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Setup</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#support-status">Support status</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#install-open-source-components">Install open-source components</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#install-xilinx-vivado-proprietary">Install Xilinx Vivado (proprietary)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#install-questa-intel-proprietary">Install Questa-Intel (proprietary)</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../flow.html">Design Flow Recipes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../software.html">Software</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../fpga_upload.html">FPGA Upload</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../questasim_guide.html">QuestaSim Guide</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../systemverilog_hdl.html">SystemVerilog HDL</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../resources/index.html">Resources</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">RISC-V Lab</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Tutorials</a></li>
+      <li class="breadcrumb-item active">Setup</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/tutorials/setup/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="setup">
+<span id="id1"></span><h1>Setup<a class="headerlink" href="#setup" title="Permalink to this heading"></a></h1>
+<p>This page describes the tool setup required to work with rvlab. <strong>No setup is required when working with the university lab computers.</strong>
+It has been testes on Xubuntu 22.04.</p>
+<section id="support-status">
+<h2>Support status<a class="headerlink" href="#support-status" title="Permalink to this heading"></a></h2>
+<p>Supported simulators:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Step</p></th>
+<th class="head"><p>Vivado XSim</p></th>
+<th class="head"><p>Questa-Intel</p></th>
+<th class="head"><p>Full Questa (university)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>RTL simulation</p></td>
+<td><p>supported</p></td>
+<td><p>supported</p></td>
+<td><p>supported</p></td>
+</tr>
+<tr class="row-odd"><td><p>Post-synthesis functional simulation</p></td>
+<td><p>supported</p></td>
+<td><p>(supported)</p></td>
+<td><p>supported</p></td>
+</tr>
+<tr class="row-even"><td><p>Post-synthesis timing simulation</p></td>
+<td><p>timing mismatch</p></td>
+<td><p>(supported)</p></td>
+<td><p>supported</p></td>
+</tr>
+<tr class="row-odd"><td><p>Post-implementation functional simulation</p></td>
+<td><p>supported</p></td>
+<td><p>(supported)</p></td>
+<td><p>supported</p></td>
+</tr>
+<tr class="row-even"><td><p>Post-implementation timing simulation</p></td>
+<td><p>timing mismatch</p></td>
+<td><p>(supported)</p></td>
+<td><p>supported</p></td>
+</tr>
+</tbody>
+</table>
+<p>Icarus with sv2v for simulation is currently not supported, but could be added in the future.</p>
+<p>For synthesis and place and route, only Xilinx Vivado is supported.</p>
+<p><strong>Timing mismatch problem with Vivado XSim:</strong> SDF annotation does not work properly with Vivado XSim at the moment. For example, observe difference in the delay from TCK (FPGA input) falling edge to TDO (FPGA output) falling/rising edge between Questa and XSim. Debugging this further showed that <em>/rvlab_fpga_top/tdo_flop_i</em> CQ delay is not properly annotated. Make sure to use <em>-debug all</em> and <em>-v 2</em> options for xelab or debugging. Debug output shows that the timing values of the library are overridden, when they are in fact not. A minimal test case should be created and submitted to Xilinx. With Questa, timing annotation works properly. The recommended <em>-sdf_anno true</em> switch to <em>write_verilog</em> in Vivado does not change the simulator behavior in this regard.</p>
+</section>
+<section id="install-open-source-components">
+<h2>Install open-source components<a class="headerlink" href="#install-open-source-components" title="Permalink to this heading"></a></h2>
+<p>Make sure you have a recent Python version (3.8+?) installed.</p>
+<p>Install mako, pip and sphinx as Debian / Ubuntu packages. Also the libraries required by Vivado:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">python3</span><span class="o">-</span><span class="n">mako</span> <span class="n">python3</span><span class="o">-</span><span class="n">pip</span> <span class="n">python3</span><span class="o">-</span><span class="n">sphinx</span>
+<span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">libtinfo6</span> <span class="n">libtinfo5</span> <span class="n">libtinfo</span><span class="o">-</span><span class="n">dev</span>
+</pre></div>
+</div>
+<p>Install <a class="reference external" href="https://github.com/TobiasKaiser/pydesignflow">PyDesignFlow</a>  , <a class="reference external" href="https://github.com/TobiasKaiser/notcl">NoTcl</a>, sphinx_rtd_theme, hjson and elftools using pip:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">pydesignflow</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">notcl</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">sphinx_rtd_theme</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">hjson</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">pyelftools</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">mistletoe</span>
+<span class="n">pip</span> <span class="n">install</span> <span class="n">mako</span>
+</pre></div>
+</div>
+<p>Add the flow executable to the search PATH:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># Execute in every new shell before starting the flow.
+export PATH=~/.local/bin:$PATH
+</pre></div>
+</div>
+<p>As RISC-V tool chain, we recommend to use precompiled gcc binaries from <a class="reference external" href="https://github.com/xpack-dev-tools/riscv-none-elf-gcc-xpack/">riscv-none-elf-gcc-xpack</a>. To make the binaries accessible, unpack the archive somewhere and add the <em>bin/</em> sub directory to the <em>PATH</em> environment variable.</p>
+</section>
+<section id="install-xilinx-vivado-proprietary">
+<h2>Install Xilinx Vivado (proprietary)<a class="headerlink" href="#install-xilinx-vivado-proprietary" title="Permalink to this heading"></a></h2>
+<p>Install Xilinx Vivado ML Edition 2022.2 Standard (Free Version) from the <a class="reference external" href="https://www.xilinx.com/support/download.html">Xilinx Download Center</a>. You need to register a free Xilinx account for downloading and during installation, but no license is required. (The free version sends some metadata to Xilinx during usage.)</p>
+<p>I recommend the web-based installer instead of the full download (80+ GB). With the shown installer options, the installation footprint is around 26 GB on disk (contrary to what the installer states). During installation, more free disk space (100+ GB?) is probably required.</p>
+<a class="reference internal image-reference" href="../../_images/vivado_install1.png"><img alt="../../_images/vivado_install1.png" src="../../_images/vivado_install1.png" style="width: 600px;" /></a>
+<a class="reference internal image-reference" href="../../_images/vivado_install2.png"><img alt="../../_images/vivado_install2.png" src="../../_images/vivado_install2.png" style="width: 600px;" /></a>
+<a class="reference internal image-reference" href="../../_images/vivado_install3.png"><img alt="../../_images/vivado_install3.png" src="../../_images/vivado_install3.png" style="width: 600px;" /></a>
+<p>During installation Vivado generates an installation dependent script settings64.sh which needs to be sourced. For the flow to find the FPGA library sources and binaries the XILINX_VIVADO and PATH variables need to be set, respectively:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># Execute in every new shell before starting the flow.
+# Adapt the paths for your installation.
+~/bin/Xilinx/Vivado/2022.2/settings64.sh
+export XILINX_VIVADO=~/bin/Xilinx/Vivado/2022.2
+export PATH=~/bin/Xilinx/Vivado/2022.2/bin:$PATH
+</pre></div>
+</div>
+</section>
+<section id="install-questa-intel-proprietary">
+<h2>Install Questa-Intel (proprietary)<a class="headerlink" href="#install-questa-intel-proprietary" title="Permalink to this heading"></a></h2>
+<p>Intel offers <a class="reference external" href="https://www.intel.de/content/www/de/de/software/programmable/quartus-prime/questa-edition.html">Questa-Intel</a> Starter FPGA edition, a free version of the QuestaSim SystemVerilog simulator. QuestaSim is the preferred simulator for rvlab, but XSim, included in Vivado, can also be used. To run Questa-Intel on Linux, you need to register an Intel account and generate a free license for your computer using its MAC address. In order for Questa-Intel to find the license file you need to create a shell variable to point to the license file you received from Intel. Furthermore for the flow Questa-Intel needs to be added to the search path:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span># Execute in every new shell before starting the flow.
+# Adapt the paths for your installation.
+export LM_LICENSE_FILE=~/bin/intelFPGA_pro/LR-113703_License.dat
+export PATH=~/bin/intelFPGA_pro/22.4/questa_fse/bin:$PATH
+</pre></div>
+</div>
+<p>Its main limitation seems to be a limit of 5000 module instances during simulation. This seems to be more than sufficient for rvlab RTL simulation, which presently uses around 195 instances. Netlist simulation is (probably?) not possible due to the limitation. The following TCL command in QuestaSim supposedly counts the number of module instances during simulation:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">llength</span> <span class="p">[</span><span class="n">find</span> <span class="n">instances</span> <span class="o">-</span><span class="n">recursive</span> <span class="o">/*</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../index.html" class="btn btn-neutral float-left" title="Tutorials" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../flow.html" class="btn btn-neutral float-right" title="Design Flow Recipes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

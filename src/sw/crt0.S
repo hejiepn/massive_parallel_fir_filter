@@ -143,6 +143,8 @@ irq_entry:
     sw  x30, 0x70(sp)
     sw  x31, 0x74(sp)
 
+	//jal stands for: jump and link
+	//jal student_irq_ctrl_top_handler
     jal irq_handler
 
     // restore registers from irq stack

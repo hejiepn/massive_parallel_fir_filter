@@ -1,0 +1,2090 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design Flow Reference &mdash; RISC-V Lab  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/reg_html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Tutorials" href="../tutorials/index.html" />
+    <link rel="prev" title="DDR3 Memory" href="ddr3_memory.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            RISC-V Lab
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../exercises/index.html">Exercise Sheets &amp; Slides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../project/index.html">Project</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Design Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="core_overview.html">Core Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="fpga_board.html">FPGA Board</a></li>
+<li class="toctree-l2"><a class="reference internal" href="directory_structure.html">Directory Structure</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory_map.html">Memory Map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="reggen.html">Generated Registers</a></li>
+<li class="toctree-l2"><a class="reference internal" href="clocks_resets.html">Clocks and Resets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ddr3_memory.html">DDR3 Memory</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Design Flow Reference</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../resources/index.html">Resources</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">RISC-V Lab</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Design Reference</a></li>
+      <li class="breadcrumb-item active">Design Flow Reference</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/design_ref/flow_reference.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="design-flow-reference">
+<span id="id1"></span><h1>Design Flow Reference<a class="headerlink" href="#design-flow-reference" title="Permalink to this heading"></a></h1>
+<p>The following reference list of defined targets is automatically generated from the blocks instantiated in <em>flow/__init__.py</em> and defined in the <em>flow/*.py</em> files.</p>
+<p><strong>Please check</strong> <a class="reference internal" href="../tutorials/flow.html#design-flow"><span class="std std-ref">Design Flow Recipes</span></a> <strong>for how to use the design flow.</strong></p>
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">block</span> <span class="sig-name descname"><span class="pre">libc</span></span> <em class="property"></em></dt>
+<dd><p><p>A small libc providing basic system functions such as printf, memcpy etc.
+(<a class="reference external" href="https://github.com/PetteriAimonen/Baselibc">Baselibc</a>)</p>
+</p>
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">libc</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">build</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>reggen.generate</li>
+</ul>
+</dd>
+</dl>
+<p><p>Builds library for static linking (.a).</p>
+</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">block</span> <span class="sig-name descname"><span class="pre">sw_monitor</span></span> <em class="property"></em></dt>
+<dd><p><p>Program for the RISC-V CPU</p>
+</p>
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">always_rebuild</span> <span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">sw_monitor</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">build</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>libc.build</li>
+<li>reggen.generate</li>
+</ul>
+</dd>
+</dl>
+<p><p>Main program for simulation and later use on FPGA.</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">always_rebuild</span> <span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">sw_monitor</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">delta</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>sw_monitor.build</li>
+<li>sw_test_rvlab.build</li>
+</ul>
+</dd>
+</dl>
+<p><p>Differential image for fast loading in simulator</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">sw_monitor</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">run</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>sw_monitor.build</li>
+</ul>
+</dd>
+</dl>
+<p><p>Run on FPGA via OpenOCD</p>
+</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">block</span> <span class="sig-name descname"><span class="pre">sw_minimal</span></span> <em class="property"></em></dt>
+<dd><p><p>Program for the RISC-V CPU</p>
+</p>
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">always_rebuild</span> <span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">sw_minimal</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">build</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>libc.build</li>
+<li>reggen.generate</li>
+</ul>
+</dd>
+</dl>
+<p><p>Main program for simulation and later use on FPGA.</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">always_rebuild</span> <span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">sw_minimal</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">delta</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>sw_minimal.build</li>
+<li>sw_test_rvlab.build</li>
+</ul>
+</dd>
+</dl>
+<p><p>Differential image for fast loading in simulator</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">sw_minimal</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">run</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>sw_minimal.build</li>
+</ul>
+</dd>
+</dl>
+<p><p>Run on FPGA via OpenOCD</p>
+</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">block</span> <span class="sig-name descname"><span class="pre">sw_test_sim_ddr</span></span> <em class="property"></em></dt>
+<dd><p><p>Program for the RISC-V CPU</p>
+</p>
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">always_rebuild</span> <span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">sw_test_sim_ddr</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">build</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>libc.build</li>
+<li>reggen.generate</li>
+</ul>
+</dd>
+</dl>
+<p><p>Main program for simulation and later use on FPGA.</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">always_rebuild</span> <span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">sw_test_sim_ddr</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">delta</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>sw_test_sim_ddr.build</li>
+<li>sw_test_rvlab.build</li>
+</ul>
+</dd>
+</dl>
+<p><p>Differential image for fast loading in simulator</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">sw_test_sim_ddr</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">run</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>sw_test_sim_ddr.build</li>
+</ul>
+</dd>
+</dl>
+<p><p>Run on FPGA via OpenOCD</p>
+</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">block</span> <span class="sig-name descname"><span class="pre">sw_test_rvlab</span></span> <em class="property"></em></dt>
+<dd><p><p>Program for the RISC-V CPU</p>
+</p>
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">always_rebuild</span> <span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">sw_test_rvlab</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">build</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>libc.build</li>
+<li>reggen.generate</li>
+</ul>
+</dd>
+</dl>
+<p><p>Main program for simulation and later use on FPGA.</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">always_rebuild</span> <span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">sw_test_rvlab</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">delta</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>sw_test_rvlab.build</li>
+<li>sw_test_rvlab.build</li>
+</ul>
+</dd>
+</dl>
+<p><p>Differential image for fast loading in simulator</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">sw_test_rvlab</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">run</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>sw_test_rvlab.build</li>
+</ul>
+</dd>
+</dl>
+<p><p>Run on FPGA via OpenOCD</p>
+</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">block</span> <span class="sig-name descname"><span class="pre">sw_test_irq</span></span> <em class="property"></em></dt>
+<dd><p><p>Program for the RISC-V CPU</p>
+</p>
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">always_rebuild</span> <span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">sw_test_irq</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">build</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>libc.build</li>
+<li>reggen.generate</li>
+</ul>
+</dd>
+</dl>
+<p><p>Main program for simulation and later use on FPGA.</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">always_rebuild</span> <span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">sw_test_irq</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">delta</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>sw_test_irq.build</li>
+<li>sw_test_rvlab.build</li>
+</ul>
+</dd>
+</dl>
+<p><p>Differential image for fast loading in simulator</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">sw_test_irq</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">run</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>sw_test_irq.build</li>
+</ul>
+</dd>
+</dl>
+<p><p>Run on FPGA via OpenOCD</p>
+</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">block</span> <span class="sig-name descname"><span class="pre">sw_rlight</span></span> <em class="property"></em></dt>
+<dd><p><p>Program for the RISC-V CPU</p>
+</p>
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">always_rebuild</span> <span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">sw_rlight</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">build</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>libc.build</li>
+<li>reggen.generate</li>
+</ul>
+</dd>
+</dl>
+<p><p>Main program for simulation and later use on FPGA.</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">always_rebuild</span> <span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">sw_rlight</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">delta</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>sw_rlight.build</li>
+<li>sw_test_rvlab.build</li>
+</ul>
+</dd>
+</dl>
+<p><p>Differential image for fast loading in simulator</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">sw_rlight</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">run</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>sw_rlight.build</li>
+</ul>
+</dd>
+</dl>
+<p><p>Run on FPGA via OpenOCD</p>
+</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">block</span> <span class="sig-name descname"><span class="pre">sw_dma</span></span> <em class="property"></em></dt>
+<dd><p><p>Program for the RISC-V CPU</p>
+</p>
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">always_rebuild</span> <span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">sw_dma</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">build</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>libc.build</li>
+<li>reggen.generate</li>
+</ul>
+</dd>
+</dl>
+<p><p>Main program for simulation and later use on FPGA.</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">always_rebuild</span> <span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">sw_dma</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">delta</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>sw_dma.build</li>
+<li>sw_test_rvlab.build</li>
+</ul>
+</dd>
+</dl>
+<p><p>Differential image for fast loading in simulator</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">sw_dma</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">run</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>sw_dma.build</li>
+</ul>
+</dd>
+</dl>
+<p><p>Run on FPGA via OpenOCD</p>
+</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">block</span> <span class="sig-name descname"><span class="pre">sw_project</span></span> <em class="property"></em></dt>
+<dd><p><p>Program for the RISC-V CPU</p>
+</p>
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">always_rebuild</span> <span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">sw_project</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">build</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>libc.build</li>
+<li>reggen.generate</li>
+</ul>
+</dd>
+</dl>
+<p><p>Main program for simulation and later use on FPGA.</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">always_rebuild</span> <span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">sw_project</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">delta</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>sw_project.build</li>
+<li>sw_test_rvlab.build</li>
+</ul>
+</dd>
+</dl>
+<p><p>Differential image for fast loading in simulator</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">sw_project</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">run</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>sw_project.build</li>
+</ul>
+</dd>
+</dl>
+<p><p>Run on FPGA via OpenOCD</p>
+</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">block</span> <span class="sig-name descname"><span class="pre">xbar</span></span> <em class="property"></em></dt>
+<dd><p><p>Crossbar switch generator using OpenTitan’s tlgen</p>
+</p>
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">xbar</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">generate</span></span></dt>
+<dd><p><p>Generate SystemVerilog sources</p>
+</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">block</span> <span class="sig-name descname"><span class="pre">reggen</span></span> <em class="property"></em></dt>
+<dd><p><p>Register generator using OpenTitan’s reggen</p>
+</p>
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">reggen</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">generate</span></span></dt>
+<dd><p><p>Generate SystemVerilog + C headers</p>
+</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">block</span> <span class="sig-name descname"><span class="pre">simlibs_questa</span></span> <em class="property"></em></dt>
+<dd><p><p>Xilinx simulation cell libraries for QuestaSim</p>
+</p>
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">simlibs_questa</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">secureip</span></span></dt>
+<dd><p><p>Encrypted simulation model library</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">simlibs_questa</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">simprims</span></span></dt>
+<dd><p><p>Library for timing-annotated netlist simulation</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">simlibs_questa</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">unisims</span></span></dt>
+<dd><p><p>Library for functional simulation</p>
+</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">block</span> <span class="sig-name descname"><span class="pre">srcs</span></span> <em class="property"></em></dt>
+<dd><p><p>Hardware sources</p>
+</p>
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">srcs</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">lint</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs_noddr</li>
+</ul>
+</dd>
+</dl>
+<p><p>Run static code quality assessment</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">always_rebuild</span> <span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">srcs</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">srcs</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs_noddr</li>
+<li>rvlab_mig.generate</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL + verification sources including DDR3</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">always_rebuild</span> <span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">srcs</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">srcs_noddr</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>xbar.generate</li>
+<li>reggen.generate</li>
+<li>sw_test_rvlab.build</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL + verification sources without DDR3</p>
+</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">block</span> <span class="sig-name descname"><span class="pre">rvlab_mig</span></span> <em class="property"></em></dt>
+<dd><p><p>Xilinx DDR3 Memory Interface Generator (MIG) IP</p>
+</p>
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">rvlab_mig</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">generate</span></span></dt>
+<dd><p><p>Generate IP</p>
+</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">block</span> <span class="sig-name descname"><span class="pre">rvlab_fpga_top</span></span> <em class="property"></em></dt>
+<dd><p><p>Top-level FPGA design</p>
+</p>
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">rvlab_fpga_top</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">bitstream</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>rvlab_fpga_top.pnr</li>
+</ul>
+</dd>
+</dl>
+<p><p>Generate bitstream from PNR result</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">rvlab_fpga_top</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">pnr</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>rvlab_fpga_top.syn</li>
+</ul>
+</dd>
+</dl>
+<p><p>Place and route netlist</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">rvlab_fpga_top</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">program</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>rvlab_fpga_top.bitstream</li>
+</ul>
+</dd>
+</dl>
+<p><p>Load bitstream to FPGA</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">rvlab_fpga_top</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">rtl_elaborate</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL elaboration in Vivado</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">rvlab_fpga_top</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">syn</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+</ul>
+</dd>
+</dl>
+<p><p>Synthesize FPGA netlist from RTL sources</p>
+</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">block</span> <span class="sig-name descname"><span class="pre">student_rlight_tb</span></span> <em class="property"></em></dt>
+<dd><p><p>Module-level testbench</p>
+</p>
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">student_rlight_tb</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_questa</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs_noddr</li>
+<li>simlibs_questa.unisims</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with QuestaSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">student_rlight_tb</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_questa_batch</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs_noddr</li>
+<li>simlibs_questa.unisims</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with QuestaSim (batch mode)</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">student_rlight_tb</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_xsim</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs_noddr</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with XSim</p>
+</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">block</span> <span class="sig-name descname"><span class="pre">student_tlul_mux_tb</span></span> <em class="property"></em></dt>
+<dd><p><p>Module-level testbench</p>
+</p>
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">student_tlul_mux_tb</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_questa</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs_noddr</li>
+<li>simlibs_questa.unisims</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with QuestaSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">student_tlul_mux_tb</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_questa_batch</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs_noddr</li>
+<li>simlibs_questa.unisims</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with QuestaSim (batch mode)</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">student_tlul_mux_tb</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_xsim</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs_noddr</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with XSim</p>
+</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">block</span> <span class="sig-name descname"><span class="pre">systb_monitor</span></span> <em class="property"></em></dt>
+<dd><p><p>System testbench</p>
+</p>
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_monitor</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_pnrtime_questa</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_monitor.delta</li>
+<li>simlibs_questa.simprims</li>
+<li>simlibs_questa.secureip</li>
+<li>rvlab_fpga_top.pnr</li>
+</ul>
+</dd>
+</dl>
+<p><p>Post-PNR timing simulation with QuestaSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_monitor</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_pnrtime_xsim</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_monitor.delta</li>
+<li>rvlab_fpga_top.pnr</li>
+</ul>
+</dd>
+</dl>
+<p><p>Post-PNR timing simulation with XSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_monitor</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_questa</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs_noddr</li>
+<li>sw_monitor.delta</li>
+<li>simlibs_questa.unisims</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with QuestaSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_monitor</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_questa_batch</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs_noddr</li>
+<li>sw_monitor.delta</li>
+<li>simlibs_questa.unisims</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with QuestaSim (batch mode)</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_monitor</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_questa_ddr</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_monitor.delta</li>
+<li>simlibs_questa.unisims</li>
+<li>simlibs_questa.secureip</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with QuestaSim including DDR3</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_monitor</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_xsim</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs_noddr</li>
+<li>sw_monitor.delta</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with XSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_monitor</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_xsim_ddr</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_monitor.delta</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with XSim including DDR3</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_monitor</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_synfunc_questa</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_monitor.delta</li>
+<li>simlibs_questa.unisims</li>
+<li>simlibs_questa.secureip</li>
+<li>rvlab_fpga_top.syn</li>
+</ul>
+</dd>
+</dl>
+<p><p>Post-synthesis functional simulation with QuestaSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_monitor</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_synfunc_xsim</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_monitor.delta</li>
+<li>rvlab_fpga_top.syn</li>
+</ul>
+</dd>
+</dl>
+<p><p>Post-synthesis functional simulation with XSim</p>
+</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">block</span> <span class="sig-name descname"><span class="pre">systb_minimal</span></span> <em class="property"></em></dt>
+<dd><p><p>System testbench</p>
+</p>
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_minimal</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_pnrtime_questa</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_minimal.delta</li>
+<li>simlibs_questa.simprims</li>
+<li>simlibs_questa.secureip</li>
+<li>rvlab_fpga_top.pnr</li>
+</ul>
+</dd>
+</dl>
+<p><p>Post-PNR timing simulation with QuestaSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_minimal</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_pnrtime_xsim</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_minimal.delta</li>
+<li>rvlab_fpga_top.pnr</li>
+</ul>
+</dd>
+</dl>
+<p><p>Post-PNR timing simulation with XSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_minimal</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_questa</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs_noddr</li>
+<li>sw_minimal.delta</li>
+<li>simlibs_questa.unisims</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with QuestaSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_minimal</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_questa_batch</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs_noddr</li>
+<li>sw_minimal.delta</li>
+<li>simlibs_questa.unisims</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with QuestaSim (batch mode)</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_minimal</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_questa_ddr</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_minimal.delta</li>
+<li>simlibs_questa.unisims</li>
+<li>simlibs_questa.secureip</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with QuestaSim including DDR3</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_minimal</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_xsim</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs_noddr</li>
+<li>sw_minimal.delta</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with XSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_minimal</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_xsim_ddr</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_minimal.delta</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with XSim including DDR3</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_minimal</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_synfunc_questa</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_minimal.delta</li>
+<li>simlibs_questa.unisims</li>
+<li>simlibs_questa.secureip</li>
+<li>rvlab_fpga_top.syn</li>
+</ul>
+</dd>
+</dl>
+<p><p>Post-synthesis functional simulation with QuestaSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_minimal</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_synfunc_xsim</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_minimal.delta</li>
+<li>rvlab_fpga_top.syn</li>
+</ul>
+</dd>
+</dl>
+<p><p>Post-synthesis functional simulation with XSim</p>
+</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">block</span> <span class="sig-name descname"><span class="pre">systb_test_sim_ddr</span></span> <em class="property"></em></dt>
+<dd><p><p>System testbench</p>
+</p>
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_test_sim_ddr</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_pnrtime_questa</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_test_sim_ddr.delta</li>
+<li>simlibs_questa.simprims</li>
+<li>simlibs_questa.secureip</li>
+<li>rvlab_fpga_top.pnr</li>
+</ul>
+</dd>
+</dl>
+<p><p>Post-PNR timing simulation with QuestaSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_test_sim_ddr</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_pnrtime_xsim</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_test_sim_ddr.delta</li>
+<li>rvlab_fpga_top.pnr</li>
+</ul>
+</dd>
+</dl>
+<p><p>Post-PNR timing simulation with XSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_test_sim_ddr</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_questa</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs_noddr</li>
+<li>sw_test_sim_ddr.delta</li>
+<li>simlibs_questa.unisims</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with QuestaSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_test_sim_ddr</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_questa_batch</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs_noddr</li>
+<li>sw_test_sim_ddr.delta</li>
+<li>simlibs_questa.unisims</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with QuestaSim (batch mode)</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_test_sim_ddr</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_questa_ddr</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_test_sim_ddr.delta</li>
+<li>simlibs_questa.unisims</li>
+<li>simlibs_questa.secureip</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with QuestaSim including DDR3</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_test_sim_ddr</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_xsim</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs_noddr</li>
+<li>sw_test_sim_ddr.delta</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with XSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_test_sim_ddr</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_xsim_ddr</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_test_sim_ddr.delta</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with XSim including DDR3</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_test_sim_ddr</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_synfunc_questa</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_test_sim_ddr.delta</li>
+<li>simlibs_questa.unisims</li>
+<li>simlibs_questa.secureip</li>
+<li>rvlab_fpga_top.syn</li>
+</ul>
+</dd>
+</dl>
+<p><p>Post-synthesis functional simulation with QuestaSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_test_sim_ddr</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_synfunc_xsim</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_test_sim_ddr.delta</li>
+<li>rvlab_fpga_top.syn</li>
+</ul>
+</dd>
+</dl>
+<p><p>Post-synthesis functional simulation with XSim</p>
+</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">block</span> <span class="sig-name descname"><span class="pre">systb_test_rvlab</span></span> <em class="property"></em></dt>
+<dd><p><p>System testbench</p>
+</p>
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_test_rvlab</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_pnrtime_questa</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_test_rvlab.delta</li>
+<li>simlibs_questa.simprims</li>
+<li>simlibs_questa.secureip</li>
+<li>rvlab_fpga_top.pnr</li>
+</ul>
+</dd>
+</dl>
+<p><p>Post-PNR timing simulation with QuestaSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_test_rvlab</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_pnrtime_xsim</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_test_rvlab.delta</li>
+<li>rvlab_fpga_top.pnr</li>
+</ul>
+</dd>
+</dl>
+<p><p>Post-PNR timing simulation with XSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_test_rvlab</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_questa</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs_noddr</li>
+<li>sw_test_rvlab.delta</li>
+<li>simlibs_questa.unisims</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with QuestaSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_test_rvlab</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_questa_batch</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs_noddr</li>
+<li>sw_test_rvlab.delta</li>
+<li>simlibs_questa.unisims</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with QuestaSim (batch mode)</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_test_rvlab</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_questa_ddr</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_test_rvlab.delta</li>
+<li>simlibs_questa.unisims</li>
+<li>simlibs_questa.secureip</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with QuestaSim including DDR3</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_test_rvlab</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_xsim</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs_noddr</li>
+<li>sw_test_rvlab.delta</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with XSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_test_rvlab</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_xsim_ddr</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_test_rvlab.delta</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with XSim including DDR3</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_test_rvlab</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_synfunc_questa</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_test_rvlab.delta</li>
+<li>simlibs_questa.unisims</li>
+<li>simlibs_questa.secureip</li>
+<li>rvlab_fpga_top.syn</li>
+</ul>
+</dd>
+</dl>
+<p><p>Post-synthesis functional simulation with QuestaSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_test_rvlab</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_synfunc_xsim</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_test_rvlab.delta</li>
+<li>rvlab_fpga_top.syn</li>
+</ul>
+</dd>
+</dl>
+<p><p>Post-synthesis functional simulation with XSim</p>
+</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">block</span> <span class="sig-name descname"><span class="pre">systb_test_irq</span></span> <em class="property"></em></dt>
+<dd><p><p>System testbench</p>
+</p>
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_test_irq</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_pnrtime_questa</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_test_irq.delta</li>
+<li>simlibs_questa.simprims</li>
+<li>simlibs_questa.secureip</li>
+<li>rvlab_fpga_top.pnr</li>
+</ul>
+</dd>
+</dl>
+<p><p>Post-PNR timing simulation with QuestaSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_test_irq</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_pnrtime_xsim</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_test_irq.delta</li>
+<li>rvlab_fpga_top.pnr</li>
+</ul>
+</dd>
+</dl>
+<p><p>Post-PNR timing simulation with XSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_test_irq</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_questa</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs_noddr</li>
+<li>sw_test_irq.delta</li>
+<li>simlibs_questa.unisims</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with QuestaSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_test_irq</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_questa_batch</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs_noddr</li>
+<li>sw_test_irq.delta</li>
+<li>simlibs_questa.unisims</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with QuestaSim (batch mode)</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_test_irq</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_questa_ddr</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_test_irq.delta</li>
+<li>simlibs_questa.unisims</li>
+<li>simlibs_questa.secureip</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with QuestaSim including DDR3</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_test_irq</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_xsim</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs_noddr</li>
+<li>sw_test_irq.delta</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with XSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_test_irq</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_xsim_ddr</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_test_irq.delta</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with XSim including DDR3</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_test_irq</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_synfunc_questa</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_test_irq.delta</li>
+<li>simlibs_questa.unisims</li>
+<li>simlibs_questa.secureip</li>
+<li>rvlab_fpga_top.syn</li>
+</ul>
+</dd>
+</dl>
+<p><p>Post-synthesis functional simulation with QuestaSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_test_irq</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_synfunc_xsim</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_test_irq.delta</li>
+<li>rvlab_fpga_top.syn</li>
+</ul>
+</dd>
+</dl>
+<p><p>Post-synthesis functional simulation with XSim</p>
+</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">block</span> <span class="sig-name descname"><span class="pre">systb_rlight</span></span> <em class="property"></em></dt>
+<dd><p><p>System testbench</p>
+</p>
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_rlight</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_pnrtime_questa</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_rlight.delta</li>
+<li>simlibs_questa.simprims</li>
+<li>simlibs_questa.secureip</li>
+<li>rvlab_fpga_top.pnr</li>
+</ul>
+</dd>
+</dl>
+<p><p>Post-PNR timing simulation with QuestaSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_rlight</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_pnrtime_xsim</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_rlight.delta</li>
+<li>rvlab_fpga_top.pnr</li>
+</ul>
+</dd>
+</dl>
+<p><p>Post-PNR timing simulation with XSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_rlight</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_questa</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs_noddr</li>
+<li>sw_rlight.delta</li>
+<li>simlibs_questa.unisims</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with QuestaSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_rlight</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_questa_batch</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs_noddr</li>
+<li>sw_rlight.delta</li>
+<li>simlibs_questa.unisims</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with QuestaSim (batch mode)</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_rlight</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_questa_ddr</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_rlight.delta</li>
+<li>simlibs_questa.unisims</li>
+<li>simlibs_questa.secureip</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with QuestaSim including DDR3</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_rlight</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_xsim</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs_noddr</li>
+<li>sw_rlight.delta</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with XSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_rlight</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_xsim_ddr</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_rlight.delta</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with XSim including DDR3</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_rlight</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_synfunc_questa</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_rlight.delta</li>
+<li>simlibs_questa.unisims</li>
+<li>simlibs_questa.secureip</li>
+<li>rvlab_fpga_top.syn</li>
+</ul>
+</dd>
+</dl>
+<p><p>Post-synthesis functional simulation with QuestaSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_rlight</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_synfunc_xsim</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_rlight.delta</li>
+<li>rvlab_fpga_top.syn</li>
+</ul>
+</dd>
+</dl>
+<p><p>Post-synthesis functional simulation with XSim</p>
+</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">block</span> <span class="sig-name descname"><span class="pre">systb_dma</span></span> <em class="property"></em></dt>
+<dd><p><p>System testbench</p>
+</p>
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_dma</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_pnrtime_questa</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_dma.delta</li>
+<li>simlibs_questa.simprims</li>
+<li>simlibs_questa.secureip</li>
+<li>rvlab_fpga_top.pnr</li>
+</ul>
+</dd>
+</dl>
+<p><p>Post-PNR timing simulation with QuestaSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_dma</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_pnrtime_xsim</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_dma.delta</li>
+<li>rvlab_fpga_top.pnr</li>
+</ul>
+</dd>
+</dl>
+<p><p>Post-PNR timing simulation with XSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_dma</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_questa</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs_noddr</li>
+<li>sw_dma.delta</li>
+<li>simlibs_questa.unisims</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with QuestaSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_dma</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_questa_batch</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs_noddr</li>
+<li>sw_dma.delta</li>
+<li>simlibs_questa.unisims</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with QuestaSim (batch mode)</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_dma</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_questa_ddr</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_dma.delta</li>
+<li>simlibs_questa.unisims</li>
+<li>simlibs_questa.secureip</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with QuestaSim including DDR3</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_dma</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_xsim</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs_noddr</li>
+<li>sw_dma.delta</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with XSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_dma</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_xsim_ddr</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_dma.delta</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with XSim including DDR3</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_dma</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_synfunc_questa</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_dma.delta</li>
+<li>simlibs_questa.unisims</li>
+<li>simlibs_questa.secureip</li>
+<li>rvlab_fpga_top.syn</li>
+</ul>
+</dd>
+</dl>
+<p><p>Post-synthesis functional simulation with QuestaSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_dma</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_synfunc_xsim</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_dma.delta</li>
+<li>rvlab_fpga_top.syn</li>
+</ul>
+</dd>
+</dl>
+<p><p>Post-synthesis functional simulation with XSim</p>
+</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">block</span> <span class="sig-name descname"><span class="pre">systb_project</span></span> <em class="property"></em></dt>
+<dd><p><p>System testbench</p>
+</p>
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_project</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_pnrtime_questa</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_project.delta</li>
+<li>simlibs_questa.simprims</li>
+<li>simlibs_questa.secureip</li>
+<li>rvlab_fpga_top.pnr</li>
+</ul>
+</dd>
+</dl>
+<p><p>Post-PNR timing simulation with QuestaSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_project</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_pnrtime_xsim</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_project.delta</li>
+<li>rvlab_fpga_top.pnr</li>
+</ul>
+</dd>
+</dl>
+<p><p>Post-PNR timing simulation with XSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_project</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_questa</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs_noddr</li>
+<li>sw_project.delta</li>
+<li>simlibs_questa.unisims</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with QuestaSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_project</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_questa_batch</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs_noddr</li>
+<li>sw_project.delta</li>
+<li>simlibs_questa.unisims</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with QuestaSim (batch mode)</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_project</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_questa_ddr</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_project.delta</li>
+<li>simlibs_questa.unisims</li>
+<li>simlibs_questa.secureip</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with QuestaSim including DDR3</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_project</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_xsim</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs_noddr</li>
+<li>sw_project.delta</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with XSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_project</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_rtl_xsim_ddr</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_project.delta</li>
+</ul>
+</dd>
+</dl>
+<p><p>RTL simulation with XSim including DDR3</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_project</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_synfunc_questa</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_project.delta</li>
+<li>simlibs_questa.unisims</li>
+<li>simlibs_questa.secureip</li>
+<li>rvlab_fpga_top.syn</li>
+</ul>
+</dd>
+</dl>
+<p><p>Post-synthesis functional simulation with QuestaSim</p>
+</p>
+</dd></dl>
+
+<dl class="object">
+<dt class="sig sig-object">
+<span class="pre">target</span> <span class="sig-prename descclassname"><span class="pre">systb_project</span></span><span class="pre">.</span><span class="sig-name descname"><span class="pre">sim_synfunc_xsim</span></span></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Requires<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li>srcs.srcs</li>
+<li>sw_project.delta</li>
+<li>rvlab_fpga_top.syn</li>
+</ul>
+</dd>
+</dl>
+<p><p>Post-synthesis functional simulation with XSim</p>
+</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ddr3_memory.html" class="btn btn-neutral float-left" title="DDR3 Memory" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../tutorials/index.html" class="btn btn-neutral float-right" title="Tutorials" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

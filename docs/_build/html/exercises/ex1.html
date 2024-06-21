@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ex. 1: HDL entry and simulation &mdash; RISC-V Lab  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/reg_html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Ex. 2: Logic synthesis, P&amp;R and netlist simulation" href="ex2.html" />
+    <link rel="prev" title="Exercise Sheets &amp; Slides" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            RISC-V Lab
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Exercise Sheets &amp; Slides</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Ex. 1: HDL entry and simulation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#objectives">Objectives</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preparation">Preparation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tasks">Tasks</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ex2.html">Ex. 2: Logic synthesis, P&amp;R and netlist simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ex3.html">Ex. 3: Software development and system simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ex4.html">Ex. 4: DMA / TL-UL host implementation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ex5.html">Ex.5: Hierarchical buses and cascaded interrupts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#slides">Slides</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../project/index.html">Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../design_ref/index.html">Design Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../resources/index.html">Resources</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">RISC-V Lab</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Exercise Sheets &amp; Slides</a></li>
+      <li class="breadcrumb-item active">Ex. 1: HDL entry and simulation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/exercises/ex1.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ex-1-hdl-entry-and-simulation">
+<span id="ex1"></span><h1>Ex. 1: HDL entry and simulation<a class="headerlink" href="#ex-1-hdl-entry-and-simulation" title="Permalink to this heading"></a></h1>
+<section id="objectives">
+<h2>Objectives<a class="headerlink" href="#objectives" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>solve simple problem using HDL</p>
+<ul>
+<li><p>register read / write</p></li>
+<li><p>simple state machines</p></li>
+</ul>
+</li>
+<li><p>RTL simulation using QuestaSim</p></li>
+<li><p>get an overview of the rvlab repository</p></li>
+</ul>
+</section>
+<section id="preparation">
+<h2>Preparation<a class="headerlink" href="#preparation" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>First of all it is necessary to get to know the overall <a class="reference internal" href="../design_ref/directory_structure.html#directory-structure"><span class="std std-ref">Directory Structure</span></a> of the RISC-V laboratory.</p></li>
+<li><p>Make yourself familiar with the basics of the <a class="reference internal" href="../tutorials/flow.html#design-flow"><span class="std std-ref">Design Flow Recipes</span></a>.</p></li>
+<li><p>If you haven’t used QuestaSim before read the <a class="reference internal" href="../tutorials/questasim_guide.html#questa-sim"><span class="std std-ref">QuestaSim Guide</span></a> tutorial.</p></li>
+<li><p>If you a new to System Verilog take part in the System Verilog crash course and study the “Verilog” section on the <a class="reference internal" href="../resources/index.html#resources"><span class="std std-ref">Resources</span></a> page.</p></li>
+</ul>
+<p><strong>Blinkenlichten (start up project)</strong></p>
+<p>As an introductory project a simple running light (<a class="reference external" href="https://en.wikipedia.org/wiki/Blinkenlights">blinkenlichten</a>) is to be designed and simulated which controls the eight LEDs connected to the FPGA.</p>
+</section>
+<section id="tasks">
+<h2>Tasks<a class="headerlink" href="#tasks" title="Permalink to this heading"></a></h2>
+<p><strong>1. Develop a running light with the following functionality</strong></p>
+<ul class="simple">
+<li><p>Any LED pattern can be programmed into a pattern register</p></li>
+<li><p>There should be four modes of the running light:</p>
+<ul>
+<li><p><strong>rotation left</strong>: The pattern is shifted left (in direction of the MSB, bit 7) every N clock cycles. The value of bit 7 is shifted to bit 0.</p></li>
+<li><p><strong>rotation right</strong>: The pattern is shifted right (in direction of the LSB, bit 0) every N clock cycles. The value of bit 0 is shifted to bit 7.</p></li>
+<li><p><strong>ping pong</strong>: The pattern is shifted left every N clock cycles until the initial value from bit 0 has reached bit 7.
+The values shifted beyond bit 7 are not copied to bit 0 but are preserved internally.
+After the value of bit 0 has reached bit 6 the direction is reversed.
+The bits previously shifted out appear successively at bit 7 until the original pattern is restored. Then the pattern is
+shifted further right until the original value of bit 7 has reached bit 0 upon which the direction
+is reversed again.</p></li>
+<li><p><strong>stop</strong>: The currently displayed pattern is kept.</p></li>
+</ul>
+</li>
+<li><p>N should be programmable with a register (Note: the FPGA internally operates with 60 MHz).</p></li>
+<li><p>A status register reflects the current status of the LEDs</p></li>
+<li><p>All registers must be readable by the CPU via the register bus.</p></li>
+<li><p>A maximum of four 32bit addresses (relative addresses 0x0, 0x4, 0x8, 0xC) of the address space may be used to access the registers of the running light.</p></li>
+<li><p>After a reset your running light should start in ping pong mode with a reasonable speed and pattern. In the final project this pattern is used to distinguish your project from the other projects when loaded into the FPGA.</p></li>
+</ul>
+<p>Use the template <em>rvlab/src/rtl/student/student_rlight.sv</em> to implement your running light.
+It contains <em>tul_adapter_reg</em> converting TileLink Uncached Lightweight (TL-UL)  to the register bus to be used by your code.
+Replace / modify the demo FSM and register read write processes to implement the running light.</p>
+<a class="reference internal image-reference" href="../_images/rlight_tb.svg"><img alt="../_images/rlight_tb.svg" src="../_images/rlight_tb.svg" width="600" /></a>
+<p><strong>2. Simulate</strong></p>
+<p>Test your running light with the test bench <em>rvlab/src/fv/student_rlight_tb.sv</em> , which instantiates your running light and simulates TL-UL write accesses to
+your module.</p>
+<p>Extend the test bench to cover the following functionality:</p>
+<ul class="simple">
+<li><p>All registers should be read and written at least once.</p></li>
+<li><p>All modes should be tested at least once</p></li>
+<li><p>Check how the design behaves if the pattern or delay is changed during operation (i.e. delay changes from 10 to 20 to 8 cycles). At no time should a delay or pattern be displayed which has not been programmed.</p></li>
+</ul>
+<p>To compile your design and invoke QuestaSim for simulation <em>from the rvlab directory</em>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">flow</span> <span class="n">student_rlight_tb</span><span class="o">.</span><span class="n">sim_rtl_questa</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="Exercise Sheets &amp; Slides" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ex2.html" class="btn btn-neutral float-right" title="Ex. 2: Logic synthesis, P&amp;R and netlist simulation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

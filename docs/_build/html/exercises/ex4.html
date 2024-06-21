@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ex. 4: DMA / TL-UL host implementation &mdash; RISC-V Lab  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/reg_html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Ex.5: Hierarchical buses and cascaded interrupts" href="ex5.html" />
+    <link rel="prev" title="Ex. 3: Software development and system simulation" href="ex3.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            RISC-V Lab
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="index.html">Exercise Sheets &amp; Slides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="ex1.html">Ex. 1: HDL entry and simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ex2.html">Ex. 2: Logic synthesis, P&amp;R and netlist simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ex3.html">Ex. 3: Software development and system simulation</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Ex. 4: DMA / TL-UL host implementation</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#objectives">Objectives</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#preparation">Preparation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#tasks">Tasks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#deliverables">Deliverables</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="ex5.html">Ex.5: Hierarchical buses and cascaded interrupts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="index.html#slides">Slides</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../project/index.html">Project</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../design_ref/index.html">Design Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials/index.html">Tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../resources/index.html">Resources</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">RISC-V Lab</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="index.html">Exercise Sheets &amp; Slides</a></li>
+      <li class="breadcrumb-item active">Ex. 4: DMA / TL-UL host implementation</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/exercises/ex4.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="ex-4-dma-tl-ul-host-implementation">
+<span id="ex4"></span><h1>Ex. 4: DMA / TL-UL host implementation<a class="headerlink" href="#ex-4-dma-tl-ul-host-implementation" title="Permalink to this heading"></a></h1>
+<p>The past exercises only used a “register bus” device interface for transferring data to/from your student module. In this exercise you will extend a simple TL-UL host. This will form the base for your own, application specific bus master.</p>
+<section id="objectives">
+<h2>Objectives<a class="headerlink" href="#objectives" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>working knowledge of Tilelink Uncached Lightweight (TL-UL)</p></li>
+<li><p>develop architectures using DMA controlled by simple descriptors</p></li>
+</ul>
+</section>
+<section id="preparation">
+<h2>Preparation<a class="headerlink" href="#preparation" title="Permalink to this heading"></a></h2>
+<ul class="simple">
+<li><p>Study the TileLink Uncached Lightweight (TL-UL) specification linked on the <a class="reference internal" href="../resources/index.html#resources"><span class="std std-ref">Resources</span></a> page. Read at least chapters 1-4 and 7. Only topics related to TL-UL must be read, i.e. skip sections dealing with TL-C and Bursts.</p></li>
+</ul>
+</section>
+<section id="tasks">
+<h2>Tasks<a class="headerlink" href="#tasks" title="Permalink to this heading"></a></h2>
+<p><strong>1. Explore the example</strong></p>
+<p><em>rvlab/src/rtl/student/student_dma.sv</em> contains a TL-UL host implementing memset which fills a given memory area with a constant value.  The module <em>student_dma</em> is already instantiated in <em>rvlab/src/rtl/student/student.sv</em> and connected as a host and device to the main TL-UL crossbar. Its CPU accessible registers are defined in <em>rvlab/src/design/reggen/student_dma.json</em>:</p>
+<table class="regdef" id="Reg_status">
+<tr><th class="regdef" colspan=5><div>student_dma.status @ + 0x0</div><div>Status</div><div>Reset default = 0x0, mask 0x3</div></th></tr>
+<tr><td colspan=5><table class="regpic"><tr><td class="bitnum">31</td><td class="bitnum">30</td><td class="bitnum">29</td><td class="bitnum">28</td><td class="bitnum">27</td><td class="bitnum">26</td><td class="bitnum">25</td><td class="bitnum">24</td><td class="bitnum">23</td><td class="bitnum">22</td><td class="bitnum">21</td><td class="bitnum">20</td><td class="bitnum">19</td><td class="bitnum">18</td><td class="bitnum">17</td><td class="bitnum">16</td></tr><tr><td class="unused" colspan=16>&nbsp;</td>
+</tr>
+<tr><td class="bitnum">15</td><td class="bitnum">14</td><td class="bitnum">13</td><td class="bitnum">12</td><td class="bitnum">11</td><td class="bitnum">10</td><td class="bitnum">9</td><td class="bitnum">8</td><td class="bitnum">7</td><td class="bitnum">6</td><td class="bitnum">5</td><td class="bitnum">4</td><td class="bitnum">3</td><td class="bitnum">2</td><td class="bitnum">1</td><td class="bitnum">0</td></tr><tr><td class="unused" colspan=14>&nbsp;</td>
+<td class="fname" colspan=2>val</td>
+</tr></table></td></tr>
+<tr><th width=5%>Bits</th><th width=5%>Type</th><th width=5%>Reset</th><th>Name</th><th>Description</th></tr><tr><td class="regbits">1:0</td><td class="regperm">ro</td><td class="regrv">0x0</td><td class="regfn">val</td><td class="regde">0 = idle, 1 = memset in progress, 2 = memcp in progress
+</td></tr>
+</table>
+<br><br>
+<table class="regdef" id="Reg_now_dadr">
+<tr><th class="regdef" colspan=5><div>student_dma.now_dadr @ + 0x4</div><div>Pointer to descriptor. Writing while idle will start the operation. Writes while not idle are ignored. Must be 32bit aligned [1:0]=0.</div><div>Reset default = 0x0, mask 0xffffffff</div></th></tr>
+<tr><td colspan=5><table class="regpic"><tr><td class="bitnum">31</td><td class="bitnum">30</td><td class="bitnum">29</td><td class="bitnum">28</td><td class="bitnum">27</td><td class="bitnum">26</td><td class="bitnum">25</td><td class="bitnum">24</td><td class="bitnum">23</td><td class="bitnum">22</td><td class="bitnum">21</td><td class="bitnum">20</td><td class="bitnum">19</td><td class="bitnum">18</td><td class="bitnum">17</td><td class="bitnum">16</td></tr><tr><td class="fname" colspan=16>val...</td>
+</tr>
+<tr><td class="bitnum">15</td><td class="bitnum">14</td><td class="bitnum">13</td><td class="bitnum">12</td><td class="bitnum">11</td><td class="bitnum">10</td><td class="bitnum">9</td><td class="bitnum">8</td><td class="bitnum">7</td><td class="bitnum">6</td><td class="bitnum">5</td><td class="bitnum">4</td><td class="bitnum">3</td><td class="bitnum">2</td><td class="bitnum">1</td><td class="bitnum">0</td></tr><tr><td class="fname" colspan=16>...val</td>
+</tr></table></td></tr>
+<tr><th width=5%>Bits</th><th width=5%>Type</th><th width=5%>Reset</th><th>Name</th><th>Description</th></tr><tr><td class="regbits">31:0</td><td class="regperm">rw</td><td class="regrv">0x0</td><td class="regfn">val</td><td class="regde">
+</td></tr>
+</table>
+<br><br>
+<table class="regdef" id="Reg_cmd">
+<tr><th class="regdef" colspan=5><div>student_dma.cmd @ + 0x8</div><div>Command.</div><div>Reset default = 0x0, mask 0x0</div></th></tr>
+<tr><td colspan=5><table class="regpic"><tr><td class="bitnum">31</td><td class="bitnum">30</td><td class="bitnum">29</td><td class="bitnum">28</td><td class="bitnum">27</td><td class="bitnum">26</td><td class="bitnum">25</td><td class="bitnum">24</td><td class="bitnum">23</td><td class="bitnum">22</td><td class="bitnum">21</td><td class="bitnum">20</td><td class="bitnum">19</td><td class="bitnum">18</td><td class="bitnum">17</td><td class="bitnum">16</td></tr><tr><td class="unused" colspan=16>&nbsp;</td>
+</tr>
+<tr><td class="bitnum">15</td><td class="bitnum">14</td><td class="bitnum">13</td><td class="bitnum">12</td><td class="bitnum">11</td><td class="bitnum">10</td><td class="bitnum">9</td><td class="bitnum">8</td><td class="bitnum">7</td><td class="bitnum">6</td><td class="bitnum">5</td><td class="bitnum">4</td><td class="bitnum">3</td><td class="bitnum">2</td><td class="bitnum">1</td><td class="bitnum">0</td></tr><tr><td class="unused" colspan=15>&nbsp;</td>
+<td class="fname" colspan=1 style="font-size:75.0%">stop</td>
+</tr></table></td></tr>
+<tr><th width=5%>Bits</th><th width=5%>Type</th><th width=5%>Reset</th><th>Name</th><th>Description</th></tr><tr><td class="regbits">0</td><td class="regperm">wo</td><td class="regrv">x</td><td class="regfn">stop</td><td class="regde">1 - abort current operation
+</td></tr>
+</table>
+<br><br>
+<table class="regdef" id="Reg_length">
+<tr><th class="regdef" colspan=5><div>student_dma.length @ + 0xc</div><div>number of bytes remaining to be set / copied</div><div>Reset default = 0x0, mask 0xffffffff</div></th></tr>
+<tr><td colspan=5><table class="regpic"><tr><td class="bitnum">31</td><td class="bitnum">30</td><td class="bitnum">29</td><td class="bitnum">28</td><td class="bitnum">27</td><td class="bitnum">26</td><td class="bitnum">25</td><td class="bitnum">24</td><td class="bitnum">23</td><td class="bitnum">22</td><td class="bitnum">21</td><td class="bitnum">20</td><td class="bitnum">19</td><td class="bitnum">18</td><td class="bitnum">17</td><td class="bitnum">16</td></tr><tr><td class="fname" colspan=16>val...</td>
+</tr>
+<tr><td class="bitnum">15</td><td class="bitnum">14</td><td class="bitnum">13</td><td class="bitnum">12</td><td class="bitnum">11</td><td class="bitnum">10</td><td class="bitnum">9</td><td class="bitnum">8</td><td class="bitnum">7</td><td class="bitnum">6</td><td class="bitnum">5</td><td class="bitnum">4</td><td class="bitnum">3</td><td class="bitnum">2</td><td class="bitnum">1</td><td class="bitnum">0</td></tr><tr><td class="fname" colspan=16>...val</td>
+</tr></table></td></tr>
+<tr><th width=5%>Bits</th><th width=5%>Type</th><th width=5%>Reset</th><th>Name</th><th>Description</th></tr><tr><td class="regbits">31:0</td><td class="regperm">ro</td><td class="regrv">0x0</td><td class="regfn">val</td><td class="regde">
+</td></tr>
+</table>
+<br><br>
+<table class="regdef" id="Reg_src_adr">
+<tr><th class="regdef" colspan=5><div>student_dma.src_adr @ + 0x10</div><div>memset: fill value. memcpy: current read address</div><div>Reset default = 0x0, mask 0xffffffff</div></th></tr>
+<tr><td colspan=5><table class="regpic"><tr><td class="bitnum">31</td><td class="bitnum">30</td><td class="bitnum">29</td><td class="bitnum">28</td><td class="bitnum">27</td><td class="bitnum">26</td><td class="bitnum">25</td><td class="bitnum">24</td><td class="bitnum">23</td><td class="bitnum">22</td><td class="bitnum">21</td><td class="bitnum">20</td><td class="bitnum">19</td><td class="bitnum">18</td><td class="bitnum">17</td><td class="bitnum">16</td></tr><tr><td class="fname" colspan=16>val...</td>
+</tr>
+<tr><td class="bitnum">15</td><td class="bitnum">14</td><td class="bitnum">13</td><td class="bitnum">12</td><td class="bitnum">11</td><td class="bitnum">10</td><td class="bitnum">9</td><td class="bitnum">8</td><td class="bitnum">7</td><td class="bitnum">6</td><td class="bitnum">5</td><td class="bitnum">4</td><td class="bitnum">3</td><td class="bitnum">2</td><td class="bitnum">1</td><td class="bitnum">0</td></tr><tr><td class="fname" colspan=16>...val</td>
+</tr></table></td></tr>
+<tr><th width=5%>Bits</th><th width=5%>Type</th><th width=5%>Reset</th><th>Name</th><th>Description</th></tr><tr><td class="regbits">31:0</td><td class="regperm">ro</td><td class="regrv">0x0</td><td class="regfn">val</td><td class="regde">
+</td></tr>
+</table>
+<br><br>
+<table class="regdef" id="Reg_dst_adr">
+<tr><th class="regdef" colspan=5><div>student_dma.dst_adr @ + 0x14</div><div>current write address</div><div>Reset default = 0x0, mask 0xffffffff</div></th></tr>
+<tr><td colspan=5><table class="regpic"><tr><td class="bitnum">31</td><td class="bitnum">30</td><td class="bitnum">29</td><td class="bitnum">28</td><td class="bitnum">27</td><td class="bitnum">26</td><td class="bitnum">25</td><td class="bitnum">24</td><td class="bitnum">23</td><td class="bitnum">22</td><td class="bitnum">21</td><td class="bitnum">20</td><td class="bitnum">19</td><td class="bitnum">18</td><td class="bitnum">17</td><td class="bitnum">16</td></tr><tr><td class="fname" colspan=16>val...</td>
+</tr>
+<tr><td class="bitnum">15</td><td class="bitnum">14</td><td class="bitnum">13</td><td class="bitnum">12</td><td class="bitnum">11</td><td class="bitnum">10</td><td class="bitnum">9</td><td class="bitnum">8</td><td class="bitnum">7</td><td class="bitnum">6</td><td class="bitnum">5</td><td class="bitnum">4</td><td class="bitnum">3</td><td class="bitnum">2</td><td class="bitnum">1</td><td class="bitnum">0</td></tr><tr><td class="fname" colspan=16>...val</td>
+</tr></table></td></tr>
+<tr><th width=5%>Bits</th><th width=5%>Type</th><th width=5%>Reset</th><th>Name</th><th>Description</th></tr><tr><td class="regbits">31:0</td><td class="regperm">ro</td><td class="regrv">0x0</td><td class="regfn">val</td><td class="regde">
+</td></tr>
+</table>
+<br><br>
+<p>Note: To simplify the operation of the bus master module only 32-bit accesses aligned to 4-byte boundaries are
+used. Smaller accesses would involve more complex logic.</p>
+<p>The descriptor is as follows:</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>offset</p></th>
+<th class="head"><p>size</p></th>
+<th class="head"><p>name</p></th>
+<th class="head"><p>description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>0x0</p></td>
+<td><p>0x4</p></td>
+<td><p>operation</p></td>
+<td><p>0 = memset, 1 = memcpy</p></td>
+</tr>
+<tr class="row-odd"><td><p>0x4</p></td>
+<td><p>0x4</p></td>
+<td><p>length</p></td>
+<td><p>number of bytes to be set (multiple of 4)</p></td>
+</tr>
+<tr class="row-even"><td><p>0x8</p></td>
+<td><p>0x4</p></td>
+<td><p>src_adr</p></td>
+<td><p>memset: fill value. memcpy: 1st address of the source buffer (32 bit word aligned)</p></td>
+</tr>
+<tr class="row-odd"><td><p>0xc</p></td>
+<td><p>0x4</p></td>
+<td><p>dst_adr</p></td>
+<td><p>1st address of the destination buffer (32 bit word aligned)</p></td>
+</tr>
+</tbody>
+</table>
+<p>Simulate and test by running:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">flow</span> <span class="n">systb_dma</span><span class="o">.</span><span class="n">sim_rtl_questa</span>
+</pre></div>
+</div>
+<p><strong>2. Hardware implementation</strong></p>
+<p>Extend the module to implement a function called memcpy, which copies one memory area to another. The register and descriptor definitions remain unchanged.
+The module should use the maximum bandwidth available from the TL-UL interface, i.e. there should always be <strong>simultaneous</strong> (pending) read and write transactions. Use a (short) FIFO (use e.g. <em>src/rtl/prim/prim_fifo_sync.sv</em>) between read and write processes to achieve this.</p>
+<p><strong>3. Software implementation</strong></p>
+<p>Sample implementations of the memset function are available in <em>rvlab/src/sw/dma/memset.c/h</em>. The function memset_soft is a complete software implementation of memset, memset_dma uses the hardware implementation to fill a memory area. <em>rvlab/src/sw/dma/memcpy.c/h</em> provides stubs for memcpy_soft and memcpy_dma. Extend memcpy_soft to contain a complete software implementation of mem copy with the same functionality as your hardware implementation. Complete memcpy_dma so it invokes your hardware implementation.</p>
+<p><strong>4. Test cases</strong></p>
+<p>Small test cases for memset_soft, memset_dma, memcpy_soft and and memcpy_dma are provided in <em>dma/main.c</em>.</p>
+<p>If you encounter problems, feel free to modify the test cases or add own tests. Make sure you do not overwrite any substantial information, like the stack, data or code of your mini application.</p>
+<p><strong>5. Benchmarking</strong></p>
+<p>Compare the speed of the software implementation of memcpy and memset with the speed of the hardware component for the scenarios listed in the <a class="reference internal" href="#deliverables">Deliverables</a>.  Measure the cycles from the write of the now_dadr register until the status register becomes 0 again.</p>
+</section>
+<section id="deliverables">
+<h2>Deliverables<a class="headerlink" href="#deliverables" title="Permalink to this heading"></a></h2>
+<p>All deliverables should be submitted in a single PDF file.</p>
+<p><strong>1. Source texts</strong></p>
+<ol class="arabic simple">
+<li><p>Verilog of your TL-UL host (excluding any generated code)</p></li>
+<li><p>C of memcpy_soft and memcpy_hard</p></li>
+<li><p>C of your memcpy test cases</p></li>
+</ol>
+<p><strong>2. Wave views</strong></p>
+<p>The wave views should be zoomed in as much as possible to only show the sections specified below. They should contain at least the clk signal, all CPU readable registers (status, length, src_adr, dst_adr) and the TL-UL host interface.</p>
+<ol class="arabic simple">
+<li><p>memcyp_hard: zoomed in view showing the transfer of at least 3 words</p></li>
+<li><p>memcyp_soft: zoomed in view showing the transfer of at least 1 word</p></li>
+</ol>
+<p><strong>3. Benchmarking results</strong></p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>operation</p></th>
+<th class="head"><p>software [cycles]</p></th>
+<th class="head"><p>hardware [cycles]</p></th>
+<th class="head"><p>ratio</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>memset of 1kB in SRAM</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>memset of 1kB in DDR3</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>memcpy of 1kB SRAM to SRAM</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>memcpy of 1kB SRAM to DDR3</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>memcpy of 1kB DDR3 to SRAM</p></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="ex3.html" class="btn btn-neutral float-left" title="Ex. 3: Software development and system simulation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="ex5.html" class="btn btn-neutral float-right" title="Ex.5: Hierarchical buses and cascaded interrupts" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
