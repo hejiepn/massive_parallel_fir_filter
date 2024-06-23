@@ -7,7 +7,7 @@
 	{
       name: "FIR_enable"
       desc: "enables filter module otherwise data will be just passed"
-      swaccess: "wr"
+      swaccess: "wo"
       hwaccess: "hro"
       fields: [
         {bits: "0", name: "enable", desc: "0: disabled, 1:enabled"}
@@ -16,7 +16,7 @@
     {
       name: "mode"
       desc: "sets effect mode of filter module"
-      swaccess: "wr"
+      swaccess: "wo"
       hwaccess: "hro"
       fields: [
         {bits: "8:0", name: "mode", desc: "effect mode"}
@@ -25,7 +25,7 @@
 	{
       name: "FIR_coeff_addr"
       desc: "memory address of coefficient"
-      swaccess: "wr"
+      swaccess: "wo"
       hwaccess: "hro"
       fields: [
         {bits: "31:0", name: "coefficient memory address", desc: "show memory address of coefficient"}

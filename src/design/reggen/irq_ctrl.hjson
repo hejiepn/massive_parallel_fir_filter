@@ -51,7 +51,6 @@
 	 desc: "monitor the state of all interrupt lines"
 	 swaccess: "ro"
 	 hwaccess: "hwo"
-	 hwre : "true"
 	 fields:
 	 [
 		{bits: "31:0", name: "status", desc: "status(n) = 1 <=> irq(n) is asserted "}
@@ -62,7 +61,6 @@
 	 desc: "indicate the number (or index) of the currently active highest-priority (lowest index: highest priority) interrupt that is unmasked, If there is no active and unmasked interrupt, irq_no is set to IRQ_MAX"
 	 swaccess: "ro"
 	 hwaccess: "hwo"
-	 hwre	: "true"
 	 fields:
 	 [
 		{bits: "31:0", name: "irq_no", desc: "n < IRQ_MAX: irq_no = n, irq(n) = 1 and there is no m < n with irq(m) = 1 and mask(m) = 1. n = IRQ_MAX: no pending unmasked irq"}

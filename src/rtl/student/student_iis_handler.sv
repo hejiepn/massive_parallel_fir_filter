@@ -19,14 +19,14 @@ module student_iis_handler (
 );
 
 
-  // Generation of AC_MCLK (half of the system clock) -> 25 MHz
+  // Generation of AC_MCLK (half of the system clock) -> 25 MHz == f_s*512
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) AC_MCLK <= 1'b0;
     else AC_MCLK <= ~AC_MCLK;
   end
 
 
-  // Generation of AC_BCLK (1/16 of the system clock) -> 3.125 MHz
+  // Generation of AC_BCLK (1/16 of the system clock) -> 3.125 MHz >= f_s * word_width(16) *2(bc. of stereo) == 1.536 MHz (minimum required frequency)
   // Also Generate Falling and Rising Edge Strobes
   logic [2:0] Cnt_BCLK;
   logic AC_BCLK_int;
@@ -48,7 +48,7 @@ module student_iis_handler (
   assign BCLK_Fall = ((Cnt_BCLK == 3'b000) && (AC_BCLK_int == 1'b1)) ? 1'b1 : 1'b0;
 
 
-  // Generation of AC_LRCLK (1/2024 of the system clock) -> 48.828 kHz 
+  // Generation of AC_LRCLK (1/1024 of the system clock) -> 48.828 kHz == sample frequency f_s
   // Also Generate Falling and Rising Edge Strobes
   logic [8:0] Cnt_LRCLK;
   logic AC_LRCLK_int;

@@ -1,5 +1,5 @@
 {
-  name: "filter_module"
+  name: "i2s_handler"
   clock_primary: "sys_clk"
   bus_device: "tlul"
   regwidth: "32"
