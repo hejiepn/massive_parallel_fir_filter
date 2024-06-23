@@ -181,18 +181,20 @@ module student_iis_handler_tb;
     $display("Start testbench...\n");
 
     // open file with input Test Data
-    fd_r = $fopen("../../../src/fv/data/test.hex", "rb");
+    fd_r = $fopen("../../../src/fv/data/test.hex", "r");
     if (fd_r) $display("File opened successfully: %0d", fd_r);
     else $display("File could not be opened");
 
     // open file with output Test Data
-    fd_w = $fopen("./test_out.hex", "wb");
+    fd_w = $fopen("./test_out.hex", "w");
     if (fd_w) $display("File opened successfully: %0d", fd_w);
     else $display("File could not be opened");
 
     // load first data
-    f_err = $fgets(TEST_Data_I_L, fd_r);
-    f_err = $fgets(TEST_Data_I_R, fd_r);
+    // f_err = $fgets(TEST_Data_I_L, fd_r);
+    // f_err = $fgets(TEST_Data_I_R, fd_r);
+	f_err = $fscanf(fd_r, "%h", TEST_Data_I_L);
+	f_err = $fscanf(fd_r, "%h", TEST_Data_I_R);
 
     // initialize temp variables
     temp_l = 0;
@@ -238,17 +240,23 @@ module student_iis_handler_tb;
       end
 
       // Write Data to file again
-      $fwrite(fd_w, "%c%c",TEST_Data_O_L[7-:8],TEST_Data_O_L[15-:8]);
-      $fwrite(fd_w, "%c%c",TEST_Data_O_R[7-:8],TEST_Data_O_R[15-:8]);
+    //   $fwrite(fd_w, "%c%c",TEST_Data_O_L[7-:8],TEST_Data_O_L[15-:8]);
+    //   $fwrite(fd_w, "%c%c",TEST_Data_O_R[7-:8],TEST_Data_O_R[15-:8]);
+	  // Write Data to file again
+		$fdisplay(fd_w, "%h", TEST_Data_O_L);
+		$fdisplay(fd_w, "%h", TEST_Data_O_R);
+
 
       temp_l = TEST_Data_I_L;
       temp_r = TEST_Data_I_R;
 
       //get new data from file
-      TEST_Data_I_L[7-:8]=$fgetc(fd_r);
-      TEST_Data_I_L[15-:8]=$fgetc(fd_r);
-      TEST_Data_I_R[7-:8]=$fgetc(fd_r);
-      TEST_Data_I_R[15-:8]=$fgetc(fd_r);
+    //   TEST_Data_I_L[7-:8]=$fgetc(fd_r);
+    //   TEST_Data_I_L[15-:8]=$fgetc(fd_r);
+    //   TEST_Data_I_R[7-:8]=$fgetc(fd_r);
+    //   TEST_Data_I_R[15-:8]=$fgetc(fd_r);
+	 f_err = $fscanf(fd_r, "%h", TEST_Data_I_L);
+	 f_err = $fscanf(fd_r, "%h", TEST_Data_I_R);
     end
 
     // Close files
