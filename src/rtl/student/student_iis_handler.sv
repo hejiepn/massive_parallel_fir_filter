@@ -10,13 +10,18 @@ module student_iis_handler (
     output logic AC_DAC_SDATA,  // Codec DAC Serial Data
 
     // To/From HW
-    input  logic [15:0] Data_I_L,     // Data from HW to Codec (Left Channel)
-    input  logic [15:0] Data_I_R,     // Data from HW to Codec (Right Channel)
-    output logic [15:0] Data_O_L,     // Data from Codec to HW (Left Channel)
-    output logic [15:0] Data_O_R,     // Data from Codec to HW (Right Channel)
-    output logic        valid_strobe  // Valid strobe to HW
+    // input  logic [15:0] Data_I_L,     // Data from HW to Codec (Left Channel)
+    // input  logic [15:0] Data_I_R,     // Data from HW to Codec (Right Channel)
+    // output logic [15:0] Data_O_L,     // Data from Codec to HW (Left Channel)
+    // output logic [15:0] Data_O_R,     // Data from Codec to HW (Right Channel)
+	input logic [15:0] Data_I_L, 			//Data from HW to Codec (mono Channel)
+	output logic [15:0] Data_O_L,			//Data from Codec to HW (mono Channel)
+    input logic        valid_strobe_I,  // Valid strobe from HW
+	output logic        valid_strobe  // Valid strobe to HW
 
 );
+
+localparam integer data_width_I = 16;
 
 
   // Generation of AC_MCLK (half of the system clock) -> 25 MHz == f_s*512
@@ -71,66 +76,82 @@ module student_iis_handler (
   assign LRCLK_Fall = ((Cnt_LRCLK == 0) && (AC_LRCLK_int == 1'b1)) ? 1'b1 : 1'b0;
 
 
+  logic valid_strobe_I_int;
+  //assign valid_strobe_I_int = valid_strobe_I;
+
+
   // Shift out data to send to the codec
-  logic [16:0] Data_Out_int;
+  logic [data_width_I:0] Data_Out_int;
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
-      Data_Out_int[16]   <= 1'b0;  // Append a 0 to the MSB bc. wait one bclk cycle
-      Data_Out_int[15:0] <= '0;
+      Data_Out_int[data_width_I]   <= 1'b0;  // Append a 0 to the MSB bc. wait one bclk cycle
+      Data_Out_int[data_width_I-1:0] <= '0;
     end else begin
       Data_Out_int <= Data_Out_int;
-      if (LRCLK_Rise) begin
-        Data_Out_int[16]   <= 1'b0;
-        Data_Out_int[15:0] <= Data_I_R;
-      end else if (LRCLK_Fall) begin
-        Data_Out_int[16]   <= 1'b0;
-        Data_Out_int[15:0] <= Data_I_L;
-      end else if (BCLK_Fall == 1'b1 && LRCLK_Fall == 1'b0 && LRCLK_Rise == 1'b0) begin
-        Data_Out_int <= {Data_Out_int[15:0], 1'b0};
+	  if(valid_strobe_I) begin
+		valid_strobe_I_int <= 1'b1;
+	  end
+      if (LRCLK_Fall && valid_strobe_I_int)  begin
+        Data_Out_int[data_width_I]   <= 1'b0;
+        Data_Out_int[data_width_I-1:0] <= Data_I_L;
+		valid_strobe_I_int <= 1'b0;
+	  end else if (LRCLK_Rise && valid_strobe_I_int) begin
+		 Data_Out_int[data_width_I]   <= 1'b0;
+        Data_Out_int[data_width_I-1:0] <= Data_I_L;
+		valid_strobe_I_int <= 1'b0;
+	  end else if (BCLK_Fall == 1'b1 && LRCLK_Fall == 1'b0 && LRCLK_Rise == 1'b0) begin
+        Data_Out_int <= {Data_Out_int[data_width_I-1:0], 1'b0};
       end
     end
   end
 
-  assign AC_DAC_SDATA = Data_Out_int[16];
+  assign AC_DAC_SDATA = Data_Out_int[data_width_I];
 
 
   // Shift in data from the codec
-  logic [15:0] Data_O_L_int;
-  logic [15:0] Data_O_R_int;
+//   logic [15:0] Data_O_L_int;
+//   logic [15:0] Data_O_R_int;
+  logic [15:0] Data_O_int;
   logic [15:0] Data_In_int;
   logic [4:0] rising_edge_cnt;    // Count the number of rising edges (we need to ignore the first one and write to the output directly after the LSB is shifted in)
-  logic valid_strobe_int;
+  logic valid_strobe_int_O;
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
-      Data_O_L_int <= 16'b0;
-      Data_O_R_int <= 16'b0;
+    //   Data_O_L_int <= 16'b0;
+    //   Data_O_R_int <= 16'b0;
+	Data_O_int <= 16'b0;
       Data_In_int <= 16'b0;
       rising_edge_cnt <= 5'b0;
-      valid_strobe_int <= 1'b0;
+      valid_strobe_int_O <= 1'b0;
     end else begin
       if (LRCLK_Rise) begin
         Data_In_int <= '0;
         rising_edge_cnt <= 5'b0;
+		valid_strobe_int_O <= 1'b0;
       end else if (LRCLK_Fall) begin
         Data_In_int <= '0;
         rising_edge_cnt <= 5'b0;
-        valid_strobe_int <= 1'b0;
+        valid_strobe_int_O <= 1'b0;
       end else if (BCLK_Rise) begin
         rising_edge_cnt <= rising_edge_cnt + 1'b1;
         if (rising_edge_cnt > 5'd0 && rising_edge_cnt <= 16) begin
           Data_In_int <= {Data_In_int[15:0], AC_ADC_SDATA};
         end
-		else if (rising_edge_cnt > 5'd16 && AC_LRCLK_int == 1'b0) Data_O_L_int <= Data_In_int;
+		else if (rising_edge_cnt > 5'd16 && AC_LRCLK_int == 1'b0) begin
+			Data_O_int <= Data_In_int;
+			valid_strobe_int_O <= 1'b1;
+		end
         else if (rising_edge_cnt > 5'd16 && AC_LRCLK_int == 1'b1) begin
-          Data_O_R_int <= Data_In_int;
-          valid_strobe_int <= 1'b1;
+          Data_O_int <= Data_In_int;
+          valid_strobe_int_O <= 1'b1;
         end
       end
     end
   end
 
-  assign Data_O_L = Data_O_L_int;
-  assign Data_O_R = Data_O_R_int;
-  assign valid_strobe = valid_strobe_int;
+//   assign Data_O_L = Data_O_L_int;
+//   assign Data_O_R = Data_O_R_int;
+  assign Data_O_L = Data_O_int;
+  assign valid_strobe = valid_strobe_int_O;
 
 endmodule

@@ -37,7 +37,7 @@ module student_iic_master (
   logic [31:0] busFreeCnt;
 
   state_e state, nstate;
-  logic rSda, rScl;
+  logic rSda, rScl; //registered versions of SDA and SCL, reflect current state
 
   logic [7:0] loadByte;
   logic dataBitOut, shiftBit;
@@ -45,7 +45,7 @@ module student_iic_master (
   logic [2:0] bitCount;
 
   logic [1:0] subState;
-  logic iSda, iScl, iDone, iErr;
+  logic iSda, iScl, iDone, iErr; //intermediate signals, reflect next state
   logic latchAddr, latchData;
   logic addrNData;
   logic [7:0] currAddr;

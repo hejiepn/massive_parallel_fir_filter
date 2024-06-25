@@ -29,9 +29,10 @@ module dummy_effect_device (
 
     input  logic        valid_strobe,  // 
     input  logic [15:0] Data_I_L,      // Data from IIS handler (Left Channel)
-    input  logic [15:0] Data_I_R,      // Data from IIS handler (Right Channel)
-    output logic [15:0] Data_O_L,      // Data to IIS handler (Left Channel)
-    output logic [15:0] Data_O_R       // Data to IIS handler (Right Channel)
+    //input  logic [15:0] Data_I_R,      // Data from IIS handler (Right Channel)
+	output logic valid_strobe_O,
+    output logic [15:0] Data_O_L      // Data to IIS handler (Left Channel)
+    //output logic [15:0] Data_O_R       // Data to IIS handler (Right Channel)
 
 );
 
@@ -62,12 +63,16 @@ module dummy_effect_device (
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       Data_O_L <= 16'd0;
-      Data_O_R <= 16'd0;
+	  valid_strobe_O <= 1'b0;
+      //Data_O_R <= 16'd0;
     end else begin
       if (valid_strobe_Rise) begin
         Data_O_L <= Data_I_L;
-        Data_O_R <= Data_I_R;
-      end
+		valid_strobe_O <= 1'b1;
+        //Data_O_R <= Data_I_R;
+	  end else begin
+		valid_strobe_O <= 1'b0;
+	  end
     end
   end
 
@@ -95,11 +100,13 @@ module student_iis_handler_tb;
   logic AC_DAC_SDATA;
 
   logic [15:0] Data_I_L;
-  logic [15:0] Data_I_R;
+  //logic [15:0] Data_I_R;
   logic [15:0] Data_O_L;
-  logic [15:0] Data_O_R;
+  //logic [15:0] Data_O_R;
 
   logic valid_strobe;
+  logic valid_strobe_O;
+
 
   student_iis_handler DUT (
       .clk_i (clk),
@@ -114,19 +121,20 @@ module student_iis_handler_tb;
 
       // // To/From HW
       .Data_I_L(Data_I_L),         // Data from Effect Module to be sent to Codec (Left Channel)
-      .Data_I_R(Data_I_R),         // Data from Effect Module to be sent to Codec (Right Channel)
+      //.Data_I_R(Data_I_R),         // Data from Effect Module to be sent to Codec (Right Channel)
       .Data_O_L(Data_O_L),         // Data from the Codec to be sent to Effect Module (Left Channel)
-      .Data_O_R(Data_O_R),         // Data from the Codec to be sent to Effect Module (Right Channel)
+      //.Data_O_R(Data_O_R),         // Data from the Codec to be sent to Effect Module (Right Channel)
+	  .valid_strobe_I(valid_strobe_O),
       .valid_strobe(valid_strobe)  // Valid strobe to Effect Module
   );
 
 
   // IIS Dummy Device Instanciation
   logic [15:0] TEST_Data_I_L;
-  logic [15:0] TEST_Data_I_R;
+  //logic [15:0] TEST_Data_I_R;
 
   logic [15:0] TEST_Data_O_L;
-  logic [15:0] TEST_Data_O_R;
+  //logic [15:0] TEST_Data_O_R;
 
     iis_dummy_device iis_dummy(
       .clk_i (clk),
@@ -139,10 +147,10 @@ module student_iis_handler_tb;
       .AC_DAC_SDATA(AC_DAC_SDATA), // Codec DAC Serial Data
 
       .TEST_DATA_IN_L(TEST_Data_I_L),  // Data that is sent to the IIS_Handler (Left Channel)
-      .TEST_DATA_IN_R(TEST_Data_I_R),  // Data that is sent to the IIS_Handler (Right Channel)
+      //.TEST_DATA_IN_R(TEST_Data_I_R),  // Data that is sent to the IIS_Handler (Right Channel)
 
-      .TEST_DATA_OUT_L(TEST_Data_O_L), // Data that came from the IIS_Handler (Left Channel)
-      .TEST_DATA_OUT_R(TEST_Data_O_R)  // Data that came from the IIS_Handler (Right Channel)
+      .TEST_DATA_OUT_L(TEST_Data_O_L) // Data that came from the IIS_Handler (Left Channel)
+      //.TEST_DATA_OUT_R(TEST_Data_O_R)  // Data that came from the IIS_Handler (Right Channel)
   );
 
 
@@ -152,17 +160,18 @@ module student_iis_handler_tb;
       .rst_ni(rst_n),
 
       .valid_strobe(valid_strobe),         // Codec valid_strobe
+	  .valid_strobe_O(valid_strobe_O),
 
       .Data_I_L(Data_O_L),         // Data IIS Handler (Left Channel)
-      .Data_I_R(Data_O_R),         // Data IIS Handler (Right Channel)
-      .Data_O_L(Data_I_L),         // Data to IIS Handler (Left Channel)
-      .Data_O_R(Data_I_R)          // Data to IIS Handler (Right Channel)
+     // .Data_I_R(Data_O_R),         // Data IIS Handler (Right Channel)
+      .Data_O_L(Data_I_L)         // Data to IIS Handler (Left Channel)
+      //.Data_O_R(Data_I_R)          // Data to IIS Handler (Right Channel)
   );
 
 
   // Testbench specific signals
   logic [15:0] temp_l;
-  logic [15:0] temp_r;
+  //logic [15:0] temp_r;
 
   int fd_r;
   int fd_w;
@@ -194,11 +203,11 @@ module student_iis_handler_tb;
     // f_err = $fgets(TEST_Data_I_L, fd_r);
     // f_err = $fgets(TEST_Data_I_R, fd_r);
 	f_err = $fscanf(fd_r, "%h", TEST_Data_I_L);
-	f_err = $fscanf(fd_r, "%h", TEST_Data_I_R);
+	//f_err = $fscanf(fd_r, "%h", TEST_Data_I_R);
 
     // initialize temp variables
     temp_l = 0;
-    temp_r = 0;
+    //temp_r = 0;
 
     // Create NegEdge for reset
     rst_n = '1;
@@ -225,11 +234,14 @@ module student_iis_handler_tb;
       end
 
       // Display Current In and Out Data
-      $display("TEST_Data_I_L = %h \t TEST_Data_I_R = %h", TEST_Data_I_L, TEST_Data_I_L);
-      $display("TEST_Data_O_L = %h \t TEST_Data_O_R = %h", TEST_Data_O_L, TEST_Data_O_R);
+      //$display("TEST_Data_I_L = %h \t TEST_Data_I_R = %h", TEST_Data_I_L, TEST_Data_I_R);
+      //$display("TEST_Data_O_L = %h \t TEST_Data_O_R = %h", TEST_Data_O_L, TEST_Data_O_R);
+	  $display("TEST_Data_I_L = %h \t", TEST_Data_I_L);
+      $display("TEST_Data_O_L = %h \t", TEST_Data_O_L);
 
       // Check if Data matches with previous data
-      if (TEST_Data_O_L == temp_l && TEST_Data_O_R == temp_r) begin
+      //if (TEST_Data_O_L == temp_l && TEST_Data_O_R == temp_r) begin
+	  if (TEST_Data_O_L == temp_l) begin
         $display("Success!");
         succeeded++;
       end else begin
@@ -244,11 +256,11 @@ module student_iis_handler_tb;
     //   $fwrite(fd_w, "%c%c",TEST_Data_O_R[7-:8],TEST_Data_O_R[15-:8]);
 	  // Write Data to file again
 		$fdisplay(fd_w, "%h", TEST_Data_O_L);
-		$fdisplay(fd_w, "%h", TEST_Data_O_R);
+		//$fdisplay(fd_w, "%h", TEST_Data_O_R);
 
 
       temp_l = TEST_Data_I_L;
-      temp_r = TEST_Data_I_R;
+      //temp_r = TEST_Data_I_R;
 
       //get new data from file
     //   TEST_Data_I_L[7-:8]=$fgetc(fd_r);
@@ -256,7 +268,7 @@ module student_iis_handler_tb;
     //   TEST_Data_I_R[7-:8]=$fgetc(fd_r);
     //   TEST_Data_I_R[15-:8]=$fgetc(fd_r);
 	 f_err = $fscanf(fd_r, "%h", TEST_Data_I_L);
-	 f_err = $fscanf(fd_r, "%h", TEST_Data_I_R);
+	 //f_err = $fscanf(fd_r, "%h", TEST_Data_I_R);
     end
 
     // Close files
