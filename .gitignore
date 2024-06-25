@@ -6,3 +6,4 @@ rvlab-solutions/
 *.log
 *.str
 fir/
+build_FIR/
