@@ -47,7 +47,7 @@ module student_rlight (
   .tl_o,
   .reg2hw,
   .hw2reg,
-  .devmode_i('0)
+  .devmode_i(1'b1)
   );
   
   localparam logic [3:0] ADDR_REGA = 4'h0;
@@ -81,18 +81,24 @@ module student_rlight (
   end
 */
 
-//register reads
-  always_comb begin
-       if (reg2hw.rega.qe) begin
-           regA <= reg2hw.rega.q;
-       end;
-       if (reg2hw.regb.qe) begin
-           regB <= reg2hw.regb.q;
-       end;
-       if (reg2hw.regc.qe) begin
-           regC <= reg2hw.regc.q;
-       end;
-   end
+   // Register read process
+  always_ff @(posedge clk_i, negedge rst_ni) begin
+    if (!rst_ni) begin
+      regA <= '0;
+      regB <= '0;
+      regC <= '0;
+    end else begin
+      if (reg2hw.rega.qe) begin
+        regA <= reg2hw.rega.q;
+      end
+      if (reg2hw.regb.qe) begin
+        regB <= reg2hw.regb.q;
+      end
+      if (reg2hw.regc.qe) begin
+        regC <= reg2hw.regc.q;
+      end
+    end
+  end
 
 /*
   // Bus writes
@@ -116,27 +122,27 @@ module student_rlight (
   end 
 */
 
-//register write
+//register write process
 
- always_ff @(posedge clk_i, negedge rst_ni) begin
-    if (~rst_ni) begin
-      hw2reg.rega.d <= reset_led_pattern;
-      hw2reg.regb.d <= reset_register_mode;
-      hw2reg.regc.d <= reset_cnt_delay;
-      hw2reg.regd.d <= reset_led_pattern;
-    end
-    else begin
-       if (hw2reg.rega.de) begin
-           hw2reg.rega.d <= regA;
-       end;
-       if (hw2reg.regb.de) begin
-           hw2reg.regb.d <= regB;
-       end;
-       if (hw2reg.regc.de) begin
-           hw2reg.regc.d <= regC;
-       end;
-    end // else (~rst_ni)
- end 
+//  always_ff @(posedge clk_i, negedge rst_ni) begin
+//     if (~rst_ni) begin
+//       hw2reg.rega.d <= reset_led_pattern;
+//       hw2reg.regb.d <= reset_register_mode;
+//       hw2reg.regc.d <= reset_cnt_delay;
+//       hw2reg.regd.d <= reset_led_pattern;
+//     end
+//     else begin
+//        if (hw2reg.rega.de) begin
+//            hw2reg.rega.d <= regA;
+//        end;
+//        if (hw2reg.regb.de) begin
+//            hw2reg.regb.d <= regB;
+//        end;
+//        if (hw2reg.regc.de) begin
+//            hw2reg.regc.d <= regC;
+//        end;
+//     end // else (~rst_ni)
+//  end 
 
  // Demo FSM. Replace with your rlight
   // ----------------------------------
@@ -150,95 +156,96 @@ module student_rlight (
 
   always_ff @(posedge clk_i, negedge rst_ni) begin
   	if (~rst_ni) begin
-	      mode   <= ping_pong;
-	      led     <= reset_led_pattern;
-	      cnt     <= reset_cnt_delay;
-	      cnt_pre_value <= reset_cnt_delay;
-	      cnt_pp <= '0;
-	      temp_pp [7:0] <= 8'b00000000;
-              pattern_pre <= reset_led_pattern;
-    	end //if ~rst_ni
-    	else begin
-		  case (regB)
-			0: begin
-		  	mode   <= ping_pong;
-			end // 0
-			1: begin
-			  mode   <= rot_left;
-			end // 1
-			2: begin
-			  mode   <= rot_right;
-			end // 2
-			3: begin
-			  mode   <= stop;
-			end // 3
-			default: begin
-			  mode <= ping_pong;
-			end // default
-	      endcase
+		hw2reg.regd.d <= reset_led_pattern;
+		mode   <= ping_pong;
+		led     <= reset_led_pattern;
+		cnt     <= reset_cnt_delay;
+		cnt_pre_value <= reset_cnt_delay;
+		cnt_pp <= '0;
+		temp_pp [7:0] <= 8'b00000000;
+		pattern_pre <= reset_led_pattern;
+	end //if ~rst_ni
+	else begin
+		case (regB)
+		0: begin
+		mode   <= ping_pong;
+		end // 0
+		1: begin
+			mode   <= rot_left;
+		end // 1
+		2: begin
+			mode   <= rot_right;
+		end // 2
+		3: begin
+			mode   <= stop;
+		end // 3
+		default: begin
+			mode <= ping_pong;
+		end // default
+		endcase
 // delay register check
-	      if (regC != cnt_pre_value) begin
-	      	cnt <= regC;
-	      	cnt_pre_value <= regC;
-	      end
-	      else if (cnt == 0) begin
-	      	cnt <= regC;
-	      end
+		if (regC != cnt_pre_value) begin
+		cnt <= regC;
+		cnt_pre_value <= regC;
+		end
+		else if (cnt == 0) begin
+		cnt <= regC;
+		end
 // pattern register check
-          if (regA != pattern_pre) begin
-             pattern_pre <= regA;
-             led <= regA;
-          end
-	      case (mode)
-	      		ping_pong: begin
-					if(cnt == 0) begin
-						if (cnt_pp[3] == 'b0) begin
-						temp_pp[7:1] <= temp_pp[6:0];
-						temp_pp[0] <= led[7];
-						led[7:1] <= led[6:0];
-						cnt_pp <= cnt_pp + 1;
-							if (cnt_pp[2:0] == 3'b110) begin
-						       cnt_pp[3] <= 'b1;
-						    end
+		if (regA != pattern_pre) begin
+			pattern_pre <= regA;
+			led <= regA;
+		end
+		case (mode)
+			ping_pong: begin
+				if(cnt == 0) begin
+					if (cnt_pp[3] == 'b0) begin
+					temp_pp[7:1] <= temp_pp[6:0];
+					temp_pp[0] <= led[7];
+					led[7:1] <= led[6:0];
+					cnt_pp <= cnt_pp + 1;
+						if (cnt_pp[2:0] == 3'b110) begin
+							cnt_pp[3] <= 'b1;
 						end
-						else begin
-						   led[6:0] <= led[7:1];
-						   led[7] <= temp_pp[0];
-						   temp_pp[6:0] <= temp_pp[7:1];
-						   cnt_pp <= cnt_pp - 1;
-						   	if (cnt_pp[2:0] == 3'b000) begin
-						  		cnt_pp[3] <='b0;
-						   	end
-		      			end
-					end//if
-		            else begin
-		               cnt -= 1;
-		            end //else
-     			end//ping_pong
-	      		rot_right: begin
-		            if(cnt == 0) begin
-		                led[7] <= led[0];
-		   	    		led[6:0] <= led[7:1];
-	   	 			end 
-				   	else begin	
-		           		cnt -= 1;
-				 	end
-	      		end//rot_right
-				rot_left: begin
-					if(cnt == 0) begin
-					   led[0] <= led[7];
-					   led[7:1] <= led[6:0];
 					end
 					else begin
-				   	cnt -= 1;
+						led[6:0] <= led[7:1];
+						led[7] <= temp_pp[0];
+						temp_pp[6:0] <= temp_pp[7:1];
+						cnt_pp <= cnt_pp - 1;
+						if (cnt_pp[2:0] == 3'b000) begin
+							cnt_pp[3] <='b0;
+						end
 					end
-				end//rot_left	
-				stop: begin
+				end//if
+				else begin
+					cnt <= cnt-1;
+				end //else
+			end//ping_pong
+			rot_right: begin
+				if(cnt == 0) begin
+					led[7] <= led[0];
+					led[6:0] <= led[7:1];
+				end 
+				else begin	
+					cnt <= cnt-1;
+				end
+			end//rot_right
+			rot_left: begin
+				if(cnt == 0) begin
+					led[0] <= led[7];
+					led[7:1] <= led[6:0];
+				end
+				else begin
+				cnt <= cnt-1;
+				end
+			end//rot_left	
+			stop: begin
+	
+			end//stop
+			default: begin
 		
-				end//stop
-				default: begin
-			
-				end//default
+			end//default
 		endcase
         hw2reg.regd.d <= led; //keep track of actual led status
     	end //else ~rst_ni

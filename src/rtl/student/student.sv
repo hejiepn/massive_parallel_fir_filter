@@ -27,7 +27,6 @@ module student (
   //assign irq_o = irq_o_i; // this was misleading
 
 
-  logic [31:0] irq_i;
   localparam integer mux_num = 2;
 
   tlul_pkg::tl_d2h_t tl_device_output [mux_num-1:0] ;
@@ -44,17 +43,6 @@ module student (
     .tl_device_i(tl_device_input)
   );
 
-  student_irq_ctrl #(
-	.N(32)
-  ) irq_ctrl (
-	.clk_i,
-	.rst_ni,
-	.irq_i(irq_i),
-	.irq_en_o(irq_o),
-	.tl_o(tl_device_output[0]),
-	.tl_i(tl_device_input[0])
-  );
-
   student_rlight rlight_i (
     .clk_i,
     .rst_ni,
@@ -63,14 +51,5 @@ module student (
     .led_o(led)
   );
 
-
-  student_dma dma_i (
-    .clk_i,
-    .rst_ni,
-    .tl_o(tl_device_fast_o),
-    .tl_i(tl_device_fast_i),
-    .tl_host_o,
-    .tl_host_i
-  );
  
 endmodule
