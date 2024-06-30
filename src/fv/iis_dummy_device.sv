@@ -11,12 +11,8 @@ module iis_dummy_device (
     input  logic AC_LRCLK,      // Codec Left/Right Clock
     output logic AC_ADC_SDATA,  // Codec ADC Serial Data
     input  logic AC_DAC_SDATA,  // Codec DAC Serial Data
-
-    input logic [15:0] TEST_DATA_IN_L,  // Test Data to send to the iis handler (left channel)
-    //input logic [15:0] TEST_DATA_IN_R,  // Test Data to send to the iis handler (right channel)
-
-    output logic [15:0] TEST_DATA_OUT_L  // Received data from the iis handler (left channel)
-    //output logic [15:0] TEST_DATA_OUT_R   // Received data from the iis handler (right channel)
+    input logic [15:0] TEST_DATA_IN,  // Test Data to send to the iis handler (left channel)
+    output logic [15:0] TEST_DATA_OUT  // Received data from the iis handler (left channel)
 
 );
 
@@ -71,7 +67,7 @@ module iis_dummy_device (
   logic [ 4:0] rising_edge_cnt;
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
-      TEST_DATA_OUT_L <= '0;
+      TEST_DATA_OUT <= '0;
       //TEST_DATA_OUT_R <= '0;
       Data_In_int <= '0;
       rising_edge_cnt <= '0;
@@ -86,10 +82,10 @@ module iis_dummy_device (
         rising_edge_cnt <= rising_edge_cnt + 1'b1;
         if (rising_edge_cnt > 5'd0 && rising_edge_cnt <= 16) begin
           Data_In_int <= {Data_In_int[15:0], AC_DAC_SDATA};
-        end else if (rising_edge_cnt > 5'd16 && AC_LRCLK == 1'b0) TEST_DATA_OUT_L <= Data_In_int;
+        end else if (rising_edge_cnt > 5'd16 && AC_LRCLK == 1'b0) TEST_DATA_OUT <= Data_In_int;
         else if (rising_edge_cnt > 5'd16 && AC_LRCLK == 1'b1) begin
           //TEST_DATA_OUT_R <= Data_In_int;
-		  TEST_DATA_OUT_L <= Data_In_int;
+		  TEST_DATA_OUT <= Data_In_int;
         end
       end
     end
@@ -100,16 +96,16 @@ module iis_dummy_device (
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
       Data_Out_int[16]   <= 1'b0;  // Append a 0 to the MSB bc. wait one bclk cycle
-      Data_Out_int[15:0] <= TEST_DATA_IN_L;
+      Data_Out_int[15:0] <= TEST_DATA_IN;
     end else begin
       Data_Out_int <= Data_Out_int;
       if (LRCLK_Rise) begin
         Data_Out_int[16]   <= 1'b0;
         //Data_Out_int[15:0] <= TEST_DATA_IN_R;
-		Data_Out_int[15:0] <= TEST_DATA_IN_L;
+		Data_Out_int[15:0] <= TEST_DATA_IN;
       end else if (LRCLK_Fall) begin
         Data_Out_int[16]   <= 1'b0;
-        Data_Out_int[15:0] <= TEST_DATA_IN_L;
+        Data_Out_int[15:0] <= TEST_DATA_IN;
       end else if (BCLK_Fall == 1'b1 && LRCLK_Fall == 1'b0 && LRCLK_Rise == 1'b0) begin
         Data_Out_int <= {Data_Out_int[15:0], 1'b0};
       end

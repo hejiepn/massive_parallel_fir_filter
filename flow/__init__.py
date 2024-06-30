@@ -55,8 +55,8 @@ module_tbs = [
     "student_rlight_tb",
     "student_tlul_mux_tb",
 	"student_iis_handler_tb",
-	"student_audio_init_tb",
-	"student_iic_master_tb",
+	"student_audio_codec_tb",
+	"student_iic_ctrl_tb",
 	"student_bram_tb",
 	"student_ringbuffer_tb",
 ]

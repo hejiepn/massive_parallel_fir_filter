@@ -31,7 +31,7 @@
 #include "reggen/student_rlight.h"
 #define STUDENT_RLIGHT0_BASE_ADDR 0x10100000
 
-#include "reggen/student_audio_init.h"
-#define STUDENT_AUDIO_INIT0_BASE_ADDR 0x10200000
+#include "reggen/student_audio_codec.h"
+#define STUDENT_AUDIO_CODEC0_BASE_ADDR 0x10200000
 
 #endif // _RVLAB_H
