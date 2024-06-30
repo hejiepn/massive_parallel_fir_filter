@@ -34,4 +34,7 @@
 #include "reggen/student_audio_codec.h"
 #define STUDENT_AUDIO_CODEC0_BASE_ADDR 0x10200000
 
+#include "reggen/student_filter_module.h"
+#define STUDENT_FILTER_MODULE0_BASE_ADDR 0x10300000
+
 #endif // _RVLAB_H
