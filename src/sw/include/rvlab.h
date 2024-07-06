@@ -37,4 +37,7 @@
 #include "reggen/student_filter_module.h"
 #define STUDENT_FILTER_MODULE0_BASE_ADDR 0x10300000
 
+#include "reggen/student_iic_ctrl.h"
+#define STUDENT_IIC_CTRL0_BASE_ADDR 0x10400000
+
 #endif // _RVLAB_H

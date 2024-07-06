@@ -63,6 +63,8 @@ always_ff@(posedge clk_i or negedge rst_ni) begin : read_sda_scl_pins
 	if(~rst_ni) begin
 		hw2reg.sda_read.d <= '0;
 		hw2reg.scl_read.d <= '0;
+		hw2reg.sda_read.de <= 1'b0;
+		hw2reg.scl_read.de <= 1'b0;
 	end else begin
 		if (~sda_en_buf) begin
 			hw2reg.sda_read.de <= 1'b1;
