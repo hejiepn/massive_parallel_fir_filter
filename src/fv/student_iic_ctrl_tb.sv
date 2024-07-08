@@ -6,6 +6,9 @@ module student_iic_ctrl_tb;
   tlul_pkg::tl_h2d_t tl_h2d;
   tlul_pkg::tl_d2h_t tl_d2h;
 
+  pullup(sda);
+  pullup(scl);
+
   localparam logic [31:0] reg_SDA_EN = 32'h00000000;
   localparam logic [31:0] reg_SDA_WRITE = 32'h00000004;
   localparam logic [31:0] reg_SDA_READ = 32'h00000008;

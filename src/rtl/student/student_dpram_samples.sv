@@ -13,14 +13,14 @@ module student_dpram_samples #(
 	output logic [DataSize-1:0] dob
 	);
 
-	logic [DataSize-1:0] read_data;
+	//logic [DataSize-1:0] read_data;
 
 	(* ram_style = "block" *) logic [DataSize-1:0] bram[0:2**AddrWidth];
 
 	//dpram in read-first mode, recommended by amd when simple synchronous clock dpram
 	always @(posedge clk_i) begin
 		if (enb) begin
-			read_data <= bram[addrb];
+			dob <= bram[addrb];
 		end
 		if (ena) begin
 			if (wea) begin
@@ -29,7 +29,7 @@ module student_dpram_samples #(
 		end
 	end
 
-	assign dob = read_data;
+	//assign dob = read_data;
 
 	// Load data from the INIT_F file during the initial block
 	initial begin
