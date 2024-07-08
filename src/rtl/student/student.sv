@@ -31,14 +31,6 @@ module student (
     .tl_i (tl_device_peri_i),
     .led_o(led)
   );
-    student_dma dma_i (
-    .clk_i,
-    .rst_ni,
-    .tl_o (tl_device_fast_o),
-    .tl_i (tl_device_fast_i),
-    .tl_host_o,
-    .tl_host_i
-  );
 
 endmodule
 
