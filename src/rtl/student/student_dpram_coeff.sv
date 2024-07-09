@@ -47,7 +47,7 @@ module student_dpbram_coeff #(
     .rerror_i(2'b00)
   );
 
-	(* ram_style = "block" *) logic [31:0] mem[0:2**AddrWidth];
+	(* ram_style = "block" *) logic [31:0] mem[0:2**AddrWidth-1];
 
 	  // Independent read interface for coefficient data
     always @(posedge clk_i) begin

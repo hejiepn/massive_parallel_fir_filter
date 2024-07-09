@@ -14,6 +14,10 @@ module student_fir_tb;
   logic valid_strobe_out;
   logic [31:0] y_out;
 
+  // Memory to store the input samples from sin.mem
+  logic [7:0] sin_mem [0:1023]; // Adjust the size based on your file
+  integer i; // Loop variable
+
   // Instantiate the DUT (Device Under Test)
   student_fir dut (
     .clk_i(clk_i),
@@ -37,6 +41,9 @@ module student_fir_tb;
     valid_strobe_in = 0;
     sample_in = 0;
 
+    // Load the sin.mem file
+    $readmemh("/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/fv/data/sin_low.mem", sin_mem);
+
     // Apply reset
     #40 rst_ni = 1; // Wait for 40 ns to apply reset (2 clock cycles)
 
@@ -44,9 +51,9 @@ module student_fir_tb;
     #20;
 
     // Apply test stimulus
-    repeat (20) begin
+    for (i = 0; i < 1024; i = i + 1) begin
       @(posedge clk_i);
-      sample_in = $random; // Apply random sample input
+      sample_in = {8'b0, sin_mem[i]}; // Zero-pad the 8-bit value to 16 bits
       valid_strobe_in <= 1;
       @(posedge clk_i);
       valid_strobe_in <= 0;
