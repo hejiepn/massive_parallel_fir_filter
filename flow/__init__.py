@@ -57,6 +57,7 @@ module_tbs = [
 	"student_iis_handler_tb",
 	"student_iic_ctrl_tb",
 	"student_dpram_samples_tb",
+	"student_fir_tb",
 ]
 
 for name in module_tbs:
