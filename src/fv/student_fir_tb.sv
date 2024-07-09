@@ -17,6 +17,7 @@ module student_fir_tb;
   // Memory to store the input samples from sin.mem
   logic [7:0] sin_mem [0:1023]; // Adjust the size based on your file
   integer i; // Loop variable
+  integer j; // Outer loop variable for clock cycle delay
 
   // Instantiate the DUT (Device Under Test)
   student_fir dut (
@@ -50,15 +51,17 @@ module student_fir_tb;
     // Wait for reset to propagate
     #20;
 
-    // Apply test stimulus
-    for (i = 0; i < 1024; i = i + 1) begin
-      @(posedge clk_i);
-      sample_in = {8'b0, sin_mem[i]}; // Zero-pad the 8-bit value to 16 bits
-      valid_strobe_in <= 1;
-      @(posedge clk_i);
-      valid_strobe_in <= 0;
-      wait(valid_strobe_out == 1); // Wait for valid_strobe_out to go high
-    end
+	for (j = 0; j < 10; j = j + 1) begin
+		// Apply test stimulus
+		for (i = 0; i < 1024; i = i + 1) begin
+			@(posedge clk_i);
+			sample_in = {8'b0, sin_mem[i]}; // Zero-pad the 8-bit value to 16 bits
+			valid_strobe_in <= 1;
+			@(posedge clk_i);
+			valid_strobe_in <= 0;
+			wait(valid_strobe_out == 1); // Wait for valid_strobe_out to go high
+		end
+	end
 
     // Finish simulation
     #200;

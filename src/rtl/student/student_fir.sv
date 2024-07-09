@@ -170,9 +170,9 @@ module student_fir (
 		  //$display("fir_sum: %d read_sample: %d read_coeff: %d", fir_sum, read_sample, read_coeff);
           if (rd_addr == wr_addr) begin
             compute_finished_out <= 1;
+			valid_strobe_out <= 1;
 		  end else if( rd_addr == wr_addr - 1) begin
 			sample_shift_out <= read_sample;
-			valid_strobe_out <= 1;
 		  end
         end
         SHIFT_OUT: begin
