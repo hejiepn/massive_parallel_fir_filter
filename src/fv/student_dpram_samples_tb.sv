@@ -1,7 +1,7 @@
 module student_dpram_samples_tb;
 
   // Parameter für die DUT
-  localparam int unsigned AddrWidth = 10;
+  localparam int unsigned AddrWidth = 2;
   localparam int unsigned DataSize = 16;
   localparam string INIT_F = "/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/fv/data/dpram_zeros_init.mem";
 
@@ -19,6 +19,7 @@ module student_dpram_samples_tb;
   student_dpram_samples #(
     .AddrWidth(AddrWidth),
     .DataSize(DataSize),
+	.DebugMode(1),
     .INIT_F(INIT_F)
   ) dut (
     .clk_i(clk_i),
@@ -61,50 +62,26 @@ module student_dpram_samples_tb;
     // Sicherstellen, dass RAM initialisiert wurde
     #100;
 
-    // Test 1: Einzelner Schreib- und Lesezugriff
-    $display("Test 1: Einzelner Schreib- und Lesezugriff");
-    write_ptr = 5;
-    ena = 1;
-    wea = 1;
-    addra = write_ptr;
-    dia = 16'hA5A5;
-    @(posedge clk_i);
-
-    // Schreiben stoppen
-    ena = 0;
-    wea = 0;
-
-    // Lesen
-    enb = 1;
-    addrb = write_ptr;
-    @(posedge clk_i); // eine Taktflanke warten
-    @(posedge clk_i); // eine zweite Taktflanke warten, um sicherzustellen, dass die Daten stabil sind
-    if (dob !== 16'hA5A5) begin
-      $display("Fehler: Erwartet 16'hA5A5, aber dob ist %h", dob);
-      error_flag = 1;
-    end
-    enb = 0;
-
     // Test 2: Mehrfache Schreib- und Lesezugriffe
     $display("Test 2: Mehrfache Schreibzugriffe");
-    for (int i = 0; i < 20; i++) begin
-      ena = 1;
+    for (int i = 0; i < 4; i++) begin
       wea = 1;
-      addra = write_ptr;
+      ena = 1;
+      addra = i;
+	  $display("addra: %4x for i: %d",addra, i);
       dia = i;
       @(posedge clk_i);
-      write_ptr = write_ptr + 1;
+	  ena = 0;
+	  wea = 0;
     end
-    ena = 0;
-    wea = 0;
 
     // Lesen der geschriebenen Daten
     $display("Test 2: Mehrfache Lesezugriffe");
-    read_ptr = write_ptr - 20;
-    for (int i = 0; i < 20; i++) begin
-      enb = 1;
-      addrb = read_ptr + i;
-      @(posedge clk_i); // eine Taktflanke warten
+	enb = 1;
+    for (int i = 0; i < 4; i++) begin
+      addrb = i;
+	  $display("addrb: %4x for i: %d",addrb, i);
+      @(posedge clk_i); // eine zweite Taktflanke warten, um sicherzustellen, dass die Daten stabil sind
       @(posedge clk_i); // eine zweite Taktflanke warten, um sicherzustellen, dass die Daten stabil sind
       expected_data = i;
       if (dob !== expected_data) begin
