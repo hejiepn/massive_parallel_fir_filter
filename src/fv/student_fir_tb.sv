@@ -1,9 +1,9 @@
 module student_fir_tb;
 
-  localparam int AddrWidth = 10; // Address width
+  localparam int AddrWidth = 2; // Address width
   localparam int MaxAddr = 2**AddrWidth; // Maximum address
   localparam int DATA_SIZE = 16; // Data size
-  localparam int DEBUGMODE = 0; // Coefficient size
+  localparam int DEBUGMODE = 1; // activate debugMode when AddrWidth != 10 
 
   // Clock and reset signals
   logic clk_i;
@@ -22,7 +22,10 @@ module student_fir_tb;
   // Memory to store the input samples from sin.mem
   logic [7:0] sin_mem [0:1023]; // Adjust the size based on your file
   integer i; // Loop variable
-  integer j; // Outer loop variable for clock cycle delay
+  
+  tlul_pkg::tl_h2d_t tl_h2d;
+  tlul_pkg::tl_d2h_t tl_d2h;
+
 
   // Instantiate the DUT (Device Under Test)
   student_fir #(
@@ -37,17 +40,30 @@ module student_fir_tb;
     .compute_finished_out(compute_finished_out),
     .sample_shift_out(sample_shift_out),
     .valid_strobe_out(valid_strobe_out),
-    .y_out(y_out)
+    .y_out(y_out),
+	.tl_i(tl_h2d),
+	.tl_o(tl_d2h)
+  );
+
+    tlul_test_host bus(
+    .clk_i(clk_i),
+    .rst_no(rst_ni),
+    .tl_i(tl_d2h),
+    .tl_o(tl_h2d)
   );
 
   // Clock generation: 50 MHz clock -> period = 20ns
-  always #10 clk_i = ~clk_i;
+   always begin
+    clk_i = '1;
+    #10000;
+    clk_i = '0;
+    #10000;
+  end
 
   // Initial block to apply stimulus
   initial begin
     // Initialize signals
     clk_i = 0;
-    rst_ni = 0;
     valid_strobe_in = 0;
     sample_in = 0;
 
@@ -58,11 +74,10 @@ module student_fir_tb;
 		$readmemh("/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/fv/data/sin_high.mem", sin_mem);
 	end
 
-    // Apply reset
-    #40 rst_ni = 1; // Wait for 40 ns to apply reset (2 clock cycles)
-
+	bus.reset();
     // Wait for reset to propagate
-    #20;
+    #40;
+	bus.wait_cycles(20);
 
 	
 	// Apply test stimulus

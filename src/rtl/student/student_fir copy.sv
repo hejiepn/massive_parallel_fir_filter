@@ -1,4 +1,4 @@
-module student_fir #(
+module student_fir_copy #(
 	parameter int unsigned ADDR_WIDTH = 10,
 	parameter int unsigned DATA_SIZE = 16,
 	parameter int unsigned DEBUGMODE = 0
@@ -12,27 +12,30 @@ module student_fir #(
     output logic compute_finished_out,
     output logic [DATA_SIZE-1:0] sample_shift_out,
 	output logic valid_strobe_out,
-    output logic [DATA_SIZE*2-1:0] y_out,
-	
-	input  tlul_pkg::tl_h2d_t tl_i,  //master input (incoming request)
-    output tlul_pkg::tl_d2h_t tl_o  //slave output (this module's response)
+    output logic [DATA_SIZE*2-1:0] y_out
 );
 
   // Define constants for memory definition
   localparam MAX_ADDR = 2 ** ADDR_WIDTH;
   localparam ROM_FILE_COEFF = (DEBUGMODE == 1) ? "/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/rtl/student/data/coe_lp_debug.mem" : "/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/rtl/student/data/coe_lp.mem";  // File for memory initialization
-  localparam ROM_FILE_SAMPLES = (DEBUGMODE == 1) ? "/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/rtl/student/data/zeros.mem" : "/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/rtl/student/data/zeros.mem";
+  localparam ROM_FILE_SAMPLES = "/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/rtl/student/data/sin_high.mem";
  
   // Read and write pointers
   logic [ADDR_WIDTH-1:0] wr_addr;
   logic [ADDR_WIDTH-1:0] rd_addr;
+  logic [ADDR_WIDTH-1:0] wr_addr_c;
   logic [ADDR_WIDTH-1:0] rd_addr_c;
   logic [DATA_SIZE-1:0] read_coeff;
   logic [DATA_SIZE-1:0] read_sample;
   logic ena_samples;
   logic enb_samples;
+  logic ena_coeff;
   logic enb_coeff;
-  logic [DATA_SIZE*2-1:0] fir_sum;      
+  logic wra_coeff;
+  logic [DATA_SIZE-1:0] write_coeff;
+  logic [DATA_SIZE*2-1:0] fir_sum;
+  //logic [31:0] ptr_counter;
+      
 
   // FIR State Machine
   typedef enum logic[2:0] {IDLE, SHIFT_IN, DELAY, COMPUTE, SHIFT_OUT} fir_state_t;
@@ -96,26 +99,29 @@ module student_fir #(
     .dob(read_sample)
   );
 
-  student_dpram_coeff #(
+  student_dpram_samples #(
     .AddrWidth(ADDR_WIDTH),
-    .CoeffDataSize(DATA_SIZE),
+    .DataSize(DATA_SIZE),
 	.DebugMode(DEBUGMODE),
     .INIT_F(ROM_FILE_COEFF) 
   ) coeff_dpram (
     .clk_i(clk_i),
-	.rst_ni(rst_ni),
+    .ena(ena_coeff),
     .enb(enb_coeff),
+    .wea(wra_coeff),
+    .addra(wr_addr_c),
     .addrb(rd_addr_c),
-    .dob(read_coeff),
-	.tl_i(tl_i),
-	.tl_o(tl_o)
+    .dia(write_coeff),
+    .dob(read_coeff)
   );
   
   // Enable signals control
   always_ff @(posedge clk_i, negedge rst_ni) begin
     if(~rst_ni) begin
       enb_samples <= 0;
+      ena_coeff <= 0;
       enb_coeff <= 0;
+      wra_coeff <= 0;
     end else begin
 		if (ena_samples) begin
         	enb_samples <= 1;
