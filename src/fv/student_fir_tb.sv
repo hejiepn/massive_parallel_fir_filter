@@ -55,7 +55,7 @@ module student_fir_tb;
 	if (DEBUGMODE == 1) begin
 		$readmemh("/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/rtl/student/data/sin_low_debug.mem", sin_mem);
 	end else begin
-		$readmemh("/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/fv/data/sin_low.mem", sin_mem);
+		$readmemh("/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/fv/data/sin_high.mem", sin_mem);
 	end
 
     // Apply reset

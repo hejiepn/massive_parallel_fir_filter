@@ -3,6 +3,7 @@ module student_dpram_samples_tb;
   // Parameter für die DUT
   localparam int unsigned AddrWidth = 2;
   localparam int unsigned DataSize = 16;
+  localparam int unsigned DEBUGMODE = 1;
   localparam string INIT_F = "/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/fv/data/dpram_zeros_init.mem";
 
   // Signale für die DUT
@@ -19,7 +20,7 @@ module student_dpram_samples_tb;
   student_dpram_samples #(
     .AddrWidth(AddrWidth),
     .DataSize(DataSize),
-	.DebugMode(1),
+	.DebugMode(DEBUGMODE),
     .INIT_F(INIT_F)
   ) dut (
     .clk_i(clk_i),
