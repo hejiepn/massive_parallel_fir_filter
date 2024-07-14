@@ -1,8 +1,9 @@
 module student_fir_tb;
 
-  localparam int AddrWidth = 2; // Address width
+  localparam int AddrWidth = 10; // Address width
   localparam int MaxAddr = 2**AddrWidth; // Maximum address
   localparam int DATA_SIZE = 16; // Data size
+  localparam int DEBUGMODE = 0; // Coefficient size
 
   // Clock and reset signals
   logic clk_i;
@@ -19,14 +20,15 @@ module student_fir_tb;
   logic [DATA_SIZE*2-1:0] y_out;
 
   // Memory to store the input samples from sin.mem
-  logic [7:0] sin_mem [0:1024-1]; // Adjust the size based on your file
+  logic [7:0] sin_mem [0:1023]; // Adjust the size based on your file
   integer i; // Loop variable
   integer j; // Outer loop variable for clock cycle delay
 
   // Instantiate the DUT (Device Under Test)
   student_fir #(
 	.ADDR_WIDTH(AddrWidth),
-	.DATA_SIZE(DATA_SIZE)
+	.DATA_SIZE(DATA_SIZE),
+	.DEBUGMODE(DEBUGMODE)
   ) dut (
     .clk_i(clk_i),
     .rst_ni(rst_ni),
@@ -50,7 +52,11 @@ module student_fir_tb;
     sample_in = 0;
 
     // Load the sin.mem file
-    $readmemh("/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/fv/data/sin_low.mem", sin_mem);
+	if (DEBUGMODE == 1) begin
+		$readmemh("/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/rtl/student/data/sin_low_debug.mem", sin_mem);
+	end else begin
+		$readmemh("/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/fv/data/sin_low.mem", sin_mem);
+	end
 
     // Apply reset
     #40 rst_ni = 1; // Wait for 40 ns to apply reset (2 clock cycles)

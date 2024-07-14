@@ -1,6 +1,7 @@
 module student_fir #(
 	parameter int unsigned ADDR_WIDTH = 10,
-	parameter int unsigned DATA_SIZE = 16
+	parameter int unsigned DATA_SIZE = 16,
+	parameter int unsigned DEBUGMODE = 0
 	) (	
     input logic clk_i,
     input logic rst_ni,
@@ -16,9 +17,9 @@ module student_fir #(
 
   // Define constants for memory definition
   localparam MAX_ADDR = 2 ** ADDR_WIDTH;
-  localparam ROM_FILE_COEFF = "/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/rtl/student/data/coe_lp.mem";  // File for memory initialization
-  localparam ROM_FILE_SAMPLES = "/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/rtl/student/data/zeros.mem";  // File for memory initialization
-
+  localparam ROM_FILE_COEFF = (DEBUGMODE == 1) ? "/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/rtl/student/data/coe_lp_debug.mem" : "/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/rtl/student/data/coe_lp.mem";  // File for memory initialization
+  localparam ROM_FILE_SAMPLES = "/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/rtl/student/data/sin_low.mem";
+ 
   // Read and write pointers
   logic [ADDR_WIDTH-1:0] wr_addr;
   logic [ADDR_WIDTH-1:0] rd_addr;
@@ -33,10 +34,7 @@ module student_fir #(
   logic wra_coeff;
   logic [DATA_SIZE-1:0] write_coeff;
   logic [DATA_SIZE*2-1:0] fir_sum;
-
-    // Pipeline registers for read_sample and read_coeff
-  logic [DATA_SIZE-1:0] read_sample_reg;
-  logic [DATA_SIZE-1:0] read_coeff_reg;
+  //logic [31:0] ptr_counter;
       
 
   // FIR State Machine
@@ -75,18 +73,20 @@ module student_fir #(
       rd_addr <= '0;
 	  rd_addr_c <= '0;
     end else begin
-		if (rd_addr != wr_addr) begin
+		if (rd_addr == wr_addr && rd_addr_c != 0 && fir_state == COMPUTE) begin
+			rd_addr_c <= rd_addr_c + 1;
+		end else if (rd_addr != wr_addr) begin
 			rd_addr <= rd_addr - 1;
 			rd_addr_c <= rd_addr_c + 1;
-      end
-    end
+    	end
+	end
   end
 
   // Dual Port RAM instances for samples and coefficients
   student_dpram_samples #(
     .AddrWidth(ADDR_WIDTH),
     .DataSize(DATA_SIZE),
-	.DebugMode(1),
+	.DebugMode(DEBUGMODE),
     .INIT_F(ROM_FILE_SAMPLES) 
   ) samples_dpram (
     .clk_i(clk_i),
@@ -102,7 +102,7 @@ module student_fir #(
   student_dpram_samples #(
     .AddrWidth(ADDR_WIDTH),
     .DataSize(DATA_SIZE),
-	.DebugMode(1),
+	.DebugMode(DEBUGMODE),
     .INIT_F(ROM_FILE_COEFF) 
   ) coeff_dpram (
     .clk_i(clk_i),
@@ -133,19 +133,6 @@ module student_fir #(
     end
 end
 
-  // Pipeline stage for read_sample and read_coeff
-  always_ff @(posedge clk_i, negedge rst_ni) begin
-    if (~rst_ni) begin
-      read_sample_reg <= '0;
-      read_coeff_reg <= '0;
-    end else begin
-      if (fir_state == COMPUTE) begin
-        read_sample_reg <= read_sample;
-        read_coeff_reg <= read_coeff;
-      end
-    end
-  end
-
   // FIR State Machine
   always_ff @(posedge clk_i, negedge rst_ni) begin
     if (~rst_ni) begin
@@ -153,23 +140,23 @@ end
     end else begin
       case (fir_state)
         IDLE: begin
-          if (valid_strobe_in_pos_edge) begin
-            fir_state <= SHIFT_IN;
-          end
+			if (valid_strobe_in_pos_edge) begin
+				fir_state <= SHIFT_IN;
+			end
         end
         SHIFT_IN: begin
-          fir_state <= COMPUTE;
+			fir_state <= COMPUTE;
         end
         COMPUTE: begin
-          if (rd_addr == wr_addr) begin
-            fir_state <= SHIFT_OUT;
-          end
+			if (rd_addr == wr_addr && rd_addr_c == 0) begin
+				fir_state <= SHIFT_OUT;
+			end
         end
         SHIFT_OUT: begin
-          fir_state <= IDLE;
+			fir_state <= IDLE;
         end
         default: begin
-          fir_state <= IDLE;
+			fir_state <= IDLE;
         end
       endcase
     end
@@ -184,36 +171,39 @@ end
     end else begin
 		case (fir_state)
 			IDLE: begin
+				compute_finished_out <= 0;
+				valid_strobe_out <= 0;
 				fir_sum <= '0;
-				$display("fir_state: IDLE");
+				// $display("fir_state: IDLE");
+				// $display("wr_addr: %4x rd_addr: %4x rd_addr_c: %4x", wr_addr, rd_addr, rd_addr_c);
+				// $display("enb_samples: %1x enb_coeff: %1x", enb_samples, enb_coeff);
+				// $display("fir_sum: %d read_sample: %4x read_coeff: %4x", fir_sum, read_sample, read_coeff);
 			end
 			SHIFT_IN: begin
 				// No specific action needed
-				$display("fir_state: SHIFT_IN");
-				$display("wr_addr: %4x rd_addr: %4x rd_addr_c: %4x", wr_addr, rd_addr, rd_addr_c);
-				$display("enb_samples: %1x enb_coeff: %1x", enb_samples, enb_coeff);
-				$display("fir_sum: %d read_sample_reg: %4x read_coeff_reg: %4x", fir_sum, read_sample_reg, read_coeff_reg);
-				$display("fir_sum: %d read_sample: %4x read_coeff: %4x", fir_sum, read_sample, read_coeff);
+				// $display("fir_state: SHIFT_IN");
+				// $display("wr_addr: %4x rd_addr: %4x rd_addr_c: %4x", wr_addr, rd_addr, rd_addr_c);
+				// $display("enb_samples: %1x enb_coeff: %1x", enb_samples, enb_coeff);
+				// $display("fir_sum: %d read_sample: %4x read_coeff: %4x", fir_sum, read_sample, read_coeff);
 
 			end
 			COMPUTE: begin
-				$display("fir_state: Compute");
-				$display("wr_addr: %4x rd_addr: %4x rd_addr_c: %4x", wr_addr, rd_addr, rd_addr_c);
-				$display("enb_samples: %1x enb_coeff: %1x", enb_samples, enb_coeff);
-				$display("fir_sum: %d read_sample_reg: %4x read_coeff_reg: %4x", fir_sum, read_sample_reg, read_coeff_reg);
-				$display("fir_sum: %d read_sample: %4x read_coeff: %4x", fir_sum, read_sample, read_coeff);
+				// $display("fir_state: Compute");
+				// $display("wr_addr: %4x rd_addr: %4x rd_addr_c: %4x", wr_addr, rd_addr, rd_addr_c);
+				// $display("enb_samples: %1x enb_coeff: %1x", enb_samples, enb_coeff);
+				// $display("fir_sum: %d read_sample: %4x read_coeff: %4x", fir_sum, read_sample, read_coeff);
 				fir_sum <= fir_sum + read_sample * read_coeff;
-				if (rd_addr == wr_addr) begin
-					compute_finished_out <= 1;
-						valid_strobe_out <= 1;
-				end else if( rd_addr == wr_addr + 1) begin
-					sample_shift_out <= read_sample_reg;
+				if( rd_addr == wr_addr) begin
+					sample_shift_out <= read_sample;
 				end
 			end
 			SHIFT_OUT: begin
-				$display("fir_state: Shift Out");
-				compute_finished_out <= 0;
-				valid_strobe_out <= 0;
+				// $display("fir_state: Shift Out");
+				// $display("wr_addr: %4x rd_addr: %4x rd_addr_c: %4x", wr_addr, rd_addr, rd_addr_c);
+				// $display("enb_samples: %1x enb_coeff: %1x", enb_samples, enb_coeff);
+				// $display("fir_sum: %d read_sample: %4x read_coeff: %4x", fir_sum, read_sample, read_coeff);
+				compute_finished_out <= 1;
+				valid_strobe_out <= 1;
 			end
 		endcase
 	end
