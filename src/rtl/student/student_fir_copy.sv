@@ -1,7 +1,8 @@
 module student_fir_copy #(
 	parameter int unsigned ADDR_WIDTH = 10,
 	parameter int unsigned DATA_SIZE = 16,
-	parameter int unsigned DEBUGMODE = 0
+	parameter int unsigned DEBUGMODE = 0,
+	parameter int unsigned DATA_SIZE_FIR_OUT = 32
 	) (	
     input logic clk_i,
     input logic rst_ni,
@@ -12,30 +13,27 @@ module student_fir_copy #(
     output logic compute_finished_out,
     output logic [DATA_SIZE-1:0] sample_shift_out,
 	output logic valid_strobe_out,
-    output logic [DATA_SIZE*2-1:0] y_out
+    output logic [DATA_SIZE_FIR_OUT-1:0] y_out,
+	
+	input  tlul_pkg::tl_h2d_t tl_i,  //master input (incoming request)
+    output tlul_pkg::tl_d2h_t tl_o  //slave output (this module's response)
 );
 
   // Define constants for memory definition
   localparam MAX_ADDR = 2 ** ADDR_WIDTH;
   localparam ROM_FILE_COEFF = (DEBUGMODE == 1) ? "/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/rtl/student/data/coe_lp_debug.mem" : "/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/rtl/student/data/coe_lp.mem";  // File for memory initialization
-  localparam ROM_FILE_SAMPLES = "/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/rtl/student/data/sin_high.mem";
+  localparam ROM_FILE_SAMPLES = (DEBUGMODE == 1) ? "/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/rtl/student/data/zeros.mem" : "/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/rtl/student/data/sin_comb.mem";
  
   // Read and write pointers
   logic [ADDR_WIDTH-1:0] wr_addr;
   logic [ADDR_WIDTH-1:0] rd_addr;
-  logic [ADDR_WIDTH-1:0] wr_addr_c;
   logic [ADDR_WIDTH-1:0] rd_addr_c;
   logic [DATA_SIZE-1:0] read_coeff;
   logic [DATA_SIZE-1:0] read_sample;
   logic ena_samples;
   logic enb_samples;
-  logic ena_coeff;
   logic enb_coeff;
-  logic wra_coeff;
-  logic [DATA_SIZE-1:0] write_coeff;
-  logic [DATA_SIZE*2-1:0] fir_sum;
-  //logic [31:0] ptr_counter;
-      
+  logic [DATA_SIZE_FIR_OUT-1:0] fir_sum;      
 
   // FIR State Machine
   typedef enum logic[2:0] {IDLE, SHIFT_IN, DELAY, COMPUTE, SHIFT_OUT} fir_state_t;
@@ -45,7 +43,7 @@ module student_fir_copy #(
   logic valid_strobe_in_prev;
   logic valid_strobe_in_pos_edge;
 
-  always_ff @(posedge clk_i, negedge rst_ni) begin
+  always_ff @(posedge clk_i) begin
     if (~rst_ni) begin
       valid_strobe_in_prev <= 0;
     end else begin
@@ -57,7 +55,7 @@ module student_fir_copy #(
   assign ena_samples = valid_strobe_in_pos_edge;
 
   // Write address generation
-  always_ff @(posedge clk_i, negedge rst_ni) begin
+  always_ff @(posedge clk_i) begin
     if (~rst_ni) begin
       wr_addr <= '0;
     end else begin
@@ -68,7 +66,7 @@ module student_fir_copy #(
   end
 
   // Read address generation
-  always_ff @(posedge clk_i, negedge rst_ni) begin
+  always_ff @(posedge clk_i) begin
     if (~rst_ni) begin
       rd_addr <= '0;
 	  rd_addr_c <= '0;
@@ -83,45 +81,45 @@ module student_fir_copy #(
   end
 
   // Dual Port RAM instances for samples and coefficients
-  student_dpram_samples #(
+  student_dpram_samples_tlul #(
     .AddrWidth(ADDR_WIDTH),
     .DataSize(DATA_SIZE),
 	.DebugMode(DEBUGMODE),
     .INIT_F(ROM_FILE_SAMPLES) 
   ) samples_dpram (
     .clk_i(clk_i),
+	.rst_ni(rst_ni),
     .ena(ena_samples),
     .enb(enb_samples),
     .wea(valid_strobe_in_pos_edge),
     .addra(wr_addr),
     .addrb(rd_addr),
     .dia(sample_in),
-    .dob(read_sample)
+    .dob(read_sample),
+	.tl_i(tl_i),
+	.tl_o(tl_o)
   );
 
-  student_dpram_samples #(
+  student_dpram_coeff #(
     .AddrWidth(ADDR_WIDTH),
-    .DataSize(DATA_SIZE),
+    .CoeffDataSize(DATA_SIZE),
 	.DebugMode(DEBUGMODE),
     .INIT_F(ROM_FILE_COEFF) 
   ) coeff_dpram (
     .clk_i(clk_i),
-    .ena(ena_coeff),
+	.rst_ni(rst_ni),
     .enb(enb_coeff),
-    .wea(wra_coeff),
-    .addra(wr_addr_c),
     .addrb(rd_addr_c),
-    .dia(write_coeff),
-    .dob(read_coeff)
+    .dob(read_coeff),
+	.tl_i(tl_i),
+	.tl_o(tl_o)
   );
   
   // Enable signals control
-  always_ff @(posedge clk_i, negedge rst_ni) begin
+  always_ff @(posedge clk_i) begin
     if(~rst_ni) begin
       enb_samples <= 0;
-      ena_coeff <= 0;
       enb_coeff <= 0;
-      wra_coeff <= 0;
     end else begin
 		if (ena_samples) begin
         	enb_samples <= 1;
@@ -134,7 +132,7 @@ module student_fir_copy #(
 end
 
   // FIR State Machine
-  always_ff @(posedge clk_i, negedge rst_ni) begin
+  always_ff @(posedge clk_i) begin
     if (~rst_ni) begin
       fir_state <= IDLE;
     end else begin
@@ -163,7 +161,7 @@ end
   end
 
   // FIR computation
-  always_ff @(posedge clk_i, negedge rst_ni) begin
+  always_ff @(posedge clk_i) begin
     if (~rst_ni) begin
       fir_sum <= '0;
       compute_finished_out <= 0;

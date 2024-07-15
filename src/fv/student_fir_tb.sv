@@ -4,6 +4,7 @@ module student_fir_tb;
   localparam int MaxAddr = 2**AddrWidth; // Maximum address
   localparam int DATA_SIZE = 16; // Data size
   localparam int DEBUGMODE = 0; // activate debugMode when AddrWidth != 10 
+  localparam int DATA_SIZE_FIR_OUT = 32; // activate debugMode when AddrWidth != 10 
 
   // Clock and reset signals
   logic clk_i;
@@ -31,7 +32,8 @@ module student_fir_tb;
   student_fir #(
 	.ADDR_WIDTH(AddrWidth),
 	.DATA_SIZE(DATA_SIZE),
-	.DEBUGMODE(DEBUGMODE)
+	.DEBUGMODE(DEBUGMODE),
+	.DATA_SIZE_FIR_OUT(DATA_SIZE_FIR_OUT)
   ) dut (
     .clk_i(clk_i),
     .rst_ni(rst_ni),

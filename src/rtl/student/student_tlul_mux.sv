@@ -24,7 +24,7 @@ module student_tlul_mux #(
 
   always_comb begin
     is_curr = 0;
-    if ((tl_host_i.a_address[CURR_OFFSET+CURR_WIDTH-1:CURR_OFFSET] == CURR_VAL) && tl_host_i.a_valid) begin
+    if ((tl_host_i.a_address[CURR_OFFSET+CURR_WIDTH-1:CURR_OFFSET] == CURR_VAL) && tl_host_i.a_valid) begin // Check if the request is for the current device which starts always with 0x1xxxxxxx
       is_curr = 1;
     end
   end

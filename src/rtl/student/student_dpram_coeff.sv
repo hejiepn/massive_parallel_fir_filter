@@ -15,14 +15,14 @@ module student_dpram_coeff #(
     output tlul_pkg::tl_d2h_t tl_o  //slave output (this module's response)
 );
 
-  localparam int DataSize = 32;  //for the tlul_adapter_sram 32 is fixed
+  localparam int TL_DataSize = 32;  //for the tlul_adapter_sram 32 is fixed
 
   logic        req;
   logic        we;
   logic [AddrWidth-1:0] addr;
-  logic [DataSize-1:0] wdata;
-  logic [DataSize-1:0] wmask;
-  logic [DataSize-1:0] rdata;
+  logic [TL_DataSize-1:0] wdata;
+  logic [TL_DataSize-1:0] wmask;
+  logic [TL_DataSize-1:0] rdata;
   logic        rvalid;
   
   logic [CoeffDataSize-1:0] read_data;
@@ -30,7 +30,7 @@ module student_dpram_coeff #(
 
   tlul_adapter_sram #(
     .SramAw     (AddrWidth),
-    .SramDw     (DataSize),
+    .SramDw     (TL_DataSize),
     .Outstanding(1)
   ) adapter_i (
     .clk_i,
@@ -50,7 +50,7 @@ module student_dpram_coeff #(
     .rerror_i(2'b00)
   );
 
-	(* ram_style = "block" *) logic [DataSize-1:0] mem[0:2**AddrWidth-1];
+	(* ram_style = "block" *) logic [CoeffDataSize-1:0] mem[0:2**AddrWidth-1];
 
 	// Independent read interface for coefficient data
 	always @(posedge clk_i) begin
@@ -58,7 +58,7 @@ module student_dpram_coeff #(
 			if (we && (addrb == addr)) begin
 				read_data <= wdata[CoeffDataSize-1:0]; // Wenn gleiche Adresse, dann den geschriebenen Wert lesen
 			end else begin
-				read_data <= mem[addrb][CoeffDataSize-1:0]; // Extract lower 16 bits
+				read_data <= mem[addrb]; // Extract lower 16 bits
 			end
 		end
 	end
@@ -72,11 +72,11 @@ module student_dpram_coeff #(
 				// Write access:
 				if (wmask[0]) mem[addr][7:0] <= wdata[7:0];
 				if (wmask[8]) mem[addr][15:8] <= wdata[15:8];
-				if (wmask[16]) mem[addr][23:16] <= wdata[23:16];
-				if (wmask[24]) mem[addr][31:24] <= wdata[31:24];
+				// if (wmask[16]) mem[addr][23:16] <= wdata[23:16];
+				// if (wmask[24]) mem[addr][31:24] <= wdata[31:24];
 			end
 			// Read access:
-			rdata <= mem[addr];
+			rdata <= {16'b0, mem[addr]};
 		end
 	end
 
@@ -92,13 +92,17 @@ module student_dpram_coeff #(
 	initial begin
 		if (INIT_F != "") begin
 			$display("Loading initialization file %s into BRAM.", INIT_F);
-				//$display("DebugMode is enabled.");
+			if(DebugMode) begin
+				$display("DebugMode is enabled.");
 				$readmemh(INIT_F, temp_bram);
 				// Daten in BRAM kopieren, angepasst auf die Adressbreite
 				for (int i = 0; i < 2**AddrWidth; i++) begin
-					mem[i] = {16'b0, temp_bram[i]};
-					//$display("Initial bram[%0d] = %h", i, mem[i]);  // Debug-Ausgabe hinzufügen
+					mem[i] = temp_bram[i];
+					$display("Initial bram[%0d] = %h", i, mem[i]);  // Debug-Ausgabe hinzufügen
 				end
+			end else begin
+				$readmemh(INIT_F, mem);
+			end
 			$display("Initialization file %s loaded successfully.", INIT_F);
 		end else begin
 			$display("Initialization file not specified.");

@@ -22,7 +22,7 @@ module student_fir #(
   // Define constants for memory definition
   localparam MAX_ADDR = 2 ** ADDR_WIDTH;
   localparam ROM_FILE_COEFF = (DEBUGMODE == 1) ? "/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/rtl/student/data/coe_lp_debug.mem" : "/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/rtl/student/data/coe_lp.mem";  // File for memory initialization
-  localparam ROM_FILE_SAMPLES = (DEBUGMODE == 1) ? "/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/rtl/student/data/zeros.mem" : "/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/rtl/student/data/sin_comb.mem";
+  localparam ROM_FILE_SAMPLES = (DEBUGMODE == 1) ? "/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/rtl/student/data/zeros.mem" : "/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/rtl/student/data/zeros.mem";
  
   // Read and write pointers
   logic [ADDR_WIDTH-1:0] wr_addr;
@@ -43,7 +43,7 @@ module student_fir #(
   logic valid_strobe_in_prev;
   logic valid_strobe_in_pos_edge;
 
-  always_ff @(posedge clk_i, negedge rst_ni) begin
+  always_ff @(posedge clk_i) begin
     if (~rst_ni) begin
       valid_strobe_in_prev <= 0;
     end else begin
@@ -55,7 +55,7 @@ module student_fir #(
   assign ena_samples = valid_strobe_in_pos_edge;
 
   // Write address generation
-  always_ff @(posedge clk_i, negedge rst_ni) begin
+  always_ff @(posedge clk_i) begin
     if (~rst_ni) begin
       wr_addr <= '0;
     end else begin
@@ -66,7 +66,7 @@ module student_fir #(
   end
 
   // Read address generation
-  always_ff @(posedge clk_i, negedge rst_ni) begin
+  always_ff @(posedge clk_i) begin
     if (~rst_ni) begin
       rd_addr <= '0;
 	  rd_addr_c <= '0;
@@ -79,22 +79,44 @@ module student_fir #(
     	end
 	end
   end
+  
+  localparam TLUL_DPRAM_DEVICES = 2;
+
+  tlul_pkg::tl_h2d_t tl_student_dpram_i[TLUL_DPRAM_DEVICES-1:0];
+  tlul_pkg::tl_d2h_t tl_student_dpram_o[TLUL_DPRAM_DEVICES-1:0];
+
+  student_tlul_mux #(
+	.NUM(TLUL_DPRAM_DEVICES),
+	.ADDR_OFFSET(12)
+  ) tlul_mux_dpram (
+      .clk_i,
+      .rst_ni,
+
+      .tl_host_i(tl_i),
+      .tl_host_o(tl_o),
+
+      .tl_device_i(tl_student_dpram_i),
+      .tl_device_o(tl_student_dpram_o)
+  );
 
   // Dual Port RAM instances for samples and coefficients
-  student_dpram_samples #(
+  student_dpram_samples_tlul #(
     .AddrWidth(ADDR_WIDTH),
     .DataSize(DATA_SIZE),
 	.DebugMode(DEBUGMODE),
     .INIT_F(ROM_FILE_SAMPLES) 
   ) samples_dpram (
     .clk_i(clk_i),
+	.rst_ni(rst_ni),
     .ena(ena_samples),
     .enb(enb_samples),
     .wea(valid_strobe_in_pos_edge),
     .addra(wr_addr),
     .addrb(rd_addr),
     .dia(sample_in),
-    .dob(read_sample)
+    .dob(read_sample),
+	.tl_i(tl_student_dpram_i[0]),
+	.tl_o(tl_student_dpram_o[0])
   );
 
   student_dpram_coeff #(
@@ -108,12 +130,12 @@ module student_fir #(
     .enb(enb_coeff),
     .addrb(rd_addr_c),
     .dob(read_coeff),
-	.tl_i(tl_i),
-	.tl_o(tl_o)
+	.tl_i(tl_student_dpram_i[1]),
+	.tl_o(tl_student_dpram_o[1])
   );
   
   // Enable signals control
-  always_ff @(posedge clk_i, negedge rst_ni) begin
+  always_ff @(posedge clk_i) begin
     if(~rst_ni) begin
       enb_samples <= 0;
       enb_coeff <= 0;
@@ -129,7 +151,7 @@ module student_fir #(
 end
 
   // FIR State Machine
-  always_ff @(posedge clk_i, negedge rst_ni) begin
+  always_ff @(posedge clk_i) begin
     if (~rst_ni) begin
       fir_state <= IDLE;
     end else begin
@@ -158,7 +180,7 @@ end
   end
 
   // FIR computation
-  always_ff @(posedge clk_i, negedge rst_ni) begin
+  always_ff @(posedge clk_i) begin
     if (~rst_ni) begin
       fir_sum <= '0;
       compute_finished_out <= 0;
