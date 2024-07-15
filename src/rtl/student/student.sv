@@ -13,10 +13,7 @@ module student (
   output tlul_pkg::tl_d2h_t tl_device_fast_o,
 
   input  tlul_pkg::tl_d2h_t tl_host_i,
-  output tlul_pkg::tl_h2d_t tl_host_o,
-  
-  inout  wire       scl,
-  inout  wire       sda
+  output tlul_pkg::tl_h2d_t tl_host_o
 );
 
 
@@ -26,14 +23,18 @@ localparam int unsigned DATA_SIZE_FIR_OUT = 32;
 localparam int unsigned DEBUGMODE = 0;
 
 logic [7:0] led;
-  logic mclk;
-  logic lrclk;
-  logic bclk;
-  logic dac_sdata;
+logic mclk;
+logic lrclk;
+logic bclk;
+logic dac_sdata;
+logic sda_oe;
+logic scl_oe;
 
   // ------ IIC -------
-//   assign sda_i = userio_i.sda;
-//   assign scl_i = userio_i.scl;
+  logic sda_i;
+  logic scl_i;
+  assign sda_i = userio_i.sda;
+  assign scl_i = userio_i.scl;
 
   assign userio_o = '{
           led: led,
@@ -41,8 +42,8 @@ logic [7:0] led;
           ac_lrclk: lrclk,
           ac_bclk: bclk,
           ac_dac_sdata: dac_sdata,
-        //   sda_oe: sda_oe,
-        //   scl_oe: scl_oe,
+          sda_oe: sda_oe,
+          scl_oe: scl_oe,
           default: '0
       };
 
@@ -80,6 +81,10 @@ logic [7:0] led;
 
   logic [DATA_SIZE-1:0] Data_iis_O;
   logic valid_strobe_2FIR;
+  logic [DATA_SIZE_FIR_OUT-1:0] y_out;
+  logic compute_finished_out;
+  logic [DATA_SIZE-1:0] sample_shift_out;
+  logic valid_strobe_out;
 
   student_iis_handler #(
 	.DATA_SIZE(DATA_SIZE),
@@ -102,7 +107,8 @@ logic [7:0] led;
   student_fir #(
 	.ADDR_WIDTH(ADDR_WIDTH),
 	.DATA_SIZE(DATA_SIZE),
-	.DEBUGMODE(DEBUGMODE)
+	.DEBUGMODE(DEBUGMODE),
+	.DATA_SIZE_FIR_OUT(DATA_SIZE_FIR_OUT)
   ) dut_student_fir (
 	.clk_i(clk_i),
 	.rst_ni(rst_ni),
@@ -119,8 +125,10 @@ logic [7:0] led;
   student_iic_ctrl dut_student_iic(
     .clk_i(clk_i),
     .rst_ni(rst_ni),
-	.sda(sda),
-	.scl(scl),
+	.sda_i(sda_i),
+	.scl_i(scl_i),
+	.sda_oe(sda_oe),
+	.scl_oe(scl_oe),
    .tl_i(tl_student_i[2]),  //master input (incoming request)
     .tl_o(tl_student_o[2])  //slave output (this module's response)
 );

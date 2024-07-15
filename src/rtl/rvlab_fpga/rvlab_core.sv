@@ -16,10 +16,7 @@ module rvlab_core (
   output tlul_pkg::tl_h2d_t tl_ddr_o,
   input  tlul_pkg::tl_d2h_t tl_ddr_i,
   output tlul_pkg::tl_h2d_t tl_ddr_ctrl_o,
-  input  tlul_pkg::tl_d2h_t tl_ddr_ctrl_i,
-  
-  inout  wire       scl,
-  inout  wire       sda
+  input  tlul_pkg::tl_d2h_t tl_ddr_ctrl_i
 
 );
 
@@ -171,9 +168,7 @@ module rvlab_core (
     .tl_device_fast_i(tl_student_device_fast_h2d),
     .tl_device_fast_o(tl_student_device_fast_d2h),
     .tl_host_i       (tl_student_host_d2h),
-    .tl_host_o       (tl_student_host_h2d),
-	.scl(scl),
-	.sda(sda)
+    .tl_host_o       (tl_student_host_h2d)
   );
 
 endmodule

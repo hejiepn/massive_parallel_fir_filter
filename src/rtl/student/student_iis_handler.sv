@@ -13,7 +13,7 @@ module student_iis_handler #(
     output logic AC_DAC_SDATA,  // Codec DAC Serial Data
 
     // To/From HW
-	input logic [DDATA_SIZE_FIR_OUT-1:0] Data_I, 	 //Data from HW to Codec (mono Channel)
+	input logic [DATA_SIZE_FIR_OUT-1:0] Data_I, 	 //Data from HW to Codec (mono Channel)
 	output logic [DATA_SIZE-1:0] Data_O,	 //Data from Codec to HW (mono Channel)
     input logic valid_strobe_I,  // Valid strobe from HW
 	output logic valid_strobe    // Valid strobe to HW

@@ -6,17 +6,17 @@
 #include <stdbool.h>
 #include "rvlab.h"
 
-#define IIC_SDA_EN		STUDENT_IIC_CTRL_SDA_EN(0)
-// write on SDA Pin
-#define IIC_SDA_WRITE	STUDENT_IIC_CTRL_SDA_WRITE(0)
-// read SDA Pin
-#define IIC_SDA_READ	STUDENT_IIC_CTRL_SDA_READ(0)
 // enable SCL Write
+#define IIC_SDA_EN		STUDENT_IIC_CTRL_SDA_EN(0)
 #define IIC_SCL_EN		STUDENT_IIC_CTRL_SCL_EN(0) 
-// write on SCL Pin
-#define IIC_SCL_WRITE	STUDENT_IIC_CTRL_SCL_WRITE(0)
-// read SCL Pin
+#define IIC_SDA_READ	STUDENT_IIC_CTRL_SDA_READ(0)
 #define IIC_SCL_READ 	STUDENT_IIC_CTRL_SCL_READ(0)
+// #define IIC_SDA_WRITE	STUDENT_IIC_CTRL_SDA_WRITE(0)
+// #define IIC_SCL_WRITE	STUDENT_IIC_CTRL_SCL_WRITE(0)
+// // write on SDA Pin
+// // read SDA Pin
+// // write on SCL Pin
+// // read SCL Pin
 
 #define I2CSPEED 100
 

@@ -40,12 +40,12 @@ const unsigned long initVectors[INIT_VECTORS] = {
 bool started = false; // global data
 
 bool read_SCL(void) {
-	REG32(IIC_SCL_EN) = 0;
+	//REG32(IIC_SCL_EN) = 0;
 	return (bool) (REG32(IIC_SCL_READ) & STUDENT_IIC_CTRL_SCL_READ_MASK);
 }
 
 bool read_SDA(void) {
-	REG32(IIC_SDA_EN) = 0;
+	//REG32(IIC_SDA_EN) = 0;
 	return (bool) (REG32(IIC_SDA_READ) & STUDENT_IIC_CTRL_SDA_READ_MASK);
 }
 
@@ -55,7 +55,7 @@ void set_SCL(void) {
 }
 
 void clear_SCL(void) {
-	REG32(IIC_SCL_WRITE) = 0;
+	//REG32(IIC_SCL_WRITE) = 0;
 	REG32(IIC_SCL_EN) = 1;
 }
 
@@ -65,7 +65,7 @@ void set_SDA(void) {
 }
 
 void clear_SDA(void) {
-	REG32(IIC_SDA_WRITE) = 0;
+	//REG32(IIC_SDA_WRITE) = 0;
 	REG32(IIC_SDA_EN) = 1;
 }
 

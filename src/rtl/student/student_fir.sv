@@ -1,7 +1,8 @@
 module student_fir #(
 	parameter int unsigned ADDR_WIDTH = 10,
 	parameter int unsigned DATA_SIZE = 16,
-	parameter int unsigned DEBUGMODE = 0
+	parameter int unsigned DEBUGMODE = 0,
+	parameter int unsigned DATA_SIZE_FIR_OUT = 32
 	) (	
     input logic clk_i,
     input logic rst_ni,
@@ -12,7 +13,7 @@ module student_fir #(
     output logic compute_finished_out,
     output logic [DATA_SIZE-1:0] sample_shift_out,
 	output logic valid_strobe_out,
-    output logic [DATA_SIZE*2-1:0] y_out,
+    output logic [DATA_SIZE_FIR_OUT-1:0] y_out,
 	
 	input  tlul_pkg::tl_h2d_t tl_i,  //master input (incoming request)
     output tlul_pkg::tl_d2h_t tl_o  //slave output (this module's response)
@@ -32,7 +33,7 @@ module student_fir #(
   logic ena_samples;
   logic enb_samples;
   logic enb_coeff;
-  logic [DATA_SIZE*2-1:0] fir_sum;      
+  logic [DATA_SIZE_FIR_OUT-1:0] fir_sum;      
 
   // FIR State Machine
   typedef enum logic[2:0] {IDLE, SHIFT_IN, DELAY, COMPUTE, SHIFT_OUT} fir_state_t;
