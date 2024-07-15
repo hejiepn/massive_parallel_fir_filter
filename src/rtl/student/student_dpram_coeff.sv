@@ -92,12 +92,12 @@ module student_dpram_coeff #(
 	initial begin
 		if (INIT_F != "") begin
 			$display("Loading initialization file %s into BRAM.", INIT_F);
-				$display("DebugMode is enabled.");
+				//$display("DebugMode is enabled.");
 				$readmemh(INIT_F, temp_bram);
 				// Daten in BRAM kopieren, angepasst auf die Adressbreite
 				for (int i = 0; i < 2**AddrWidth; i++) begin
 					mem[i] = {16'b0, temp_bram[i]};
-					$display("Initial bram[%0d] = %h", i, mem[i]);  // Debug-Ausgabe hinzufügen
+					//$display("Initial bram[%0d] = %h", i, mem[i]);  // Debug-Ausgabe hinzufügen
 				end
 			$display("Initialization file %s loaded successfully.", INIT_F);
 		end else begin

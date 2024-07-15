@@ -1,6 +1,5 @@
 #include "iic_ctrl.h"
 
-
 #define AudioCodecAddr 0x76 // binary: 8'b01110110 ; Write mode active, if LSB == 0
 #define INIT_VECTORS 29
 #define MAX_ATTEMPTS 5

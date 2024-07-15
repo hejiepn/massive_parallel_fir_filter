@@ -12,7 +12,7 @@ typedef enum {
 	bandpass
 } filterModule;
 
-void fir_filter_enable(bool enable);
+void fir_filter_debug_enable(bool enable);
 void fir_filter_set_mode(filterModule mode);
 
 #endif //FILTER_H

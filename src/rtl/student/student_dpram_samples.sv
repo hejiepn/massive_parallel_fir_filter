@@ -43,12 +43,12 @@ module student_dpram_samples #(
 		if (INIT_F != "") begin
 			$display("Loading initialization file %s into BRAM.", INIT_F);
 			if (DebugMode) begin
-				$display("DebugMode is enabled.");
+				//$display("DebugMode is enabled.");
 				$readmemh(INIT_F, temp_bram);
 				// Daten in BRAM kopieren, angepasst auf die Adressbreite
 				for (int i = 0; i < 2**AddrWidth; i++) begin
 					bram[i] = temp_bram[i];
-					$display("Initial bram[%0d] = %h", i, bram[i]);  // Debug-Ausgabe hinzufügen
+					//$display("Initial bram[%0d] = %h", i, bram[i]);  // Debug-Ausgabe hinzufügen
 				end
 			end else begin
 				$readmemh(INIT_F, bram);
