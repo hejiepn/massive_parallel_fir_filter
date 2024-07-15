@@ -34,6 +34,10 @@ logic sda_i;
 logic scl_o;
 logic scl_en;
 logic scl_i;
+logic sda_i_d; // 1st FF delay
+logic sda_i_dd; // 2nd FF delay
+logic scl_i_d;
+logic scl_i_dd;
 
 always_ff @(posedge clk_i or negedge rst_ni) begin : write_drive_sda_scl_pins
 	if(~rst_ni) begin
@@ -68,16 +72,30 @@ always_ff@(posedge clk_i or negedge rst_ni) begin : read_sda_scl_pins
 	end else begin
 		if (~sda_en_buf) begin
 			hw2reg.sda_read.de <= 1'b1;
-			hw2reg.sda_read.d <= sda_i;
+			hw2reg.sda_read.d <= sda_i_dd;
 		end else begin
 			hw2reg.sda_read.de <= 1'b0;
 		end 
 		if (~scl_en_buf) begin
 			hw2reg.scl_read.de <= 1'b1;
-			hw2reg.scl_read.d <= scl_i;
+			hw2reg.scl_read.d <= scl_i_dd;
 		end else begin
 			hw2reg.scl_read.de <= 1'b0;
 		end
+	end
+end
+
+always_ff @(posedge clk_i or negedge rst_ni) begin: 2FF_for_Buffer_Input
+	if(~rst_ni) begin
+		scl_i_d <= 0;
+		scl_i_dd <= 0;
+		sda_i_d <= 0;
+		sda_i_dd <= 0;
+	end else begin
+		scl_i_d <= scl_i;
+		scl_i_dd <= scl_i_d;
+		sda_i_d <= sda_i;
+		sda_i_dd <= sda_i_d;
 	end
 end
 
