@@ -2,8 +2,8 @@ module student_iic_ctrl (
     input logic clk_i,
     input logic rst_ni,
 
-    inout  logic sda,
-    inout  logic scl,
+    inout  wire sda,
+    inout  wire scl,
 
     input  tlul_pkg::tl_h2d_t tl_i,  //master input (incoming request)
     output tlul_pkg::tl_d2h_t tl_o  //slave output (this module's response)
@@ -85,7 +85,7 @@ always_ff@(posedge clk_i or negedge rst_ni) begin : read_sda_scl_pins
 	end
 end
 
-always_ff @(posedge clk_i or negedge rst_ni) begin: 2FF_for_Buffer_Input
+always_ff@(posedge clk_i or negedge rst_ni) begin : ff_delay
 	if(~rst_ni) begin
 		scl_i_d <= 0;
 		scl_i_dd <= 0;

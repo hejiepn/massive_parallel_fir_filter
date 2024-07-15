@@ -1,9 +1,9 @@
 module student_tlul_mux_tb;
-  localparam CONNECTED_SLAVES = 16;
+  localparam CONNECTED_SLAVES = 4;
 
   logic clk;
   logic rst_n;
-  tlul_pkg::tl_d2h_t tl_host_d2h;  // tl_host_d2h
+  tlul_pkg::tl_d2h_t tl_host_d2h; 
   tlul_pkg::tl_h2d_t tl_host_h2d;
 
   tlul_pkg::tl_d2h_t tl_device_d2h[CONNECTED_SLAVES];
@@ -18,7 +18,12 @@ module student_tlul_mux_tb;
   end
 
   student_tlul_mux #(
-      .NUM(CONNECTED_SLAVES)
+      .NUM(CONNECTED_SLAVES),
+      .ADDR_WIDTH(4),
+      .ADDR_OFFSET(4),
+      .CURR_OFFSET(8),
+      .CURR_WIDTH(4),
+      .CURR_VAL(0)
   ) DUT (
       .clk_i(clk),
       .rst_ni(rst_n),
@@ -63,7 +68,7 @@ module student_tlul_mux_tb;
     errcnt = '0;
 
     for (int j = 0; j < CONNECTED_SLAVES; j = j + 1) begin
-      addr  = j << 20;
+      addr  = j << 4;
       wdata = j + 1;
       bus.put_word(addr + SHIFTIN_OFFSET, wdata);
       bus.put_word(addr + SHIFTCFG_OFFSET, 6'b000010);
@@ -71,15 +76,13 @@ module student_tlul_mux_tb;
 
 
     for (int j = 0; j < CONNECTED_SLAVES; j = j + 1) begin
-      addr = j << 20;
+      addr = j << 4;
       bus.get_word(addr + SHIFTIN_OFFSET, res);
       expected_value = j + 1;
       if (res !== expected_value) begin
         $error("SHIFTIN is incorrect: should be %u, is %u", expected_value, res);
         errcnt = errcnt + 1;
-	  end else begin
-		$display("SHIFTIN is correct: should be %u, is %u", expected_value, res);
-	  end
+      end
 
       bus.get_word(addr + SHIFTOUT_OFFSET, res);
       expected_value = (j + 1) << 1;
@@ -90,9 +93,9 @@ module student_tlul_mux_tb;
     end
 
     if (errcnt > 0) begin
-      $display("### TESTS FAILED WITH %d ERRORS###", errcnt);
+      $display("# FAILED WITH %d ERRORS #", errcnt);
     end else begin
-      $display("### TESTS PASSED ###");
+      $display("# PASSED #");
     end
     $finish;
   end

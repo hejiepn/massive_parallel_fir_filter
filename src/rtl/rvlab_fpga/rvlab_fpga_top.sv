@@ -413,7 +413,9 @@ module rvlab_fpga_top (
     .tl_ddr_ctrl_i(tl_ddr_ctrl_d2h),
 
     .userio_i(userio_b2f),
-    .userio_o(userio_f2b)
+    .userio_o(userio_f2b),
+	.scl(scl),
+	.sda(sda)
   );
 
 
