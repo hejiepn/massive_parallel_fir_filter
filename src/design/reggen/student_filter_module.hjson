@@ -5,12 +5,13 @@
   regwidth: "32"
   registers: [
 	{
-      name: "FIR_enable"
-      desc: "enables filter module otherwise data will be just passed"
+      name: "Debug Enable"
+      desc: "enables debug fir filter module to test component single handly"
       swaccess: "wo"
       hwaccess: "hro"
+	  hwqe : "true"
       fields: [
-        {bits: "0", name: "enable", desc: "0: disabled, 1:enabled"}
+        {bits: "0", name: "Debug enable", desc: "0: disabled, 1:enabled"}
       ]
     }
     {
@@ -18,17 +19,9 @@
       desc: "sets effect mode of filter module"
       swaccess: "wo"
       hwaccess: "hro"
+	  hwqe : "true"
       fields: [
         {bits: "8:0", name: "mode", desc: "effect mode"}
-      ]
-    }
-	{
-      name: "FIR_coeff_addr"
-      desc: "memory address of coefficient"
-      swaccess: "wo"
-      hwaccess: "hro"
-      fields: [
-        {bits: "31:0", name: "coefficient memory address", desc: "show memory address of coefficient"}
       ]
     }
   ]
