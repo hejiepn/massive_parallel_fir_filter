@@ -1,0 +1,15 @@
+#-----------------------------------------------------------
+# Vivado v2021.2 (64-bit)
+# SW Build 3367213 on Tue Oct 19 02:47:39 MDT 2021
+# IP Build 3369179 on Thu Oct 21 08:25:16 MDT 2021
+# Start of session at: Mon Jun 24 14:40:28 2024
+# Process ID: 127851
+# Current directory: /home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01
+# Command line: vivado
+# Log file: /home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/vivado.log
+# Journal file: /home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/vivado.jou
+# Running On: msclab, OS: Linux, CPU Frequency: 3000.000 MHz, CPU Physical cores: 31, Host memory: 404094 MB
+#-----------------------------------------------------------
+start_gui
+open_project /home/rvlab/groups/rvlab01/Desktop/dev_siyu/risc-v-lab-group-01/fir/fir.xpr
+update_compile_order -fileset sources_1

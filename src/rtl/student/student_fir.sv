@@ -116,8 +116,8 @@ module student_fir #(
     .addrb(rd_addr),
     .dia(sample_in),
     .dob(read_sample)
-	//.tl_i(tl_student_dpram_i[0]),
-	//.tl_o(tl_student_dpram_o[0])
+	//.tl_i(tl_student_dpram_i[1]),
+	//.tl_o(tl_student_dpram_o[1])
   );
 
   student_dpram_coeff #(
