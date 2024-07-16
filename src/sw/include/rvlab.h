@@ -31,9 +31,6 @@
 #include "reggen/student_rlight.h"
 #define STUDENT_RLIGHT0_BASE_ADDR 0x10100000
 
-#include "reggen/student_filter_module.h"
-#define STUDENT_FILTER_MODULE0_BASE_ADDR 0x10200000
-
 #include "reggen/student_iic_ctrl.h"
 #define STUDENT_IIC_CTRL0_BASE_ADDR 0x10300000
 

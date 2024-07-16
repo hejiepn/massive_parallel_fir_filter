@@ -38,34 +38,34 @@ const unsigned long initVectors[INIT_VECTORS] = {
 
 bool started = false; // global data
 
-bool read_SCL(void) {
+uint32_t read_SCL(void) {
 	//REG32(IIC_SCL_EN) = 0;
-	return (bool) (REG32(IIC_SCL_READ) & STUDENT_IIC_CTRL_SCL_READ_MASK);
+	return REG32(STUDENT_IIC_CTRL_SCL_READ(0));
 }
 
-bool read_SDA(void) {
+uint32_t read_SDA(void) {
 	//REG32(IIC_SDA_EN) = 0;
-	return (bool) (REG32(IIC_SDA_READ) & STUDENT_IIC_CTRL_SDA_READ_MASK);
+	return REG32(STUDENT_IIC_CTRL_SDA_READ(0));
 }
 
 void set_SCL(void) {
 	//REG32(IIC_SCL_WRITE) = 1;
-	REG32(IIC_SCL_EN) = 0; //let pull up resistor drive pin high
+	REG32(STUDENT_IIC_CTRL_SCL_EN(0)) = 0x00000000;
 }
 
 void clear_SCL(void) {
 	//REG32(IIC_SCL_WRITE) = 0;
-	REG32(IIC_SCL_EN) = 1;
+	REG32(STUDENT_IIC_CTRL_SCL_EN(0)) = 0x00000001;
 }
 
 void set_SDA(void) {
 	//REG32(IIC_SDA_WRITE) = 1;
-	REG32(IIC_SDA_EN) = 0;
+	REG32(STUDENT_IIC_CTRL_SDA_EN(0)) = 0x00000000;
 }
 
 void clear_SDA(void) {
 	//REG32(IIC_SDA_WRITE) = 0;
-	REG32(IIC_SDA_EN) = 1;
+	REG32(STUDENT_IIC_CTRL_SDA_EN(0)) = 0x00000001;
 }
 
 void arbitration_lost(void) {
@@ -76,8 +76,10 @@ void I2C_delay(void) {
   volatile int v;
   int i;
 
+  v = 0;
+
   for (i = 0; i < I2CSPEED / 2; ++i) {
-    v;
+    ++v ;
   }
 }
 
@@ -202,7 +204,7 @@ bool i2c_read_bit(void)
   while (read_SCL() == 0) { // Clock stretching
     if (timeout >= MAX_ITERATIONS) {
 		arbitration_lost();
-		return;
+		return 0;
 	}
 	++timeout;
   }
@@ -301,4 +303,16 @@ void start_audio_codec_config(void) {
             break;
         }
     }
+}
+
+
+void test_ii2(void)
+{
+    printf("read_SDA after enabling: %b", read_SDA());
+    printf("read_SCL after enabling: %b", read_SCL());
+    I2C_delay();
+    
+    set_SDA();
+    set_SCL();
+    I2C_delay();
 }

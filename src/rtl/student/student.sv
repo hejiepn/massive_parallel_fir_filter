@@ -29,6 +29,10 @@ logic bclk;
 logic dac_sdata;
 logic sda_oe;
 logic scl_oe;
+//logic pmod_a_oe;
+logic pmod_a_out;
+//logic pmod_b_oe;
+logic pmod_b_out;
 
   // ------ IIC -------
   logic sda_i;
@@ -44,6 +48,8 @@ logic scl_oe;
           ac_dac_sdata: dac_sdata,
           sda_oe: sda_oe,
           scl_oe: scl_oe,
+          pmod_a_oe: {6'b0,2'b1},
+          pmod_a_out: {'0,sda_i,scl_i},
           default: '0
       };
 

@@ -7,10 +7,10 @@
 #include "rvlab.h"
 
 // enable SCL Write
-#define IIC_SDA_EN		STUDENT_IIC_CTRL_SDA_EN(0)
-#define IIC_SCL_EN		STUDENT_IIC_CTRL_SCL_EN(0) 
-#define IIC_SDA_READ	STUDENT_IIC_CTRL_SDA_READ(0)
-#define IIC_SCL_READ 	STUDENT_IIC_CTRL_SCL_READ(0)
+//#define IIC_SDA_EN		STUDENT_IIC_CTRL_SDA_EN(0)
+//#define IIC_SCL_EN		STUDENT_IIC_CTRL_SCL_EN(0) 
+//#define IIC_SDA_READ	STUDENT_IIC_CTRL_SDA_READ(0)
+//#define IIC_SCL_READ 	STUDENT_IIC_CTRL_SCL_READ(0)
 // #define IIC_SDA_WRITE	STUDENT_IIC_CTRL_SDA_WRITE(0)
 // #define IIC_SCL_WRITE	STUDENT_IIC_CTRL_SCL_WRITE(0)
 // // write on SDA Pin
@@ -23,8 +23,8 @@
 #define MAX_ITERATIONS 1000
 
 void I2C_delay(void);
-bool read_SCL(void); // Return current level of SCL line, 0 or 1
-bool read_SDA(void); // Return current level of SDA line, 0 or 1
+uint32_t read_SCL(void); // Return current level of SCL line, 0 or 1
+uint32_t read_SDA(void); // Return current level of SDA line, 0 or 1
 void set_SCL(void); // Do not drive SCL (set pin high-impedance)
 void clear_SCL(void); // Actively drive SCL signal low
 void set_SDA(void); // Do not drive SDA (set pin high-impedance)
@@ -39,5 +39,7 @@ bool i2c_write_byte(bool send_start,
                     unsigned char byte);
 unsigned char i2c_read_byte(bool nack, bool send_stop);
 void start_audio_codec_config(void);
+void test_ii2(void);
+
 
 #endif //IIC_CTRL_H
