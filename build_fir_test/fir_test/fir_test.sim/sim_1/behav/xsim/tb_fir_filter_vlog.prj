@@ -1,0 +1,13 @@
+# compile verilog/system verilog design source files
+sv xil_defaultlib  \
+"../../../../fir_test_src/coe_dpram.sv" \
+"../../../../fir_test_src/dp_bram.sv" \
+"../../../../fir_test_src/fir_filter.sv" \
+"../../../../fir_test_src/ir_ringB_dpram.sv" \
+"../../../../fir_test_src/fir_test_tb.sv" \
+
+# compile glbl module
+verilog xil_defaultlib "glbl.v"
+
+# Do not sort compile order
+nosort

@@ -2,5 +2,13 @@ build/
 __pycache__
 docs/_build/
 rvlab-solutions/
+<<<<<<< HEAD
 .DS_Store
 .vscode
+=======
+*.jou
+*.log
+*.str
+fir/
+build_FIR/
+>>>>>>> 2d5ea1c3d1afd8ddbc357b441a8ea3b4f9d75583

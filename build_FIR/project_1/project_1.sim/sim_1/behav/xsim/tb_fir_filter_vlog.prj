@@ -1,0 +1,13 @@
+# compile verilog/system verilog design source files
+sv xil_defaultlib  \
+"../../../../../../fir/rtl/testFIR/bram.sv" \
+"../../../../../../fir/rtl/testFIR/testFIR_5woPipeline.sv" \
+"../../../../../../fir/rtl/testFIR/testFIR_dpramCoe_woWriting.sv" \
+"../../../../../../fir/rtl/testFIR/testFIR_ringBuffer.sv" \
+"../../../../../../fir/rtl/testFIR/testFIR_tb.sv" \
+
+# compile glbl module
+verilog xil_defaultlib "glbl.v"
+
+# Do not sort compile order
+nosort
