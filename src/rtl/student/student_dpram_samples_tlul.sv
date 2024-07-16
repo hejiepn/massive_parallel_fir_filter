@@ -30,7 +30,7 @@ module student_dpram_samples_tlul #(
 	logic					rvalid;
 
 	logic [DataSize-1:0] temp_bram[0:1023];  // Maximal 1024 Einträge einlesen
-	logic [DataSize-1:0] read_data;
+	//logic [DataSize-1:0] read_data;
 
 	tlul_adapter_sram #(
     .SramAw     (AddrWidth),
@@ -66,20 +66,14 @@ module student_dpram_samples_tlul #(
 
 	always @(posedge clk_i) begin
 		if (enb) begin
-			if (wea && (addrb == addra)) begin
-				read_data <= dia; // Wenn gleiche Adresse, dann den geschriebenen Wert lesen
-			end else begin
-				read_data <= bram[addrb];
-			end
+			dob <= bram[addrb];
 		end
 	end
-
-	assign dob = read_data;
-
+	
 	always @(posedge clk_i) begin
 		rdata <= '0;
 		if (req) begin
-			if (we && !(ena&&wea)) begin
+			if (we) begin
 				// Write access:
 				if (wmask[0]) bram[addr][7:0] <= wdata[7:0];
 				if (wmask[8]) bram[addr][15:8] <= wdata[15:8];

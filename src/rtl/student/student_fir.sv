@@ -33,7 +33,8 @@ module student_fir #(
   logic ena_samples;
   logic enb_samples;
   logic enb_coeff;
-  logic [DATA_SIZE_FIR_OUT-1:0] fir_sum;      
+  logic [DATA_SIZE_FIR_OUT-1:0] fir_sum;
+
 
   // FIR State Machine
   typedef enum logic[2:0] {IDLE, SHIFT_IN, DELAY, COMPUTE, SHIFT_OUT} fir_state_t;
@@ -80,7 +81,7 @@ module student_fir #(
 	end
   end
   
-  localparam TLUL_DPRAM_DEVICES = 2;
+  localparam TLUL_DPRAM_DEVICES = 1;
 
   tlul_pkg::tl_h2d_t tl_student_dpram_i[TLUL_DPRAM_DEVICES-1:0];
   tlul_pkg::tl_d2h_t tl_student_dpram_o[TLUL_DPRAM_DEVICES-1:0];
@@ -100,23 +101,23 @@ module student_fir #(
   );
 
   // Dual Port RAM instances for samples and coefficients
-  student_dpram_samples_tlul #(
+  student_dpram_samples #(
     .AddrWidth(ADDR_WIDTH),
     .DataSize(DATA_SIZE),
 	.DebugMode(DEBUGMODE),
     .INIT_F(ROM_FILE_SAMPLES) 
   ) samples_dpram (
     .clk_i(clk_i),
-	.rst_ni(rst_ni),
+	//.rst_ni(rst_ni),
     .ena(ena_samples),
     .enb(enb_samples),
     .wea(valid_strobe_in_pos_edge),
     .addra(wr_addr),
     .addrb(rd_addr),
     .dia(sample_in),
-    .dob(read_sample),
-	.tl_i(tl_student_dpram_i[0]),
-	.tl_o(tl_student_dpram_o[0])
+    .dob(read_sample)
+	//.tl_i(tl_student_dpram_i[0]),
+	//.tl_o(tl_student_dpram_o[0])
   );
 
   student_dpram_coeff #(
@@ -130,8 +131,8 @@ module student_fir #(
     .enb(enb_coeff),
     .addrb(rd_addr_c),
     .dob(read_coeff),
-	.tl_i(tl_student_dpram_i[1]),
-	.tl_o(tl_student_dpram_o[1])
+	.tl_i(tl_student_dpram_i[0]),
+	.tl_o(tl_student_dpram_o[0])
   );
   
   // Enable signals control
@@ -178,8 +179,9 @@ end
       endcase
     end
   end
+  
 
-  // FIR computation
+   // FIR computation
   always_ff @(posedge clk_i) begin
     if (~rst_ni) begin
       fir_sum <= '0;

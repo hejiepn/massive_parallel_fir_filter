@@ -14,7 +14,7 @@ module student_dpram_samples #(
 	output logic [DataSize-1:0] dob
 	);
 	logic [DataSize-1:0] temp_bram[0:1023];  // Maximal 1024 Einträge einlesen
-	logic [DataSize-1:0] read_data;
+	//logic [DataSize-1:0] read_data;
 
 	(* ram_style = "block" *) logic [DataSize-1:0] bram[0:2**AddrWidth-1];
 
@@ -28,15 +28,9 @@ module student_dpram_samples #(
 
 	always @(posedge clk_i) begin
 		if (enb) begin
-			if (wea && (addrb == addra)) begin
-				read_data <= dia; // Wenn gleiche Adresse, dann den geschriebenen Wert lesen
-			end else begin
-				read_data <= bram[addrb];
-			end
+			dob <= bram[addrb];
 		end
 	end
-
-	assign dob = read_data;
 
 	// Load data from the INIT_F file during the initial block
 	initial begin

@@ -25,8 +25,8 @@ module student_dpram_coeff #(
   logic [TL_DataSize-1:0] rdata;
   logic        rvalid;
   
-  logic [CoeffDataSize-1:0] read_data;
   logic [CoeffDataSize-1:0] temp_bram[0:1023];  // Maximal 1024 Einträge einlesen
+  //logic [CoeffDataSize-1:0] read_data;
 
   tlul_adapter_sram #(
     .SramAw     (AddrWidth),
@@ -55,16 +55,10 @@ module student_dpram_coeff #(
 	// Independent read interface for coefficient data
 	always @(posedge clk_i) begin
 		if (enb) begin
-			if (we && (addrb == addr)) begin
-				read_data <= wdata[CoeffDataSize-1:0]; // Wenn gleiche Adresse, dann den geschriebenen Wert lesen
-			end else begin
-				read_data <= mem[addrb]; // Extract lower 16 bits
-			end
+			dob <= mem[addrb]; // Extract lower 16 bits
 		end
 	end
-
-	assign dob = read_data;
-
+	
 	always @(posedge clk_i) begin
 		rdata <= '0;
 		if (req) begin
