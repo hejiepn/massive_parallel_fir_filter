@@ -16,7 +16,7 @@ module student_dpram_samples_tlul #(
 
 	// TL-UL interface
 	input  tlul_pkg::tl_h2d_t tl_i,  //master input (incoming request)
-    output tlul_pkg::tl_d2h_t tl_o  //slave output (this module's response)
+	output tlul_pkg::tl_d2h_t tl_o  //slave output (this module's response)
 	);
 
 	localparam int TL_DataSize = 32;  //for the tlul_adapter_sram 32 is fixed
@@ -29,8 +29,14 @@ module student_dpram_samples_tlul #(
 	logic [TL_DataSize-1:0] rdata;
 	logic					rvalid;
 
-	logic [DataSize-1:0] temp_bram[0:1023];  // Maximal 1024 Einträge einlesen
-	//logic [DataSize-1:0] read_data;
+	logic ena_i;
+	logic enb_i;
+	logic wea_i;
+	logic [AddrWidth-1:0] addra_i;
+	logic [AddrWidth-1:0] addrb_i;
+	logic [DataSize-1:0] dia_i;
+	logic [DataSize-1:0] dob_i;
+
 
 	tlul_adapter_sram #(
     .SramAw     (AddrWidth),
@@ -54,35 +60,53 @@ module student_dpram_samples_tlul #(
     .rerror_i(2'b00)
   );
 
-	(* ram_style = "block" *) logic [DataSize-1:0] bram[0:2**AddrWidth-1];
+  student_dpram_samples #(
+  	.AddrWidth(AddrWidth),
+    .DataSize(DataSize),
+		.DebugMode(DebugMode),
+    .INIT_F(INIT_F)
+	) dpram_samples (
+	.clk_i,
+	.ena(ena_i),
+	.enb(enb_i),
+	.wea(wea_i),
+	.addra(addra_i),
+	.addrb(addrb_i),
+	.dia(dia_i),
+	.dob(dob_i)
+	);
 
-	always @(posedge clk_i) begin
-		if (ena) begin
-			if (wea) begin
-				bram[addra] <= dia;
+	always_ff @(posedge clk_i or negedge rst_ni) begin : proc_
+			if(~rst_ni) begin
+				 ena_i <= '0;
+				 enb_i <= '0;
+				 wea_i <= '0;
+				 addra_i <= '0;
+				 addrb_i <= '0;
+				 dia_i <= '0;
+			end else begin
+				ena_i <= ena;
+				 enb_i <= enb;
+				 wea_i <= wea;
+				 addra_i <= addra;
+				 addrb_i <= addrb;
+				 dia_i <= dia;
+				 dob <= dob_i;
+				 rdata <= '0;
+				if (req) begin
+						if (we) begin
+								// Write access:
+								addra_i <= addr;
+								if (wmask[0]) dia_i[7:0] <= wdata[7:0];
+								if (wmask[8]) dia_i[15:8] <= wdata[15:8];
+								// if (wmask[16]) bram[addr][23:16] <= wdata[23:16];
+								// if (wmask[24]) bram[addr][31:24] <= wdata[31:24];
+						end
+				// Read access:
+					addrb_i <= addr;
+					rdata <= {16'b0,dob};
+				end
 			end
-		end
-	end
-
-	always @(posedge clk_i) begin
-		if (enb) begin
-			dob <= bram[addrb];
-		end
-	end
-	
-	always @(posedge clk_i) begin
-		rdata <= '0;
-		if (req) begin
-			if (we) begin
-				// Write access:
-				if (wmask[0]) bram[addr][7:0] <= wdata[7:0];
-				if (wmask[8]) bram[addr][15:8] <= wdata[15:8];
-				// if (wmask[16]) bram[addr][23:16] <= wdata[23:16];
-				// if (wmask[24]) bram[addr][31:24] <= wdata[31:24];
-			end
-			// Read access:
-			rdata <= {16'b0,bram[addr]};
-		end
 	end
 
 	always @(posedge clk_i, negedge rst_ni) begin
@@ -90,27 +114,6 @@ module student_dpram_samples_tlul #(
 			rvalid <= '0;
 		end else begin
 			rvalid <= (req && !we);
-		end
-	end
-
-		// Load data from the INIT_F file during the initial block
-	initial begin
-		if (INIT_F != "") begin
-			$display("Loading initialization file %s into BRAM.", INIT_F);
-			if(DebugMode) begin
-				$display("DebugMode is enabled.");
-				$readmemh(INIT_F, temp_bram);
-				// Daten in BRAM kopieren, angepasst auf die Adressbreite
-				for (int i = 0; i < 2**AddrWidth; i++) begin
-					bram[i] = temp_bram[i];
-					$display("Initial bram[%0d] = %h", i, bram[i]);  // Debug-Ausgabe hinzufügen
-				end
-			end else begin
-				$readmemh(INIT_F, bram);
-			end
-			$display("Initialization file %s loaded successfully.", INIT_F);
-		end else begin
-			$display("Initialization file not specified.");
 		end
 	end
 

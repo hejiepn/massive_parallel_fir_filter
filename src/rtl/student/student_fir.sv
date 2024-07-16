@@ -2,7 +2,8 @@ module student_fir #(
 	parameter int unsigned ADDR_WIDTH = 10,
 	parameter int unsigned DATA_SIZE = 16,
 	parameter int unsigned DEBUGMODE = 0,
-	parameter int unsigned DATA_SIZE_FIR_OUT = 32
+	parameter int unsigned DATA_SIZE_FIR_OUT = 64,
+  parameter int unsigned USER_MODE = 1
 	) (	
     input logic clk_i,
     input logic rst_ni,
@@ -18,6 +19,20 @@ module student_fir #(
 	input  tlul_pkg::tl_h2d_t tl_i,  //master input (incoming request)
     output tlul_pkg::tl_d2h_t tl_o  //slave output (this module's response)
 );
+
+  import student_filter_module_reg_pkg::*;
+  student_filter_module_reg2hw_t reg2hw; //write
+  student_filter_module_hw2reg_t hw2reg; //read
+
+  student_filter_module_reg_top student_filter_reggen_module(
+  .clk_i,
+  .rst_ni,
+  .tl_i,
+  // .tl_o_reggen_module,
+  .reg2hw,
+  .hw2reg,
+  .devmode_i(1'b1)
+  );
 
   // Define constants for memory definition
   localparam MAX_ADDR = 2 ** ADDR_WIDTH;
@@ -39,6 +54,22 @@ module student_fir #(
   // FIR State Machine
   typedef enum logic[2:0] {IDLE, SHIFT_IN, DELAY, COMPUTE, SHIFT_OUT} fir_state_t;
   fir_state_t fir_state;
+
+  // user mode signals
+  logic [ADDR_WIDTH-1:0] user_samples;
+  // tlul_pkg::tl_d2h_t tl_o_reggen_module;
+  // tlul_pkg::tl_d2h_t tl_o_mux_dpram;
+
+// register read process
+always_ff @(posedge clk_i, negedge rst_ni) begin
+    if (!rst_ni) begin
+      user_samples <= 16'b0;
+    end else begin
+      if (reg2hw.samples_in.qe) begin
+        user_samples <= reg2hw.samples_in.q;
+      end
+    end
+  end
 
   // Edge detection for valid_strobe_in
   logic valid_strobe_in_prev;
@@ -114,7 +145,7 @@ module student_fir #(
     .wea(valid_strobe_in_pos_edge),
     .addra(wr_addr),
     .addrb(rd_addr),
-    .dia(sample_in),
+    .dia(user_samples),
     .dob(read_sample)
 	//.tl_i(tl_student_dpram_i[1]),
 	//.tl_o(tl_student_dpram_o[1])
@@ -229,5 +260,6 @@ end
 end
 
 assign y_out = fir_sum;
+// assign tl_o = (tl_o_reggen_module | tl_o_mux_dpram);
 
 endmodule
