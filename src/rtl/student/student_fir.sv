@@ -81,7 +81,7 @@ module student_fir #(
 	end
   end
   
-  localparam TLUL_DPRAM_DEVICES = 1;
+  localparam TLUL_DPRAM_DEVICES = 2;
 
   tlul_pkg::tl_h2d_t tl_student_dpram_i[TLUL_DPRAM_DEVICES-1:0];
   tlul_pkg::tl_d2h_t tl_student_dpram_o[TLUL_DPRAM_DEVICES-1:0];

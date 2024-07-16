@@ -226,6 +226,8 @@ bool i2c_write_byte(bool send_start,
 {
   unsigned bit;
   bool     nack;
+  
+  printf("i2c_write_byte function \n");
 
   if (send_start) {
     i2c_start_cond();
@@ -251,6 +253,8 @@ unsigned char i2c_read_byte(bool nack, bool send_stop)
   unsigned char byte = 0;
   unsigned char bit;
 
+  printf("i2c_write_byte function \n");
+
   for (bit = 0; bit < 8; ++bit) {
     byte = (byte << 1) | i2c_read_bit();
   }
@@ -275,9 +279,10 @@ void start_audio_codec_config(void) {
         bool success = false;
         
         while (attempts < MAX_ATTEMPTS && !success) {
-            // Start condition and write the slave address once
+			printf("attempts: %d \n", attempts);
+            printf("Start condition and write the slave address once\n");
             if (i2c_write_byte(true, false, AudioCodecAddr) == 0) {
-                // Write the register address and data in sequence
+                printf("Write the register address and data in sequence\n");
                 if (i2c_write_byte(false, false, addr) == 0 &&
                     i2c_write_byte(false, false, regAddr) == 0 &&
                     i2c_write_byte(false, true, data) == 0) {

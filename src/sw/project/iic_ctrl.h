@@ -38,5 +38,6 @@ bool i2c_write_byte(bool send_start,
                     bool send_stop,
                     unsigned char byte);
 unsigned char i2c_read_byte(bool nack, bool send_stop);
+void start_audio_codec_config(void);
 
 #endif //IIC_CTRL_H
