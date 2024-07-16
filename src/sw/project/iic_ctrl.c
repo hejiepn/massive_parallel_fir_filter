@@ -255,7 +255,7 @@ unsigned char i2c_read_byte(bool nack, bool send_stop)
   unsigned char byte = 0;
   unsigned char bit;
 
-  printf("i2c_write_byte function \n");
+  printf("i2c_read_byte function \n");
 
   for (bit = 0; bit < 8; ++bit) {
     byte = (byte << 1) | i2c_read_bit();
@@ -308,11 +308,20 @@ void start_audio_codec_config(void) {
 
 void test_ii2(void)
 {
-    printf("read_SDA after enabling: %b", read_SDA());
-    printf("read_SCL after enabling: %b", read_SCL());
+    printf("read_SDA after enabling: %x \n", read_SDA());
+    printf("read_SCL after enabling: %x \n", read_SCL());
     I2C_delay();
-    
-    set_SDA();
-    set_SCL();
+    clear_SDA();
+    clear_SCL();
     I2C_delay();
+	printf("read_SDA after disenabling: %x \n", read_SDA());
+    printf("read_SCL after disenabling: %x \n", read_SCL());
+}
+
+void testing_i2c_tlul(bool number_test) {
+	REG32(STUDENT_IIC_CTRL_SDA_SCL_TESTING(0)) = number_test;
+}
+
+uint32_t read_testing_i2c_tlul(void) {
+	return REG32(STUDENT_IIC_CTRL_SDA_SCL_TESTING(0));
 }

@@ -3,13 +3,6 @@
 // SPDX-License-Identifier: Apache-2.0
 //
 // Generic synchronous fifo for use in a variety of devices.
-//   logic                 wvalid; //i have valid data to write
-//   logic                 rvalid; //~fifo_empty output
-//   logic                 wready; //~fifo_full output
-//   logic                 rready; //ready to read from fifo
-//   logic [         31:0] wdata ; //fifo_w_data input
-//   logic [         31:0] rdata ; //fifo_r_data output
-//   logic [$clog2(4)-1:0] depth ; // FIFO depth of 4 output
 
 module prim_fifo_sync #(
   parameter int unsigned Width       = 16,
@@ -24,12 +17,12 @@ module prim_fifo_sync #(
   // synchronous clear / flush port
   input                   clr_i,
   // write port
-  input                   wvalid, //->rvalid
+  input                   wvalid,
   output                  wready,
-  input   [Width-1:0]     wdata, //->rdata
+  input   [Width-1:0]     wdata,
   // read port
   output                  rvalid,
-  input                   rready, //->wready
+  input                   rready,
   output  [Width-1:0]     rdata,
   // occupancy
   output  [DepthW-1:0]    depth

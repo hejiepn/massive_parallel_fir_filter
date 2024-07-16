@@ -59,12 +59,15 @@ logic pmod_b_out;
 
 // ------ TLUL MUX -------
   localparam TLUL_DEVICES = 3;
+  //tl_student_i/o [index] is depended from the address you give to them in rvlab.h
 
   tlul_pkg::tl_h2d_t tl_student_i[TLUL_DEVICES-1:0];
   tlul_pkg::tl_d2h_t tl_student_o[TLUL_DEVICES-1:0];
 
   student_tlul_mux #(
-      .NUM(TLUL_DEVICES)
+	.NUM(TLUL_DEVICES),
+	.ADDR_WIDTH(4),
+	.ADDR_OFFSET(20)
   ) tlul_mux_i (
       .clk_i,
       .rst_ni,
@@ -72,8 +75,8 @@ logic pmod_b_out;
       .tl_host_i(tl_device_peri_i),
       .tl_host_o(tl_device_peri_o),
 
-      .tl_device_i(tl_student_i),
-      .tl_device_o(tl_student_o)
+      .tl_device_o(tl_student_o),
+      .tl_device_i(tl_student_i)
   );
 
   // ------ RLIGHT -------
@@ -124,8 +127,8 @@ logic pmod_b_out;
 	.sample_shift_out(sample_shift_out),
 	.valid_strobe_out(valid_strobe_out),
 	.y_out(y_out),
-	.tl_i(tl_student_i[1]),
-	.tl_o(tl_student_o[1])
+	.tl_i(tl_student_i[2]),
+	.tl_o(tl_student_o[2])
   );
 
   student_iic_ctrl dut_student_iic(
@@ -135,8 +138,8 @@ logic pmod_b_out;
 	.scl_i(scl_i),
 	.sda_oe(sda_oe),
 	.scl_oe(scl_oe),
-   .tl_i(tl_student_i[2]),  //master input (incoming request)
-    .tl_o(tl_student_o[2])  //slave output (this module's response)
+   .tl_i(tl_student_i[1]),  //master input (incoming request)
+    .tl_o(tl_student_o[1])  //slave output (this module's response)
 );
 
 endmodule

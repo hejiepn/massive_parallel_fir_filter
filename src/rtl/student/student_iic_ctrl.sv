@@ -71,4 +71,17 @@ end
 assign hw2reg.sda_read.d = sda_i_dd;
 assign hw2reg.scl_read.d = scl_i_dd;
 
+logic testing;
+
+always_ff @(posedge clk_i, negedge rst_ni) begin : testing_proc
+	if(~rst_ni) begin
+		testing <= 1'b0;
+	end else begin
+		if(reg2hw.sda_scl_testing.qe) begin
+			testing <= reg2hw.sda_scl_testing.q;
+		end
+	end
+end
+
+
 endmodule

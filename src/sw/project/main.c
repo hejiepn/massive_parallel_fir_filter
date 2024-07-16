@@ -17,13 +17,8 @@ int main(void) {
     start_audio_codec_config();
     printf("Audio Codec configuration done\n");
 **/
-
     printf("test_ii2 started\n");
+	test_ii2();
 
-    //test_ii2();
-  //  delay_cycles(100);
-    printf("read_SDA at beginning\n");
-clear_SCL();
-clear_SDA();
     return 0;
 }

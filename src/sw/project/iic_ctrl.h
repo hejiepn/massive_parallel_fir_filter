@@ -40,6 +40,8 @@ bool i2c_write_byte(bool send_start,
 unsigned char i2c_read_byte(bool nack, bool send_stop);
 void start_audio_codec_config(void);
 void test_ii2(void);
+void testing_i2c_tlul(bool number_test);
+uint32_t read_testing_i2c_tlul(void);
 
 
 #endif //IIC_CTRL_H

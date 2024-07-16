@@ -703,21 +703,36 @@ add wave -noupdate /system_tb/board/DUT/core_i/tl_bram_main_d2h
 add wave -noupdate -divider {Running Light}
 add wave -noupdate /system_tb/board/DUT/core_i/student_i/rlight_i/led_o
 add wave -noupdate /system_tb/board/DUT/core_i/student_i/rlight_i/mode
-add wave -noupdate -expand -group iic_ctrl /system_tb/board/DUT/core_i/student_i/dut_student_iic/sda_oe
-add wave -noupdate -expand -group iic_ctrl /system_tb/board/DUT/core_i/student_i/dut_student_iic/scl_oe
-add wave -noupdate -expand -group iic_ctrl /system_tb/board/DUT/core_i/student_i/dut_student_iic/tl_i
-add wave -noupdate -expand -group iic_ctrl /system_tb/board/DUT/core_i/student_i/dut_student_iic/tl_o
-add wave -noupdate -expand -group iic_ctrl /system_tb/board/DUT/core_i/student_i/dut_student_iic/reg2hw
-add wave -noupdate -expand -group iic_ctrl /system_tb/board/DUT/core_i/student_i/dut_student_iic/hw2reg
-add wave -noupdate -expand -group iic_ctrl /system_tb/board/DUT/core_i/student_i/dut_student_iic/sda_i_d
-add wave -noupdate -expand -group iic_ctrl /system_tb/board/DUT/core_i/student_i/dut_student_iic/sda_i_dd
-add wave -noupdate -expand -group iic_ctrl /system_tb/board/DUT/core_i/student_i/dut_student_iic/scl_i_d
-add wave -noupdate -expand -group iic_ctrl /system_tb/board/DUT/core_i/student_i/dut_student_iic/scl_i_dd
+add wave -noupdate -group iic_ctrl /system_tb/board/DUT/core_i/student_i/dut_student_iic/sda_oe
+add wave -noupdate -group iic_ctrl /system_tb/board/DUT/core_i/student_i/dut_student_iic/scl_oe
+add wave -noupdate -group iic_ctrl /system_tb/board/DUT/core_i/student_i/dut_student_iic/tl_i
+add wave -noupdate -group iic_ctrl /system_tb/board/DUT/core_i/student_i/dut_student_iic/tl_o
+add wave -noupdate -group iic_ctrl /system_tb/board/DUT/core_i/student_i/dut_student_iic/reg2hw
+add wave -noupdate -group iic_ctrl /system_tb/board/DUT/core_i/student_i/dut_student_iic/hw2reg
+add wave -noupdate -group iic_ctrl /system_tb/board/DUT/core_i/student_i/dut_student_iic/sda_i_d
+add wave -noupdate -group iic_ctrl /system_tb/board/DUT/core_i/student_i/dut_student_iic/sda_i_dd
+add wave -noupdate -group iic_ctrl /system_tb/board/DUT/core_i/student_i/dut_student_iic/scl_i_d
+add wave -noupdate -group iic_ctrl /system_tb/board/DUT/core_i/student_i/dut_student_iic/scl_i_dd
+add wave -noupdate -expand -group student_rlight /system_tb/board/DUT/core_i/student_i/rlight_i/tl_o
+add wave -noupdate -expand -group student_rlight /system_tb/board/DUT/core_i/student_i/rlight_i/tl_i
+add wave -noupdate -expand -group student_rlight /system_tb/board/DUT/core_i/student_i/rlight_i/led_o
+add wave -noupdate -expand -group student_rlight /system_tb/board/DUT/core_i/student_i/rlight_i/reg2hw
+add wave -noupdate -expand -group student_rlight /system_tb/board/DUT/core_i/student_i/rlight_i/hw2reg
+add wave -noupdate -expand -group student_rlight /system_tb/board/DUT/core_i/student_i/rlight_i/regA
+add wave -noupdate -expand -group student_rlight /system_tb/board/DUT/core_i/student_i/rlight_i/regB
+add wave -noupdate -expand -group student_rlight /system_tb/board/DUT/core_i/student_i/rlight_i/regC
+add wave -noupdate -expand -group student_rlight /system_tb/board/DUT/core_i/student_i/rlight_i/mode
+add wave -noupdate -expand -group student_rlight /system_tb/board/DUT/core_i/student_i/rlight_i/led
+add wave -noupdate -expand -group student_rlight /system_tb/board/DUT/core_i/student_i/rlight_i/cnt
+add wave -noupdate -expand -group student_rlight /system_tb/board/DUT/core_i/student_i/rlight_i/cnt_pre_value
+add wave -noupdate -expand -group student_rlight /system_tb/board/DUT/core_i/student_i/rlight_i/cnt_pp
+add wave -noupdate -expand -group student_rlight /system_tb/board/DUT/core_i/student_i/rlight_i/temp_pp
+add wave -noupdate -expand -group student_rlight /system_tb/board/DUT/core_i/student_i/rlight_i/pattern_pre
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {40160000000 fs} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 421
-configure wave -valuecolwidth 288
+configure wave -valuecolwidth 106
 configure wave -justifyvalue left
 configure wave -signalnamewidth 0
 configure wave -snapdistance 10
@@ -730,4 +745,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {30633510200 ps} {30794244200 ps}
+WaveRestoreZoom {0 fs} {308630209346 fs}

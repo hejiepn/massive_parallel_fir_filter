@@ -45,5 +45,15 @@
         {bits: "0", name: "SCL_READ", desc: "read SCL Pin"}
       ]
     }
+	{
+	name: "SDA_SCL_Testing"
+	desc: "test to write to reg"
+	swaccess: "wo"
+	hwaccess: "hro"
+	hwqe : "true"
+	fields: [
+	{bits: "0", name: "test", desc: "enable SDA SCL"}
+	]
+}
   ]
 } 
