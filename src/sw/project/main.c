@@ -19,6 +19,7 @@ int main(void) {
 **/
     printf("test_ii2 started\n");
 	test_ii2();
+    printf("test_ii2 finished\n");
 
     return 0;
 }

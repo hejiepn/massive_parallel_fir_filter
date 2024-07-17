@@ -19,7 +19,7 @@ module student (
 
 localparam int unsigned ADDR_WIDTH = 10;
 localparam int unsigned DATA_SIZE = 16;
-localparam int unsigned DATA_SIZE_FIR_OUT = 32;
+localparam int unsigned DATA_SIZE_FIR_OUT = 64;
 localparam int unsigned DEBUGMODE = 0;
 
 logic [7:0] led;
@@ -49,7 +49,7 @@ logic pmod_b_out;
           sda_oe: sda_oe,
           scl_oe: scl_oe,
           pmod_a_oe: {6'b0,2'b1},
-          pmod_a_out: {'0,sda_i,scl_i},
+          pmod_a_out: {'0,scl_i,sda_i},
           default: '0
       };
 
@@ -113,6 +113,17 @@ logic pmod_b_out;
 	.valid_strobe(valid_strobe_2FIR)    // Valid strobe to HW
 );
 
+  student_iic_ctrl dut_student_iic(
+    .clk_i(clk_i),
+    .rst_ni(rst_ni),
+  .sda_i(sda_i),
+  .scl_i(scl_i),
+  .sda_oe(sda_oe),
+  .scl_oe(scl_oe),
+   .tl_i(tl_student_i[1]),  //master input (incoming request)
+    .tl_o(tl_student_o[1])  //slave output (this module's response)
+);
+
   student_fir #(
 	.ADDR_WIDTH(ADDR_WIDTH),
 	.DATA_SIZE(DATA_SIZE),
@@ -129,17 +140,6 @@ logic pmod_b_out;
 	.y_out(y_out),
 	.tl_i(tl_student_i[2]),
 	.tl_o(tl_student_o[2])
-  );
-
-  student_iic_ctrl dut_student_iic(
-    .clk_i(clk_i),
-    .rst_ni(rst_ni),
-	.sda_i(sda_i),
-	.scl_i(scl_i),
-	.sda_oe(sda_oe),
-	.scl_oe(scl_oe),
-   .tl_i(tl_student_i[1]),  //master input (incoming request)
-    .tl_o(tl_student_o[1])  //slave output (this module's response)
 );
 
 endmodule

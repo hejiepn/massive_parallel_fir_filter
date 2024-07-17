@@ -5,7 +5,7 @@
   regwidth: "32"
   registers: [
     {
-      name: "IIS_Serial_CODEC2HW"
+      name: "serial_in"
       desc: "send Serial Bits into IIS Handler"
       swaccess: "wo"
       hwaccess: "hro"
@@ -15,7 +15,7 @@
       ]
     }
 	{
-      name: "IIS_Serial_HW2CODEC"
+      name: "serial_out"
       desc: "read Serial Bits out from IIS Handler"
       swaccess: "ro"
       hwaccess: "hwo"
@@ -24,25 +24,23 @@
       ]
     }
 	{
-      name: "IIS_Parallel_CODEC2HW"
-      desc: "send PCM Bits in IIS Handler"
+      name: "pcm_out"
+      desc: "read PCM Bits which are sent to fir"
+      swaccess: "ro"
+      hwaccess: "hwo"
+      fields: [
+        {bits: "31:0", name: "iis_to_fir", desc: "send PCM Bits in IIS Handler"}
+      ]
+    }
+	{
+      name: "pcm_in"
+      desc: "send PCM Bits which would come from fir"
       swaccess: "wo"
       hwaccess: "hro"
       hwqe : "true"
       fields: [
-        {bits: "31:0", name: "IIS_P_IN", desc: "send PCM Bits in IIS Handler"}
+        {bits: "31:0", name: "fir_to_iis", desc: "read PCM Bits out of IIS Handler"}
       ]
     }
-	{
-      name: "IIS_Parallel_HW2CODEC"
-      desc: "read PCM Bits out of IIS Handler"
-      swaccess: "ro"
-      hwaccess: "hwo"
-      fields: [
-        {bits: "31:0", name: "IIS_P_OUT", desc: "read PCM Bits out of IIS Handler"}
-      ]
-    }
-	
-	
   ]
 }

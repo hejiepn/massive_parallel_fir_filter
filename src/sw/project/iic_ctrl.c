@@ -308,14 +308,18 @@ void start_audio_codec_config(void) {
 
 void test_ii2(void)
 {
-    printf("read_SDA after enabling: %x \n", read_SDA());
-    printf("read_SCL after enabling: %x \n", read_SCL());
-    I2C_delay();
+    printf("read_SDA at beginning: %x \n", read_SDA());
+    printf("read_SCL at beginning: %x \n", read_SCL());
     clear_SDA();
     clear_SCL();
     I2C_delay();
-	printf("read_SDA after disenabling: %x \n", read_SDA());
+    printf("read_SDA after disenabling: %x \n", read_SDA());
     printf("read_SCL after disenabling: %x \n", read_SCL());
+    set_SCL();
+    set_SDA();
+    I2C_delay();
+    printf("read_SDA after enabling: %x \n", read_SDA());
+    printf("read_SCL after enabling: %x \n", read_SCL());
 }
 
 void testing_i2c_tlul(bool number_test) {
