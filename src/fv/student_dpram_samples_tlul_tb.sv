@@ -95,12 +95,7 @@ module student_dpram_samples_tlul_tb;
       @(posedge clk_i);
 	  ena = 0;
 	  wea = 0;
-    end
-
-	// Lesen der geschriebenen Daten
-    $display("Test 2: Mehrfache Lesezugriffe");
-	enb = 1;
-    for (int i = 0; i < 4; i++) begin
+	  enb = 1;
       addrb = i;
 	  $display("addrb: %4x for i: %d",addrb, i);
       @(posedge clk_i); // eine zweite Taktflanke warten, um sicherzustellen, dass die Daten stabil sind
@@ -111,11 +106,8 @@ module student_dpram_samples_tlul_tb;
         $display("Fehler: Erwartet %0d, aber dob ist %h", expected_data, dob);
         error_flag = 1;
       end
+	  enb = 0;
     end
-    enb = 0;
-
-
-
 
 	//Schreibzugriffe über TLUL ## Address writing for SRAM is address[AddrWidth+1:2]
 	$display("Test 3: TLUL schreiben");
@@ -125,16 +117,12 @@ module student_dpram_samples_tlul_tb;
 		address_sram [1:0] = '0;
 		tlul_write_data = {4'hb,i,4'ha,8'hff};
 		bus.put_word(address_sram, tlul_write_data);
-	end
-
-	bus.wait_cycles(20);
-
-	$display("Test 4: TLUL lesen");
-	for (int i = 0; i < 4; i++) begin
-		address_sram [31:AddrWidth+2] = '0;
-		address_sram [AddrWidth+1:2] = i;
-		address_sram [1:0] = '0;
 		bus.get_word(address_sram, tlul_read_data);
+	  	$display("tlul_read_data: %4x and expected_data: %4x",tlul_read_data, tlul_write_data);
+      	if (tlul_read_data !== tlul_write_data) begin
+        	$display("Fehler: Erwartet %0d, aber tlul_read_data ist %h", tlul_write_data, tlul_read_data);
+        	error_flag = 1;
+      	end
 	end
 
 	bus.wait_cycles(20);
