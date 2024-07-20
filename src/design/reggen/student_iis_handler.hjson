@@ -11,7 +11,7 @@
       hwaccess: "hro"
       hwqe : "true"
       fields: [
-        {bits: "0", name: "IIS_S_IN", desc: "send Serial Bits into IIS Handler"}
+        {bits: "15:0", name: "IIS_S_IN", desc: "send Serial Bits into IIS Handler"}
       ]
     }
 	{
@@ -20,7 +20,7 @@
       swaccess: "ro"
       hwaccess: "hwo"
       fields: [
-        {bits: "0", name: "IIS_S_OUT", desc: "read Serial Bits out from IIS Handler"}
+        {bits: "31:0", name: "IIS_S_OUT", desc: "read Serial Bits out from IIS Handler"}
       ]
     }
 	{
@@ -29,7 +29,7 @@
       swaccess: "ro"
       hwaccess: "hwo"
       fields: [
-        {bits: "31:0", name: "iis_to_fir", desc: "send PCM Bits in IIS Handler"}
+        {bits: "15:0", name: "iis_to_fir", desc: "send PCM Bits in IIS Handler"}
       ]
     }
 	{
