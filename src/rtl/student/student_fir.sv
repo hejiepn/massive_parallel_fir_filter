@@ -27,12 +27,15 @@ module student_fir #(
   // Read and write pointers
   logic [ADDR_WIDTH-1:0] wr_addr;
   logic [ADDR_WIDTH-1:0] rd_addr;
+  //logic [ADDR_WIDTH-1:0] wd_addr_c;
   logic [ADDR_WIDTH-1:0] rd_addr_c;
   logic [DATA_SIZE-1:0] read_coeff;
   logic [DATA_SIZE-1:0] read_sample;
   logic ena_samples;
   logic enb_samples;
+  //logic ena_coeff;
   logic enb_coeff;
+  //logic wea_coeff;
   logic [DATA_SIZE_FIR_OUT-1:0] fir_sum;
 
 
@@ -101,38 +104,41 @@ module student_fir #(
   );
 
   // Dual Port RAM instances for samples and coefficients
-  student_dpram_samples #(
+  student_dpram_samples_tlul #(
     .AddrWidth(ADDR_WIDTH),
     .DataSize(DATA_SIZE),
 	.DebugMode(DEBUGMODE),
     .INIT_F(ROM_FILE_SAMPLES) 
   ) samples_dpram (
     .clk_i(clk_i),
-	//.rst_ni(rst_ni),
+	.rst_ni(rst_ni),
     .ena(ena_samples),
     .enb(enb_samples),
     .wea(valid_strobe_in_pos_edge),
     .addra(wr_addr),
     .addrb(rd_addr),
     .dia(sample_in),
-    .dob(read_sample)
-	//.tl_i(tl_student_dpram_i[1]),
-	//.tl_o(tl_student_dpram_o[1])
+    .dob(read_sample),
+	.tl_i(tl_student_dpram_i[0]),
+	.tl_o(tl_student_dpram_o[0])
   );
 
-  student_dpram_coeff #(
+  student_dpram_samples_tlul #(
     .AddrWidth(ADDR_WIDTH),
-    .CoeffDataSize(DATA_SIZE),
+    .DataSize(DATA_SIZE),
 	.DebugMode(DEBUGMODE),
     .INIT_F(ROM_FILE_COEFF) 
   ) coeff_dpram (
     .clk_i(clk_i),
 	.rst_ni(rst_ni),
+	.ena('0),
     .enb(enb_coeff),
+	.wea('0),
+	.addra('0),
     .addrb(rd_addr_c),
     .dob(read_coeff),
-	.tl_i(tl_student_dpram_i[0]),
-	.tl_o(tl_student_dpram_o[0])
+	.tl_i(tl_student_dpram_i[1]),
+	.tl_o(tl_student_dpram_o[1])
   );
   
   // Enable signals control

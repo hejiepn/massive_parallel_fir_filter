@@ -1,10 +1,14 @@
 module student_fir_tb;
 
-  localparam int AddrWidth = 10; // Address width
+  localparam int AddrWidth = 2; // Address width
   localparam int MaxAddr = 2**AddrWidth; // Maximum address
   localparam int DATA_SIZE = 16; // Data size
-  localparam int DEBUGMODE = 0; // activate debugMode when AddrWidth != 10 
-  localparam int DATA_SIZE_FIR_OUT = 32; // activate debugMode when AddrWidth != 10 
+  localparam int DEBUGMODE = 1; // activate debugMode when AddrWidth != 10 
+  localparam int DATA_SIZE_FIR_OUT = 32; // activate debugMode when AddrWidth != 10
+  localparam int dpram_tlul_offset = 12;
+  localparam int dpram_no_inside_fir = 2;
+  localparam int dpram_samples_address = 0;
+  localparam int dpram_coeff_address = 1;
 
   // Clock and reset signals
   logic clk_i;
@@ -22,10 +26,15 @@ module student_fir_tb;
 
   // Memory to store the input samples from sin.mem
   logic [7:0] sin_mem [0:1023]; // Adjust the size based on your file
-  integer i; // Loop variable
-  
+  //integer i; // Loop variable
+  logic [31:0] address_sram;
+  logic [31:0] tlul_write_data;
+  logic [31:0] tlul_read_data;
+
   tlul_pkg::tl_h2d_t tl_h2d;
   tlul_pkg::tl_d2h_t tl_d2h;
+
+  logic error_flag = 0;
 
 
   // Instantiate the DUT (Device Under Test)
@@ -85,7 +94,7 @@ module student_fir_tb;
 	bus.wait_cycles(20);
 
 	// Apply test stimulus
-	for (i = 0; i < MaxAddr; i = i + 1) begin
+	for (int i = 0; i < MaxAddr; i = i + 1) begin
 		sample_in = {8'b0, sin_mem[i]}; // Zero-pad the 8-bit value to 16 bits
 		valid_strobe_in <= 1;
 		counting = 1;
@@ -95,6 +104,45 @@ module student_fir_tb;
 		counting = 0;
 		$display("Number of clock cycles from valid_strobe_in to valid_strobe_out: %0d", clk_count);
         clk_count = 0; // Reset counter for next iteration
+		@(posedge clk_i);
+	end
+
+	//apply tlul write on samples and coeff:
+	for (int i = 0; i < MaxAddr; i++) begin
+		address_sram = 32'h10000000; // Basisadresse setzen
+		address_sram[31:24] = 8'h10; // Aktuelle Geräteadresse setzen
+		address_sram[23:dpram_tlul_offset+4] = '0; // Bereich auf Null setzen
+		address_sram[dpram_tlul_offset+4-1:dpram_tlul_offset] = dpram_coeff_address; // tlul_dpram_device auswählen
+		address_sram[dpram_tlul_offset-1:AddrWidth+2] = '0; // Bereich auf Null setzen
+		address_sram[AddrWidth+1:2] = i; // Adresse innerhalb des dpram setzen
+		address_sram[1:0] = '0; // Niedrigste zwei Bits auf Null setzen		
+		tlul_write_data = {'0,8'h02};
+		bus.put_word(address_sram, tlul_write_data);
+		bus.get_word(address_sram, tlul_read_data);
+		$display("tlul_read_data: %4x and expected_data: %4x",tlul_read_data, tlul_write_data);
+		if (tlul_read_data !== tlul_write_data) begin
+			$display("Fehler: Erwartet %0d, aber tlul_read_data ist %h", tlul_write_data, tlul_read_data);
+			error_flag = 1;
+		end
+	end
+
+	// Apply test stimulus
+	for (int i = 0; i < MaxAddr; i = i + 1) begin
+		//sample_in = {8'b0, sin_mem[i]}; // Zero-pad the 8-bit value to 16 bits
+		valid_strobe_in <= 1;
+		counting = 1;
+		@(posedge clk_i);
+		valid_strobe_in <= 0;
+		wait(valid_strobe_out == 1); // Wait for valid_strobe_out to go high
+		counting = 0;
+		$display("Number of clock cycles from valid_strobe_in to valid_strobe_out: %0d", clk_count);
+        clk_count = 0; // Reset counter for next iteration
+		 // Testresultat
+		if (error_flag) begin
+			$display("Test fehlgeschlagen.");
+		end else begin
+			$display("Test erfolgreich.");
+		end
 		@(posedge clk_i);
 	end
 
