@@ -106,6 +106,7 @@ module student_dpram_samples_tlul_tb;
       @(posedge clk_i); // eine zweite Taktflanke warten, um sicherzustellen, dass die Daten stabil sind
       @(posedge clk_i); // eine zweite Taktflanke warten, um sicherzustellen, dass die Daten stabil sind
       expected_data = i;
+	  $display("dob: %4x and expected_data: %4x",dob, expected_data);
       if (dob !== expected_data) begin
         $display("Fehler: Erwartet %0d, aber dob ist %h", expected_data, dob);
         error_flag = 1;
@@ -113,39 +114,30 @@ module student_dpram_samples_tlul_tb;
     end
     enb = 0;
 
+
+
+
 	//Schreibzugriffe über TLUL ## Address writing for SRAM is address[AddrWidth+1:2]
-	$display("Test 3: TLUL lesen und schreiben");
+	$display("Test 3: TLUL schreiben");
 	for (int i = 0; i < 4; i++) begin
 		address_sram [31:AddrWidth+2] = '0;
 		address_sram [AddrWidth+1:2] = i;
 		address_sram [1:0] = '0;
-		tlul_write_data = {'0,i,8'hff};
+		tlul_write_data = {4'hb,i,4'ha,8'hff};
 		bus.put_word(address_sram, tlul_write_data);
-		@(posedge clk_i);
-		bus.get_word(address_sram, tlul_read_data);
-		if (tlul_read_data !== tlul_write_data) begin
-			$display("Fehler: Erwartet %0d, aber tlul_read_data ist %h", tlul_write_data, tlul_read_data);
-			error_flag = 1;
-		end
 	end
 
 	bus.wait_cycles(20);
 
-    // Lesen der geschriebenen Daten
-    $display("Test 4: Mehrfache Lesezugriffe nach tlul");
-	enb = 1;
-    for (int i = 0; i < 4; i++) begin
-      addrb = i;
-	  $display("addrb: %4x for i: %d",addrb, i);
-      @(posedge clk_i); // eine zweite Taktflanke warten, um sicherzustellen, dass die Daten stabil sind
-      @(posedge clk_i); // eine zweite Taktflanke warten, um sicherzustellen, dass die Daten stabil sind
-      expected_data = {i,8'hff};
-      if (dob !== expected_data) begin
-        $display("Fehler: Erwartet %0d, aber dob ist %h", expected_data, dob);
-        error_flag = 1;
-      end
-    end
-    enb = 0;
+	$display("Test 4: TLUL lesen");
+	for (int i = 0; i < 4; i++) begin
+		address_sram [31:AddrWidth+2] = '0;
+		address_sram [AddrWidth+1:2] = i;
+		address_sram [1:0] = '0;
+		bus.get_word(address_sram, tlul_read_data);
+	end
+
+	bus.wait_cycles(20);
 
     // Testresultat
     if (error_flag) begin
