@@ -9,6 +9,13 @@ module student_fir_tb;
   localparam int dpram_no_inside_fir = 2;
   localparam int dpram_samples_address = 0;
   localparam int dpram_coeff_address = 1;
+  localparam int fir_reg_address = 2;
+
+  
+  localparam int sample_write_in_reg = 32'h10002000;
+  localparam int sample_shift_out_reg = 32'h10002004;
+  localparam int y_out_upper_reg = 32'h10002008;
+  localparam int y_out_lower_reg = 32'h1000200C;
 
   // Clock and reset signals
   logic clk_i;
@@ -94,6 +101,7 @@ module student_fir_tb;
 	bus.wait_cycles(20);
 
 	// Apply test stimulus
+	$display("Apply test stimulus:");
 	for (int i = 0; i < MaxAddr; i = i + 1) begin
 		sample_in = {8'b0, sin_mem[i]}; // Zero-pad the 8-bit value to 16 bits
 		valid_strobe_in <= 1;
@@ -101,6 +109,11 @@ module student_fir_tb;
 		@(posedge clk_i);
 		valid_strobe_in <= 0;
 		wait(valid_strobe_out == 1); // Wait for valid_strobe_out to go high
+		//read sample_shift_out_internal
+		bus.get_word(sample_shift_out_reg, tlul_read_data);
+		//read y out
+		bus.get_word(y_out_upper_reg, tlul_read_data);
+		bus.get_word(y_out_lower_reg, tlul_read_data);
 		counting = 0;
 		$display("Number of clock cycles from valid_strobe_in to valid_strobe_out: %0d", clk_count);
         clk_count = 0; // Reset counter for next iteration
@@ -108,6 +121,7 @@ module student_fir_tb;
 	end
 
 	//apply tlul write on coeff dpram:
+	$display("Apply tlul write on coeff dpram:");
 	for (int i = 0; i < MaxAddr; i++) begin
 		address_sram = 32'h00000000; // Basisadresse setzen
 		address_sram[31:24] = 8'h10; // Aktuelle Geräteadresse setzen
@@ -116,7 +130,7 @@ module student_fir_tb;
 		address_sram[dpram_tlul_offset-1:AddrWidth+2] = '0; // Bereich auf Null setzen
 		address_sram[AddrWidth+1:2] = i; // Adresse innerhalb des dpram setzen
 		address_sram[1:0] = '0; // Niedrigste zwei Bits auf Null setzen		
-		tlul_write_data = {'0,8'h01};
+		tlul_write_data = {'0,8'h02};
 		bus.put_word(address_sram, tlul_write_data);
 		bus.get_word(address_sram, tlul_read_data);
 		$display("tlul_read_data: %4x and expected_data: %4x",tlul_read_data, tlul_write_data);
@@ -126,28 +140,59 @@ module student_fir_tb;
 		end
 	end
 
-	// Apply test stimulus
-	for (int i = 0; i < MaxAddr; i = i + 1) begin
+	//apply tlul write on samples dpram:
+	$display("Apply tlul write on samples dpram:");
+	for (int i = 0; i < MaxAddr; i++) begin
+		address_sram = 32'h00000000; // Basisadresse setzen
+		address_sram[31:24] = 8'h10; // Aktuelle Geräteadresse setzen
+		address_sram[23:dpram_tlul_offset+4] = '0; // Bereich auf Null setzen
+		address_sram[dpram_tlul_offset+4-1:dpram_tlul_offset] = dpram_samples_address; // tlul_dpram_device auswählen
+		address_sram[dpram_tlul_offset-1:AddrWidth+2] = '0; // Bereich auf Null setzen
+		address_sram[AddrWidth+1:2] = i; // Adresse innerhalb des dpram setzen
+		address_sram[1:0] = '0; // Niedrigste zwei Bits auf Null setzen		
+		tlul_write_data = {'0,8'h00};
+		bus.put_word(address_sram, tlul_write_data);
+		bus.get_word(address_sram, tlul_read_data);
+		$display("tlul_read_data: %4x and expected_data: %4x",tlul_read_data, tlul_write_data);
+		if (tlul_read_data !== tlul_write_data) begin
+			$display("Fehler: Erwartet %0d, aber tlul_read_data ist %h", tlul_write_data, tlul_read_data);
+			error_flag = 1;
+		end
+	end
+
+	// Apply test stimulus with tlul sample in
+	$display("Apply test stimulus with tlul sample in");
+	//for (int i = 0; i < MaxAddr; i = i + 1) begin
 		//sample_in = {8'b0, sin_mem[i]}; // Zero-pad the 8-bit value to 16 bits
-		valid_strobe_in <= 1;
+		//valid_strobe_in <= 1;
+		bus.put_word(sample_write_in_reg, {'0,8'h01});
 		counting = 1;
 		@(posedge clk_i);
-		valid_strobe_in <= 0;
+		//valid_strobe_in <= 0;
 		wait(valid_strobe_out == 1); // Wait for valid_strobe_out to go high
+		//read sample_shift_out_internal
+		bus.get_word(sample_shift_out_reg, tlul_read_data);
+		//read y out
+		bus.get_word(y_out_upper_reg, tlul_read_data);
+		bus.get_word(y_out_lower_reg, tlul_read_data);
 		counting = 0;
 		$display("Number of clock cycles from valid_strobe_in to valid_strobe_out: %0d", clk_count);
         clk_count = 0; // Reset counter for next iteration
-		 // Testresultat
-		if (error_flag) begin
-			$display("Test fehlgeschlagen.");
-		end else begin
-			$display("Test erfolgreich.");
-		end
-		@(posedge clk_i);
-	end
+	//end
+
+
 
     // Finish simulation
     #200;
+
+	// Testresultat
+	if (error_flag) begin
+		$display("Test fehlgeschlagen.");
+	end else begin
+		$display("Test erfolgreich.");
+	end
+	@(posedge clk_i);
+
     $stop;
   end
 

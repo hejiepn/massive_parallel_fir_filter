@@ -19,6 +19,43 @@ module student_fir #(
     output tlul_pkg::tl_d2h_t tl_o  //slave output (this module's response)
 );
 
+  localparam TLUL_DPRAM_DEVICES = 3;
+
+  tlul_pkg::tl_h2d_t tl_student_dpram_i[TLUL_DPRAM_DEVICES-1:0];
+  tlul_pkg::tl_d2h_t tl_student_dpram_o[TLUL_DPRAM_DEVICES-1:0];
+
+  student_tlul_mux #(
+	.NUM(TLUL_DPRAM_DEVICES),
+	.ADDR_OFFSET(12)
+  ) tlul_mux_dpram (
+      .clk_i,
+      .rst_ni,
+
+      .tl_host_i(tl_i),
+      .tl_host_o(tl_o),
+
+      .tl_device_i(tl_student_dpram_i),
+      .tl_device_o(tl_student_dpram_o)
+  );
+
+  import student_fir_reg_pkg::*;
+
+  student_fir_reg2hw_t reg2hw; 
+  student_fir_hw2reg_t hw2reg;
+
+  student_fir_reg_top student_fir_reg_top (
+	.clk_i(clk_i),
+	.rst_ni(rst_ni),
+
+	.tl_i(tl_student_dpram_i[2]),
+	.tl_o(tl_student_dpram_o[2]),
+
+	.reg2hw(reg2hw),
+	.hw2reg(hw2reg),
+
+	.devmode_i(1'b1)
+  );
+
   // Define constants for memory definition
   localparam MAX_ADDR = 2 ** ADDR_WIDTH;
   localparam ROM_FILE_COEFF = (DEBUGMODE == 1) ? "/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/rtl/student/data/coe_lp_debug.mem" : "/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/rtl/student/data/coe_lp.mem";  // File for memory initialization
@@ -37,6 +74,10 @@ module student_fir #(
   logic enb_coeff;
   //logic wea_coeff;
   logic [DATA_SIZE_FIR_OUT-1:0] fir_sum;
+  
+  logic [DATA_SIZE-1:0] sample_in_internal;
+  //logic ena_internal;
+//   logic wea_internal;
 
 
   // FIR State Machine
@@ -55,8 +96,13 @@ module student_fir #(
     end
   end
 
-  assign valid_strobe_in_pos_edge = valid_strobe_in && ~valid_strobe_in_prev;
-  assign ena_samples = valid_strobe_in_pos_edge;
+  assign valid_strobe_in_pos_edge = reg2hw.fir_write_in_samples.qe? 1'b1 : valid_strobe_in && ~valid_strobe_in_prev;
+  assign ena_samples = reg2hw.fir_write_in_samples.qe? 1'b1 : valid_strobe_in_pos_edge;
+
+
+  assign sample_in_internal = reg2hw.fir_write_in_samples.qe? reg2hw.fir_write_in_samples.q : sample_in;
+  //assign ena_internal = reg2hw.fir_write_in_samples.qe? 1'b1 : ena_samples;
+  //assign wea_internal = reg2hw.fir_write_in_samples.qe? 1'b1 : valid_strobe_in_pos_edge;
 
   // Write address generation
   always_ff @(posedge clk_i) begin
@@ -83,27 +129,8 @@ module student_fir #(
     	end
 	end
   end
-  
-  localparam TLUL_DPRAM_DEVICES = 2;
 
-  tlul_pkg::tl_h2d_t tl_student_dpram_i[TLUL_DPRAM_DEVICES-1:0];
-  tlul_pkg::tl_d2h_t tl_student_dpram_o[TLUL_DPRAM_DEVICES-1:0];
-
-  student_tlul_mux #(
-	.NUM(TLUL_DPRAM_DEVICES),
-	.ADDR_OFFSET(12)
-  ) tlul_mux_dpram (
-      .clk_i,
-      .rst_ni,
-
-      .tl_host_i(tl_i),
-      .tl_host_o(tl_o),
-
-      .tl_device_i(tl_student_dpram_i),
-      .tl_device_o(tl_student_dpram_o)
-  );
-
-  // Dual Port RAM instances for samples and coefficients
+   // Dual Port RAM instances for samples and coefficients
   student_dpram_samples_tlul #(
     .AddrWidth(ADDR_WIDTH),
     .DataSize(DATA_SIZE),
@@ -117,11 +144,31 @@ module student_fir #(
     .wea(valid_strobe_in_pos_edge),
     .addra(wr_addr),
     .addrb(rd_addr),
-    .dia(sample_in),
+    .dia(sample_in_internal),
     .dob(read_sample),
 	.tl_i(tl_student_dpram_i[0]),
 	.tl_o(tl_student_dpram_o[0])
   );
+
+//   // Dual Port RAM instances for samples and coefficients
+//   student_dpram_samples_tlul #(
+//     .AddrWidth(ADDR_WIDTH),
+//     .DataSize(DATA_SIZE),
+// 	.DebugMode(DEBUGMODE),
+//     .INIT_F(ROM_FILE_SAMPLES) 
+//   ) samples_dpram (
+//     .clk_i(clk_i),
+// 	.rst_ni(rst_ni),
+//     .ena(ena_samples),
+//     .enb(enb_samples),
+//     .wea(valid_strobe_in_pos_edge),
+//     .addra(wr_addr),
+//     .addrb(rd_addr),
+//     .dia(sample_in),
+//     .dob(read_sample),
+// 	.tl_i(tl_student_dpram_i[0]),
+// 	.tl_o(tl_student_dpram_o[0])
+//   );
 
   student_dpram_samples_tlul #(
     .AddrWidth(ADDR_WIDTH),
@@ -136,6 +183,7 @@ module student_fir #(
 	.wea('0),
 	.addra('0),
     .addrb(rd_addr_c),
+	.dia('0),
     .dob(read_coeff),
 	.tl_i(tl_student_dpram_i[1]),
 	.tl_o(tl_student_dpram_o[1])
@@ -193,6 +241,8 @@ end
       fir_sum <= '0;
     //   compute_finished_out <= 0;
 	  valid_strobe_out <= 0;
+	  hw2reg.fir_read_shift_out_samples.d = '0;
+	  hw2reg.fir_read_shift_out_samples.de = 1'b0;
     end else begin
 		case (fir_state)
 			IDLE: begin
@@ -220,6 +270,8 @@ end
 				fir_sum <= fir_sum + read_sample * read_coeff;
 				if( rd_addr == wr_addr) begin
 					sample_shift_out <= read_sample;
+					hw2reg.fir_read_shift_out_samples.d = read_sample;
+					hw2reg.fir_read_shift_out_samples.de = 1'b1;
 				end
 			end
 			SHIFT_OUT: begin
@@ -229,10 +281,35 @@ end
 				// $display("fir_sum: %d read_sample: %4x read_coeff: %4x", fir_sum, read_sample, read_coeff);
 				// compute_finished_out <= 1;
 				valid_strobe_out <= 1;
+				hw2reg.fir_read_shift_out_samples.de = 1'b0;
 			end
 		endcase
 	end
 end
+
+always_ff @(posedge clk_i, negedge rst_ni) begin
+	if (~rst_ni) begin
+		hw2reg.fir_read_y_out_upper.d = '0;
+		hw2reg.fir_read_y_out_upper.de = 1'b0;
+		hw2reg.fir_read_y_out_lower.d = '0;
+		hw2reg.fir_read_y_out_lower.de = 1'b0;
+	end else begin
+		if (valid_strobe_out) begin
+			hw2reg.fir_read_y_out_upper.d = fir_sum[DATA_SIZE_FIR_OUT-1:DATA_SIZE_FIR_OUT/2];
+			hw2reg.fir_read_y_out_upper.de = 1'b1;
+			hw2reg.fir_read_y_out_lower.d = fir_sum[DATA_SIZE_FIR_OUT/2-1:0];
+			hw2reg.fir_read_y_out_lower.de = 1'b1;
+		end else begin
+			hw2reg.fir_read_y_out_upper.de = 1'b0;
+			hw2reg.fir_read_y_out_lower.de = 1'b0;
+		end
+	end
+end
+
+  // Output assignment
+  //assign sample_shift_out = read_sample;
+  //assign valid_strobe_out = compute_finished_out;
+  //
 
 assign y_out = fir_sum;
 

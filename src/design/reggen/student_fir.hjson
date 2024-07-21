@@ -1,0 +1,45 @@
+{
+  name: "student_fir"
+  clock_primary: "sys_clk"
+  bus_device: "tlul"
+  regwidth: "32"
+  registers: [
+    {
+      name: "fir_write_in_samples"
+      desc: "writes samples in fir"
+      swaccess: "wo"
+      hwaccess: "hro"
+	  hwqe : "true"
+      fields: [
+        {bits: "15:0", name: "Samples In", desc: "write in samples"}
+      ]
+    }
+	{
+      name: "fir_read_shift_out_samples"
+      desc: "read shift out samples"
+      swaccess: "ro"
+      hwaccess: "hwo"
+      fields: [
+        {bits: "15:0", name: "Samples out", desc: "read out samples"}
+      ]
+    }
+	{
+      name: "fir_read_y_out_upper"
+      desc: "read fir y_out upper half"
+      swaccess: "ro"
+      hwaccess: "hwo"
+      fields: [
+        {bits: "31:0", name: "read y out upper", desc: "read fir y_out upper half"}
+      ]
+    }
+	{
+      name: "fir_read_y_out_lower"
+      desc: "read fir y_out lower half"
+      swaccess: "ro"
+      hwaccess: "hwo"
+      fields: [
+        {bits: "31:0", name: "read y out lower", desc: "read fir y_out lower half"}
+      ]
+    }
+  ]
+}
