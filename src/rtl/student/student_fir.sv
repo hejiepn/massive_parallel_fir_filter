@@ -10,7 +10,7 @@ module student_fir #(
     input logic valid_strobe_in,
     input logic [DATA_SIZE-1:0] sample_in,
 
-    output logic compute_finished_out,
+    //output logic compute_finished_out,
     output logic [DATA_SIZE-1:0] sample_shift_out,
 	output logic valid_strobe_out,
     output logic [DATA_SIZE_FIR_OUT-1:0] y_out,
@@ -191,12 +191,12 @@ end
   always_ff @(posedge clk_i) begin
     if (~rst_ni) begin
       fir_sum <= '0;
-      compute_finished_out <= 0;
+    //   compute_finished_out <= 0;
 	  valid_strobe_out <= 0;
     end else begin
 		case (fir_state)
 			IDLE: begin
-				compute_finished_out <= 0;
+				// compute_finished_out <= 0;
 				valid_strobe_out <= 0;
 				fir_sum <= '0;
 				// $display("fir_state: IDLE");
@@ -227,7 +227,7 @@ end
 				// $display("wr_addr: %4x rd_addr: %4x rd_addr_c: %4x", wr_addr, rd_addr, rd_addr_c);
 				// $display("enb_samples: %1x enb_coeff: %1x", enb_samples, enb_coeff);
 				// $display("fir_sum: %d read_sample: %4x read_coeff: %4x", fir_sum, read_sample, read_coeff);
-				compute_finished_out <= 1;
+				// compute_finished_out <= 1;
 				valid_strobe_out <= 1;
 			end
 		endcase

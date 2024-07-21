@@ -19,7 +19,7 @@ module student_fir_tb;
   logic [DATA_SIZE-1:0] sample_in;
 
   // Output signals
-  logic compute_finished_out;
+//   logic compute_finished_out;
   logic [DATA_SIZE-1:0] sample_shift_out;
   logic valid_strobe_out;
   logic [DATA_SIZE*2-1:0] y_out;
@@ -48,7 +48,7 @@ module student_fir_tb;
     .rst_ni(rst_ni),
     .valid_strobe_in(valid_strobe_in),
     .sample_in(sample_in),
-    .compute_finished_out(compute_finished_out),
+    // .compute_finished_out(compute_finished_out),
     .sample_shift_out(sample_shift_out),
     .valid_strobe_out(valid_strobe_out),
     .y_out(y_out),
@@ -107,16 +107,16 @@ module student_fir_tb;
 		@(posedge clk_i);
 	end
 
-	//apply tlul write on samples and coeff:
+	//apply tlul write on coeff dpram:
 	for (int i = 0; i < MaxAddr; i++) begin
-		address_sram = 32'h10000000; // Basisadresse setzen
+		address_sram = 32'h00000000; // Basisadresse setzen
 		address_sram[31:24] = 8'h10; // Aktuelle Geräteadresse setzen
 		address_sram[23:dpram_tlul_offset+4] = '0; // Bereich auf Null setzen
 		address_sram[dpram_tlul_offset+4-1:dpram_tlul_offset] = dpram_coeff_address; // tlul_dpram_device auswählen
 		address_sram[dpram_tlul_offset-1:AddrWidth+2] = '0; // Bereich auf Null setzen
 		address_sram[AddrWidth+1:2] = i; // Adresse innerhalb des dpram setzen
 		address_sram[1:0] = '0; // Niedrigste zwei Bits auf Null setzen		
-		tlul_write_data = {'0,8'h02};
+		tlul_write_data = {'0,8'h01};
 		bus.put_word(address_sram, tlul_write_data);
 		bus.get_word(address_sram, tlul_read_data);
 		$display("tlul_read_data: %4x and expected_data: %4x",tlul_read_data, tlul_write_data);
@@ -159,9 +159,13 @@ module student_fir_tb;
   end
 
   // Monitor to print values
+//   initial begin
+//     $monitor("Time: %0t | valid_strobe_in: %0b | sample_in: %0h | compute_finished_out: %0b | sample_shift_out: %0h | valid_strobe_out: %0b | y_out: %0h",
+//              $time, valid_strobe_in, sample_in, compute_finished_out, sample_shift_out, valid_strobe_out, y_out);
+//   end
   initial begin
-    $monitor("Time: %0t | valid_strobe_in: %0b | sample_in: %0h | compute_finished_out: %0b | sample_shift_out: %0h | valid_strobe_out: %0b | y_out: %0h",
-             $time, valid_strobe_in, sample_in, compute_finished_out, sample_shift_out, valid_strobe_out, y_out);
+    $monitor("Time: %0t | valid_strobe_in: %0b | sample_in: %0h | sample_shift_out: %0h | valid_strobe_out: %0b | y_out: %0h",
+             $time, valid_strobe_in, sample_in, sample_shift_out, valid_strobe_out, y_out);
   end
 
 endmodule
