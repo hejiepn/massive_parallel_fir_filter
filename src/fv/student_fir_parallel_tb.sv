@@ -16,7 +16,7 @@ module student_fir_parallel_tb;
 
   // Output signals
   logic valid_strobe_out;
-  logic [DATA_SIZE_FIR_OUT+NUM_FIR-1:0] y_out;
+  logic [DATA_SIZE_FIR_OUT+$clog2(NUM_FIR)-1:0] y_out;
 
   // TileLink interface
   tlul_pkg::tl_h2d_t tl_h2d;
@@ -40,6 +40,14 @@ module student_fir_parallel_tb;
     .tl_o(tl_d2h)
   );
 
+     tlul_test_host bus(
+    .clk_i(clk_i),
+    .rst_no(rst_ni),
+    .tl_i(tl_d2h),
+    .tl_o(tl_h2d)
+  );
+
+
   // Clock generation: 50 MHz clock -> period = 20ns
   always begin
     clk_i = 1'b1;
@@ -51,25 +59,34 @@ module student_fir_parallel_tb;
   // Initial block to apply stimulus
   initial begin
     // Initialize signals
-    rst_ni = 1;
+    
     valid_strobe_in = 0;
     sample_in = 0;
-    #100;  // Wait for 100ns
-    rst_ni = 0;  // Release reset
-    #100;
-    rst_ni = 1;
-    #100;
+    bus.reset();
+    // Wait for reset to propagate
+    #40;
+	bus.wait_cycles(20);
+
+	sample_in = 1;  // Incremental test pattern
+	valid_strobe_in = 1;
+	@(posedge clk_i);  // Wait for a clock edge
+	valid_strobe_in = 0;
+	@(posedge valid_strobe_out);  // Wait for output validation
+	$display("Output y_out at time %0t: %h", $time, y_out);
+	@(posedge clk_i);
 
     // Apply test stimulus
-    // for (int i = 0; i < 256; i++) begin
-      sample_in = 1;  // Incremental test pattern
+    for (int i = 0; i < 100; i++) begin
+		sample_in = 0;  // Incremental test pattern
       valid_strobe_in = 1;
       @(posedge clk_i);  // Wait for a clock edge
       valid_strobe_in = 0;
       @(posedge valid_strobe_out);  // Wait for output validation
       $display("Output y_out at time %0t: %h", $time, y_out);
       @(posedge clk_i);
-    // end
+    end
+
+	bus.wait_cycles(20);
 
     $finish;  // End simulation
   end

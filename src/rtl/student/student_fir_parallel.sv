@@ -13,7 +13,7 @@ module student_fir_parallel #(
     //output logic compute_finished_out,
     //output logic [DATA_SIZE-1:0] sample_shift_out,
 	output logic valid_strobe_out,
-    output logic [DATA_SIZE_FIR_OUT+NUM_FIR-1:0] y_out,
+    output logic [DATA_SIZE_FIR_OUT+$clog2(NUM_FIR)-1:0] y_out,
 	
 	input  tlul_pkg::tl_h2d_t tl_i,  //master input (incoming request)
     output tlul_pkg::tl_d2h_t tl_o  //slave output (this module's response)
@@ -23,7 +23,7 @@ module student_fir_parallel #(
   tlul_pkg::tl_d2h_t tl_student_fir_o[NUM_FIR:0];
 
   student_tlul_mux #(
-	.NUM(NUM_FIR),
+	.NUM(NUM_FIR+1),
 	.ADDR_OFFSET(16)
   ) tlul_mux_dpram (
       .clk_i,
@@ -54,7 +54,7 @@ module student_fir_parallel #(
 
   logic [DATA_SIZE-1:0] sample_shift_out_internal[NUM_FIR-1:0];
   logic valid_strobe_out_internal[NUM_FIR-1:0];
-  logic [DATA_SIZE_FIR_OUT-1:0] y_out_internal [NUM_FIR-1:0];
+  logic [NUM_FIR-1:0] [DATA_SIZE_FIR_OUT-1:0] y_out_internal ;
   logic [DATA_SIZE-1:0] sample_in_internal;
 
 
@@ -91,7 +91,7 @@ module student_fir_parallel #(
 					.valid_strobe_out(valid_strobe_out_internal[i]),
 					.y_out(y_out_internal[i]),
 					.tl_i(tl_student_fir_i[i]),
-					.tl_o(tl_student_fir_i[i])
+					.tl_o(tl_student_fir_o[i])
 				);
 			end else begin
 				student_fir #(
@@ -108,7 +108,7 @@ module student_fir_parallel #(
 					.valid_strobe_out(valid_strobe_out_internal[i]),
 					.y_out(y_out_internal[i]),
 					.tl_i(tl_student_fir_i[i]),
-					.tl_o(tl_student_fir_i[i])
+					.tl_o(tl_student_fir_o[i])
 				);
 			end
 		end
@@ -117,19 +117,19 @@ module student_fir_parallel #(
 	always_ff @(posedge clk_i, negedge rst_ni) begin
 		if (~rst_ni) begin
 			hw2reg.fir_read_shift_out_samples.de <= 0;
-			hw2reg.fir_read_shift_out_samples.q <= '0;
+			hw2reg.fir_read_shift_out_samples.d <= '0;
 		end else begin
 			if(valid_strobe_out_internal[NUM_FIR-1]) begin
 				hw2reg.fir_read_shift_out_samples.de <= 1;
-				hw2reg.fir_read_shift_out_samples.q <= sample_shift_out_internal[NUM_FIR-1];
+				hw2reg.fir_read_shift_out_samples.d <= sample_shift_out_internal[NUM_FIR-1];
 			end else begin
 				hw2reg.fir_read_shift_out_samples.de <= 0;
 			end
 		end
 	end
 
-	logic [DATA_SIZE_FIR_OUT+NUM_FIR-1:0] adder_tree_y_out;
-	logic [DATA_SIZE_FIR_OUT+NUM_FIR-1:0] adder_tree_y_out_prev;
+	logic [DATA_SIZE_FIR_OUT+$clog2(NUM_FIR)-1:0] adder_tree_y_out;
+	logic [DATA_SIZE_FIR_OUT+$clog2(NUM_FIR)-1:0] adder_tree_y_out_prev;
 
 	adder_tree #(
 		.INPUTS_NUM(NUM_FIR),
@@ -170,5 +170,5 @@ module student_fir_parallel #(
 			end
 		end
 	end
-	
+
 endmodule
