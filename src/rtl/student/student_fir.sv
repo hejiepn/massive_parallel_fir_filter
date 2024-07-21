@@ -88,7 +88,7 @@ module student_fir #(
   logic valid_strobe_in_prev;
   logic valid_strobe_in_pos_edge;
 
-  always_ff @(posedge clk_i) begin
+  always_ff @(posedge clk_i, negedge rst_ni) begin
     if (~rst_ni) begin
       valid_strobe_in_prev <= 0;
     end else begin
@@ -105,7 +105,7 @@ module student_fir #(
   //assign wea_internal = reg2hw.fir_write_in_samples.qe? 1'b1 : valid_strobe_in_pos_edge;
 
   // Write address generation
-  always_ff @(posedge clk_i) begin
+  always_ff @(posedge clk_i, negedge rst_ni) begin
     if (~rst_ni) begin
       wr_addr <= '0;
     end else begin
@@ -116,7 +116,7 @@ module student_fir #(
   end
 
   // Read address generation
-  always_ff @(posedge clk_i) begin
+  always_ff @(posedge clk_i, negedge rst_ni) begin
     if (~rst_ni) begin
       rd_addr <= '0;
 	  rd_addr_c <= '0;
@@ -190,7 +190,7 @@ module student_fir #(
   );
   
   // Enable signals control
-  always_ff @(posedge clk_i) begin
+  always_ff @(posedge clk_i, negedge rst_ni) begin
     if(~rst_ni) begin
       enb_samples <= 0;
       enb_coeff <= 0;
@@ -206,7 +206,7 @@ module student_fir #(
 end
 
   // FIR State Machine
-  always_ff @(posedge clk_i) begin
+  always_ff @(posedge clk_i, negedge rst_ni) begin
     if (~rst_ni) begin
       fir_state <= IDLE;
     end else begin
@@ -236,19 +236,21 @@ end
   
 
    // FIR computation
-  always_ff @(posedge clk_i) begin
+  always_ff @(posedge clk_i, negedge rst_ni) begin
     if (~rst_ni) begin
       fir_sum <= '0;
-    //   compute_finished_out <= 0;
+	  y_out <= '0;
 	  valid_strobe_out <= 0;
 	  hw2reg.fir_read_shift_out_samples.d = '0;
 	  hw2reg.fir_read_shift_out_samples.de = 1'b0;
+    //   compute_finished_out <= 0;
     end else begin
 		case (fir_state)
 			IDLE: begin
 				// compute_finished_out <= 0;
 				valid_strobe_out <= 0;
 				fir_sum <= '0;
+				//y_out <= '0;
 				// $display("fir_state: IDLE");
 				// $display("wr_addr: %4x rd_addr: %4x rd_addr_c: %4x", wr_addr, rd_addr, rd_addr_c);
 				// $display("enb_samples: %1x enb_coeff: %1x", enb_samples, enb_coeff);
@@ -282,6 +284,7 @@ end
 				// compute_finished_out <= 1;
 				valid_strobe_out <= 1;
 				hw2reg.fir_read_shift_out_samples.de = 1'b0;
+				y_out <= fir_sum;
 			end
 		endcase
 	end
@@ -309,8 +312,6 @@ end
   // Output assignment
   //assign sample_shift_out = read_sample;
   //assign valid_strobe_out = compute_finished_out;
-  //
-
-assign y_out = fir_sum;
+  //assign y_out = fir_sum;
 
 endmodule
