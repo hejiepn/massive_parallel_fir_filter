@@ -61,6 +61,8 @@ module_tbs = [
 	"student_fir_tb",
 	"student_dpram_samples_tlul_tb",
 	"student_dpram_coeff_tlul_tb",
+	"adder_tree_tb",
+	"student_fir_parallel_tb",
 ]
 
 for name in module_tbs:

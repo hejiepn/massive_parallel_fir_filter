@@ -3,7 +3,7 @@ module student_fir_parallel #(
 	parameter int unsigned DATA_SIZE = 16,
 	parameter int unsigned DEBUGMODE = 0,
 	parameter int unsigned DATA_SIZE_FIR_OUT = 32,
-	parameter int unsigned NUM_FIR = 4 //only even numbers
+	parameter int unsigned NUM_FIR = 4 //only numbers which are power of 2 are supported
 ) (
 	input logic clk_i,
     input logic rst_ni,
@@ -13,7 +13,7 @@ module student_fir_parallel #(
     //output logic compute_finished_out,
     //output logic [DATA_SIZE-1:0] sample_shift_out,
 	output logic valid_strobe_out,
-    output logic [DATA_SIZE_FIR_OUT-1:0] y_out,
+    output logic [DATA_SIZE_FIR_OUT+NUM_FIR-1:0] y_out,
 	
 	input  tlul_pkg::tl_h2d_t tl_i,  //master input (incoming request)
     output tlul_pkg::tl_d2h_t tl_o  //slave output (this module's response)
@@ -55,6 +55,8 @@ module student_fir_parallel #(
   logic [DATA_SIZE-1:0] sample_shift_out_internal[NUM_FIR-1:0];
   logic valid_strobe_out_internal[NUM_FIR-1:0];
   logic [DATA_SIZE_FIR_OUT-1:0] y_out_internal [NUM_FIR-1:0];
+  logic [DATA_SIZE-1:0] sample_in_internal;
+
 
     // Edge detection for valid_strobe_in
   logic valid_strobe_in_prev;
@@ -112,90 +114,61 @@ module student_fir_parallel #(
 		end
 	endgenerate
 
-	//implement adder tree for y_out_internal[i] depending on valid_strobe_out_internal[i]
-	 // Implementing the Adder Tree with Valid Strobe Check
-    logic [DATA_SIZE_FIR_OUT-1:0] adder_tree[NUM_FIR-1:0];
-    logic valid_strobe_tree[NUM_FIR-1:0];
+	always_ff @(posedge clk_i, negedge rst_ni) begin
+		if (~rst_ni) begin
+			hw2reg.fir_read_shift_out_samples.de <= 0;
+			hw2reg.fir_read_shift_out_samples.q <= '0;
+		end else begin
+			if(valid_strobe_out_internal[NUM_FIR-1]) begin
+				hw2reg.fir_read_shift_out_samples.de <= 1;
+				hw2reg.fir_read_shift_out_samples.q <= sample_shift_out_internal[NUM_FIR-1];
+			end else begin
+				hw2reg.fir_read_shift_out_samples.de <= 0;
+			end
+		end
+	end
 
-    // Stage 1
-    generate
-        for (i = 0; i < NUM_FIR; i = i + 2) begin : adder_stage_1
-            always_ff @(posedge clk_i or negedge rst_ni) begin
-                if (!rst_ni) begin
-                    adder_tree[i/2] <= 0;
-                    valid_strobe_tree[i/2] <= 0;
-                end else if (valid_strobe_out_internal[i] && valid_strobe_out_internal[i+1]) begin
-                    adder_tree[i/2] <= y_out_internal[i] + y_out_internal[i+1];
-                    valid_strobe_tree[i/2] <= 1;
-                end else begin
-                    valid_strobe_tree[i/2] <= 0;
-                end
-            end
-        end
-    endgenerate
+	logic [DATA_SIZE_FIR_OUT+NUM_FIR-1:0] adder_tree_y_out;
+	logic [DATA_SIZE_FIR_OUT+NUM_FIR-1:0] adder_tree_y_out_prev;
 
-    // Continue stages
-    genvar stage;
-    generate
-        for (stage = 1; stage < $clog2(NUM_FIR); stage = stage + 1) begin : adder_stages
-            for (i = 0; i < (NUM_FIR >> stage); i = i + 2) begin : adder_stage
-                always_ff @(posedge clk_i or negedge rst_ni) begin
-                    if (!rst_ni) begin
-                        adder_tree[(NUM_FIR >> stage) + i/2] <= 0;
-                        valid_strobe_tree[(NUM_FIR >> stage) + i/2] <= 0;
-                    end else if (valid_strobe_tree[(NUM_FIR >> (stage-1)) + i] && valid_strobe_tree[(NUM_FIR >> (stage-1)) + i+1]) begin
-                        adder_tree[(NUM_FIR >> stage) + i/2] <= adder_tree[(NUM_FIR >> (stage-1)) + i] + adder_tree[(NUM_FIR >> (stage-1)) + i+1];
-                        valid_strobe_tree[(NUM_FIR >> stage) + i/2] <= 1;
-                    end else begin
-                        valid_strobe_tree[(NUM_FIR >> stage) + i/2] <= 0;
-                    end
-                end
-            end
-        end
-    endgenerate
+	adder_tree #(
+		.INPUTS_NUM(NUM_FIR),
+		.IDATA_WIDTH(DATA_SIZE_FIR_OUT)
+	) adder_tree_i (
+		.clk(clk_i),
+		.nrst(rst_ni),
+		.idata(y_out_internal),
+		.odata(adder_tree_y_out)
+	);
 
-    always_ff @(posedge clk_i or negedge rst_ni) begin
-        if (!rst_ni) begin
-            y_out <= 0;
-            valid_strobe_out <= 0;
-        end else if (valid_strobe_tree[0]) begin
-            y_out <= adder_tree[0];
-            valid_strobe_out <= 1;
-        end else begin
-            valid_strobe_out <= 0;
-        end
-    end
+	always_ff @(posedge clk_i) begin
+		if (~rst_ni) begin
+			adder_tree_y_out_prev <= 0;
+		end else begin
+			adder_tree_y_out_prev <= adder_tree_y_out;
+		end
+	end
 
+	assign valid_strobe_out = adder_tree_y_out != adder_tree_y_out_prev;
+	assign y_out = adder_tree_y_out;
+
+	always_ff @(posedge clk_i, negedge rst_ni) begin
+		if (~rst_ni) begin
+			hw2reg.fir_read_y_out_upper.d = '0;
+			hw2reg.fir_read_y_out_upper.de = 1'b0;
+			hw2reg.fir_read_y_out_lower.d = '0;
+			hw2reg.fir_read_y_out_lower.de = 1'b0;
+		end else begin
+			if(valid_strobe_out) begin
+				hw2reg.fir_read_y_out_upper.d = adder_tree_y_out[DATA_SIZE_FIR_OUT-1:DATA_SIZE_FIR_OUT/2];
+				hw2reg.fir_read_y_out_upper.de = 1'b1;
+				hw2reg.fir_read_y_out_lower.d = adder_tree_y_out[DATA_SIZE_FIR_OUT/2-1:0];
+				hw2reg.fir_read_y_out_lower.de = 1'b1;
+			end else begin
+				hw2reg.fir_read_y_out_upper.de = 1'b0;
+				hw2reg.fir_read_y_out_lower.de = 1'b0;
+			end
+		end
+	end
+	
 endmodule
-
-
-	 /**
-    logic [DATA_SIZE_FIR_OUT-1:0] adder_tree [NUM_FIR-1:0];
-	logic valid_adder_stage[NUM_FIR-1:0];
-
-    // Stage 1
-    generate
-        for (i = 0; i < NUM_FIR; i = i + 2) begin : adder_stage_1
-            if (i+1 < NUM_FIR) begin
-                assign adder_tree[i/2] = y_out_internal[i] + y_out_internal[i+1];
-            end
-        end
-    endgenerate
-
-    // Continue stages
-    genvar stage;
-    generate
-        for (stage = 1; stage < $clog2(NUM_FIR); stage = stage + 1) begin : adder_stages
-            for (i = 0; i < (NUM_FIR >> stage); i = i + 2) begin : adder_stage
-                assign adder_tree[(NUM_FIR >> stage) + i/2] = adder_tree[(NUM_FIR >> (stage-1)) + i] + adder_tree[(NUM_FIR >> (stage-1)) + i+1];
-            end
-        end
-    endgenerate
-
-    assign y_out = adder_tree[0];
-	// Assign valid_strobe_out based on the last valid strobe of the FIR chain
-    assign valid_strobe_out = valid_strobe_out_internal[NUM_FIR-1];
-
-
-endmodule
-**/
