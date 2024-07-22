@@ -29,8 +29,12 @@
 #include "reggen/student_iic_ctrl.h"
 #define STUDENT_IIC_CTRL0_BASE_ADDR 0x10100000
 
+/**
+ *Bit 19 -16 of FIR_PARALLEL0 is the NUM_FIR in student.sv 
+ *
+ **/
 #include "reggen/student_fir_parallel.h"
-#define STUDENT_IIC_CTRL0_BASE_ADDR 0x10200000
+#define STUDENT_FIR_PARALLEL0_BASE_ADDR 0x10240000
 
 #include "reggen/irq_ctrl.h"
 #define IRQ_CTRL0_BASE_ADDR 0x10400000
