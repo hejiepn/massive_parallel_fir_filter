@@ -281,7 +281,7 @@ void start_audio_codec_config(void) {
         bool success = false;
         
         while (attempts < MAX_ATTEMPTS && !success) {
-			printf("attempts: %d \n", attempts);
+			       printf("attempts: %d \n", attempts);
             printf("Start condition and write the slave address once\n");
             if (i2c_write_byte(true, false, AudioCodecAddr) == 0) {
                 printf("Write the register address and data in sequence\n");

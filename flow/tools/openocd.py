@@ -178,7 +178,7 @@ class OpenOcd:
         self.loadImage(elf_filename)
         self.send("resume")
 
-        print("Starting program.")
+        print("Starting program fiirrrrrrrr.")
 
         time.sleep(1)
 

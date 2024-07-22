@@ -1,8 +1,4 @@
-#include <stdio.h>
-#include <stdbool.h>
-#include "init.h"
-
-#define LINE_SIZE 256
+#include "userinterface.h"
 
 char *readline(void) {
     static char line[LINE_SIZE];
@@ -137,12 +133,10 @@ void cmd_sw(char *args[]) {
     printf("wrote 0x%08x: 0x%08x\n", addr, data);
 }
 
+int start_cli(void) {
+    //ddr_init();
 
-
-int main(void) {
-    ddr_init();
-
-    printf("Welcome to rvlab fir testtt monitor.\n", stdout);
+    printf("Welcome to rvlab FIR Parallel.\n", stdout);
 
     while(1) {
         char *cmd = readline();
