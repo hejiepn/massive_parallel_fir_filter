@@ -63,7 +63,7 @@ module student_fir_parallel #(
   logic valid_strobe_in_prev;
   logic valid_strobe_in_pos_edge;
 
-  always_ff @(posedge clk_i) begin
+  always_ff @(posedge clk_i, negedge rst_ni) begin
     if (~rst_ni) begin
       valid_strobe_in_prev <= 0;
     end else begin

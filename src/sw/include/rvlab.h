@@ -29,6 +29,9 @@
 #include "reggen/student_iic_ctrl.h"
 #define STUDENT_IIC_CTRL0_BASE_ADDR 0x10100000
 
+#include "reggen/student_fir_parallel.h"
+#define STUDENT_IIC_CTRL0_BASE_ADDR 0x10200000
+
 #include "reggen/irq_ctrl.h"
 #define IRQ_CTRL0_BASE_ADDR 0x10400000
 
