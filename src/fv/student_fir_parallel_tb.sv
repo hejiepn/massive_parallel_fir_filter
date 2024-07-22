@@ -4,7 +4,7 @@ module student_fir_parallel_tb;
   localparam int unsigned DATA_SIZE = 16;
   localparam int unsigned DEBUGMODE = 1;
   localparam int unsigned DATA_SIZE_FIR_OUT = 32;
-  localparam int unsigned NUM_FIR = 4;
+  localparam int unsigned NUM_FIR = 2;
 
   // Clock and reset signals
   logic clk_i;
@@ -21,6 +21,9 @@ module student_fir_parallel_tb;
   // TileLink interface
   tlul_pkg::tl_h2d_t tl_h2d;
   tlul_pkg::tl_d2h_t tl_d2h;
+  
+  logic [7:0] sin_mem [0:1023]; // Adjust the size based on your file
+
 
   // Instantiate the Device Under Test (DUT)
   student_fir_parallel #(
@@ -58,35 +61,81 @@ module student_fir_parallel_tb;
 
   // Initial block to apply stimulus
   initial begin
-    // Initialize signals
-    
+
+	clk_i = 0;
     valid_strobe_in = 0;
     sample_in = 0;
-    bus.reset();
+
+    // Load the sin.mem file
+	if (DEBUGMODE == 1) begin
+		$readmemh("/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/rtl/student/data/sin_low_debug.mem", sin_mem);
+	end else begin
+		$readmemh("/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/fv/data/sin_comb.mem", sin_mem);
+	end
+
+	bus.reset();
     // Wait for reset to propagate
     #40;
 	bus.wait_cycles(20);
+
+	$display("Testbench started");
+    // Initialize signals
 
 	sample_in = 1;  // Incremental test pattern
 	valid_strobe_in = 1;
 	@(posedge clk_i);  // Wait for a clock edge
 	valid_strobe_in = 0;
-	@(posedge valid_strobe_out);  // Wait for output validation
+	wait(valid_strobe_out == 1); // Wait for valid_strobe_out to go high	$display("Output y_out at time %0t: %h", $time, y_out);
+
 	$display("Output y_out at time %0t: %h", $time, y_out);
 	@(posedge clk_i);
 
-    // Apply test stimulus
-    for (int i = 0; i < 100; i++) begin
+	sample_in = 2;  // Incremental test pattern
+	valid_strobe_in = 1;
+	@(posedge clk_i);  // Wait for a clock edge
+	valid_strobe_in = 0;
+	wait(valid_strobe_out == 1); // Wait for valid_strobe_out to go high	$display("Output y_out at time %0t: %h", $time, y_out);
+
+	$display("Output y_out at time %0t: %h", $time, y_out);
+	@(posedge clk_i);
+
+	sample_in = 3;  // Incremental test pattern
+	valid_strobe_in = 1;
+	@(posedge clk_i);  // Wait for a clock edge
+	valid_strobe_in = 0;
+	wait(valid_strobe_out == 1); // Wait for valid_strobe_out to go high	$display("Output y_out at time %0t: %h", $time, y_out);
+	@(posedge clk_i);
+
+	sample_in = 4;  // Incremental test pattern
+	valid_strobe_in = 1;
+	@(posedge clk_i);  // Wait for a clock edge
+	valid_strobe_in = 0;
+	wait(valid_strobe_out == 1); // Wait for valid_strobe_out to go high	$display("Output y_out at time %0t: %h", $time, y_out);
+	@(posedge clk_i);
+
+	sample_in = 5;  // Incremental test pattern
+	valid_strobe_in = 1;
+	@(posedge clk_i);  // Wait for a clock edge
+	valid_strobe_in = 0;
+	wait(valid_strobe_out == 1); // Wait for valid_strobe_out to go highn
+	$display("Output y_out at time %0t: %h", $time, y_out);
+	@(posedge clk_i);
+
+    //Apply test stimulus
+	$display("Apply test stimulus");
+    for (int i = 0; i < 50; i++) begin
 		sample_in = 0;  // Incremental test pattern
-      valid_strobe_in = 1;
-      @(posedge clk_i);  // Wait for a clock edge
-      valid_strobe_in = 0;
-      @(posedge valid_strobe_out);  // Wait for output validation
-      $display("Output y_out at time %0t: %h", $time, y_out);
-      @(posedge clk_i);
+		valid_strobe_in = 1;
+		@(posedge clk_i);  // Wait for a clock edge
+		valid_strobe_in = 0;
+		wait(valid_strobe_out == 1); // Wait for valid_strobe_out to go highn
+		$display("Output y_out at time %0t: %h", $time, y_out);
+		@(posedge clk_i);
+		$display("samples number: %d",i);
+
     end
 
-	bus.wait_cycles(20);
+	$display("Testbench finished");
 
     $finish;  // End simulation
   end

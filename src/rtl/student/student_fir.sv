@@ -290,6 +290,11 @@ end
 	end
 end
 
+  // Output assignment
+  //assign sample_shift_out = read_sample;
+  //assign valid_strobe_out = compute_finished_out;
+//assign y_out = fir_sum;
+
 always_ff @(posedge clk_i, negedge rst_ni) begin
 	if (~rst_ni) begin
 		hw2reg.fir_read_y_out_upper.d = '0;
@@ -308,10 +313,5 @@ always_ff @(posedge clk_i, negedge rst_ni) begin
 		end
 	end
 end
-
-  // Output assignment
-  //assign sample_shift_out = read_sample;
-  //assign valid_strobe_out = compute_finished_out;
-  //assign y_out = fir_sum;
 
 endmodule

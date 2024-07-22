@@ -100,6 +100,34 @@ module student_fir_tb;
     #40;
 	bus.wait_cycles(20);
 
+	$display("Testbench started");
+    // Initialize signals
+
+	// // //Apply test stimulus
+	// $display("Apply test stimulus");
+    // for (int i = 0; i < 50; i++) begin
+	// 	if(i == 4) begin // Apply a valid strobe
+	// 		sample_in = 1;  // Incremental test pattern
+	// 	end else begin
+	// 		sample_in = 0;  // Incremental test pattern
+	// 	end
+    //   	valid_strobe_in = 1;
+	// 	counting = 1;
+    //   	@(posedge clk_i);  // Wait for a clock edge
+    //   	valid_strobe_in = 0;
+	// 	wait(valid_strobe_out == 1); // Wait for valid_strobe_out to go highn
+	// 	//read sample_shift_out_internal
+	// 	bus.get_word(sample_shift_out_reg, tlul_read_data);
+	// 	//read y out
+	// 	bus.get_word(y_out_upper_reg, tlul_read_data);
+	// 	bus.get_word(y_out_lower_reg, tlul_read_data);
+	// 	counting = 0;
+	// 	$display("Number of clock cycles from valid_strobe_in to valid_strobe_out: %0d", clk_count);
+    //     clk_count = 0; // Reset counter for next iteration
+	//   	$display("samples number: %d",i);
+    //   	@(posedge clk_i);
+    // end
+
 	// Apply test stimulus
 	$display("Apply test stimulus:");
 	for (int i = 0; i < MaxAddr; i = i + 1) begin
@@ -162,13 +190,11 @@ module student_fir_tb;
 
 	// Apply test stimulus with tlul sample in
 	$display("Apply test stimulus with tlul sample in");
-	//for (int i = 0; i < MaxAddr; i = i + 1) begin
-		//sample_in = {8'b0, sin_mem[i]}; // Zero-pad the 8-bit value to 16 bits
-		//valid_strobe_in <= 1;
+	for (int i = 0; i < MaxAddr; i = i + 1) begin
+		sample_in = {8'b0, sin_mem[i]}; // Zero-pad the 8-bit value to 16 bits
 		bus.put_word(sample_write_in_reg, {'0,8'h01});
 		counting = 1;
 		@(posedge clk_i);
-		//valid_strobe_in <= 0;
 		wait(valid_strobe_out == 1); // Wait for valid_strobe_out to go high
 		//read sample_shift_out_internal
 		bus.get_word(sample_shift_out_reg, tlul_read_data);
@@ -178,9 +204,7 @@ module student_fir_tb;
 		counting = 0;
 		$display("Number of clock cycles from valid_strobe_in to valid_strobe_out: %0d", clk_count);
         clk_count = 0; // Reset counter for next iteration
-	//end
-
-
+  	end
 
     // Finish simulation
     #200;

@@ -3,7 +3,7 @@ module student_fir_parallel #(
 	parameter int unsigned DATA_SIZE = 16,
 	parameter int unsigned DEBUGMODE = 0,
 	parameter int unsigned DATA_SIZE_FIR_OUT = 32,
-	parameter int unsigned NUM_FIR = 4 //only numbers which are power of 2 are supported
+	parameter int unsigned NUM_FIR = 2 //only numbers which are power of 2 are supported
 ) (
 	input logic clk_i,
     input logic rst_ni,
@@ -53,11 +53,12 @@ module student_fir_parallel #(
   );
 
   logic [DATA_SIZE-1:0] sample_shift_out_internal[NUM_FIR-1:0];
+  logic [DATA_SIZE-1:0] sample_shift_in_internal[NUM_FIR-1:0];
   logic valid_strobe_out_internal[NUM_FIR-1:0];
-  logic [NUM_FIR-1:0] [DATA_SIZE_FIR_OUT-1:0] y_out_internal ;
-  logic [DATA_SIZE-1:0] sample_in_internal;
+  logic [NUM_FIR-1:0] [DATA_SIZE_FIR_OUT-1:0] y_out_internal;
+  logic [DATA_SIZE-1:0] sample_in_internal_first;
 
-
+ 
     // Edge detection for valid_strobe_in
   logic valid_strobe_in_prev;
   logic valid_strobe_in_pos_edge;
@@ -71,7 +72,7 @@ module student_fir_parallel #(
   end
 
   assign valid_strobe_in_pos_edge = reg2hw.fir_write_in_samples.qe? 1'b1 : valid_strobe_in && ~valid_strobe_in_prev;
-  assign sample_in_internal = reg2hw.fir_write_in_samples.qe? reg2hw.fir_write_in_samples.q : sample_in;
+  assign sample_in_internal_first = reg2hw.fir_write_in_samples.qe? reg2hw.fir_write_in_samples.q : sample_in;
 
 	genvar i;
 	generate
@@ -86,7 +87,7 @@ module student_fir_parallel #(
 					.clk_i(clk_i),
 					.rst_ni(rst_ni),
 					.valid_strobe_in(valid_strobe_in_pos_edge),
-					.sample_in(sample_in_internal),
+					.sample_in(sample_in_internal_first),
 					.sample_shift_out(sample_shift_out_internal[i]),
 					.valid_strobe_out(valid_strobe_out_internal[i]),
 					.y_out(y_out_internal[i]),
@@ -102,8 +103,8 @@ module student_fir_parallel #(
 				) fir_i_middle (
 					.clk_i(clk_i),
 					.rst_ni(rst_ni),
-					.valid_strobe_in(valid_strobe_out_internal[i-1]),
-					.sample_in(sample_shift_out_internal[i-1]),
+					.valid_strobe_in(valid_strobe_in_pos_edge),
+					.sample_in(sample_shift_in_internal[i-1]),
 					.sample_shift_out(sample_shift_out_internal[i]),
 					.valid_strobe_out(valid_strobe_out_internal[i]),
 					.y_out(y_out_internal[i]),
@@ -113,6 +114,20 @@ module student_fir_parallel #(
 			end
 		end
 	endgenerate
+
+	always_ff @(posedge clk_i, negedge rst_ni) begin
+		if (~rst_ni) begin
+			for (int i = 0; i < NUM_FIR; i++) begin
+      			sample_shift_in_internal[i] <= '0;
+    		end
+		end else begin
+			if(valid_strobe_out_internal[NUM_FIR-1]) begin
+				for (int i = 0; i < NUM_FIR; i++) begin
+					sample_shift_in_internal[i] <= sample_shift_out_internal[i];
+				end
+			end
+		end
+	end
 
 	always_ff @(posedge clk_i, negedge rst_ni) begin
 		if (~rst_ni) begin
@@ -127,6 +142,127 @@ module student_fir_parallel #(
 			end
 		end
 	end
+
+	// logic [NUM_FIR/2-1:0] [DATA_SIZE_FIR_OUT-1+1:0] y_out_internal_stage_1;
+	// logic valid_strobe_out_internal_stage_1 [NUM_FIR/2-1:0];
+
+
+	// genvar adder;
+	// generate
+	// 	for(adder = 0; adder < NUM_FIR; adder = adder + 2) begin : adder_stage_1
+	// 		student_adder #(
+	// 			.DATA_SIZE_FIR_OUT(DATA_SIZE_FIR_OUT+1),
+	// 			.NUM_FIR(NUM_FIR)
+	// 		) adder_stage_1 (
+	// 			.clk(clk_i),
+	// 			.rst_ni(rst_ni),
+	// 			.valid_strobe_in_a(valid_strobe_out_internal[adder]),
+	// 			.valid_strobe_in_b(valid_strobe_out_internal[adder+1]),
+	// 			.fir_out_a(y_out_internal[adder]),
+	// 			.fir_out_b(y_out_internal[adder+1]),
+	// 			.odata(y_out_internal_stage_1[adder/2]),
+	// 			.valid_strobe_out(valid_strobe_out_internal_stage_1[adder/2])
+	// 		);
+	// 	end
+	// endgenerate
+
+	// logic [(NUM_FIR/2-1)/2:0] [DATA_SIZE_FIR_OUT-1+2:0] y_out_internal_stage_2;
+	// logic valid_strobe_out_internal_stage_2 [(NUM_FIR/2-1)/2:0];
+
+	// generate
+	// 	for(adder = 0; adder < NUM_FIR/2; adder = adder + 2) begin : adder_stage_2
+	// 		if(adder == NUM_FIR/2-1) begin
+	// 			student_adder #(
+	// 				.DATA_SIZE_FIR_OUT(DATA_SIZE_FIR_OUT+2),
+	// 				.NUM_FIR(NUM_FIR)
+	// 			) adder_stage_2_last (
+	// 				.clk(clk_i),
+	// 				.rst_ni(rst_ni),
+	// 				.valid_strobe_in_a(valid_strobe_out_internal_stage_1[adder]),
+	// 				.valid_strobe_in_b('0),
+	// 				.fir_out_a(y_out_internal_stage_1[adder]),
+	// 				.fir_out_b('1),
+	// 				.odata(y_out_internal_stage_2[adder/2]),
+	// 				.valid_strobe_out(valid_strobe_out_internal_stage_2[adder/2])
+	// 			);
+	// 		end else begin
+	// 			student_adder #(
+	// 				.DATA_SIZE_FIR_OUT(DATA_SIZE_FIR_OUT+2),
+	// 				.NUM_FIR(NUM_FIR)
+	// 			) adder_stage_2 (
+	// 				.clk(clk_i),
+	// 				.rst_ni(rst_ni),
+	// 				.valid_strobe_in_a(valid_strobe_out_internal_stage_1[adder]),
+	// 				.valid_strobe_in_b(valid_strobe_out_internal_stage_1[adder+1]),
+	// 				.fir_out_a(y_out_internal_stage_1[adder]),
+	// 				.fir_out_b(y_out_internal_stage_1[adder+1]),
+	// 				.odata(y_out_internal_stage_2[adder/2]),
+	// 				.valid_strobe_out(valid_strobe_out_internal_stage_2[adder/2])
+	// 			);
+	// 		end
+	// 	end
+	// endgenerate
+
+	// logic [1:0] [DATA_SIZE_FIR_OUT-1+3:0] y_out_internal_stage_3;
+	// logic valid_strobe_out_internal_stage_3 [1:0];
+
+	// generate
+	// 	for(adder = 0; adder < 3; adder = adder + 2) begin : adder_stage_3
+	// 		if(adder == 2) begin
+	// 			student_adder #(
+	// 				.DATA_SIZE_FIR_OUT(DATA_SIZE_FIR_OUT+3),
+	// 				.NUM_FIR(NUM_FIR)
+	// 			) adder_stage_3_last (
+	// 				.clk(clk_i),
+	// 				.rst_ni(rst_ni),
+	// 				.valid_strobe_in_a(valid_strobe_out_internal_stage_2[adder]),
+	// 				.valid_strobe_in_b('0),
+	// 				.fir_out_a(y_out_internal_stage_2[adder]),
+	// 				.fir_out_b('1),
+	// 				.odata(y_out_internal_stage_3[adder/2]),
+	// 				.valid_strobe_out(valid_strobe_out_internal_stage_3[adder/2])
+	// 			);
+	// 		end else begin
+	// 			student_adder #(
+	// 				.DATA_SIZE_FIR_OUT(DATA_SIZE_FIR_OUT+3),
+	// 				.NUM_FIR(NUM_FIR)
+	// 			) adder_stage_3 (
+	// 				.clk(clk_i),
+	// 				.rst_ni(rst_ni),
+	// 				.valid_strobe_in_a(valid_strobe_out_internal_stage_2[adder]),
+	// 				.valid_strobe_in_b(valid_strobe_out_internal_stage_2[adder+1]),
+	// 				.fir_out_a(y_out_internal_stage_2[adder]),
+	// 				.fir_out_b(y_out_internal_stage_2[adder+1]),
+	// 				.odata(y_out_internal_stage_3[adder/2]),
+	// 				.valid_strobe_out(valid_strobe_out_internal_stage_3[adder/2])
+	// 			);
+	// 		end
+	// 	end
+	// endgenerate
+
+	// logic [DATA_SIZE_FIR_OUT-1+4:0] y_out_internal_stage_4;
+	// logic valid_strobe_out_internal_stage_4;
+
+	// generate
+	// 	for(adder = 0; adder < 2; adder = adder + 2) begin : adder_stage_4
+	// 		student_adder #(
+	// 			.DATA_SIZE_FIR_OUT(DATA_SIZE_FIR_OUT+4),
+	// 			.NUM_FIR(NUM_FIR)
+	// 		) adder_stage_4 (
+	// 			.clk(clk_i),
+	// 			.rst_ni(rst_ni),
+	// 			.valid_strobe_in_a(valid_strobe_out_internal_stage_3[adder]),
+	// 			.valid_strobe_in_b(valid_strobe_out_internal_stage_3[adder+1]),
+	// 			.fir_out_a(y_out_internal_stage_3[adder]),
+	// 			.fir_out_b(y_out_internal_stage_3[adder+1]),
+	// 			.odata(y_out_internal_stage_4),
+	// 			.valid_strobe_out(valid_strobe_out_internal_stage_4)
+	// 		);
+	// 	end
+	// endgenerate
+
+	// assign y_out = y_out_internal_stage_4;
+	// assign valid_strobe_out = valid_strobe_out_internal_stage_4;
 
 	logic [DATA_SIZE_FIR_OUT+$clog2(NUM_FIR)-1:0] adder_tree_y_out;
 	logic [DATA_SIZE_FIR_OUT+$clog2(NUM_FIR)-1:0] adder_tree_y_out_prev;
