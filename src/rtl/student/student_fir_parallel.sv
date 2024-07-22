@@ -143,7 +143,73 @@ module student_fir_parallel #(
 		end
 	end
 
-	// logic [NUM_FIR/2-1:0] [DATA_SIZE_FIR_OUT-1+1:0] y_out_internal_stage_1;
+	logic [DATA_SIZE_FIR_OUT+$clog2(NUM_FIR)-1:0] adder_tree_y_out;
+	//logic [DATA_SIZE_FIR_OUT+$clog2(NUM_FIR)-1:0] adder_tree_y_out_prev;
+
+	adder_tree #(
+		.INPUTS_NUM(NUM_FIR),
+		.IDATA_WIDTH(DATA_SIZE_FIR_OUT)
+	) adder_tree_i (
+		.clk(clk_i),
+		.nrst(rst_ni),
+		.idata(y_out_internal),
+		.odata(adder_tree_y_out)
+	);
+
+	localparam int unsigned stageNum = $clog2(NUM_FIR);
+	logic [31:0] stageCounter;
+	logic waitAdder;
+
+	always_ff @(posedge clk_i, negedge rst_ni) begin
+		if (~rst_ni) begin
+			y_out <= '0;
+			valid_strobe_out <= '0;
+			stageCounter <= stageNum;
+			waitAdder <= '0;
+		end else begin
+			if(valid_strobe_out_internal[NUM_FIR-1]) begin
+				waitAdder <= '1;
+			end
+			if(waitAdder) begin
+				if(stageCounter == 0) begin
+					y_out <= adder_tree_y_out;
+					valid_strobe_out <= '1;
+					waitAdder <= '0;
+					stageCounter <= stageNum;
+				end else begin
+					stageCounter <= stageCounter - 1;
+				end
+			end else begin 
+				valid_strobe_out <= '0;
+			end
+		end
+	end
+
+	//assign valid_strobe_out = adder_tree_y_out != adder_tree_y_out_prev;
+	//assign y_out = adder_tree_y_out;
+
+	always_ff @(posedge clk_i, negedge rst_ni) begin
+		if (~rst_ni) begin
+			hw2reg.fir_read_y_out_upper.d = '0;
+			hw2reg.fir_read_y_out_upper.de = 1'b0;
+			hw2reg.fir_read_y_out_lower.d = '0;
+			hw2reg.fir_read_y_out_lower.de = 1'b0;
+		end else begin
+			if(valid_strobe_out) begin
+				hw2reg.fir_read_y_out_upper.d = adder_tree_y_out[DATA_SIZE_FIR_OUT-1:DATA_SIZE_FIR_OUT/2];
+				hw2reg.fir_read_y_out_upper.de = 1'b1;
+				hw2reg.fir_read_y_out_lower.d = adder_tree_y_out[DATA_SIZE_FIR_OUT/2-1:0];
+				hw2reg.fir_read_y_out_lower.de = 1'b1;
+			end else begin
+				hw2reg.fir_read_y_out_upper.de = 1'b0;
+				hw2reg.fir_read_y_out_lower.de = 1'b0;
+			end
+		end
+	end
+
+endmodule
+
+// logic [NUM_FIR/2-1:0] [DATA_SIZE_FIR_OUT-1+1:0] y_out_internal_stage_1;
 	// logic valid_strobe_out_internal_stage_1 [NUM_FIR/2-1:0];
 
 
@@ -263,48 +329,3 @@ module student_fir_parallel #(
 
 	// assign y_out = y_out_internal_stage_4;
 	// assign valid_strobe_out = valid_strobe_out_internal_stage_4;
-
-	logic [DATA_SIZE_FIR_OUT+$clog2(NUM_FIR)-1:0] adder_tree_y_out;
-	logic [DATA_SIZE_FIR_OUT+$clog2(NUM_FIR)-1:0] adder_tree_y_out_prev;
-
-	adder_tree #(
-		.INPUTS_NUM(NUM_FIR),
-		.IDATA_WIDTH(DATA_SIZE_FIR_OUT)
-	) adder_tree_i (
-		.clk(clk_i),
-		.nrst(rst_ni),
-		.idata(y_out_internal),
-		.odata(adder_tree_y_out)
-	);
-
-	always_ff @(posedge clk_i) begin
-		if (~rst_ni) begin
-			adder_tree_y_out_prev <= 0;
-		end else begin
-			adder_tree_y_out_prev <= adder_tree_y_out;
-		end
-	end
-
-	assign valid_strobe_out = adder_tree_y_out != adder_tree_y_out_prev;
-	assign y_out = adder_tree_y_out;
-
-	always_ff @(posedge clk_i, negedge rst_ni) begin
-		if (~rst_ni) begin
-			hw2reg.fir_read_y_out_upper.d = '0;
-			hw2reg.fir_read_y_out_upper.de = 1'b0;
-			hw2reg.fir_read_y_out_lower.d = '0;
-			hw2reg.fir_read_y_out_lower.de = 1'b0;
-		end else begin
-			if(valid_strobe_out) begin
-				hw2reg.fir_read_y_out_upper.d = adder_tree_y_out[DATA_SIZE_FIR_OUT-1:DATA_SIZE_FIR_OUT/2];
-				hw2reg.fir_read_y_out_upper.de = 1'b1;
-				hw2reg.fir_read_y_out_lower.d = adder_tree_y_out[DATA_SIZE_FIR_OUT/2-1:0];
-				hw2reg.fir_read_y_out_lower.de = 1'b1;
-			end else begin
-				hw2reg.fir_read_y_out_upper.de = 1'b0;
-				hw2reg.fir_read_y_out_lower.de = 1'b0;
-			end
-		end
-	end
-
-endmodule
