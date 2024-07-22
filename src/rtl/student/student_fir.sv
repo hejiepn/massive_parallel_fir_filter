@@ -251,6 +251,7 @@ end
 				valid_strobe_out <= 0;
 				fir_sum <= '0;
 				//y_out <= '0;
+
 				// $display("fir_state: IDLE");
 				// $display("wr_addr: %4x rd_addr: %4x rd_addr_c: %4x", wr_addr, rd_addr, rd_addr_c);
 				// $display("enb_samples: %1x enb_coeff: %1x", enb_samples, enb_coeff);
@@ -269,6 +270,7 @@ end
 				// $display("wr_addr: %4x rd_addr: %4x rd_addr_c: %4x", wr_addr, rd_addr, rd_addr_c);
 				// $display("enb_samples: %1x enb_coeff: %1x", enb_samples, enb_coeff);
 				// $display("fir_sum: %d read_sample: %4x read_coeff: %4x", fir_sum, read_sample, read_coeff);
+
 				fir_sum <= fir_sum + read_sample * read_coeff;
 				if( rd_addr == wr_addr) begin
 					sample_shift_out <= read_sample;
@@ -281,6 +283,7 @@ end
 				// $display("wr_addr: %4x rd_addr: %4x rd_addr_c: %4x", wr_addr, rd_addr, rd_addr_c);
 				// $display("enb_samples: %1x enb_coeff: %1x", enb_samples, enb_coeff);
 				// $display("fir_sum: %d read_sample: %4x read_coeff: %4x", fir_sum, read_sample, read_coeff);
+
 				// compute_finished_out <= 1;
 				valid_strobe_out <= 1;
 				hw2reg.fir_read_shift_out_samples.de = 1'b0;

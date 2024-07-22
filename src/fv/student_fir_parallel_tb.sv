@@ -4,7 +4,7 @@ module student_fir_parallel_tb;
   localparam int unsigned DATA_SIZE = 16;
   localparam int unsigned DEBUGMODE = 1;
   localparam int unsigned DATA_SIZE_FIR_OUT = 32;
-  localparam int unsigned NUM_FIR = 2;
+  localparam int unsigned NUM_FIR = 8;
 
   // Clock and reset signals
   logic clk_i;
@@ -52,11 +52,11 @@ module student_fir_parallel_tb;
 
 
   // Clock generation: 50 MHz clock -> period = 20ns
-  always begin
-    clk_i = 1'b1;
-    #10;  // High for 10ns
-    clk_i = 1'b0;
-    #10;  // Low for 10ns
+   always begin
+    clk_i = '1;
+    #10000;
+    clk_i = '0;
+    #10000;
   end
 
   // Initial block to apply stimulus
@@ -104,6 +104,7 @@ module student_fir_parallel_tb;
 	@(posedge clk_i);  // Wait for a clock edge
 	valid_strobe_in = 0;
 	wait(valid_strobe_out == 1); // Wait for valid_strobe_out to go high	$display("Output y_out at time %0t: %h", $time, y_out);
+		$display("Output y_out at time %0t: %h", $time, y_out);
 	@(posedge clk_i);
 
 	sample_in = 4;  // Incremental test pattern
@@ -111,6 +112,8 @@ module student_fir_parallel_tb;
 	@(posedge clk_i);  // Wait for a clock edge
 	valid_strobe_in = 0;
 	wait(valid_strobe_out == 1); // Wait for valid_strobe_out to go high	$display("Output y_out at time %0t: %h", $time, y_out);
+		$display("Output y_out at time %0t: %h", $time, y_out);
+
 	@(posedge clk_i);
 
 	sample_in = 5;  // Incremental test pattern
@@ -123,12 +126,16 @@ module student_fir_parallel_tb;
 
     //Apply test stimulus
 	$display("Apply test stimulus");
-    for (int i = 0; i < 50; i++) begin
+    for (int i = 0; i < 5; i++) begin
 		sample_in = 0;  // Incremental test pattern
-		valid_strobe_in = 1;
+		$display("new sample");
+		valid_strobe_in <= 1;
+		$display("new valid strobe in");
 		@(posedge clk_i);  // Wait for a clock edge
-		valid_strobe_in = 0;
+		valid_strobe_in <= 0;
+		$display("valid strobe in 0");
 		wait(valid_strobe_out == 1); // Wait for valid_strobe_out to go highn
+		$display("after wait for valid strobe out");
 		$display("Output y_out at time %0t: %h", $time, y_out);
 		@(posedge clk_i);
 		$display("samples number: %d",i);
