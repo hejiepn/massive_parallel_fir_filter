@@ -154,7 +154,7 @@ student_fir_parallel #(
 	.clk_i(clk_i),
     .rst_ni(rst_ni),
 	.valid_strobe_in(valid_strobe_2FIR),
-    .sample_in(Data_iis_O),
+    .sample_in('0),
 	.valid_strobe_out(valid_strobe_out),
     .y_out(y_out),
 	.tl_i(tl_student_i[2]),  //master input (incoming request)

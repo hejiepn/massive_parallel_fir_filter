@@ -2,11 +2,11 @@
 
 #define AudioCodecAddr 0x76 // binary: 8'b01110110 ; Write mode active, if LSB == 0
 #define readAudioCodecAddr 0x77
-#define INIT_VECTORS 35
+#define INIT_VECTORS 34
 #define MAX_ATTEMPTS 5
 
 
-const unsigned long long pllInitVector 0x4002027101DD1B01; // PLL control register 0x0271 01DD 1B01 to set Fs:44,1 MHz, with MSCLK: 25MHZ
+const unsigned long long pllInitVector = 0x4002027101DD1B01; // PLL control register 0x0271 01DD 1B01 to set Fs:44,1 MHz, with MSCLK: 25MHZ
 
 const unsigned long initVectors[INIT_VECTORS] = {
     //0x400003,  // Clock Control bypass PLL directly
@@ -387,13 +387,13 @@ int check_pll_locked(void) {
 void start_audio_codec_config(void) {
 
     start_pll_config();
-
-    if(check_pll_locked == 1) {
+/**
+    if(check_pll_locked() == 1) {
       printf("PLL is locked.\n");
     } else {
       printf("PLL is not locked.\n");
     }
-   
+   **/
     for (int i = 0; i < INIT_VECTORS; i++) {
         unsigned long initWord = initVectors[i];
         unsigned char addr = (initWord >> 16) & 0xFF;

@@ -13,6 +13,7 @@
 
 #define FIR_NUM 4
 
+
 /**
  * Adressing in the FIR Parallel
  * FIR Parallel Address: 102ab000
@@ -27,7 +28,18 @@
  * 		0: dpram_samples
  * 		1: dpram_coeff
  * 		2: single fir unit's registers
+ *
+ * 
+ * DPRAM Memory Addressing
+ * for e.g.  #define STUDENT_FIR0_BASE_ADDR_s 0x10200000
+ * last 2 Bytes respond to address in bram
+ * 
  **/            
+
+void student_fir_s_write_in_samples(uint16_t sample);
+uint16_t student_fir_s_read_out_samples(unsigned int fir_unit_no);	
+uint32_t student_fir_s_read_y_out_upper(unsigned int fir_unit_no);
+uint32_t student_fir_s_read_y_out_lower(unsigned int fir_unit_no);
 
 
 #endif //FILTER_H

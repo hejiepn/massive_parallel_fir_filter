@@ -39,11 +39,11 @@ always_ff @(posedge clk_i, negedge rst_ni) begin : write_drive_sda_scl_pins
 	end else begin
 		if(reg2hw.sda_en.qe) begin
 				sda_oe <= reg2hw.sda_en.q;
-				$display("sda pin q");
+				//$display("sda pin q");
 		end
 		if(reg2hw.scl_en.qe) begin
 				scl_oe <= reg2hw.scl_en.q; //drive scl pin low
-				$display("drive scl pin q");
+				//$display("drive scl pin q");
 		end
 	end
 end
