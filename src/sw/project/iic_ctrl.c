@@ -5,35 +5,42 @@
 #define MAX_ATTEMPTS 5
 
 const unsigned long initVectors[INIT_VECTORS] = {
-    0x400003,  // Clock Control
-    0x401500,  // Serial Port Control 0
-    0x401600,  // Serial Port Control 1
-    0x401700,  // Converter Control
-    0x40F800,  // Serial Port Sample Rate
+    //0x400003,  // Clock Control bypass PLL directly
+    0x4002027101DD1B01, // PLL control register 0x0271 01DD 1B01 to set Fs:44,1 MHz, with MSCLK: 25MHZ
+    0x40000F,  // Clock Control use PLL, enable COREN after PLL is locked
+    0x400A01,  // Record Mixer Left (Mixer 1) Control 0 MUTE: LINN, LINP
+    0x400B06,  // Record Mixer Left (Mixer 1) Control 1 Amp: LAUX 3dB
+    0x400C01,  // Record Mixer Right (Mixer 2) Control 0 MUTE: RINN, RINP
+    0x400D06,  // Record Mixer Right (Mixer 2) Control 1 Amp: RAUX 3dB
+    0x401500,  // Serial Port Control 0 DEFAULT
+    0x401600,  // Serial Port Control 1 DEFAULT 64 BCLK per LRCLK Audio Frame
+    0x401700,  // Converter Control set sampling rate of ADC/DAC to Fs
     0x401913,  // ADC Control | both ADCs on
-    0x402A03,  // DAC Control | both DACs on
-    0x402903,  // Playback Power Management | both Playbacks on
-    0x40F201,  // Serial Input Route Control | Serial Input [L0,RO] to DACs
-    0x40F97F,  // Clock Enable 0
-    0x40FA03,  // Clock Enable 1
-    0x402003,  // Playback L/R Mixer Left (Mixer 5) Line Output Control
-    0x402200,  // Playback L/R Mixer Mono Output (Mixer 7) Control
-    0x402109,  // Playback L/R Mixer Right (Mixer 6) Line Output Control
-    0x4025E6,  // Playback Line Output Left Volume Control | 0dB
-    0x4026E6,  // Playback Line Output Right Volume Control | 0dB
-    0x402700,  // Playback Mono Output Control
-    0x4023E6,  // Playback Headphone Left Volume Control
-    0x4024E6,  // Playback Headphone Right Volume Control
-    0x400A01,  // Record Mixer Left (Mixer 1) Control 0
-    0x400B05,  // Record Mixer Left (Mixer 1) Control 1
-    0x400C01,  // Record Mixer Right (Mixer 2) Control 0
-    0x400D05,  // Record Mixer Right (Mixer 2) Control 1
-    0x401C21,  // Playback Mixer Left (Mixer 3) Control 0
+    0x401A00,  // Left Input Digital Volume DEFAULT
+    0x401B00,  // Right Input Digital Volume DEFAULT
+    0x401C31,  // Playback Mixer Left (Mixer 3) Control 0 Mute: input R DAC, EN: input L DAC, Amp: 6 dB
     0x401D00,  // Playback Mixer Left (Mixer 3) Control 1
-    0x401E41,  // Playback Mixer Right (Mixer 4) Control 0
-    0x401F00,  // Playback Mixer Right (Mixer 4) Control 1
+    0x401E81,  // Playback Mixer Right (Mixer 4) Control 0 Mute: input L DAC, EN: input R DAC, Amp: 6 dB
+    0x401F00,  // Playback Mixer Right (Mixer 4) Control 1 DEFAULT
+    0x402005,  // Playback L/R Mixer Left (Mixer 5) Line Output Control Mute: input Mixer 4, en: input Mixer 3
+    0x402111,  // Playback L/R Mixer Right (Mixer 6) Line Output Control Mute: input Mixer 3, en: input Mixer 4
+    0x402205,  // Playback L/R Mixer Mono Output (Mixer 7) Control ENABLED, Amp: Mixer 3 and 4
+    0x4023E6,  // Playback Headphone Left Volume Control Amp: 0dB, unmute headphone left
+    0x4024E6,  // Playback Headphone Right Volume Control Amp: 0dB, unmute headphone right, EN line output
+    0x4025E6,  // Playback Line Output Left Volume Control | Amp: 0dB, unmute: LOUTN and LOUTP
+    0x4026E6,  // Playback Line Output Right Volume Control | Amp: 0dB, unmute: ROUTN and ROUTP
+    0x4027E6,  // Playback Mono Output Control unmute Mono output
+    0x402903,  // Playback Power Management | both Playbacks on
+    0x402A33,  // DAC Control | both DACs on, both channels in mono mode
+    0x402F00,  // Control Pad Control, here one can set SDA and SCL to pull up
+    0x403000,  // Control Pad Control 1
+    0x40EB01,  // set to same sample rate as 0x4017
+    0x40F201,  // Serial Input Route Control | Serial Input [L0,RO] to DACs
     0x40F301,  // Serial Output Route Control | ADCs to Serial Output [L0,RO]
-    0x40F400   // Serial Data/GPIO Pin Configuration
+    0x40F400,   // Serial Data/GPIO Pin Configuration, Serial Data/GPIO Pin Configuration,
+    0x40F800,  // Serial Port Sample Rate set as 0x4017
+    0x40F97F,  // Clock Enable 0, only Codec slew digital clock engine disenabled
+    0x40FA03  // Clock Enable 1, Digital Clock Generator 0 & 1 on
 };
 
 bool started = false; // global data
