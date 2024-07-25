@@ -42,6 +42,8 @@ void start_audio_codec_config(void);
 void test_ii2(void);
 void testing_i2c_tlul(bool number_test);
 uint32_t read_testing_i2c_tlul(void);
+void start_pll_config(void);
+int check_pll_locked(void);
 
 
 #endif //IIC_CTRL_H

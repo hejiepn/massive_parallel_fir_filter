@@ -1,12 +1,15 @@
 #include "iic_ctrl.h"
 
 #define AudioCodecAddr 0x76 // binary: 8'b01110110 ; Write mode active, if LSB == 0
-#define INIT_VECTORS 29
+#define readAudioCodecAddr 0x77
+#define INIT_VECTORS 35
 #define MAX_ATTEMPTS 5
+
+
+const unsigned long long pllInitVector 0x4002027101DD1B01; // PLL control register 0x0271 01DD 1B01 to set Fs:44,1 MHz, with MSCLK: 25MHZ
 
 const unsigned long initVectors[INIT_VECTORS] = {
     //0x400003,  // Clock Control bypass PLL directly
-    0x4002027101DD1B01, // PLL control register 0x0271 01DD 1B01 to set Fs:44,1 MHz, with MSCLK: 25MHZ
     0x40000F,  // Clock Control use PLL, enable COREN after PLL is locked
     0x400A01,  // Record Mixer Left (Mixer 1) Control 0 MUTE: LINN, LINP
     0x400B06,  // Record Mixer Left (Mixer 1) Control 1 Amp: LAUX 3dB
@@ -268,16 +271,129 @@ unsigned char i2c_read_byte(bool nack, bool send_stop)
     byte = (byte << 1) | i2c_read_bit();
   }
 
-  i2c_write_bit(nack);
-
   if (send_stop) {
     i2c_stop_cond();
   }
 
+  i2c_write_bit(nack);
+
   return byte;
 }
 
+void start_pll_config(void) {
+    unsigned int pll_byte_cnt = 6;
+    unsigned long long initWord = pllInitVector; // Changed to long long to accommodate 64-bit value
+    unsigned char addr = (initWord >> 56) & 0xFF; // Adjusted to extract bytes correctly
+    unsigned char regAddr = (initWord >> 48) & 0xFF;
+    unsigned char data[6]; // Array to hold the 6 bytes of data
+    
+    /**
+     * Extract the 6 bytes of datan
+     * data[0] MSB Data Byte
+     * data[5] LSB Data Byte
+     * 
+     * 
+     * **/
+    for (int i = 0; i < pll_byte_cnt; i++) {
+        data[5 - i] = (initWord >> (i * 8)) & 0xFF;
+    }
+
+    int attempts = 0;
+    bool success = false;
+
+    while (attempts < MAX_ATTEMPTS && !success) {
+        printf("attempts: %d \n", attempts);
+        printf("Start condition and write the slave address once\n");
+        if (i2c_write_byte(true, false, AudioCodecAddr) == 0) {
+            printf("Write the register address and data in sequence\n");
+            if (i2c_write_byte(false, false, addr) == 0 &&
+                i2c_write_byte(false, false, regAddr) == 0) {
+                success = true;
+                for (int i = 0; i < pll_byte_cnt; i++) {
+                    if (i2c_write_byte(false, false, data[i]) != 0) {
+                        success = false;
+                        break;
+                    }
+                }
+                if (success) {
+                    i2c_stop_cond();
+                    printf("PLL configured successfully.\n");
+                }
+            }
+        }
+        if (!success) {
+            printf("Failed to configure PLL register 0x%02X%02X Retrying...\n", addr, regAddr);
+            attempts++;
+        }
+    }
+
+    if (!success) {
+        printf("Failed to configure PLL register 0x%02X%02X after %d attempts. Exiting...\n", addr, regAddr, MAX_ATTEMPTS);
+    }
+}
+
+int check_pll_locked(void) {
+    int pll_locked = 0;
+    unsigned int pll_byte_cnt = 6; // Adjusted to the length of PLL status register data
+    unsigned char addr = 0x40; // Address for the PLL status register
+    unsigned char regAddr = 0x02; // Register address for the PLL status register
+    unsigned char readData[6]; // Array to store the read data
+    int attempts = 0;
+
+    while (!pll_locked && attempts < MAX_ATTEMPTS) {
+        if (i2c_write_byte(true, false, AudioCodecAddr) == 0) {
+            if (i2c_write_byte(false, false, addr) == 0 &&
+                i2c_write_byte(false, false, regAddr) == 0 &&
+                i2c_write_byte(true, false, readAudioCodecAddr) == 0) {
+                
+                printf("Reading bytes from PLL register\n");
+                
+                for (int i = 0; i < pll_byte_cnt; i++) {
+                    if (i == pll_byte_cnt - 1) {
+                        readData[i] = i2c_read_byte(true, true);
+                    } else {
+                        readData[i] = i2c_read_byte(false, false);
+                    }
+                }
+
+                // Check the 2nd bit of the 5th byte (index 4 in readData array)
+                if (readData[5] & 0x02) {
+                    pll_locked = 1;
+                } else {
+                    printf("PLL not locked. Retrying...\n");
+                }
+            } else {
+                printf("Failed to read from PLL status register. Retrying...\n");
+            }
+        } else {
+            printf("Failed to write to PLL status register. Retrying...\n");
+        }
+
+        attempts++;
+        I2C_delay(); // Add a delay between retries to avoid bus contention
+    }
+
+    if (pll_locked) {
+        printf("PLL is locked.\n");
+    } else {
+        printf("PLL is not locked after %d attempts.\n", attempts);
+    }
+
+    return pll_locked;
+}
+
+
+
 void start_audio_codec_config(void) {
+
+    start_pll_config();
+
+    if(check_pll_locked == 1) {
+      printf("PLL is locked.\n");
+    } else {
+      printf("PLL is not locked.\n");
+    }
+   
     for (int i = 0; i < INIT_VECTORS; i++) {
         unsigned long initWord = initVectors[i];
         unsigned char addr = (initWord >> 16) & 0xFF;
@@ -288,16 +404,16 @@ void start_audio_codec_config(void) {
         bool success = false;
         
         while (attempts < MAX_ATTEMPTS && !success) {
-			       printf("attempts: %d \n", attempts);
+            printf("attempts: %d \n", attempts);
             printf("Start condition and write the slave address once\n");
             if (i2c_write_byte(true, false, AudioCodecAddr) == 0) {
-                printf("Write the register address and data in sequence\n");
-                if (i2c_write_byte(false, false, addr) == 0 &&
-                    i2c_write_byte(false, false, regAddr) == 0 &&
-                    i2c_write_byte(false, true, data) == 0) {
-                    success = true;
-                    printf("Register 0x%02X%02X configured successfully.\n", addr, regAddr);
-                }
+                  printf("Write the register address and data in sequence\n");
+                  if (i2c_write_byte(false, false, addr) == 0 &&
+                      i2c_write_byte(false, false, regAddr) == 0 &&
+                      i2c_write_byte(false, true, data) == 0) {
+                      success = true;
+                      printf("Register 0x%02X%02X configured successfully.\n", addr, regAddr);
+                  }
             }
             if (!success) {
                 printf("Failed to configure register 0x%02X%02X Retrying...\n", addr, regAddr);
