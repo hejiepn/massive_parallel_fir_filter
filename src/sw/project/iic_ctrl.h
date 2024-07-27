@@ -44,6 +44,7 @@ void testing_i2c_tlul(bool number_test);
 uint32_t read_testing_i2c_tlul(void);
 void start_pll_config(void);
 int check_pll_locked(void);
+void print_num_initVectors(void);
 
 
 #endif //IIC_CTRL_H

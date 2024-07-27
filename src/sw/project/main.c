@@ -12,9 +12,13 @@ static void delay_cycles(int n_cycles) {
 
 int main(void) {
     
+    printf("Welcome to rvlab FIR Parallel.\n");
+	print_num_initVectors();
+
+
+
 
 /**
-    printf("Welcome to rvlab FIR Parallel.\n");
     printf("Audio Codec configuration started\n");
     //start_audio_codec_config();
     test_ii2();
@@ -22,12 +26,17 @@ int main(void) {
     //start_cli();
 **/
 
-    printf("example sample in fir\n");
+
+    printf("write sample in fir\n");
     uint16_t sample = 0x44;
     //student_fir_s_write_in_samples(sample);
     student_fir_p_write_in_samples(sample);
-    delay_cycles(1100);
+    delay_cycles(11000);
+
+
 /**
+	printf("read sample out fir\n");
+    uint16_t sample = 0x44;
     int hit = 0;
     uint32_t read_y_out;
     while(!hit) {

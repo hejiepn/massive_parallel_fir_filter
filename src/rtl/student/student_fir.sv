@@ -220,7 +220,7 @@ end
 			fir_state <= COMPUTE;
         end
         COMPUTE: begin
-			if (rd_addr == wr_addr && rd_addr_c == 0) begin
+			if (rd_addr == wr_addr && rd_addr_c == MAX_ADDR-1) begin
 				fir_state <= SHIFT_OUT;
 			end
         end
