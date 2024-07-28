@@ -64,6 +64,7 @@ module_tbs = [
 	"student_dpram_coeff_tlul_tb",
 	"adder_tree_tb",
 	"student_fir_parallel_tb",
+	"student_iis_receiver_tb",
 ]
 
 for name in module_tbs:

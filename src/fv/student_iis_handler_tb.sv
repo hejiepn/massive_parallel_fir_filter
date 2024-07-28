@@ -144,7 +144,10 @@ module student_iis_handler_tb;
   logic [DATA_SIZE-1:0] TEST_Data_I;
   logic [DATA_SIZE_FIR_OUT-1:0] TEST_Data_O;
 
-    iis_dummy_device iis_dummy(
+    iis_dummy_device #(
+	.DATA_SIZE(DATA_SIZE),
+	.DATA_SIZE_FIR_OUT(DATA_SIZE_FIR_OUT)
+	)iis_dummy(
       .clk_i (clk),
       .rst_ni(rst_n),
 
@@ -178,7 +181,6 @@ module student_iis_handler_tb;
 
   int fd_r;
   int fd_w;
-  logic [15:0] line;
 
   int num_cycles = 10;
   int succeeded = 0;

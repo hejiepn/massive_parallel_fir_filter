@@ -19,22 +19,22 @@ module student_iis_receiver #(
   // Shift in data from the codec
   logic [DATA_SIZE-1:0] Data_O_int;
   logic [DATA_SIZE-1:0] Data_In_int;
-  logic [4:0] rising_edge_cnt;    // Count the number of rising edges (we need to ignore the first one and write to the output directly after the LSB is shifted in)
+  logic [$clog2(DATA_SIZE):0] rising_edge_cnt;    // Count the number of rising edges (we need to ignore the first one and write to the output directly after the LSB is shifted in)
   logic valid_strobe_int_O;
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
 		Data_O_int <= DATA_SIZE-1'b0;
       	Data_In_int <= DATA_SIZE-1'b0;
-      	rising_edge_cnt <= 5'b0;
+      	rising_edge_cnt <= '0;
       	valid_strobe_int_O <= 1'b0;
     end else begin
       if (LRCLK_Rise) begin
         Data_In_int <= '0;
-        rising_edge_cnt <= 5'b0;
+        rising_edge_cnt <= '0;
 		valid_strobe_int_O <= 1'b0;
       end else if (LRCLK_Fall) begin
         Data_In_int <= '0;
-        rising_edge_cnt <= 5'b0;
+        rising_edge_cnt <= '0;
         valid_strobe_int_O <= 1'b0;
       end else if (BCLK_Rise) begin
         rising_edge_cnt <= rising_edge_cnt + 1'b1;
