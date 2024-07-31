@@ -49,8 +49,8 @@ logic pmod_b_out;
           ac_dac_sdata: dac_sdata,
           sda_oe: sda_oe,
           scl_oe: scl_oe,
-          pmod_a_oe: {6'b0,2'b1},
-          pmod_a_out: {'0,scl_i,sda_i},
+          pmod_a_oe: {'0,5'b1},
+          pmod_a_out: {'0,bclk,lrclk,dac_sdata,scl_i,sda_i},
           default: '0
       };
 

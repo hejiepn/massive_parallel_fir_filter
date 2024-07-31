@@ -11,8 +11,8 @@ unsigned long setupPllVector = 0x40000E;
 unsigned long long pllInitVector = 0x4002027101DD1B01; // PLL control register 0x0271 01DD 1B01 to set Fs:44,1 MHz, with desired MSCLK: 25MHZ, in table line: MCLK: 24 MHZ, X:2, R:3, M:625, N:477
 
 unsigned long initVectors[] = {
-    //0x400003,  // Clock Control bypass PLL directly
-    0x40000F,  // Clock Control use PLL, enable COREN after PLL is locked
+    0x400003,  // Clock Control bypass PLL directly
+    //0x40000F,  // Clock Control use PLL, enable COREN after PLL is locked
     0x400A01,  // Record Mixer Left (Mixer 1) Control 0 MUTE: LINN, LINP
     0x400B05,  // Record Mixer Left (Mixer 1) Control 1 Amp: LAUX 0dB
     0x400C01,  // Record Mixer Right (Mixer 2) Control 0 MUTE: RINN, RINP
@@ -392,14 +392,15 @@ void start_audio_codec_config(void) {
 
     printf("start audio codec confiuration");
 
-    start_pll_config();
-/**
+    //start_pll_config();
+
+/*
     if(check_pll_locked() == 1) {
       printf("PLL is locked.\n");
     } else {
       printf("PLL is not locked.\n");
     }
-   **/
+  */ 
     for (int i = 0; i < INIT_VECTORS; i++) {
         unsigned long initWord = initVectors[i];
         unsigned char addr = (initWord >> 16) & 0xFF;
@@ -441,11 +442,11 @@ void test_ii2(void)
         printf("read_SDA at beginning: %x \n", read_SDA());
         printf("read_SCL at beginning: %x \n", read_SCL());
         clear_SDA();
-        //clear_SCL();
+        clear_SCL();
         I2C_delay();
         printf("read_SDA after disenabling: %x \n", read_SDA());
         printf("read_SCL after disenabling: %x \n", read_SCL());
-        //set_SCL();
+        set_SCL();
         set_SDA();
         I2C_delay();
         printf("read_SDA after enabling: %x \n", read_SDA());

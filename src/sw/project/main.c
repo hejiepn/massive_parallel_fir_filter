@@ -17,7 +17,7 @@ int main(void) {
 
 test_ii2();
 
-start_audio_codec_config();
+//start_audio_codec_config();
 /**
     printf("Audio Codec configuration started\n");
     
@@ -26,13 +26,13 @@ start_audio_codec_config();
     //start_cli();
 **/
 
-
+/*
     printf("write sample in fir\n");
     uint16_t sample = 0x44;
     //student_fir_s_write_in_samples(sample);
     student_fir_p_write_in_samples(sample);
     delay_cycles(11000);
-
+*/
 
 /**
 	printf("read sample out fir\n");
