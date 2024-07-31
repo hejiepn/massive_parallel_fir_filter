@@ -151,8 +151,6 @@ assign ADC_SDATA_int = useTLUL? ADC_SDATA_tlul : AC_ADC_SDATA;
   logic [DATA_SIZE_FIR_OUT-1:0] Data_I_L_int;
   logic [DATA_SIZE_FIR_OUT-1:0] Data_I_L_tlul;
 
-  
-
   student_iis_transmitter #(
 	.DATA_SIZE_FIR_OUT(DATA_SIZE_FIR_OUT)
 	  ) student_iis_transmitter_inst (
@@ -187,31 +185,31 @@ assign ADC_SDATA_int = useTLUL? ADC_SDATA_tlul : AC_ADC_SDATA;
 // 	end 
 //   end 
 
-/*
-  logic [23:0] AC_DAC_SDATA_int;
-  logic [31:0] AC_DAC_SDATA_int_cnt;
 
- always_ff @(posedge clk_i, negedge rst_ni) begin
-	if (~rst_ni) begin
-		hw2reg.serial_out.de <= 1'b0;
-		hw2reg.serial_out.d <= '0;
-		AC_DAC_SDATA_int_cnt <= 32'd23;
-		AC_DAC_SDATA_int <= '0;
-	end else begin
-		if(BCLK_Fall_int == 1'b1 && LRCLK_Fall_int == 1'b0 && LRCLK_Rise_int == 1'b0) begin
-			AC_DAC_SDATA_int <= {AC_DAC_SDATA_int[22:0], AC_DAC_SDATA};
-			AC_DAC_SDATA_int_cnt <= AC_DAC_SDATA_int_cnt - 1;
-			if(AC_DAC_SDATA_int_cnt == 0) begin
-				hw2reg.serial_out.d <= AC_DAC_SDATA_int;
-				hw2reg.serial_out.de <= 1'b1;
-				AC_DAC_SDATA_int_cnt <= 32'd23;
-			end else begin 
-				hw2reg.serial_out.de <= 1'b0;
-			end
-		end
-	end
-  end
-  */
+//   logic [23:0] AC_DAC_SDATA_int;
+//   logic [31:0] AC_DAC_SDATA_int_cnt;
+
+//  always_ff @(posedge clk_i, negedge rst_ni) begin
+// 	if (~rst_ni) begin
+// 		hw2reg.serial_out.de <= 1'b0;
+// 		hw2reg.serial_out.d <= '0;
+// 		AC_DAC_SDATA_int_cnt <= 32'd23;
+// 		AC_DAC_SDATA_int <= '0;
+// 	end else begin
+// 		if(BCLK_Fall_int == 1'b1 && LRCLK_Fall_int == 1'b0 && LRCLK_Rise_int == 1'b0) begin
+// 			AC_DAC_SDATA_int <= {AC_DAC_SDATA_int[22:0], AC_DAC_SDATA};
+// 			AC_DAC_SDATA_int_cnt <= AC_DAC_SDATA_int_cnt - 1;
+// 			if(AC_DAC_SDATA_int_cnt == 0) begin
+// 				hw2reg.serial_out.d <= AC_DAC_SDATA_int;
+// 				hw2reg.serial_out.de <= 1'b1;
+// 				AC_DAC_SDATA_int_cnt <= 32'd23;
+// 			end else begin 
+// 				hw2reg.serial_out.de <= 1'b0;
+// 			end
+// 		end
+// 	end
+//   end
+  
 
 
 endmodule

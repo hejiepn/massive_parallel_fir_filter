@@ -15,12 +15,12 @@ int main(void) {
     printf("Welcome to rvlab FIR Parallel.\n");
 	print_num_initVectors();
 
+test_ii2();
 
-
-
+start_audio_codec_config();
 /**
     printf("Audio Codec configuration started\n");
-    //start_audio_codec_config();
+    
     test_ii2();
     printf("Audio Codec configuration done\n");
     //start_cli();
