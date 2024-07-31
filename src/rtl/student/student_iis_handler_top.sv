@@ -12,7 +12,7 @@ module student_iis_handler_top #(
     output logic AC_DAC_SDATA,  // Codec DAC Serial Data
 
 	// From Audio Codec
-    input  logic AC_ADC_SDATA,  // Codec ADC Serial Data
+    input logic AC_ADC_SDATA,  // Codec ADC Serial Data
 
     // From FIR
 	input logic [DATA_SIZE_FIR_OUT-1:0] Data_I_R, 	 //Data from HW to Codec (mono Channel)
@@ -23,31 +23,72 @@ module student_iis_handler_top #(
 	output logic [DATA_SIZE-1:0] Data_O_L, //Data from Codec to HW (mono Channel)
 	output logic [DATA_SIZE-1:0] Data_O_R, //Data from Codec to HW (mono Channel)
 
+	// To HW
+	input  tlul_pkg::tl_h2d_t tl_i,
+	// From HW
+	output tlul_pkg::tl_d2h_t tl_o,  
+
 	output logic valid_strobe   // Valid strobe to HW
 
 );
 
-// 	input  tlul_pkg::tl_h2d_t tl_i,
-  //output tlul_pkg::tl_d2h_t tl_o  
+import student_iis_handler_reg_pkg::*;
+student_iis_handler_reg2hw_t reg2hw; // Write
+student_iis_handler_hw2reg_t hw2reg; // Read
 
-// import student_iis_handler_reg_pkg::*;
-// student_iis_handler_reg2hw_t reg2hw; // Write
-// student_iis_handler_hw2reg_t hw2reg; // Read
-
-//  student_iis_handler_reg_top student_iis_handler_reggen_module(
-//   .clk_i,
-//   .rst_ni,
-//   .tl_i,
-//   .tl_o,
-//   .reg2hw,
-//   .hw2reg,
-//   .devmode_i(1'b1)
-//   );
+ student_iis_handler_reg_top student_iis_handler_reggen_module(
+  .clk_i,
+  .rst_ni,
+  .tl_i,
+  .tl_o,
+  .reg2hw,
+  .hw2reg,
+  .devmode_i(1'b1)
+  );
 
 logic BCLK_Fall_int;
 logic BCLK_Rise_int;
 logic LRCLK_Fall_int;
 logic LRCLK_Rise_int;
+
+logic ADC_SDATA_int;
+
+logic ADC_SDATA_tlul;
+logic useTLUL;
+logic [DATA_SIZE-1:0] serial_in_int;
+logic [3:0] tlulCnt;
+logic lastBitFlag;
+
+always_ff @(posedge clk_i or negedge rst_ni) begin
+	if (~rst_ni) begin
+		useTLUL <= 1'b0;
+		tlulCnt <= DATA_SIZE-1;
+		serial_in_int <= '0;
+		ADC_SDATA_tlul <= '0;
+		lastBitFlag <= 1'b0;
+	end else begin
+		if(reg2hw.serial_in.qe) begin
+			useTLUL <= 1'b1;
+			serial_in_int <= reg2hw.serial_in.q;
+		end
+		if(useTLUL) begin
+			if(BCLK_Fall_int == 1'b1 && LRCLK_Fall_int == 1'b0 && LRCLK_Rise_int == 1'b0 && ~lastBitFlag) begin
+				ADC_SDATA_tlul <= serial_in_int[tlulCnt];
+				if (tlulCnt == 0) begin
+						lastBitFlag <= 1'b1;
+				end else begin
+					tlulCnt <= tlulCnt - 1;
+				end
+			end else if(BCLK_Fall_int == 1'b1 && LRCLK_Fall_int == 1'b0 && LRCLK_Rise_int == 1'b0 && lastBitFlag) begin 
+				tlulCnt <= DATA_SIZE-1;
+				useTLUL <= 1'b0;
+				lastBitFlag <= 1'b0;
+			end 
+		end
+	end 
+end
+
+assign ADC_SDATA_int = useTLUL? ADC_SDATA_tlul : AC_ADC_SDATA;
 
   student_iis_clock_gen #(
 	.DATA_SIZE(DATA_SIZE)
@@ -68,7 +109,7 @@ logic LRCLK_Rise_int;
   ) student_iis_receiver_inst (
 	.clk_i(clk_i),
 	.rst_ni(rst_ni),
-	.AC_ADC_SDATA(AC_ADC_SDATA),
+	.AC_ADC_SDATA(ADC_SDATA_int),
 	.AC_LRCLK(AC_LRCLK),
 	.LRCLK_Rise(LRCLK_Rise_int),
 	.LRCLK_Fall(LRCLK_Fall_int),
@@ -77,6 +118,20 @@ logic LRCLK_Rise_int;
 	.Data_O_L(Data_O_L),
 	.valid_strobe(valid_strobe)
   );
+
+  always_ff @(posedge clk_i, negedge rst_ni) begin
+	if (~rst_ni) begin
+		hw2reg.pcm_out.de <= 1'b0;
+		hw2reg.pcm_out.d <= '0;
+	end else begin
+		if(valid_strobe) begin
+			hw2reg.pcm_out.d <= Data_O_L;
+			hw2reg.pcm_out.de <= 1'b1;
+		end else begin
+			hw2reg.pcm_out.de <= 1'b0;
+		end
+	end
+  end
 
   student_iis_transmitter #(
 	.DATA_SIZE_FIR_OUT(DATA_SIZE_FIR_OUT)

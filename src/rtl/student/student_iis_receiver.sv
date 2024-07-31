@@ -42,17 +42,12 @@ module student_iis_receiver #(
         valid_strobe_int <= 1'b0;
       end else if (BCLK_Rise) begin
         rising_edge_cnt <= rising_edge_cnt + 1'b1;
-        //$display("rising_edge_cnt %d \n", rising_edge_cnt);
         if (rising_edge_cnt > 5'd0 && rising_edge_cnt <= 16) begin
           Data_In_int <= {Data_In_int[15:0], AC_ADC_SDATA};
-          //$display("AC_ADC_SDATA: %b \n",AC_ADC_SDATA);
-          //$display("Data_In_int shift: %h \n",Data_In_int);
         end else if (rising_edge_cnt > 5'd16 && AC_LRCLK == 1'b0) begin
             Data_O_L_int <= Data_In_int;
-            //$display("Data_In_int LEFT: %h \n",Data_In_int);
         end else if (rising_edge_cnt > 5'd16 && AC_LRCLK == 1'b1) begin
           Data_O_R_int <= Data_In_int;
-          //$display("Data_In_int RIGHT: %h \n",Data_In_int);
           valid_strobe_int <= 1'b1;
         end
       end

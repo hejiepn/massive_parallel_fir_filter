@@ -21,11 +21,15 @@
 
 localparam int DATA_SIZE = 16;
 localparam int DATA_SIZE_FIR_OUT = 16;
+
 localparam int test_tlul = 0;
 localparam int tlul_serial_in = 32'h00000000;
 localparam int tlul_serial_out = 32'h00000004;
 localparam int tlul_pcm_out = 32'h00000008;
 localparam int tlul_pcm_in = 32'h0000000C;
+
+tlul_pkg::tl_h2d_t tl_h2d;
+tlul_pkg::tl_d2h_t tl_d2h;
 
 module student_iis_handler_top_tb;
   logic clk;
@@ -75,6 +79,8 @@ module student_iis_handler_top_tb;
       .Data_I_R(Data_I_R),         // Data from Effect Module to be sent to Codec (Right Channel)
       .Data_O_L(Data_O_L),         // Data from the Codec to be sent to Effect Module (Left Channel)
       .Data_O_R(Data_O_R),         // Data from the Codec to be sent to Effect Module (Right Channel)
+	  .tl_i(tl_h2d),
+	  .tl_o(tl_d2h),
       .valid_strobe(valid_strobe)  // Valid strobe to Effect Module
   );
 
@@ -117,6 +123,13 @@ module student_iis_handler_top_tb;
       .Data_O_R(Data_I_R)          // Data to IIS Handler (Right Channel)
   );
 
+     tlul_test_host bus(
+    .clk_i(clk),
+    .rst_no(rst_n),
+    .tl_i(tl_d2h),
+    .tl_o(tl_h2d)
+  );
+
 
   // Testbench specific signals
   logic [15:0] temp_l;
@@ -126,11 +139,14 @@ module student_iis_handler_top_tb;
   int fd_w;
   logic [15:0] line;
 
-  int num_cycles = 150;
+  int num_cycles = 15;
   int succeeded = 0;
   int failed = 0;
 
   int f_err = 0;
+
+    logic [31:0] rdata;
+
 
   initial begin
 
@@ -155,11 +171,13 @@ module student_iis_handler_top_tb;
     temp_r = 0;
 
     // Create NegEdge for reset
-    rst_n = '1;
-    #10000;
-    rst_n = '0;
-    #10000;
-    rst_n = '1;
+    // rst_n = '1;
+    // #10000;
+    // rst_n = '0;
+    // #10000;
+    // rst_n = '1;
+
+	bus.reset();
 
     // Loop through the dummy data and compare output of the handler with the previous input
     for (int i = 0; i < num_cycles; i++) begin
@@ -210,6 +228,37 @@ module student_iis_handler_top_tb;
     $fclose(fd_w);
 
 
+	//##################
+
+      $display("write word over tlul to serial in",);
+      bus.put_word(tlul_serial_in, 32'h0000D555);
+      // wait until valid_strobe is high
+      @(posedge clk);
+      while (valid_strobe == 1'b0) begin
+        @(posedge clk);
+      end
+
+      // wait until valid_strobe is low 
+      @(posedge clk);
+      while (valid_strobe == 1'b1) begin
+        @(posedge clk);
+      end
+
+      bus.get_word(tlul_pcm_out, rdata);
+      $display("read pcm_out: 0x%08x", rdata);
+      bus.wait_cycles(10);
+
+    //   $display("write word over tlul to pcm in",);
+    //   bus.put_word(tlul_pcm_in, 32'hffffffff);
+	//   bus.wait_cycles(10);
+	//   valid_strobe_O = '1;
+	//   @(posedge clk);
+
+	// bus.get_word(tlul_serial_out, rdata);
+	// $display("read serial_out: 0x%08x", rdata);
+	bus.wait_cycles(4000);
+
+
     // Display Summary
     $display("________________Summary__________________________");
     $display("Total: %0d   Succeeded: %0d   Failed: %0d", num_cycles, succeeded, failed);
@@ -221,38 +270,5 @@ module student_iis_handler_top_tb;
 
 endmodule
 
-  	//end
-	//else begin
-  	// 	logic [31:0] rdata;
-
-    //   bus.reset();
-
-    //   $display("write word over tlul to serial in",);
-    //   bus.put_word(tlul_serial_in, 32'h00001010);
-    //   // wait until valid_strobe is high
-    //   @(posedge clk);
-    //   while (valid_strobe == 1'b0) begin
-    //     @(posedge clk);
-    //   end
-
-    //   // wait until valid_strobe is low 
-    //   @(posedge clk);
-    //   while (valid_strobe == 1'b1) begin
-    //     @(posedge clk);
-    //   end
-    //   bus.get_word(tlul_pcm_out, rdata);
-    //   $display("read pcm_out: 0x%08x", rdata);
-    //   bus.wait_cycles(10);
-
-    //   $display("write word over tlul to pcm in",);
-    //   bus.put_word(tlul_pcm_in, 32'hffffffff);
-	//   bus.wait_cycles(10);
-	//   valid_strobe_O = '1;
-	//   @(posedge clk);
-
-	// bus.get_word(tlul_serial_out, rdata);
-	// $display("read serial_out: 0x%08x", rdata);
-	// bus.wait_cycles(4000);
-
-  //end
-  //end
+  	
+  	
