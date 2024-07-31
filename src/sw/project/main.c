@@ -13,18 +13,15 @@ static void delay_cycles(int n_cycles) {
 int main(void) {
     
     printf("Welcome to rvlab FIR Parallel.\n");
-	print_num_initVectors();
+    //test_ii2();
 
-test_ii2();
 
-start_audio_codec_config();
-/**
     printf("Audio Codec configuration started\n");
-    
-    test_ii2();
+    start_audio_codec_config();
     printf("Audio Codec configuration done\n");
     //start_cli();
-**/
+
+
 
 
     printf("write sample in fir\n");
@@ -46,7 +43,7 @@ start_audio_codec_config();
         }
         printf("read out is: %x08", read_y_out);
     }
-**/
+*/
 
     return 0;
 }

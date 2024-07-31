@@ -20,6 +20,7 @@ uint32_t student_fir_s_read_y_out_lower(unsigned int fir_unit_no) {
 **/
 void student_fir_s_write_in_samples(uint16_t sample) {
   	REG16(STUDENT_FIR_FIR_WRITE_IN_SAMPLES(0)) = sample;
+    printf("write samples 0x%x to fir single 0 \n", sample);
   }
 
  void student_fir_p_write_in_samples(uint16_t sample) {
