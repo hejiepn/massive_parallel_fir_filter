@@ -21,7 +21,7 @@ localparam int unsigned ADDR_WIDTH = 10;
 localparam int unsigned DATA_SIZE = 16;
 localparam int unsigned DATA_SIZE_FIR_OUT = 64;
 localparam int unsigned DEBUGMODE = 0;
-localparam int unsigned NUM_FIR = 4; //only numbers which are power of 2 are supported
+localparam int unsigned NUM_FIR = 8; //only numbers which are power of 2 are supported
 
 logic [7:0] led;
 logic mclk;
