@@ -24,9 +24,11 @@ localparam int DATA_SIZE_FIR_OUT = 16;
 
 localparam int test_tlul = 0;
 localparam int tlul_serial_in = 32'h00000000;
-localparam int tlul_serial_out = 32'h00000004;
-localparam int tlul_pcm_out = 32'h00000008;
-localparam int tlul_pcm_in = 32'h0000000C;
+localparam int tlul_pcm_out_left = 32'h00000004;
+localparam int tlul_pcm_out_right = 32'h00000008;
+localparam int tlul_serial_out = 32'h0000000C;
+localparam int tlul_pcm_in_left = 32'h00000010;
+localparam int tlul_pcm_in_right = 32'h00000014;
 
 tlul_pkg::tl_h2d_t tl_h2d;
 tlul_pkg::tl_d2h_t tl_d2h;
@@ -244,8 +246,12 @@ module student_iis_handler_top_tb;
         @(posedge clk);
       end
 
-      bus.get_word(tlul_pcm_out, rdata);
-      $display("read pcm_out: 0x%08x", rdata);
+      bus.get_word(tlul_pcm_out_left, rdata);
+      $display("read pcm_out_left: 0x%08x", rdata);
+      bus.wait_cycles(10);
+
+      bus.get_word(tlul_pcm_out_right, rdata);
+      $display("read pcm_out_right: 0x%08x", rdata);
       bus.wait_cycles(10);
 
     //   $display("write word over tlul to pcm in",);

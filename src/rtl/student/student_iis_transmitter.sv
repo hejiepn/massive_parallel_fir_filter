@@ -4,7 +4,7 @@ module student_iis_transmitter #(
 	input logic clk_i,
 	input logic rst_ni,
 	input logic [DATA_SIZE_FIR_OUT-1:0] Data_I_L,
-  input logic [DATA_SIZE_FIR_OUT-1:0] Data_I_R,
+	input logic [DATA_SIZE_FIR_OUT-1:0] Data_I_R,
 	input logic valid_strobe_I,
 	input logic LRCLK_Rise,
 	input logic LRCLK_Fall,

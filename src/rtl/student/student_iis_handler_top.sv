@@ -121,17 +121,37 @@ assign ADC_SDATA_int = useTLUL? ADC_SDATA_tlul : AC_ADC_SDATA;
 
   always_ff @(posedge clk_i, negedge rst_ni) begin
 	if (~rst_ni) begin
-		hw2reg.pcm_out.de <= 1'b0;
-		hw2reg.pcm_out.d <= '0;
+		hw2reg.pcm_out_left.de <= 1'b0;
+		hw2reg.pcm_out_left.d <= '0;
 	end else begin
 		if(valid_strobe) begin
-			hw2reg.pcm_out.d <= Data_O_L;
-			hw2reg.pcm_out.de <= 1'b1;
+			hw2reg.pcm_out_left.d <= Data_O_L;
+			hw2reg.pcm_out_left.de <= 1'b1;
 		end else begin
-			hw2reg.pcm_out.de <= 1'b0;
+			hw2reg.pcm_out_left.de <= 1'b0;
 		end
 	end
   end
+
+   always_ff @(posedge clk_i, negedge rst_ni) begin
+	if (~rst_ni) begin
+		hw2reg.pcm_out_right.de <= 1'b0;
+		hw2reg.pcm_out_right.d <= '0;
+	end else begin
+		if(valid_strobe) begin
+			hw2reg.pcm_out_right.d <= Data_O_R;
+			hw2reg.pcm_out_right.de <= 1'b1;
+		end else begin
+			hw2reg.pcm_out_right.de <= 1'b0;
+		end
+	end
+  end
+
+  logic use_tl_pcm_in_left;
+  logic [DATA_SIZE_FIR_OUT-1:0] Data_I_L_int;
+  logic [DATA_SIZE_FIR_OUT-1:0] Data_I_L_tlul;
+
+  
 
   student_iis_transmitter #(
 	.DATA_SIZE_FIR_OUT(DATA_SIZE_FIR_OUT)
@@ -146,5 +166,52 @@ assign ADC_SDATA_int = useTLUL? ADC_SDATA_tlul : AC_ADC_SDATA;
 	.BCLK_Fall(BCLK_Fall_int),
 	.AC_DAC_SDATA(AC_DAC_SDATA)
   );
+
+
+//   always_ff @(posedge clk_i, negedge rst_ni) begin
+// 	if (~rst_ni) begin
+// 		use_tl_pcm_in_left <= 1'b0;
+// 	end else begin
+// 		if(reg2hw.pcm_in_left.qe) begin
+// 			Data_I_L_tlul <= reg2hw.pcm_in_left.q[DATA_SIZE_FIR_OUT-1:0];
+// 			use_tl_pcm_in_left <= 1'b1;
+// 		end
+// 		if (valid_strobe_I) begin
+// 			if (use_tl_pcm_in_left) begin
+// 				Data_I_L_int <= Data_I_L_tlul;
+// 				use_tl_pcm_in_left <= 1'b0;
+// 			end else begin
+// 				Data_I_L_int <= Data_I_L;
+// 			end 
+// 		end
+// 	end 
+//   end 
+
+/*
+  logic [23:0] AC_DAC_SDATA_int;
+  logic [31:0] AC_DAC_SDATA_int_cnt;
+
+ always_ff @(posedge clk_i, negedge rst_ni) begin
+	if (~rst_ni) begin
+		hw2reg.serial_out.de <= 1'b0;
+		hw2reg.serial_out.d <= '0;
+		AC_DAC_SDATA_int_cnt <= 32'd23;
+		AC_DAC_SDATA_int <= '0;
+	end else begin
+		if(BCLK_Fall_int == 1'b1 && LRCLK_Fall_int == 1'b0 && LRCLK_Rise_int == 1'b0) begin
+			AC_DAC_SDATA_int <= {AC_DAC_SDATA_int[22:0], AC_DAC_SDATA};
+			AC_DAC_SDATA_int_cnt <= AC_DAC_SDATA_int_cnt - 1;
+			if(AC_DAC_SDATA_int_cnt == 0) begin
+				hw2reg.serial_out.d <= AC_DAC_SDATA_int;
+				hw2reg.serial_out.de <= 1'b1;
+				AC_DAC_SDATA_int_cnt <= 32'd23;
+			end else begin 
+				hw2reg.serial_out.de <= 1'b0;
+			end
+		end
+	end
+  end
+  */
+
 
 endmodule
