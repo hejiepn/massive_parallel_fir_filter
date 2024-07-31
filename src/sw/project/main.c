@@ -22,14 +22,23 @@ int main(void) {
     //start_cli();
 
 
+while(true) {
+    printf("checking fir values \n");
+    printf("fir_p_samples_out: %x \n",student_fir_p_read_shift_out_samples());
+    printf("fir_p_y_upper: %x \n",fir_p_read_y_out_upper());
+    printf("fir_p_y_lower: %x \n",student_fir_p_read_y_out_lower());
+    delay_cycles(10);
+}
 
 
+
+/**
     printf("write sample in fir\n");
     uint16_t sample = 0x44;
     //student_fir_s_write_in_samples(sample);
     student_fir_p_write_in_samples(sample);
     delay_cycles(11000);
-
+*/
 
 /**
 	printf("read sample out fir\n");

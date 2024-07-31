@@ -49,8 +49,8 @@ logic pmod_b_out;
           ac_dac_sdata: dac_sdata,
           sda_oe: sda_oe,
           scl_oe: scl_oe,
-          pmod_a_oe: {6'b0,2'b1},
-          pmod_a_out: {'0,scl_i,sda_i},
+          pmod_a_oe: {'0,4'b1},
+          pmod_a_out: {'0,bclk,lrclk,dac_sdata,scl_i,sda_i},
           default: '0
       };
 
@@ -59,7 +59,7 @@ logic pmod_b_out;
   assign tl_device_fast_o = '{d_opcode: tlul_pkg::AccessAck, default: '0};
 
 // ------ TLUL MUX -------
-  localparam TLUL_DEVICES = 4;
+  localparam TLUL_DEVICES = 5;
   //tl_student_i/o [index] is depended from the address you give to them in rvlab.h
 
   tlul_pkg::tl_h2d_t tl_student_i[TLUL_DEVICES-1:0];
@@ -89,35 +89,36 @@ logic pmod_b_out;
       .led_o(led)
   );
 
-  logic [DATA_SIZE-1:0] Data_iis_O;
+  logic [DATA_SIZE-1:0] Data_iis_O_L;
   logic [DATA_SIZE-1:0] Data_iis_o_R;
   logic valid_strobe_2FIR;
   logic compute_finished_out;
   logic [DATA_SIZE-1:0] sample_shift_out;
   logic valid_strobe_out;
-  logic [DATA_SIZE_FIR_OUT+$clog2(NUM_FIR)-1:0] y_out;
+  logic [DATA_SIZE_FIR_OUT+$clog2(NUM_FIR)-1:0] y_out_l;
+  logic [DATA_SIZE_FIR_OUT+$clog2(NUM_FIR)-1:0] y_out_r;
   //logic [DATA_SIZE_FIR_OUT-1:0] y_out;
 
   student_iis_handler_top #(
-	.DATA_SIZE(DATA_SIZE),
-	.DATA_SIZE_FIR_OUT(DATA_SIZE_FIR_OUT)
+	 .DATA_SIZE(DATA_SIZE),
+	 .DATA_SIZE_FIR_OUT(DATA_SIZE_FIR_OUT)
   ) dut_student_iis (
     .clk_i(clk_i),
     .rst_ni(rst_ni),
-	.AC_MCLK(mclk),       // Codec Master Clock
-	.AC_BCLK(bclk),       // Codec Bit Clock
+    .AC_MCLK(mclk),       // Codec Master Clock
+    .AC_BCLK(bclk),       // Codec Bit Clock
     .AC_LRCLK(lrclk),      // Codec Left/Right Clock
     .AC_ADC_SDATA(userio_i.ac_adc_sdata),  // Codec ADC Serial Data
     .AC_DAC_SDATA(dac_sdata),  // Codec DAC Serial Data
 	
-	.Data_I_R(y_out), 	 //Data from HW to Codec (mono Channel)
-  .Data_I_L('0),
-	.Data_O_L(Data_iis_O),	 //Data from Codec to HW (mono Channel)
+	.Data_I_R(y_out_r[DATA_SIZE_FIR_OUT-1:0]), 	 //Data from HW to Codec (mono Channel)
+  .Data_I_L(y_out_l[DATA_SIZE_FIR_OUT-1:0]),
+	.Data_O_L(Data_iis_O_L),	 //Data from Codec to HW (mono Channel)
   .Data_O_R(Data_iis_o_R),
 	.valid_strobe_I(valid_strobe_out), // Valid strobe from HW
 	.valid_strobe(valid_strobe_2FIR),    // Valid strobe to HW
-  .tl_i(tl_student_i[3]),  //master input (incoming request)
-    .tl_o(tl_student_o[3])  //slave output (this module's response)
+  .tl_i(tl_student_i[4]),  //master input (incoming request)
+    .tl_o(tl_student_o[4])  //slave output (this module's response)
 
 );
 
@@ -138,15 +139,32 @@ student_fir_parallel #(
 	.DEBUGMODE(DEBUGMODE),
 	.DATA_SIZE_FIR_OUT(DATA_SIZE_FIR_OUT),
 	.NUM_FIR(NUM_FIR) //only numbers which are power of 2 are supported
-) dut_fir_parallel(
+) dut_fir_parallel_left(
 	.clk_i(clk_i),
     .rst_ni(rst_ni),
 	.valid_strobe_in(valid_strobe_2FIR),
-    .sample_in(Data_iis_O),
+    .sample_in(Data_iis_O_L),
 	.valid_strobe_out(valid_strobe_out),
-    .y_out(y_out),
+    .y_out(y_out_l),
 	.tl_i(tl_student_i[2]),  //master input (incoming request)
 	.tl_o(tl_student_o[2])  //slave output (this module's response)
+);
+
+student_fir_parallel #(
+  .ADDR_WIDTH(ADDR_WIDTH),
+  .DATA_SIZE(DATA_SIZE),
+  .DEBUGMODE(DEBUGMODE),
+  .DATA_SIZE_FIR_OUT(DATA_SIZE_FIR_OUT),
+  .NUM_FIR(NUM_FIR) //only numbers which are power of 2 are supported
+) dut_fir_parallel_right(
+  .clk_i(clk_i),
+    .rst_ni(rst_ni),
+  .valid_strobe_in(valid_strobe_2FIR),
+    .sample_in(Data_iis_o_R),
+  .valid_strobe_out('0),
+    .y_out(y_out_r),
+  .tl_i(tl_student_i[3]),  //master input (incoming request)
+  .tl_o(tl_student_o[3])  //slave output (this module's response)
 );
 
 endmodule
