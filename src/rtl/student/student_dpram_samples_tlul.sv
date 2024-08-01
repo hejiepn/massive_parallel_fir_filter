@@ -89,6 +89,11 @@ module student_dpram_samples_tlul #(
 	assign dob = dob_i;
 	assign rdata = rvalid? {'0,dob_i} : '0;
 
+	// always_ff @(posedge clk_i) begin
+	// 	if(we) begin
+	// 		$display("Writing to addr %0d: %0h", addr, wdata);
+	// 	end
+	// end
 
 	// always_ff @(posedge clk_i or negedge rst_ni) begin : tlul_read_write_proc
 	// 	rdata <= '0;

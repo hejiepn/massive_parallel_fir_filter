@@ -96,13 +96,35 @@ module student_fir #(
     end
   end
 
-  assign valid_strobe_in_pos_edge = reg2hw.fir_write_in_samples.qe? 1'b1 : valid_strobe_in && ~valid_strobe_in_prev;
-  assign ena_samples = reg2hw.fir_write_in_samples.qe? 1'b1 : valid_strobe_in_pos_edge;
+//   assign valid_strobe_in_pos_edge = reg2hw.fir_write_in_samples.qe? 1'b1 : valid_strobe_in && ~valid_strobe_in_prev;
+//   assign ena_samples = reg2hw.fir_write_in_samples.qe? 1'b1 : valid_strobe_in_pos_edge;
+
+ assign valid_strobe_in_pos_edge = valid_strobe_in && ~valid_strobe_in_prev;
+ assign ena_samples = valid_strobe_in_pos_edge;
 
 
-  assign sample_in_internal = reg2hw.fir_write_in_samples.qe? reg2hw.fir_write_in_samples.q : sample_in;
+  //assign sample_in_internal = reg2hw.fir_write_in_samples.qe? reg2hw.fir_write_in_samples.q : sample_in;
   //assign ena_internal = reg2hw.fir_write_in_samples.qe? 1'b1 : ena_samples;
   //assign wea_internal = reg2hw.fir_write_in_samples.qe? 1'b1 : valid_strobe_in_pos_edge;
+
+	logic useTlulSample;
+
+  always_ff @(posedge clk_i, negedge rst_ni) begin
+	if (~rst_ni) begin
+	  sample_in_internal <= '0;
+	  useTlulSample <= 1'b0;
+	end else begin
+	  if (reg2hw.fir_write_in_samples.qe) begin
+		useTlulSample <= 1'b1;
+	  end
+	  if(useTlulSample) begin
+		sample_in_internal <= reg2hw.fir_write_in_samples.q;
+		useTlulSample <= 1'b0;
+	  end else begin
+		sample_in_internal <= sample_in;
+	  end 
+	end
+  end
 
   // Write address generation
   always_ff @(posedge clk_i, negedge rst_ni) begin
@@ -305,7 +327,7 @@ always_ff @(posedge clk_i, negedge rst_ni) begin
 		hw2reg.fir_read_y_out_lower.d = '0;
 		hw2reg.fir_read_y_out_lower.de = 1'b0;
 	end else begin
-		if (valid_strobe_out) begin //alternative if (fir_state == SHIFT_OUT)
+		if (valid_strobe_out) begin //alternative if fir_state == SHIFT_OUT
 			hw2reg.fir_read_y_out_lower.d = {'0,fir_sum};
 			hw2reg.fir_read_y_out_lower.de = 1'b1;
 		end else begin
