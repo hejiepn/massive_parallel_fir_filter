@@ -67,6 +67,7 @@ module_tbs = [
 	"student_iis_receiver_tb",
 	"student_iis_clock_gen_tb",
     "student_iis_handler_stereo_tb",
+	"student_fir_i2s_clk_tb",
 ]
 
 for name in module_tbs:

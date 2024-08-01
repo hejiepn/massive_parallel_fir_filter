@@ -2,7 +2,7 @@ module student_fir #(
 	parameter int unsigned ADDR_WIDTH = 10,
 	parameter int unsigned DATA_SIZE = 16,
 	parameter int unsigned DEBUGMODE = 0,
-	parameter int unsigned DATA_SIZE_FIR_OUT = 32
+	parameter int unsigned DATA_SIZE_FIR_OUT = 24
 	) (	
     input logic clk_i,
     input logic rst_ni,
@@ -57,7 +57,7 @@ module student_fir #(
   );
 
   // Define constants for memory definition
-  localparam MAX_ADDR = 2 ** ADDR_WIDTH;
+  localparam MAX_ADDR = 2**ADDR_WIDTH;
   localparam ROM_FILE_COEFF = (DEBUGMODE == 1) ? "/home/rvlab/groups/rvlab01/Desktop/dev_hejie_copy_2/risc-v-lab-group-01/src/rtl/student/data/coe_lp_debug.mem" : "/home/rvlab/groups/rvlab01/Desktop/dev_hejie_copy_2/risc-v-lab-group-01/src/rtl/student/data/coe_lp.mem";  // File for memory initialization
   localparam ROM_FILE_SAMPLES = (DEBUGMODE == 1) ? "/home/rvlab/groups/rvlab01/Desktop/dev_hejie_copy_2/risc-v-lab-group-01/src/rtl/student/data/zeros.mem" : "/home/rvlab/groups/rvlab01/Desktop/dev_hejie_copy_2/risc-v-lab-group-01/src/rtl/student/data/zeros.mem";
  
@@ -248,7 +248,7 @@ end
 		case (fir_state)
 			IDLE: begin
 				// compute_finished_out <= 0;
-				valid_strobe_out <= 0;
+				valid_strobe_out <= '0;
 				fir_sum <= '0;
 				//y_out <= '0;
 
@@ -285,7 +285,7 @@ end
 				// $display("fir_sum: %d read_sample: %4x read_coeff: %4x", fir_sum, read_sample, read_coeff);
 
 				// compute_finished_out <= 1;
-				valid_strobe_out <= 1;
+				valid_strobe_out <= '1;
 				hw2reg.fir_read_shift_out_samples.de = 1'b0;
 				y_out <= fir_sum;
 			end
@@ -305,13 +305,10 @@ always_ff @(posedge clk_i, negedge rst_ni) begin
 		hw2reg.fir_read_y_out_lower.d = '0;
 		hw2reg.fir_read_y_out_lower.de = 1'b0;
 	end else begin
-		if (valid_strobe_out) begin
-			hw2reg.fir_read_y_out_upper.d = fir_sum[DATA_SIZE_FIR_OUT-1:DATA_SIZE_FIR_OUT/2];
-			hw2reg.fir_read_y_out_upper.de = 1'b1;
-			hw2reg.fir_read_y_out_lower.d = fir_sum[DATA_SIZE_FIR_OUT/2-1:0];
+		if (valid_strobe_out) begin //alternative if (fir_state == SHIFT_OUT)
+			hw2reg.fir_read_y_out_lower.d = {'0,fir_sum};
 			hw2reg.fir_read_y_out_lower.de = 1'b1;
 		end else begin
-			hw2reg.fir_read_y_out_upper.de = 1'b0;
 			hw2reg.fir_read_y_out_lower.de = 1'b0;
 		end
 	end

@@ -1,10 +1,10 @@
 module student_fir_tb;
 
-  localparam int AddrWidth = 2; // Address width
+  localparam int AddrWidth = 10; // Address width
   localparam int MaxAddr = 2**AddrWidth; // Maximum address
   localparam int DATA_SIZE = 16; // Data size
-  localparam int DEBUGMODE = 1; // activate debugMode when AddrWidth != 10 
-  localparam int DATA_SIZE_FIR_OUT = 32; // activate debugMode when AddrWidth != 10
+  localparam int DEBUGMODE = 0; // activate debugMode when AddrWidth != 10 
+  localparam int DATA_SIZE_FIR_OUT = 24; // activate debugMode when AddrWidth != 10
   localparam int dpram_tlul_offset = 12;
   localparam int dpram_no_inside_fir = 2;
   localparam int dpram_samples_address = 0;
@@ -29,7 +29,7 @@ module student_fir_tb;
 //   logic compute_finished_out;
   logic [DATA_SIZE-1:0] sample_shift_out;
   logic valid_strobe_out;
-  logic [DATA_SIZE*2-1:0] y_out;
+  logic [DATA_SIZE_FIR_OUT-1:0] y_out;
 
   // Memory to store the input samples from sin.mem
   logic [7:0] sin_mem [0:1023]; // Adjust the size based on your file
@@ -90,9 +90,9 @@ module student_fir_tb;
 
     // Load the sin.mem file
 	if (DEBUGMODE == 1) begin
-		$readmemh("/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/rtl/student/data/sin_low_debug.mem", sin_mem);
+		$readmemh("/home/rvlab/groups/rvlab01/Desktop/dev_hejie_copy_2/risc-v-lab-group-01/src/rtl/student/data/sin_low_debug.mem", sin_mem);
 	end else begin
-		$readmemh("/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/fv/data/sin_comb.mem", sin_mem);
+		$readmemh("/home/rvlab/groups/rvlab01/Desktop/dev_hejie_copy_2/risc-v-lab-group-01/src/fv/data/sin_comb.mem", sin_mem);
 	end
 
 	bus.reset();
@@ -155,8 +155,8 @@ module student_fir_tb;
 		address_sram[31:24] = 8'h10; // Aktuelle Geräteadresse setzen
 		address_sram[23:dpram_tlul_offset+4] = '0; // Bereich auf Null setzen
 		address_sram[dpram_tlul_offset+4-1:dpram_tlul_offset] = dpram_coeff_address; // tlul_dpram_device auswählen
-		address_sram[dpram_tlul_offset-1:AddrWidth+2] = '0; // Bereich auf Null setzen
-		address_sram[AddrWidth+1:2] = i; // Adresse innerhalb des dpram setzen
+		address_sram[dpram_tlul_offset-1:2+2] = '0; // Bereich auf Null setzen
+		address_sram[2+1:2] = i; // Adresse innerhalb des dpram setzen
 		address_sram[1:0] = '0; // Niedrigste zwei Bits auf Null setzen		
 		tlul_write_data = {'0,8'h02};
 		bus.put_word(address_sram, tlul_write_data);
@@ -175,8 +175,8 @@ module student_fir_tb;
 		address_sram[31:24] = 8'h10; // Aktuelle Geräteadresse setzen
 		address_sram[23:dpram_tlul_offset+4] = '0; // Bereich auf Null setzen
 		address_sram[dpram_tlul_offset+4-1:dpram_tlul_offset] = dpram_samples_address; // tlul_dpram_device auswählen
-		address_sram[dpram_tlul_offset-1:AddrWidth+2] = '0; // Bereich auf Null setzen
-		address_sram[AddrWidth+1:2] = i; // Adresse innerhalb des dpram setzen
+		address_sram[dpram_tlul_offset-1:2+2] = '0; // Bereich auf Null setzen
+		address_sram[2+1:2] = i; // Adresse innerhalb des dpram setzen
 		address_sram[1:0] = '0; // Niedrigste zwei Bits auf Null setzen		
 		tlul_write_data = {'0,8'h00};
 		bus.put_word(address_sram, tlul_write_data);
