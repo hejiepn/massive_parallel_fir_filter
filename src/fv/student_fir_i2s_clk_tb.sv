@@ -197,22 +197,26 @@ module student_fir_i2s_clk_tb;
 	// Apply test stimulus with tlul sample in
 	$display("Apply test stimulus with tlul sample in");
 	for (int i = 0; i < MaxAddr; i = i + 1) begin
-		bus.put_word(sample_write_in_reg, {'0,8'h01});
+		bus.put_word(sample_write_in_reg, {16'hffaa});
+		@(posedge LRCLK_Rise);
+		valid_strobe_in <= 1;
 		counting = 1;
-		@(posedge clk_i);
+		@(posedge LRCLK_Fall);
+		valid_strobe_in <= 0;
 		wait(valid_strobe_out == 1); // Wait for valid_strobe_out to go high
+		counting = 0;
+		$display("Number of clock cycles from valid_strobe_in to valid_strobe_out: %0d", clk_count);
+		clk_count = 0; // Reset counter for next iteration
 		//read sample_shift_out_internal
 		bus.get_word(sample_shift_out_reg, tlul_read_data);
 		//read y out
 		bus.get_word(y_out_upper_reg, tlul_read_data);
 		bus.get_word(y_out_lower_reg, tlul_read_data);
-		counting = 0;
-		$display("Number of clock cycles from valid_strobe_in to valid_strobe_out: %0d", clk_count);
-        clk_count = 0; // Reset counter for next iteration
+		@(posedge clk_i);
   	end
 
     // Finish simulation
-    #20000;
+    #200000;
 
 	// Testresultat
 	if (error_flag) begin

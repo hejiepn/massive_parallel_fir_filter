@@ -117,12 +117,15 @@ module student_fir #(
 	  if (reg2hw.fir_write_in_samples.qe) begin
 		useTlulSample <= 1'b1;
 	  end
-	  if(useTlulSample) begin
-		sample_in_internal <= reg2hw.fir_write_in_samples.q;
-		useTlulSample <= 1'b0;
-	  end else begin
-		sample_in_internal <= sample_in;
-	  end 
+	  if(valid_strobe_in_pos_edge) begin
+		if(useTlulSample) begin
+			sample_in_internal <= reg2hw.fir_write_in_samples.q;
+			$display("fir_write_in_samples.q: %4x", reg2hw.fir_write_in_samples.q);
+			useTlulSample <= 1'b0;
+		end else begin
+			sample_in_internal <= sample_in;
+		end
+	  end
 	end
   end
 
