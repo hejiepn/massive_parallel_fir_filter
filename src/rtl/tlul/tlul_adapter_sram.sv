@@ -143,7 +143,8 @@ module tlul_adapter_sram #(
   //    In this case, it is assumed the request is granted (may cause ordering issue later?)
   assign req_o    = tl_i.a_valid & reqfifo_wready & ~error_internal;
   assign we_o     = tl_i.a_valid & logic'(tl_i.a_opcode inside {PutFullData, PutPartialData});
-  assign addr_o   = (tl_i.a_valid) ? tl_i.a_address[DataBitWidth+:SramAw] : '0;
+  //assign addr_o   = (tl_i.a_valid) ? tl_i.a_address[DataBitWidth+:SramAw] : '0;
+  assign addr_o   = (tl_i.a_valid) ? tl_i.a_address[11:2] : '0;
 
   `ASSERT_INIT(TlUlEqualsToSramDw, top_pkg::TL_DW == SramDw)
 
