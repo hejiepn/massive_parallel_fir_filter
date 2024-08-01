@@ -24,18 +24,18 @@ logic AC_MCLK_int;
 
   // Generation of AC_BCLK (1/16 of the system clock) -> 3,125 MHz >= f_s * word_width(16) *2(bc. of stereo) == 1,4112 MHz (minimum required frequency)
   // Also Generate Falling and Rising Edge Strobes
-  logic [2:0] Cnt_BCLK;
-  //logic [3:0] Cnt_BCLK;
+  //logic [2:0] Cnt_BCLK;
+  logic [3:0] Cnt_BCLK;
   logic AC_BCLK_int;
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
-      Cnt_BCLK <= '1;
-      //Cnt_BCLK <= 4'd8;
+  //    Cnt_BCLK <= '1;
+      Cnt_BCLK <= 4'd8;
       AC_BCLK_int <= 1'b0;
     end else begin
       if (Cnt_BCLK == '0) begin
-         Cnt_BCLK <= '1;
-         //Cnt_BCLK <= 4'd8;
+        //  Cnt_BCLK <= '1;
+         Cnt_BCLK <= 4'd8;
         AC_BCLK_int <= ~AC_BCLK_int;
       end else Cnt_BCLK <= Cnt_BCLK - 1;
     end
@@ -49,18 +49,18 @@ logic AC_MCLK_int;
 
   // Generation of AC_LRCLK (1/1024 of the system clock) -> 48.828 kHz == sample frequency f_s
   // Also Generate Falling and Rising Edge Strobes
-  //logic [9:0] Cnt_LRCLK;
-  logic [8:0] Cnt_LRCLK;
+  logic [9:0] Cnt_LRCLK;
+  //logic [8:0] Cnt_LRCLK;
   logic AC_LRCLK_int;
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
-      // Cnt_LRCLK <= 10'd566;
-      Cnt_LRCLK <= '1;
+      Cnt_LRCLK <= 10'd566;
+      //Cnt_LRCLK <= '1;
       AC_LRCLK_int <= 1'b0;
     end else begin
       if (Cnt_LRCLK == 0) begin
-	  	 //Cnt_LRCLK <= 10'd566;
-      Cnt_LRCLK <= '1;
+	  	 Cnt_LRCLK <= 10'd566;
+      //Cnt_LRCLK <= '1;
         AC_LRCLK_int <= ~AC_LRCLK_int;
       end else Cnt_LRCLK <= Cnt_LRCLK - 1;
     end
