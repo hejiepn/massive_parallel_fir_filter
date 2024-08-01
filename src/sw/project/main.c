@@ -3,6 +3,7 @@
 #include "rvlab.h"
 #include "iic_ctrl.h"
 #include "userinterface.h"
+#include "iis_handler.h"
 
 static void delay_cycles(int n_cycles) {
     REG32(RV_TIMER_CTRL(0)) = (1<<RV_TIMER_CTRL_ACTIVE0_LSB);
@@ -13,13 +14,35 @@ static void delay_cycles(int n_cycles) {
 int main(void) {
     
     printf("Welcome to rvlab FIR Parallel.\n");
-	print_num_initVectors();
 
-test_ii2();
+        //test_ii2();
 
-//start_audio_codec_config();
+         //printf("Audio Codec configuration started\n");
+
+        //start_audio_codec_config();
+        //printf("Audio Codec configuration done\n");
+
+    
+
+        printf("write sample in fir\n");
+        uint16_t sample = 0xff;
+        student_fir_p_write_in_samples(sample);
 /**
-    printf("Audio Codec configuration started\n");
+        //printf("pcm out left: %x\n", read_pcm_out_left());
+        printf("pcm out right: %x\n", read_pcm_out_right());
+
+        printf("fir parallel out upper: %x \n",student_fir_p_read_y_out_upper());
+        printf("fir parallel out lower: %x \n",student_fir_p_read_y_out_lower());
+        //}
+
+*/
+
+        //while(true) {
+
+        
+
+/**
+   
     
     test_ii2();
     printf("Audio Codec configuration done\n");

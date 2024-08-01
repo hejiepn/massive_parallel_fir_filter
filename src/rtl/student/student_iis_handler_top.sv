@@ -1,6 +1,6 @@
 module student_iis_handler_top #(
 	parameter int unsigned DATA_SIZE = 16,
-	parameter int unsigned DATA_SIZE_FIR_OUT = 16
+	parameter int unsigned DATA_SIZE_FIR_OUT = 24
 )(
     input logic clk_i,
     input logic rst_ni,

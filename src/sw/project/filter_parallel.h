@@ -41,5 +41,10 @@ uint16_t student_fir_s_read_out_samples(unsigned int fir_unit_no);
 uint32_t student_fir_s_read_y_out_upper(unsigned int fir_unit_no);
 uint32_t student_fir_s_read_y_out_lower(unsigned int fir_unit_no);
 
+void student_fir_p_write_in_samples(uint16_t sample);
+uint32_t student_fir_p_read_y_out_upper(void);
+uint32_t student_fir_p_read_y_out_lower(void);
+
+
 
 #endif //FILTER_H

@@ -11,8 +11,8 @@ unsigned long setupPllVector = 0x40000E;
 unsigned long long pllInitVector = 0x4002027101DD1B01; // PLL control register 0x0271 01DD 1B01 to set Fs:44,1 MHz, with desired MSCLK: 25MHZ, in table line: MCLK: 24 MHZ, X:2, R:3, M:625, N:477
 
 unsigned long initVectors[] = {
-    0x400003,  // Clock Control bypass PLL directly
-    //0x40000F,  // Clock Control use PLL, enable COREN after PLL is locked
+    //0x400003,  // Clock Control bypass PLL directly
+    0x40000F,  // Clock Control use PLL, enable COREN after PLL is locked
     0x400A01,  // Record Mixer Left (Mixer 1) Control 0 MUTE: LINN, LINP
     0x400B05,  // Record Mixer Left (Mixer 1) Control 1 Amp: LAUX 0dB
     0x400C01,  // Record Mixer Right (Mixer 2) Control 0 MUTE: RINN, RINP
@@ -26,16 +26,18 @@ unsigned long initVectors[] = {
     0x401A00,  // Left Input Digital Volume DEFAULT IF NOT WORKING CHANGE TO: x50
     0x401B00,  // Right Input Digital Volume DEFAULT IF NOT WORKING CHANGE TO: x50
     0x401C21,  // Playback Mixer Left (Mixer 3) Control 0 Mute: input R DAC, EN: input L DAC, Amp: 6 dB, IF NOT WORKING CHANGE TO: x01
-    0x401D06,  // Playback Mixer Left (Mixer 3) Control 1 IF NOT WORKING CHANGE TO: x00
+    0x401D00, // Playback Mixer Left (Mixer 3) Control 1 IF NOT WORKING CHANGE TO: x00
+    //0x401D06,
     0x401E41,  // Playback Mixer Right (Mixer 4) Control 0 Mute: input L DAC, EN: input R DAC, Amp: 6 dB IF NOT WORKING CHANGE TO: x01
-    0x401F60,  // Playback Mixer Right (Mixer 4) Control 1 DEFAULT IF NOT WORKING CHANGE TO: x00
+    0x401F00,  // Playback Mixer Right (Mixer 4) Control 1 DEFAULT IF NOT WORKING CHANGE TO: x00
+    //0x401F60,
     0x402005,  // Playback L/R Mixer Left (Mixer 5) Line Output Control Mute: input Mixer 4, en: input Mixer 3
-    0x402111,  // Playback L/R Mixer Right (Mixer 6) Line Output Control Mute: input Mixer 3, en: input Mixer 4
+    0x402101,  // Playback L/R Mixer Right (Mixer 6) Line Output Control Mute: input Mixer 3, en: input Mixer 4
     0x402200,  // Playback L/R Mixer Mono Output (Mixer 7) Control ENABLED, Amp: Mixer 3 and 4 IF NOT WORKING CHANGE TO: x05
     0x4023E7,  // Playback Headphone Left Volume Control Amp: 0dB, unmute headphone left IF NOT WORKING CHANGE TO: x00
     0x4024E7,  // Playback Headphone Right Volume Control Amp: 0dB, unmute headphone right, EN line output IF NOT WORKING CHANGE TO: x00
-    0x4025E6,  // Playback Line Output Left Volume Control | Amp: 0dB, unmute: LOUTN and LOUTP IF NOT WORKING CHANGE TO: xE7 for headphone out
-    0x4026E6,  // Playback Line Output Right Volume Control | Amp: 0dB, unmute: ROUTN and ROUTP IF NOT WORKING CHANGE TO: xE7 for headphone out
+    0x4025E7,  // Playback Line Output Left Volume Control | Amp: 0dB, unmute: LOUTN and LOUTP IF NOT WORKING CHANGE TO: xE7 for headphone out
+    0x4026E7,  // Playback Line Output Right Volume Control | Amp: 0dB, unmute: ROUTN and ROUTP IF NOT WORKING CHANGE TO: xE7 for headphone out
     0x402700,  // Playback Mono Output Control unmute Mono output IF NOT WORKING CHANGE TO: xE6
     0x402903,  // Playback Power Management | both Playbacks on
     0x402A03,  // DAC Control | both DACs on, both channels in mono mode IF NOT WORKING CHANGE TO: x33
@@ -392,15 +394,15 @@ void start_audio_codec_config(void) {
 
     printf("start audio codec confiuration");
 
-    //start_pll_config();
+    start_pll_config();
 
-/*
+
     if(check_pll_locked() == 1) {
       printf("PLL is locked.\n");
     } else {
       printf("PLL is not locked.\n");
     }
-  */ 
+
     for (int i = 0; i < INIT_VECTORS; i++) {
         unsigned long initWord = initVectors[i];
         unsigned char addr = (initWord >> 16) & 0xFF;
@@ -438,19 +440,20 @@ void start_audio_codec_config(void) {
 
 void test_ii2(void)
 {
-    printf("test_ii2 working?");
-        printf("read_SDA at beginning: %x \n", read_SDA());
-        printf("read_SCL at beginning: %x \n", read_SCL());
-        clear_SDA();
+    printf("test_ii2 working?\n");;
+
         clear_SCL();
+        clear_SDA();
+
         I2C_delay();
-        printf("read_SDA after disenabling: %x \n", read_SDA());
-        printf("read_SCL after disenabling: %x \n", read_SCL());
+
         set_SCL();
         set_SDA();
+
         I2C_delay();
-        printf("read_SDA after enabling: %x \n", read_SDA());
-        printf("read_SCL after enabling: %x \n", read_SCL());
+        
+        clear_SCL();
+        clear_SDA();
 
 }
 

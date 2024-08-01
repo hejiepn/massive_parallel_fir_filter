@@ -6,17 +6,17 @@ module student_fir_parallel #(
 	parameter int unsigned NUM_FIR = 2 //only numbers which are power of 2 are supported
 ) (
 	input logic clk_i,
-    input logic rst_ni,
+  input logic rst_ni,
 	input logic valid_strobe_in,
-    input logic [DATA_SIZE-1:0] sample_in,
+  input logic [DATA_SIZE-1:0] sample_in,
 
     //output logic compute_finished_out,
     //output logic [DATA_SIZE-1:0] sample_shift_out,
 	output logic valid_strobe_out,
-    output logic [DATA_SIZE_FIR_OUT+$clog2(NUM_FIR)-1:0] y_out,
+  output logic [DATA_SIZE_FIR_OUT-1:0] y_out,
 	
 	input  tlul_pkg::tl_h2d_t tl_i,  //master input (incoming request)
-    output tlul_pkg::tl_d2h_t tl_o  //slave output (this module's response)
+  output tlul_pkg::tl_d2h_t tl_o  //slave output (this module's response)
 );
 
   tlul_pkg::tl_h2d_t tl_student_fir_i[NUM_FIR:0];
@@ -172,7 +172,7 @@ module student_fir_parallel #(
 			end
 			if(waitAdder) begin
 				if(stageCounter == 0) begin
-					y_out <= adder_tree_y_out;
+					y_out <= adder_tree_y_out[DATA_SIZE_FIR_OUT-1:0];
 					valid_strobe_out <= '1;
 					waitAdder <= '0;
 					stageCounter <= stageNum;
@@ -196,9 +196,7 @@ module student_fir_parallel #(
 			hw2reg.fir_read_y_out_lower.de = 1'b0;
 		end else begin
 			if(valid_strobe_out) begin
-				hw2reg.fir_read_y_out_upper.d = adder_tree_y_out[DATA_SIZE_FIR_OUT-1:DATA_SIZE_FIR_OUT/2];
-				hw2reg.fir_read_y_out_upper.de = 1'b1;
-				hw2reg.fir_read_y_out_lower.d = adder_tree_y_out[DATA_SIZE_FIR_OUT/2-1:0];
+				hw2reg.fir_read_y_out_lower.d = {'0,adder_tree_y_out[DATA_SIZE_FIR_OUT-1:0]};
 				hw2reg.fir_read_y_out_lower.de = 1'b1;
 			end else begin
 				hw2reg.fir_read_y_out_upper.de = 1'b0;

@@ -90,9 +90,9 @@ module student_fir_tb;
 
     // Load the sin.mem file
 	if (DEBUGMODE == 1) begin
-		$readmemh("/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/rtl/student/data/sin_low_debug.mem", sin_mem);
+		$readmemh("/home/rvlab/groups/rvlab01/Desktop/dev_hejie_copy_2/risc-v-lab-group-01/src/rtl/student/data/sin_low_debug.mem", sin_mem);
 	end else begin
-		$readmemh("/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/fv/data/sin_comb.mem", sin_mem);
+		$readmemh("/home/rvlab/groups/rvlab01/Desktop/dev_hejie_copy_2/risc-v-lab-group-01/src/fv/data/sin_comb.mem", sin_mem);
 	end
 
 	bus.reset();

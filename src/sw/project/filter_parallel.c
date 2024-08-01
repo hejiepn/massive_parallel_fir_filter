@@ -23,5 +23,12 @@ void student_fir_s_write_in_samples(uint16_t sample) {
   }
 
  void student_fir_p_write_in_samples(uint16_t sample) {
-  	REG16(fir_p_write_in_samples) = sample;
+  	REG16(STUDENT_FIR_PARALLEL_FIR_WRITE_IN_SAMPLES(0)) = sample;
   }
+
+  uint32_t student_fir_p_read_y_out_upper(void) {
+    return REG32(fir_p_read_y_out_upper);
+  }
+uint32_t student_fir_p_read_y_out_lower(void) {
+  return REG32(fir_p_read_y_out_lower);
+}

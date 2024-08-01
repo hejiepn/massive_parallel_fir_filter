@@ -58,8 +58,8 @@ module student_fir #(
 
   // Define constants for memory definition
   localparam MAX_ADDR = 2 ** ADDR_WIDTH;
-  localparam ROM_FILE_COEFF = (DEBUGMODE == 1) ? "/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/rtl/student/data/coe_lp_debug.mem" : "/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/rtl/student/data/coe_lp.mem";  // File for memory initialization
-  localparam ROM_FILE_SAMPLES = (DEBUGMODE == 1) ? "/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/rtl/student/data/zeros.mem" : "/home/rvlab/groups/rvlab01/Desktop/dev_hejie/risc-v-lab-group-01/src/rtl/student/data/zeros.mem";
+  localparam ROM_FILE_COEFF = (DEBUGMODE == 1) ? "/home/rvlab/groups/rvlab01/Desktop/dev_hejie_copy_2/risc-v-lab-group-01/src/rtl/student/data/coe_lp_debug.mem" : "/home/rvlab/groups/rvlab01/Desktop/dev_hejie_copy_2/risc-v-lab-group-01/src/rtl/student/data/coe_lp.mem";  // File for memory initialization
+  localparam ROM_FILE_SAMPLES = (DEBUGMODE == 1) ? "/home/rvlab/groups/rvlab01/Desktop/dev_hejie_copy_2/risc-v-lab-group-01/src/rtl/student/data/zeros.mem" : "/home/rvlab/groups/rvlab01/Desktop/dev_hejie_copy_2/risc-v-lab-group-01/src/rtl/student/data/zeros.mem";
  
   // Read and write pointers
   logic [ADDR_WIDTH-1:0] wr_addr;
@@ -306,9 +306,7 @@ always_ff @(posedge clk_i, negedge rst_ni) begin
 		hw2reg.fir_read_y_out_lower.de = 1'b0;
 	end else begin
 		if (valid_strobe_out) begin
-			hw2reg.fir_read_y_out_upper.d = fir_sum[DATA_SIZE_FIR_OUT-1:DATA_SIZE_FIR_OUT/2];
-			hw2reg.fir_read_y_out_upper.de = 1'b1;
-			hw2reg.fir_read_y_out_lower.d = fir_sum[DATA_SIZE_FIR_OUT/2-1:0];
+			hw2reg.fir_read_y_out_lower.d = {'0,fir_sum};
 			hw2reg.fir_read_y_out_lower.de = 1'b1;
 		end else begin
 			hw2reg.fir_read_y_out_upper.de = 1'b0;

@@ -53,8 +53,8 @@
 #define STUDENT_FIR3_BASE_ADDR_s 0x10230000
 #define STUDENT_FIR3_BASE_ADDR_c 0x10231000
 
-#include "reggen/irq_ctrl.h"
-#define IRQ_CTRL0_BASE_ADDR 0x10400000
+#include "reggen/student_iis_handler.h"
+#define STUDENT_IIS_HANDLER0_BASE_ADDR 0x10300000
 
 
 #endif // _RVLAB_H
