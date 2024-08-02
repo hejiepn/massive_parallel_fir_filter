@@ -1,0 +1,65 @@
+{
+  name: "student_iis_handler"
+  clock_primary: "sys_clk"
+  bus_device: "tlul"
+  regwidth: "32"
+  registers: [
+    {
+      name: "serial_in"
+      desc: "send Serial Bits into IIS Handler"
+      swaccess: "wo"
+      hwaccess: "hro"
+      hwqe : "true"
+      fields: [
+        {bits: "15:0", name: "IIS_S_IN", desc: "send Serial Bits into IIS Handler"}
+      ]
+    }
+	{
+      name: "pcm_out_left"
+      desc: "read PCM Bits which are sent to fir for left channel"
+      swaccess: "ro"
+      hwaccess: "hwo"
+      fields: [
+        {bits: "15:0", name: "iis_to_fir_left", desc: "send PCM Bits in IIS Handler"}
+      ]
+    }
+	{
+      name: "pcm_out_right"
+      desc: "read PCM Bits which are sent to fir for right channel"
+      swaccess: "ro"
+      hwaccess: "hwo"
+      fields: [
+        {bits: "15:0", name: "iis_to_fir_right", desc: "send PCM Bits in IIS Handler"}
+      ]
+    }
+	{
+      name: "serial_out"
+      desc: "read Serial Bits out from IIS Handler"
+      swaccess: "ro"
+      hwaccess: "hwo"
+      fields: [
+        {bits: "23:0", name: "IIS_S_OUT", desc: "read Serial Bits out from IIS Handler"}
+      ]
+    }
+	{
+      name: "pcm_in_left"
+      desc: "send PCM Bits which would come from fir from left channel"
+      swaccess: "wo"
+      hwaccess: "hro"
+      hwqe : "true"
+      fields: [
+        {bits: "23:0", name: "fir_to_iis_left", desc: "read PCM Bits out of IIS Handler"}
+      ]
+    }
+		{
+      name: "pcm_in_right"
+      desc: "send PCM Bits which would come from fir from right channel"
+      swaccess: "wo"
+      hwaccess: "hro"
+      hwqe : "true"
+      fields: [
+        {bits: "23:0", name: "fir_to_iis_right", desc: "read PCM Bits out of IIS Handler"}
+      ]
+    }
+  ]
+}

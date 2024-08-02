@@ -16,6 +16,13 @@ module student (
   output tlul_pkg::tl_h2d_t tl_host_o
 );
 
+
+localparam int unsigned ADDR_WIDTH = 10;
+localparam int unsigned DATA_SIZE = 16;
+localparam int unsigned DATA_SIZE_FIR_OUT = 24;
+localparam int unsigned DEBUGMODE = 0;
+localparam int unsigned NUM_FIR = 8; //only numbers which are power of 2 are supported
+
   // ------ IIC -------
 	logic sda_i;
 	logic scl_i;
@@ -50,7 +57,7 @@ module student (
   assign irq_o         = '0;
 
   // ------ TLUL MUX -------
-  localparam TLUL_DEVICES = 2;
+  localparam TLUL_DEVICES = 4;
 
   tlul_pkg::tl_h2d_t tl_student_i[TLUL_DEVICES-1:0];
   tlul_pkg::tl_d2h_t tl_student_o[TLUL_DEVICES-1:0];
@@ -96,6 +103,70 @@ module student (
   	.scl_oe(scl_oe),
 	.tl_o(tl_student_o[1]),
    	.tl_i(tl_student_i[1])
+);
+  
+  logic valid_strobe_2FIR;
+  logic [DATA_SIZE-1:0] Data_iis_O_L;
+  logic [DATA_SIZE-1:0] Data_iis_O_R;
+  logic valid_strobe_out;
+  logic [DATA_SIZE_FIR_OUT-1:0] y_out_l;
+  logic [DATA_SIZE_FIR_OUT-1:0] y_out_r;
+  logic [DATA_SIZE-1:0] sample_shift_out;
+
+	student_fir_parallel #(
+	.ADDR_WIDTH(ADDR_WIDTH),
+	.DATA_SIZE(DATA_SIZE),
+	.DEBUGMODE(DEBUGMODE),
+	.DATA_SIZE_FIR_OUT(DATA_SIZE_FIR_OUT),
+	.NUM_FIR(NUM_FIR) 
+	) dut_fir_parallel_left(
+	.clk_i(clk_i),
+    .rst_ni(rst_ni),
+	.valid_strobe_in(valid_strobe_2FIR),
+    .sample_in(Data_iis_O_L),
+	.valid_strobe_out(valid_strobe_out),
+    .y_out(y_out_l),
+	.tl_i(tl_student_i[2]),  //master input (incoming request)
+	.tl_o(tl_student_o[2])  //slave output (this module's response)
+);
+
+// 	student_fir #(
+// 	.ADDR_WIDTH(ADDR_WIDTH),
+// 	.DATA_SIZE(DATA_SIZE),
+// 	.DEBUGMODE(DEBUGMODE),
+// 	.DATA_SIZE_FIR_OUT(DATA_SIZE_FIR_OUT)
+// 	) fir_single (	
+//      .clk_i(clk_i),
+//      .rst_ni(rst_ni),
+//      .valid_strobe_in(valid_strobe_2FIR),
+//      .sample_in(Data_iis_O_L),
+//      .sample_shift_out(sample_shift_out),
+// 	 .valid_strobe_out(valid_strobe_out),
+//      .y_out(y_out_l),
+// 	 .tl_i(tl_student_i[2]),
+//      .tl_o(tl_student_o[2])
+// );
+
+	student_iis_handler_top #(
+	 .DATA_SIZE(DATA_SIZE),
+	 .DATA_SIZE_FIR_OUT(DATA_SIZE_FIR_OUT)
+  ) dut_student_iis (
+    .clk_i(clk_i),
+    .rst_ni(rst_ni),
+    .AC_MCLK(mclk),       // Codec Master Clock
+    .AC_BCLK(bclk),       // Codec Bit Clock
+    .AC_LRCLK(lrclk),      // Codec Left/Right Clock
+    .AC_ADC_SDATA(userio_i.ac_adc_sdata),  // Codec ADC Serial Data
+    .AC_DAC_SDATA(dac_sdata),  // Codec DAC Serial Data
+	
+  	.Data_I_R('0), 	 	//Data from HW to Codec (mono Channel)
+    .Data_I_L(y_out_l),
+  	.Data_O_L(Data_iis_O_L),	 //Data from Codec to HW (mono Channel)
+    .Data_O_R(Data_iis_O_R),
+  	.valid_strobe_I(valid_strobe_out), // Valid strobe from HW
+  	.valid_strobe(valid_strobe_2FIR),    // Valid strobe to HW
+    .tl_i(tl_student_i[3]),  //master input (incoming request)
+    .tl_o(tl_student_o[3])  //slave output (this module's response)
 );
 
 endmodule
