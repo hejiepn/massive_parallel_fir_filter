@@ -25,13 +25,14 @@ adder_tree #(
 ) at (
   .clk( clk_i ),
   .nrst( rst_ni ),
-  .idata( { 16'h0002,
-			16'h0002,
-			16'h0001,
-			16'h0001,
-			16'h0001,
-			16'h0001,
-			16'h0001} ),
+  .idata( { 
+      16'h0000,
+			16'h0000,
+			16'h0000,
+			16'h0000,
+			16'h0000,
+			16'h0000,
+			16'h0000} ),
   .odata(odata)
 );
 
@@ -51,9 +52,11 @@ adder_tree #(
 
 	$display("wait for adder tree to finish");
 
-	#1000000;
+	#10000;
 
 	$display("odata", odata);
+
+  $finish;
 
   end
 

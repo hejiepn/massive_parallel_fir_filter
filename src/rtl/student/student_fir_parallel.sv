@@ -2,7 +2,7 @@ module student_fir_parallel #(
 	parameter int unsigned ADDR_WIDTH = 10,
 	parameter int unsigned DATA_SIZE = 16,
 	parameter int unsigned DEBUGMODE = 0,
-	parameter int unsigned DATA_SIZE_FIR_OUT = 32,
+	parameter int unsigned DATA_SIZE_FIR_OUT = 24,
 	parameter int unsigned NUM_FIR = 2 //only numbers which are power of 2 are supported
 ) (
 	input logic clk_i,
@@ -13,7 +13,7 @@ module student_fir_parallel #(
     //output logic compute_finished_out,
     //output logic [DATA_SIZE-1:0] sample_shift_out,
 	output logic valid_strobe_out,
-    output logic [DATA_SIZE_FIR_OUT+$clog2(NUM_FIR)-1:0] y_out,
+    output logic [DATA_SIZE_FIR_OUT-1:0] y_out,
 	
 	input  tlul_pkg::tl_h2d_t tl_i,  //master input (incoming request)
     output tlul_pkg::tl_d2h_t tl_o  //slave output (this module's response)
@@ -57,7 +57,6 @@ module student_fir_parallel #(
   logic valid_strobe_out_internal[NUM_FIR-1:0];
   logic [NUM_FIR-1:0] [DATA_SIZE_FIR_OUT-1:0] y_out_internal;
   logic [DATA_SIZE-1:0] sample_in_internal_first;
-
  
     // Edge detection for valid_strobe_in
   logic valid_strobe_in_prev;
@@ -71,8 +70,33 @@ module student_fir_parallel #(
     end
   end
 
-  assign valid_strobe_in_pos_edge = reg2hw.fir_write_in_samples.qe? 1'b1 : valid_strobe_in && ~valid_strobe_in_prev;
-  assign sample_in_internal_first = reg2hw.fir_write_in_samples.qe? reg2hw.fir_write_in_samples.q : sample_in;
+  //assign valid_strobe_in_pos_edge = reg2hw.fir_write_in_samples.qe? 1'b1 : valid_strobe_in && ~valid_strobe_in_prev;
+  //assign sample_in_internal_first = reg2hw.fir_write_in_samples.qe? reg2hw.fir_write_in_samples.q : sample_in;
+
+ assign valid_strobe_in_pos_edge = valid_strobe_in && ~valid_strobe_in_prev;
+ //assign sample_in_internal_first = sample_in;
+
+ logic useTlulSample;
+
+  always_ff @(posedge clk_i, negedge rst_ni) begin
+	if (~rst_ni) begin
+	  sample_in_internal_first <= '0;
+	  useTlulSample <= 1'b0;
+	end else begin
+	  if (reg2hw.fir_write_in_samples.qe) begin
+		useTlulSample <= 1'b1;
+	  end
+	  if(valid_strobe_in_pos_edge) begin
+			if(useTlulSample) begin
+				sample_in_internal_first <= reg2hw.fir_write_in_samples.q;
+			//$display("fir_write_in_samples.q: %4x", reg2hw.fir_write_in_samples.q);
+				useTlulSample <= 1'b0;
+			end else begin
+				sample_in_internal_first <= sample_in;
+			end
+	  end
+	end
+  end
 
 	genvar i;
 	generate
@@ -115,6 +139,7 @@ module student_fir_parallel #(
 		end
 	endgenerate
 
+
 	always_ff @(posedge clk_i, negedge rst_ni) begin
 		if (~rst_ni) begin
 			for (int i = 0; i < NUM_FIR; i++) begin
@@ -128,6 +153,7 @@ module student_fir_parallel #(
 			end
 		end
 	end
+
 
 	always_ff @(posedge clk_i, negedge rst_ni) begin
 		if (~rst_ni) begin
@@ -172,7 +198,7 @@ module student_fir_parallel #(
 			end
 			if(waitAdder) begin
 				if(stageCounter == 0) begin
-					y_out <= adder_tree_y_out;
+					y_out <= adder_tree_y_out[DATA_SIZE_FIR_OUT-1:0];
 					valid_strobe_out <= '1;
 					waitAdder <= '0;
 					stageCounter <= stageNum;
@@ -196,9 +222,7 @@ module student_fir_parallel #(
 			hw2reg.fir_read_y_out_lower.de = 1'b0;
 		end else begin
 			if(valid_strobe_out) begin
-				hw2reg.fir_read_y_out_upper.d = adder_tree_y_out[DATA_SIZE_FIR_OUT-1:DATA_SIZE_FIR_OUT/2];
-				hw2reg.fir_read_y_out_upper.de = 1'b1;
-				hw2reg.fir_read_y_out_lower.d = adder_tree_y_out[DATA_SIZE_FIR_OUT/2-1:0];
+				hw2reg.fir_read_y_out_lower.d = adder_tree_y_out[DATA_SIZE_FIR_OUT-1:0];
 				hw2reg.fir_read_y_out_lower.de = 1'b1;
 			end else begin
 				hw2reg.fir_read_y_out_upper.de = 1'b0;

@@ -34,8 +34,7 @@
  *
  **/
 #include "reggen/student_fir_parallel.h"
-#define STUDENT_FIR_PARALLEL0_BASE_ADDR 0x10240000
-#define STUDENT_FIR_PARALLEL1_BASE_ADDR 0x10340000
+#define STUDENT_FIR_PARALLEL0_BASE_ADDR 0x10280000
 
 
 

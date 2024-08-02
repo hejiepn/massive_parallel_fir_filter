@@ -12,8 +12,8 @@ module student_fir_parallel_tb;
   localparam int dpram_coeff_address = 1;
   localparam int fir_reg_address = 2;
 
-  localparam int sample_write_in_reg = 32'h10080000;
-  localparam int sample_shift_out_reg = 32'h10080004;
+  localparam int sample_write_in_reg = 32'h00080000;
+  localparam int sample_shift_out_reg = 32'h00080004;
   localparam int y_out_upper_reg = 32'h10080008;
   localparam int y_out_lower_reg = 32'h1008000C;
 

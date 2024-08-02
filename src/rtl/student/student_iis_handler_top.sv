@@ -23,11 +23,8 @@ module student_iis_handler_top #(
 	output logic [DATA_SIZE-1:0] Data_O_L, //Data from Codec to HW (mono Channel)
 	output logic [DATA_SIZE-1:0] Data_O_R, //Data from Codec to HW (mono Channel)
 
-	// To HW
 	input  tlul_pkg::tl_h2d_t tl_i,
-	// From HW
 	output tlul_pkg::tl_d2h_t tl_o,  
-
 	output logic valid_strobe   // Valid strobe to HW
 
 );

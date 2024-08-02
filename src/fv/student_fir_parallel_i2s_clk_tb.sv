@@ -1,22 +1,27 @@
-module student_fir_i2s_clk_tb;
+module student_fir_parallel_i2s_clk_tb;
 
   localparam int AddrWidth = 10; // Address width
   localparam int MaxAddr = 2**AddrWidth; // Maximum address
   localparam int DATA_SIZE = 16; // Data size
   localparam int DEBUGMODE = 0; // activate debugMode when AddrWidth != 10 
   localparam int DATA_SIZE_FIR_OUT = 24; // activate debugMode when AddrWidth != 10
-  localparam int dpram_tlul_offset = 12;
   localparam int dpram_no_inside_fir = 2;
   localparam int dpram_samples_address = 0;
   localparam int dpram_coeff_address = 1;
   localparam int fir_reg_address = 2;
   localparam int SramAw = 12;
+  localparam int NUM_FIR = 8;
+  localparam int firtlulOffset = 16;
+  localparam int dpram_tlul_offset = 12;
+  localparam int dpram_address_offset_max = 11;
+  localparam int dpram_address_offset_min = 2; 
 
   
-  localparam int sample_write_in_reg = 32'h10002000;
-  localparam int sample_shift_out_reg = 32'h10002004;
-  localparam int y_out_upper_reg = 32'h10002008;
-  localparam int y_out_lower_reg = 32'h1000200C;
+  // the 19-16 bits are depended from NUM_FIR
+  localparam int sample_write_in_reg = 32'h10080000;
+  localparam int sample_shift_out_reg = 32'h10080004;
+  localparam int y_out_upper_reg = 32'h10080008;
+  localparam int y_out_lower_reg = 32'h1008000C;
 
   // Clock and reset signals
   logic clk_i;
@@ -51,21 +56,23 @@ module student_fir_i2s_clk_tb;
   logic AC_BCLK;
   logic BCLK_Fall;
   logic BCLK_Rise;
+  logic round_begin;
+
+  logic [31:0] address_fir_single;
 
 
   // Instantiate the DUT (Device Under Test)
-  student_fir #(
+  student_fir_parallel #(
 	.ADDR_WIDTH(AddrWidth),
 	.DATA_SIZE(DATA_SIZE),
 	.DEBUGMODE(DEBUGMODE),
-	.DATA_SIZE_FIR_OUT(DATA_SIZE_FIR_OUT)
-  ) dut (
+	.DATA_SIZE_FIR_OUT(DATA_SIZE_FIR_OUT),
+	.NUM_FIR(NUM_FIR)
+  ) dut_fir_parallel (
     .clk_i(clk_i),
     .rst_ni(rst_ni),
     .valid_strobe_in(valid_strobe_in),
     .sample_in(sample_in),
-    // .compute_finished_out(compute_finished_out),
-    .sample_shift_out(sample_shift_out),
     .valid_strobe_out(valid_strobe_out),
     .y_out(y_out),
 	.tl_i(tl_h2d),
@@ -110,6 +117,7 @@ module student_fir_i2s_clk_tb;
     clk_i = 0;
     valid_strobe_in = 0;
     sample_in = 0;
+    round_begin =0;
 
     // Load the sin.mem file
 	if (DEBUGMODE == 1) begin
@@ -127,81 +135,82 @@ module student_fir_i2s_clk_tb;
 
 	// Apply test stimulus
 	$display("Apply test stimulus:");
-	for(int j= 0; j < 4; j = j+1) begin
-		for (int i = 0; i < MaxAddr; i = i + 1) begin
-			sample_in = {8'b0, sin_mem[i]}; // Zero-pad the 8-bit value to 16 bits
-			@(posedge LRCLK_Rise);
-			valid_strobe_in <= 1;
-			counting = 1;
-			@(posedge LRCLK_Fall);
-			valid_strobe_in <= 0;
-			wait(valid_strobe_out == 1); // Wait for valid_strobe_out to go high
-			counting = 0;
-			$display("Number of clock cycles from valid_strobe_in to valid_strobe_out: %0d", clk_count);
-			clk_count = 0; // Reset counter for next iteration
-			//read sample_shift_out_internal
-			bus.get_word(sample_shift_out_reg, tlul_read_data);
-			//read y out
-			bus.get_word(y_out_upper_reg, tlul_read_data);
-			bus.get_word(y_out_lower_reg, tlul_read_data);
-			@(posedge clk_i);
-		end
+	
+/*
+	for (int i = 0; i < MaxAddr; i = i + 1) begin
+		sample_in = {'0, sin_mem[i]}; // Zero-pad the 8-bit value to 16 bits
+		@(posedge LRCLK_Rise);
+		valid_strobe_in <= 1;
+		counting = 1;
+		@(posedge LRCLK_Fall);
+		valid_strobe_in <= 0;
+		wait(valid_strobe_out == 1); // Wait for valid_strobe_out to go high
+		counting = 0;
+		$display("Number of clock cycles from valid_strobe_in to valid_strobe_out: %0d", clk_count);
+		clk_count = 0; // Reset counter for next iteration
+		bus.get_word(sample_shift_out_reg, tlul_read_data);
+		bus.get_word(y_out_upper_reg, tlul_read_data);
+		bus.get_word(y_out_lower_reg, tlul_read_data);
+		@(posedge clk_i);
 	end
-
-	/*
-
-	//apply tlul write on coeff dpram:
-	$display("Apply tlul write on coeff dpram:");
-	for (int i = 0; i < MaxAddr; i++) begin
-		address_sram = 32'h00000000; // Basisadresse setzen
-		address_sram[31:24] = 8'h10; // Aktuelle Geräteadresse setzen
-		address_sram[23:dpram_tlul_offset+4] = '0; // Bereich auf Null setzen
-		address_sram[dpram_tlul_offset+4-1:dpram_tlul_offset] = dpram_coeff_address; // tlul_dpram_device auswählen
-		address_sram[11:2] = i; // Adresse innerhalb des dpram setzen
-		address_sram[1:0] = '0; // Niedrigste zwei Bits auf Null setzen	
-		$display("address_sram: %4x", address_sram);
-		$display("address sram: %d",i);
-		// address_sram[dpram_tlul_offset-1:SramAw+1] = '0; // Bereich auf Null setzen
-		// address_sram[SramAw+2-1:2] = i; // Adresse innerhalb des dpram setzen
-		// address_sram[1:0] = '0; // Niedrigste zwei Bits auf Null setzen		
-		tlul_write_data = {'0,8'haa};
-		bus.put_word(address_sram, tlul_write_data);
-		bus.get_word(address_sram, tlul_read_data);
-		$display("tlul_read_data: %4x and expected_data: %4x",tlul_read_data, tlul_write_data);
-		if (tlul_read_data !== tlul_write_data) begin
-			$display("Fehler: Erwartet %0d, aber tlul_read_data ist %h", tlul_write_data, tlul_read_data);
-			error_flag = 1;
-		end
-	end
-
-
-
-	//apply tlul write on samples dpram:
-	$display("Apply tlul write on samples dpram:");
-	for (int i = 0; i < MaxAddr; i++) begin
-		address_sram = 32'h00000000; // Basisadresse setzen
-		address_sram[31:24] = 8'h10; // Aktuelle Geräteadresse setzen
-		address_sram[23:dpram_tlul_offset+4] = '0; // Bereich auf Null setzen
-		address_sram[dpram_tlul_offset+4-1:dpram_tlul_offset] = dpram_samples_address; // tlul_dpram_device auswählen
-		address_sram[11:2] = i; // Adresse innerhalb des dpram setzen
-		address_sram[1:0] = '0; // Niedrigste zwei Bits auf Null setzen	
-		// address_sram[dpram_tlul_offset-1:2+2] = '0; // Bereich auf Null setzen
-		// address_sram[2+1:2] = i; // Adresse innerhalb des dpram setzen
-		// address_sram[1:0] = '0; // Niedrigste zwei Bits auf Null setzen		
-		tlul_write_data = {'0,8'h00};
-		bus.put_word(address_sram, tlul_write_data);
-		bus.get_word(address_sram, tlul_read_data);
-		$display("tlul_read_data: %4x and expected_data: %4x",tlul_read_data, tlul_write_data);
-		if (tlul_read_data !== tlul_write_data) begin
-			$display("Fehler: Erwartet %0d, aber tlul_read_data ist %h", tlul_write_data, tlul_read_data);
-			error_flag = 1;
-		end
-	end
+	
 
 	// Apply test stimulus with tlul sample in
 	$display("Apply test stimulus with tlul sample in");
 	for (int i = 0; i < MaxAddr; i = i + 1) begin
-		bus.put_word(sample_write_in_reg, {16'hffaa});
+		 bus.put_word(sample_write_in_reg, 16'hFFaa);
+		@(posedge LRCLK_Rise);
+		valid_strobe_in <= 1;
+		counting = 1;
+		@(posedge LRCLK_Fall);
+		valid_strobe_in <= 0;
+		wait(valid_strobe_out == 1); // Wait for valid_strobe_out to go high
+		counting = 0;
+		$display("Number of clock cycles from valid_strobe_in to valid_strobe_out: %0d", clk_count);
+		clk_count = 0; // Reset counter for next iteration
+		//read sample_shift_out_internal
+		bus.get_word(sample_shift_out_reg, tlul_read_data);
+		//read y out
+		bus.get_word(y_out_upper_reg, tlul_read_data);
+		bus.get_word(y_out_lower_reg, tlul_read_data);
+		@(posedge clk_i);
+  	end
+  */
+
+// Apply test stimulus with tlul sample in
+	$display("Apply test stimulus with tlul sample in");
+	for (int i = 0; i < MaxAddr; i = i + 1) begin
+		
+		//write into single fir register
+		
+		for(int j = 0; j < NUM_FIR; j = j + 1) begin
+			address_fir_single[31:firtlulOffset+4] = 12'h100;
+			address_fir_single[firtlulOffset+3:firtlulOffset] = j;
+			address_fir_single[firtlulOffset-1:dpram_tlul_offset] = 2;
+			address_fir_single[dpram_tlul_offset-1:0] = '0;
+			bus.put_word(address_fir_single, 16'hF0F0);
+		end
+		
+		//write into single fir dpram sample
+		for(int j = 0; j < NUM_FIR; j = j + 1) begin
+			address_fir_single[31:firtlulOffset+4] = 12'h100;
+			address_fir_single[firtlulOffset+3:firtlulOffset] = j;
+			address_fir_single[firtlulOffset-1:dpram_tlul_offset] = 0;
+			address_fir_single[dpram_address_offset_max:dpram_address_offset_min] = i;
+			address_fir_single[dpram_address_offset_min-1:0] = '0;
+			bus.put_word(address_fir_single, 16'hcaca);
+		end
+		//write into single fir dpram coeff
+		for(int j = 0; j < NUM_FIR; j = j + 1) begin
+			address_fir_single[31:firtlulOffset+4] = 12'h100;
+			address_fir_single[firtlulOffset+3:firtlulOffset] = j;
+			address_fir_single[firtlulOffset-1:dpram_tlul_offset] = 1;
+			address_fir_single[dpram_address_offset_max:dpram_address_offset_min] = i;
+			address_fir_single[dpram_address_offset_min-1:0] = '0;
+			bus.put_word(address_fir_single, 16'hdbdb);
+		end
+
+		bus.put_word(sample_write_in_reg, 16'hFFaa);
 		@(posedge LRCLK_Rise);
 		valid_strobe_in <= 1;
 		counting = 1;
@@ -221,7 +230,6 @@ module student_fir_i2s_clk_tb;
 
     // Finish simulation
     #200000;
-    */
 
 	// Testresultat
 	if (error_flag) begin

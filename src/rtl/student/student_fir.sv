@@ -120,7 +120,7 @@ module student_fir #(
 	  if(valid_strobe_in_pos_edge) begin
 		if(useTlulSample) begin
 			sample_in_internal <= reg2hw.fir_write_in_samples.q;
-			$display("fir_write_in_samples.q: %4x", reg2hw.fir_write_in_samples.q);
+			//$display("fir_write_in_samples.q: %4x", reg2hw.fir_write_in_samples.q);
 			useTlulSample <= 1'b0;
 		end else begin
 			sample_in_internal <= sample_in;
@@ -294,10 +294,10 @@ end
 				// $display("fir_state: Compute");
 				// $display("wr_addr: %4x rd_addr: %4x rd_addr_c: %4x", wr_addr, rd_addr, rd_addr_c);
 				// $display("enb_samples: %1x enb_coeff: %1x", enb_samples, enb_coeff);
-				// $display("fir_sum: %d read_sample: %4x read_coeff: %4x", fir_sum, read_sample, read_coeff);
-
+				//$display("fir_sum: %d read_sample: %4x read_coeff: %4x", fir_sum, read_sample, read_coeff);
 				fir_sum <= fir_sum + read_sample * read_coeff;
-				if( rd_addr == wr_addr) begin
+				//if( rd_addr == wr_addr) begin
+				if(rd_addr == wr_addr && rd_addr_c == MAX_ADDR-1) begin
 					sample_shift_out <= read_sample;
 					hw2reg.fir_read_shift_out_samples.d = read_sample;
 					hw2reg.fir_read_shift_out_samples.de = 1'b1;
