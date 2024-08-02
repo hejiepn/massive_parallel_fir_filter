@@ -70,6 +70,7 @@ module_tbs = [
 	"student_fir_i2s_clk_tb",
     "student_fir_parallel_i2s_clk_tb",
     "student_fir_DAC_SDATA_tb",
+    "sine_wave_output_tb",
 ]
 
 for name in module_tbs:

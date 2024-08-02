@@ -22,6 +22,7 @@ module student_fir_parallel_i2s_clk_tb;
   localparam int sample_shift_out_reg = 32'h10080004;
   localparam int y_out_upper_reg = 32'h10080008;
   localparam int y_out_lower_reg = 32'h1008000C;
+  localparam int STUDENT_FIR_PARALLEL_SINE_ENABLE = 32'h10080010;
 
   // Clock and reset signals
   logic clk_i;
@@ -177,6 +178,14 @@ module student_fir_parallel_i2s_clk_tb;
   	end
   */
 
+
+	$display("use sine wave signal");
+		bus.put_word(STUDENT_FIR_PARALLEL_SINE_ENABLE, 32'd1);
+    #200000;
+    	bus.put_word(STUDENT_FIR_PARALLEL_SINE_ENABLE, 32'd0);
+    	$display("use sine wave signal end");
+
+
 // Apply test stimulus with tlul sample in
 	$display("Apply test stimulus with tlul sample in");
 	for (int i = 0; i < MaxAddr; i = i + 1) begin
@@ -226,10 +235,14 @@ module student_fir_parallel_i2s_clk_tb;
 		bus.get_word(y_out_upper_reg, tlul_read_data);
 		bus.get_word(y_out_lower_reg, tlul_read_data);
 		@(posedge clk_i);
-  	end
+  
+  end
 
     // Finish simulation
-    #200000;
+
+
+
+
 
 	// Testresultat
 	if (error_flag) begin

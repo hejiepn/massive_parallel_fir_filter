@@ -45,7 +45,7 @@ add wave -noupdate -group fir_parallel /student_fir_parallel_i2s_clk_tb/dut_fir_
 add wave -noupdate -group fir_parallel /student_fir_parallel_i2s_clk_tb/dut_fir_parallel/stageNum
 add wave -noupdate -group fir_parallel /student_fir_parallel_i2s_clk_tb/dut_fir_parallel/stageCounter
 add wave -noupdate -group fir_parallel /student_fir_parallel_i2s_clk_tb/dut_fir_parallel/waitAdder
-add wave -noupdate -subitemconfig {{/student_fir_parallel_i2s_clk_tb/dut_fir_parallel/fir[0]/genblk1/fir_i_first/reg2hw.fir_write_in_samples} -expand} {/student_fir_parallel_i2s_clk_tb/dut_fir_parallel/fir[0]/genblk1/fir_i_first/reg2hw}
+add wave -noupdate {/student_fir_parallel_i2s_clk_tb/dut_fir_parallel/fir[0]/genblk1/fir_i_first/reg2hw}
 add wave -noupdate {/student_fir_parallel_i2s_clk_tb/dut_fir_parallel/fir[0]/genblk1/fir_i_first/hw2reg}
 add wave -noupdate {/student_fir_parallel_i2s_clk_tb/dut_fir_parallel/fir[0]/genblk1/fir_i_first/sample_in_internal}
 add wave -noupdate {/student_fir_parallel_i2s_clk_tb/dut_fir_parallel/fir[1]/genblk1/fir_i_middle/reg2hw}
@@ -63,6 +63,10 @@ add wave -noupdate -group fir0_bram_samples {/student_fir_parallel_i2s_clk_tb/du
 add wave -noupdate -group fir4_bram_coeff {/student_fir_parallel_i2s_clk_tb/dut_fir_parallel/fir[4]/genblk1/fir_i_middle/coeff_dpram/req}
 add wave -noupdate -group fir4_bram_coeff {/student_fir_parallel_i2s_clk_tb/dut_fir_parallel/fir[4]/genblk1/fir_i_middle/coeff_dpram/we}
 add wave -noupdate -group fir4_bram_coeff {/student_fir_parallel_i2s_clk_tb/dut_fir_parallel/fir[4]/genblk1/fir_i_middle/coeff_dpram/dpram_samples/bram}
+add wave -noupdate /student_fir_parallel_i2s_clk_tb/dut_fir_parallel/useSineWave
+add wave -noupdate /student_fir_parallel_i2s_clk_tb/dut_fir_parallel/y_out_int_int
+add wave -noupdate /student_fir_parallel_i2s_clk_tb/dut_fir_parallel/y_out
+add wave -noupdate /student_fir_parallel_i2s_clk_tb/dut_fir_parallel/y_out_internal
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {5362080000000 fs} 0}
 quietly wave cursor active 1
@@ -80,4 +84,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {0 fs} {43934740262831 fs}
+WaveRestoreZoom {0 fs} {66963491381562 fs}

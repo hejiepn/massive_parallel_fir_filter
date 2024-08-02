@@ -41,5 +41,15 @@
         {bits: "31:0", name: "read y out lower", desc: "read fir y_out lower half"}
       ]
     }
+    {
+      name: "sine_enable"
+      desc: "use the sine generator to output data"
+      swaccess: "wo"
+      hwaccess: "hro"
+      hwqe: "true"
+      fields: [
+        {bits: "0", name: "use sine", desc: "choose to use sin gen or not"}
+      ]
+    }
   ]
 }

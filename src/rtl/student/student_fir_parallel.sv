@@ -52,6 +52,15 @@ module student_fir_parallel #(
 	.devmode_i(1'b1)
   );
 
+  logic [23:0] sine_wave_output_int;
+
+  sine_wave_output sine_wave_ins (
+    .clk(clk_i),
+    .rst_ni(rst_ni),
+    .sine_wave_out(sine_wave_output_int)
+);
+
+
   logic [DATA_SIZE-1:0] sample_shift_out_internal[NUM_FIR-1:0];
   logic [DATA_SIZE-1:0] sample_shift_in_internal[NUM_FIR-1:0];
   logic valid_strobe_out_internal[NUM_FIR-1:0];
@@ -186,9 +195,11 @@ module student_fir_parallel #(
 	logic [31:0] stageCounter;
 	logic waitAdder;
 
+	logic [DATA_SIZE_FIR_OUT-1:0] y_out_int_int;
+
 	always_ff @(posedge clk_i, negedge rst_ni) begin
 		if (~rst_ni) begin
-			y_out <= '0;
+			y_out_int_int <= '0;
 			valid_strobe_out <= '0;
 			stageCounter <= stageNum;
 			waitAdder <= '0;
@@ -198,7 +209,7 @@ module student_fir_parallel #(
 			end
 			if(waitAdder) begin
 				if(stageCounter == 0) begin
-					y_out <= adder_tree_y_out[DATA_SIZE_FIR_OUT-1:0];
+					y_out_int_int <= adder_tree_y_out[DATA_SIZE_FIR_OUT-1:0];
 					valid_strobe_out <= '1;
 					waitAdder <= '0;
 					stageCounter <= stageNum;
@@ -227,6 +238,24 @@ module student_fir_parallel #(
 			end else begin
 				hw2reg.fir_read_y_out_upper.de = 1'b0;
 				hw2reg.fir_read_y_out_lower.de = 1'b0;
+			end
+		end
+	end
+
+
+logic useSineWave;
+	
+	always_ff @(posedge clk_i or negedge rst_ni) begin : proc_en_sine_wave
+		if(~rst_ni) begin
+			 useSineWave <= '0;
+		end else begin
+			if(reg2hw.sine_enable.qe) begin
+				useSineWave <= reg2hw.sine_enable.q;
+			end
+			if(useSineWave) begin
+				y_out <= sine_wave_output_int;
+			end else begin
+				y_out <= y_out_int_int;
 			end
 		end
 	end
