@@ -54,6 +54,22 @@ flow['rvlab_fpga_top'] = RvlabFpgaTop(dependency_map={'srcs':'srcs'})
 module_tbs = [
     "student_rlight_tb",
     "student_tlul_mux_tb",
+	"student_iis_handler_top_tb",
+	"student_iic_ctrl_tb",
+	"student_dpram_samples_tb",
+	"student_dpram_coeff_tb",
+	"student_fir_tb",
+	"student_dpram_samples_tlul_tb",
+	"student_dpram_coeff_tlul_tb",
+	"adder_tree_tb",
+	"student_fir_parallel_tb",
+	"student_iis_receiver_tb",
+	"student_iis_clock_gen_tb",
+    "student_iis_handler_stereo_tb",
+	"student_fir_i2s_clk_tb",
+    "student_fir_parallel_i2s_clk_tb",
+    "student_fir_DAC_SDATA_tb",
+    "sine_wave_output_tb",
 ]
 
 for name in module_tbs:

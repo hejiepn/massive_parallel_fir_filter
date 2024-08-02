@@ -9,7 +9,6 @@ module student_dma (
   output tlul_pkg::tl_h2d_t tl_host_o
 );
   import student_dma_reg_pkg::*;
-  import prim_pkg::*; // import fifo
 
   // Signals & types
   // ---------------
@@ -56,35 +55,6 @@ module student_dma (
     .hw2reg,
     .devmode_i('1)
   );
-  
-  // FIFO signals
-  logic                wvalid;
-  logic                rvalid;
-  logic                wready;
-  logic                rready;
-  logic [31:0]         wdata;
-  logic [31:0]         rdata;
-  logic [$clog2(16)-1:0] depth; // Assuming FIFO depth of 16
-
-  
-  prim_fifo_sync #(
-  	.Width(32),
-  	.Depth(4)
-  ) fifo_sync_i (
-	.clk_i,
-	.rst_ni,
-	.clr_i(1'b0),
-// write port
-	.wvalid,
-	.wready,
- 	.wdata,
-  // read port
-	.rvalid,
-	.rready,
-	.rdata(fifo_rd_data),
-  // occupancy
-	.depth
-  );
 
   assign hw2reg.status.d  = status;
   assign hw2reg.length.d  = length;
@@ -102,11 +72,7 @@ module student_dma (
     READ_DESC_SEND,
     READ_DESC_RECV,
     MEMSET_WRITING,   // ready to try to write next thing
-    MEMSET_WAIT_RESP,  // still trying to send next thing
-    
-    MEMCPY_WRITING,   // write to fifo buffer
-    MEMCPY_READING,   // fifo to mem
-    MEMCPY_WAIT_RESP  // still trying to send next thing
+    MEMSET_WAIT_RESP  // still trying to send next thing
   } state_dma_t;
 
   state_dma_t        current_state;
@@ -138,27 +104,13 @@ module student_dma (
       READ_DESC_RECV: begin
         if (desc_response_received) next_state = READ_DESC_SEND;
         if (desc_read_finished && (operation == DESC_OP_MEMSET)) next_state = MEMSET_WRITING;
-        if (desc_read_finished && (operation == DESC_OP_MEMCPY)) next_state = MEMCPY_WRITING;  
+        if (desc_read_finished && (operation == DESC_OP_MEMCPY))
+          next_state = IDLE;  // <-- memcpy not implemented yet.
       end
       MEMSET_WRITING: begin
         if (length == 0 && tl_host_i.a_ready && tl_host_o.a_valid) next_state = MEMSET_WAIT_RESP;
       end
       MEMSET_WAIT_RESP: begin
-        if (length_recv == 0) next_state = IDLE;
-      end
-      // memcpy
-      MEMCPY_WRITING: begin
-        if (length != 0 && tl_host_i.a_ready && tl_host_o.a_valid && rvalid && rready) begin
-        	next_state = MEMCPY_READING;
-        end else if (length == 0 && tl_host_i.a_ready && tl_host_o.a_valid) begin
-        	next_state = MEMCPY_WAIT_RESP; // length_rec oder?
-        end	
-      end
-      MEMCPY_READING: begin
-        if (length == 0 && tl_host_i.a_ready && tl_host_o.a_valid && wvalid && wready) next_state = MEMCPY_WRITING;
-        // to done
-      end
-      MEMCPY_WAIT_RESP: begin
         if (length_recv == 0) next_state = IDLE;
       end
       default: begin
@@ -269,47 +221,6 @@ module student_dma (
             length_recv <= length_recv - 4;
           end
         end
-        // --- memcpy ---//
-        MEMCPY_WRITING: begin
-          status <= STATUS_MEMCPY_BUSY;
-          tl_host_o.a_opcode <= tlul_pkg::PutFullData;
-          tl_host_o.a_valid <= '1;
-          tl_host_o.a_data <= rdata;
-		
-		  if (tl_host_i.a_ready && tl_host_o.a_valid) begin
-            dst_adr <= dst_adr + 4;
-            // length  <= length - 4;
-            tl_host_o.a_address <= dst_adr + 4;
-          end
-          else begin
-            tl_host_o.a_address <= dst_adr;
-          end
-          if (tl_host_i.d_valid) begin
-            length_recv <= length_recv - 4;
-          end
-          
-          MEMCPY_READING: begin
-          	status <= STATUS_MEMCPY_BUSY;
-		    tl_host_o.a_opcode <= tlul_pkg::GET;
-		    tl_host_o.a_valid <= '1;
-		    tl_host_o.a_address <= src_adr;
-		    
-		    // direction?
-		    if (tl_host_i.a_ready && tl_host_o.a_valid) begin
-		    	if (tl_host_o.d_ready && tl_host_i.d_valid) begin
-		    		wdata <= tl_host_i.d_data;
-		    	end
-		    end
-		    src_adr <= src_adr + 4;
-		    length  <= length - 4;
-		  end
-		  
-		  MEMCPY_WAIT_RESP: begin
-          	status <= STATUS_MEMCPY_BUSY;
-          	if (tl_host_i.d_valid) begin
-            	length_recv <= length_recv - 4;
-          	end
-          end
         default: begin
 
         end

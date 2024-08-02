@@ -1,5 +1,5 @@
 module student_tlul_mux_tb;
-  localparam CONNECTED_SLAVES = 2;
+  localparam CONNECTED_SLAVES = 4;
 
   logic clk;
   logic rst_n;
@@ -18,7 +18,12 @@ module student_tlul_mux_tb;
   end
 
   student_tlul_mux #(
-      .NUM(CONNECTED_SLAVES)
+      .NUM(CONNECTED_SLAVES),
+      .ADDR_WIDTH(4),
+      .ADDR_OFFSET(4),
+      .CURR_OFFSET(8),
+      .CURR_WIDTH(4),
+      .CURR_VAL(0)
   ) DUT (
       .clk_i(clk),
       .rst_ni(rst_n),

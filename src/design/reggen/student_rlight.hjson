@@ -1,49 +1,43 @@
 {
   name: "student_rlight"
-  clock_primary: "sys_clk"
+  clock_primary: "clk_i"
   bus_device: "tlul"
   regwidth: "32"
   registers: [
     {
-      name: "RegA"
-      desc: "led pattern register"
+      name: "Led_pattern"
+      desc: "Contains the Pattern for the Running Light"
       swaccess: "rw"
-      hwaccess: "hrw"
-      hwqe : "true"
+      hwaccess: "hro"
       fields: [
-        {bits: "7:0", name: "led_pattern", desc: "sets the led pattern"}
+        {bits: "7:0", name: "led_pattern", desc: "bit pattern", resval: "0x18"}
       ]
-    }
+    },
     {
-      name: "RegB"
-      desc: "mode register"
+      name: "Delay"
+      desc: "Controls the Speed of the Running light (in CC)"
       swaccess: "rw"
-      hwaccess: "hrw"
-      hwqe : "true"
+      hwaccess: "hro"
       fields: [
-        {bits: "7:0", name: "mode", desc: "sets the actual mode of the running light"}
+        {bits: "31:0", name: "Delay", desc: "Delay in CC", resval: "5000000"}
       ]
-    }
+    },
     {
-      name: "RegC"
-      desc: "pause register"
+      name: "Modes"
+      desc: "Controls the Mode of the Running Light"
       swaccess: "rw"
-      hwaccess: "hrw"
-      hwqe : "true"
-      fields:
-      [
-        {bits: "31:0", name: "pause", desc: "sets the pause cycles"}
+      hwaccess: "hro"
+      fields: [
+        {bits: "1:0", name: "Mode", desc: "00 - Stop, 01 - Rotate Right, 10 - Rotate Left, 11 - PingPong", resval: "0x3"}
       ]
-    }
+    },
     {
-      name: "RegD"
-      desc: "led status register"
+      name: "LED_Status"
+      desc: "Currently active LEDs"
       swaccess: "ro"
       hwaccess: "hwo"
-      hwext : "true"
-      fields:
-      [
-        {bits: "7:0", name: "led_status", desc: "keeps track of actual led status"}
+      fields: [
+        {bits: "7:0", name: "led_status", desc: "bit pattern"}
       ]
     }
   ]

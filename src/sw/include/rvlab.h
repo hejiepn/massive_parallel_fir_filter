@@ -18,7 +18,6 @@
 #include "reggen/regdemo.h"
 #define REGDEMO0_BASE_ADDR 0x1f002000
 
-
 #include "reggen/student_dma.h"
 #define STUDENT_DMA0_BASE_ADDR 0x20000000
 
@@ -27,5 +26,8 @@
 
 #include "reggen/student_rlight.h"
 #define STUDENT_RLIGHT0_BASE_ADDR 0x10000000
+
+#include "reggen/student_iic_ctrl.h"
+#define STUDENT_IIC_CTRL0_BASE_ADDR 0x10100000
 
 #endif // _RVLAB_H

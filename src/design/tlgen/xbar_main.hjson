@@ -9,7 +9,7 @@
         {
             name: "corei"
             type: "host"
-            pipeline: "false"
+            pipeline: "true"
         }
         {
             name: "cored"

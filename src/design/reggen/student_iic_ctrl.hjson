@@ -1,0 +1,59 @@
+{
+  name: "student_iic_ctrl"
+  clock_primary: "sys_clk"
+  bus_device: "tlul"
+  regwidth: "32"
+  registers: 
+  [
+    {
+      name: "SDA_EN"
+      desc: "enable SDA Write"
+      swaccess: "wo"
+      hwaccess: "hro"
+      hwqe : "true"
+      fields: [
+        {bits: "0", name: "SDA_EN", desc: "enable SDA Write"}
+      ]
+    }
+    {
+      name: "SCL_EN"
+      desc: "enable SCL Write"
+      swaccess: "wo"
+      hwaccess: "hro"
+      hwqe : "true"
+      fields: [
+        {bits: "0", name: "SCL_EN", desc: "enable SCL Write"}
+      ]
+    }
+    {
+      name: "SDA_READ"
+      desc: "read SDA Pin"
+      swaccess: "ro"
+      hwaccess: "hwo"
+	  hwext: "true"
+      fields: [
+        {bits: "0", name: "SDA_READ", desc: "read SDA Pin"}
+      ]
+    }
+    {
+      name: "SCL_READ"
+      desc: "read SCL Pin"
+      swaccess: "ro"
+      hwaccess: "hwo"
+	  hwext: "true"
+      fields: [
+        {bits: "0", name: "SCL_READ", desc: "read SCL Pin"}
+      ]
+    }
+	{
+	name: "SDA_SCL_Testing"
+	desc: "test to write to reg"
+	swaccess: "wo"
+	hwaccess: "hro"
+	hwqe : "true"
+	fields: [
+	{bits: "0", name: "test", desc: "enable SDA SCL"}
+	]
+}
+  ]
+} 
