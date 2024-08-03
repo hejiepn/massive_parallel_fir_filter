@@ -13,7 +13,7 @@ module student_fir #(
     //output logic compute_finished_out,
     output logic [DATA_SIZE-1:0] sample_shift_out,
 	output logic valid_strobe_out,
-    output logic [DATA_SIZE_FIR_OUT-1:0] y_out,
+    output logic signed [DATA_SIZE_FIR_OUT-1:0] y_out,
 	
 	input  tlul_pkg::tl_h2d_t tl_i,  //master input (incoming request)
     output tlul_pkg::tl_d2h_t tl_o  //slave output (this module's response)
@@ -73,7 +73,7 @@ module student_fir #(
   //logic ena_coeff;
   logic enb_coeff;
   //logic wea_coeff;
-  logic [DATA_SIZE_FIR_OUT-1:0] fir_sum;
+  logic signed [48-1:0] fir_sum;
   
   logic [DATA_SIZE-1:0] sample_in_internal;
   //logic ena_internal;
@@ -260,6 +260,10 @@ end
   end
   
 
+//   logic signed [DATA_SIZE_FIR_OUT-1:0] y_out_1;
+//   logic signed [DATA_SIZE_FIR_OUT-1:0] y_out_2;
+  //logic signed [DATA_SIZE_FIR_OUT-1:0] y_out_3; 
+
    // FIR computation
   always_ff @(posedge clk_i, negedge rst_ni) begin
     if (~rst_ni) begin
@@ -269,20 +273,16 @@ end
 	  hw2reg.fir_read_shift_out_samples.d = '0;
 	  hw2reg.fir_read_shift_out_samples.de = 1'b0;
 	  sample_shift_out <= '0;
+	  //y_out_1 <= '0;
+	  //y_out_2 <= '0;
+	 // y_out_3 <= '0;
     //   compute_finished_out <= 0;
     end else begin
 		case (fir_state)
 			IDLE: begin
-				// compute_finished_out <= 0;
 				valid_strobe_out <= '0;
 				fir_sum <= '0;
 				sample_shift_out <= '0;
-				//y_out <= '0;
-
-				// $display("fir_state: IDLE");
-				// $display("wr_addr: %4x rd_addr: %4x rd_addr_c: %4x", wr_addr, rd_addr, rd_addr_c);
-				// $display("enb_samples: %1x enb_coeff: %1x", enb_samples, enb_coeff);
-				// $display("fir_sum: %d read_sample: %4x read_coeff: %4x", fir_sum, read_sample, read_coeff);
 			end
 			SHIFT_IN: begin
 				// No specific action needed
@@ -293,13 +293,14 @@ end
 
 			end
 			COMPUTE: begin
-				// $display("fir_state: Compute");
-				// $display("wr_addr: %4x rd_addr: %4x rd_addr_c: %4x", wr_addr, rd_addr, rd_addr_c);
-				// $display("enb_samples: %1x enb_coeff: %1x", enb_samples, enb_coeff);
-				//$display("fir_sum: %d read_sample: %4x read_coeff: %4x", fir_sum, read_sample, read_coeff);
-				fir_sum <= fir_sum + read_sample * read_coeff;
-				if( rd_addr == wr_addr) begin
-				//if(rd_addr == wr_addr && rd_addr_c == MAX_ADDR-1) begin
+				$display("fir_state: Compute");
+				//$display("wr_addr: %4x rd_addr: %4x rd_addr_c: %4x", wr_addr, rd_addr, rd_addr_c);
+				//$display("enb_samples: %1x enb_coeff: %1x", enb_samples, enb_coeff);
+				$display("fir_sum: %d read_sample: %d read_coeff: %d", fir_sum, read_sample, read_coeff);
+				// fir_sum <= fir_sum + read_sample * read_coeff;
+				fir_sum <= fir_sum + 48'(signed'(read_sample) * signed'(read_coeff));
+				//if( rd_addr == wr_addr) begin
+				if(rd_addr == wr_addr && rd_addr_c == MAX_ADDR-1) begin
 					sample_shift_out <= read_sample;
 					hw2reg.fir_read_shift_out_samples.d = read_sample;
 					hw2reg.fir_read_shift_out_samples.de = 1'b1;
@@ -314,7 +315,11 @@ end
 				// compute_finished_out <= 1;
 				valid_strobe_out <= '1;
 				hw2reg.fir_read_shift_out_samples.de = 1'b0;
-				y_out <= fir_sum;
+				y_out <= fir_sum[39:16];
+				//y_out <= fir_sum;
+				//y_out <= fir_sum[47:24];
+				//y_out_1 <= fir_sum[39:16]; // This takes bits 16 to 39, giving you 24 bits
+				//y_out_2 <= fir_sum[47:24] + (fir_sum[23] ? 1'b1 : 1'b0);
 			end
 		endcase
 	end
