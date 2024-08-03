@@ -30,4 +30,10 @@
 #include "reggen/student_iic_ctrl.h"
 #define STUDENT_IIC_CTRL0_BASE_ADDR 0x10100000
 
+#include "reggen/student_fir_parallel.h"
+#define STUDENT_FIR_PARALLEL0_BASE_ADDR 0x10280000
+
+#include "reggen/student_iis_handler.h"
+#define STUDENT_IIS_HANDLER0_BASE_ADDR 0x10300000
+
 #endif // _RVLAB_H

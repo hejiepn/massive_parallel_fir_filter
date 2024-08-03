@@ -34,6 +34,7 @@ localparam int unsigned NUM_FIR = 8; //only numbers which are power of 2 are sup
 	logic sda_oe;
 	logic scl_oe;
 
+
   assign sda_i = userio_i.sda;
   assign scl_i = userio_i.scl;
   assign adc_i = userio_i.ac_adc_sdata;
@@ -130,23 +131,6 @@ localparam int unsigned NUM_FIR = 8; //only numbers which are power of 2 are sup
 	.tl_o(tl_student_o[2])  //slave output (this module's response)
 );
 
-// 	student_fir #(
-// 	.ADDR_WIDTH(ADDR_WIDTH),
-// 	.DATA_SIZE(DATA_SIZE),
-// 	.DEBUGMODE(DEBUGMODE),
-// 	.DATA_SIZE_FIR_OUT(DATA_SIZE_FIR_OUT)
-// 	) fir_single (	
-//      .clk_i(clk_i),
-//      .rst_ni(rst_ni),
-//      .valid_strobe_in(valid_strobe_2FIR),
-//      .sample_in(Data_iis_O_L),
-//      .sample_shift_out(sample_shift_out),
-// 	 .valid_strobe_out(valid_strobe_out),
-//      .y_out(y_out_l),
-// 	 .tl_i(tl_student_i[2]),
-//      .tl_o(tl_student_o[2])
-// );
-
 	student_iis_handler_top #(
 	 .DATA_SIZE(DATA_SIZE),
 	 .DATA_SIZE_FIR_OUT(DATA_SIZE_FIR_OUT)
@@ -168,5 +152,24 @@ localparam int unsigned NUM_FIR = 8; //only numbers which are power of 2 are sup
     .tl_i(tl_student_i[3]),  //master input (incoming request)
     .tl_o(tl_student_o[3])  //slave output (this module's response)
 );
+	
+
+// 	student_iis_handler iss_handler(
+//     .clk_i(clk_i),
+//     .rst_ni(rst_ni),
+
+//     .AC_MCLK(mclk),       // Codec Master Clock
+//     .AC_BCLK(bclk),       // Codec Bit Clock
+//     .AC_LRCLK(lrclk),      // Codec Left/Right Clock
+//     //.AC_ADC_SDATA(userio_i.ac_adc_sdata),  // Codec ADC Serial Data
+// 	.AC_ADC_SDATA('1),  // Codec ADC Serial Data
+//     .AC_DAC_SDATA(dac_sdata),  // Codec DAC Serial Data
+
+//     .Data_I_L('0),     // Data from HW to Codec (Left Channel)
+//     .Data_I_R('1),     // Data from HW to Codec (Right Channel)
+//     .Data_O_L(Data_iis_O_L),     // Data from Codec to HW (Left Channel)
+//     .Data_O_R(Data_iis_O_R),     // Data from Codec to HW (Right Channel)
+//     .valid_strobe(valid_strobe_2FIR)  // Valid strobe to HW
+// );
 
 endmodule

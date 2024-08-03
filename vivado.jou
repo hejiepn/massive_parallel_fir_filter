@@ -1,0 +1,28 @@
+#-----------------------------------------------------------
+# Vivado v2021.2 (64-bit)
+# SW Build 3367213 on Tue Oct 19 02:47:39 MDT 2021
+# IP Build 3369179 on Thu Oct 21 08:25:16 MDT 2021
+# Start of session at: Sat Aug  3 04:08:59 2024
+# Process ID: 199436
+# Current directory: /home/rvlab/groups/rvlab01/Desktop/new_start/risc-v-lab-group-01
+# Command line: vivado
+# Log file: /home/rvlab/groups/rvlab01/Desktop/new_start/risc-v-lab-group-01/vivado.log
+# Journal file: /home/rvlab/groups/rvlab01/Desktop/new_start/risc-v-lab-group-01/vivado.jou
+# Running On: msclab, OS: Linux, CPU Frequency: 3000.000 MHz, CPU Physical cores: 32, Host memory: 404094 MB
+#-----------------------------------------------------------
+start_gui
+open_project /home/rvlab/groups/rvlab01/Desktop/dev_tianyi/project_1/project_1.xpr
+file mkdir /home/rvlab/groups/rvlab01/Desktop/dev_tianyi/project_1/project_1.srcs/sources_1/new
+close [ open /home/rvlab/groups/rvlab01/Desktop/dev_tianyi/project_1/project_1.srcs/sources_1/new/student_fir.sv w ]
+add_files /home/rvlab/groups/rvlab01/Desktop/dev_tianyi/project_1/project_1.srcs/sources_1/new/student_fir.sv
+update_compile_order -fileset sources_1
+file mkdir /home/rvlab/groups/rvlab01/Desktop/dev_tianyi/project_1/project_1.srcs/sim_1/new
+set_property SOURCE_SET sources_1 [get_filesets sim_1]
+close [ open /home/rvlab/groups/rvlab01/Desktop/dev_tianyi/project_1/project_1.srcs/sim_1/new/student_fir_tb.sv w ]
+add_files -fileset sim_1 /home/rvlab/groups/rvlab01/Desktop/dev_tianyi/project_1/project_1.srcs/sim_1/new/student_fir_tb.sv
+update_compile_order -fileset sim_1
+update_compile_order -fileset sim_1
+launch_simulation
+launch_simulation
+launch_runs synth_1 -jobs 10
+wait_on_run synth_1

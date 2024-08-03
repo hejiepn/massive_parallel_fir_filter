@@ -89,7 +89,7 @@ module system_tb;
   assign (weak1, weak0) scl           = '1;
   assign (weak1, weak0) sda           = '1;
 
-  assign                ac_dac_sdata  = '0;
+  //assign                ac_dac_sdata  = '0;
 
   assign                sd_cd         = '0;
   assign                sd_miso       = '0;
