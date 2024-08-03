@@ -162,7 +162,7 @@ localparam int unsigned NUM_FIR = 8; //only numbers which are power of 2 are sup
    sine_wave_output sine_wave_ins (
    .clk(clk_i),
    .rst_ni(rst_ni),
-   .LRCLK(lrclk),
+   .lrclk(lrclk),
    .sine_wave_out(sine_input)
 );
 

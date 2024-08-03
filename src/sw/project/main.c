@@ -21,6 +21,10 @@ int main(void) {
 
 	//printf("Enable Loopback!\n");
 	//enable_loopback(0);
+
+	while(true) {
+		;;
+	} 
 	
     return 0;
 }
