@@ -15,16 +15,17 @@ static void delay_cycles(int n_cycles) {
 int main(void) {
     printf("Welcome to rvlab FIR Parallel!\n");
 
-	//printf("Start Audio Config!\n");
+	printf("Start Audio Config!\n");
 
-	//start_audio_codec_config();
+	start_audio_codec_config();
 
 	//printf("Enable Loopback!\n");
-	//enable_loopback(0);
+	enable_loopback(0);
 
-	while(true) {
-		;;
-	} 
-	
+	/*
+		while(true) {
+			;;
+		} 
+	*/	
     return 0;
 }

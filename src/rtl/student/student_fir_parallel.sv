@@ -259,9 +259,9 @@ logic useSineWave;
 				useSineWave <= reg2hw.sine_enable.q;
 			end
 			if(useSineWave) begin
-				y_out <= sine_wave_output_int;
+				y_out <= (sine_wave_output_int << 5);
 			end else begin
-				y_out <= y_out_int_int;
+				y_out <= (y_out_int_int << 5);
 			end
 		end
 	end
