@@ -13,7 +13,7 @@ module student_fir_parallel #(
     //output logic compute_finished_out,
     //output logic [DATA_SIZE-1:0] sample_shift_out,
 	output logic valid_strobe_out,
-    output logic [DATA_SIZE_FIR_OUT-1:0] y_out,
+    output logic signed [DATA_SIZE_FIR_OUT-1:0] y_out,
 	
 	input  tlul_pkg::tl_h2d_t tl_i,  //master input (incoming request)
     output tlul_pkg::tl_d2h_t tl_o  //slave output (this module's response)
@@ -64,7 +64,7 @@ module student_fir_parallel #(
   logic [DATA_SIZE-1:0] sample_shift_out_internal[NUM_FIR-1:0];
   logic [DATA_SIZE-1:0] sample_shift_in_internal[NUM_FIR-1:0];
   logic valid_strobe_out_internal[NUM_FIR-1:0];
-  logic [NUM_FIR-1:0] [DATA_SIZE_FIR_OUT-1:0] y_out_internal;
+  logic signed [NUM_FIR-1:0] [DATA_SIZE_FIR_OUT-1:0] y_out_internal;
   logic [DATA_SIZE-1:0] sample_in_internal_first;
  
     // Edge detection for valid_strobe_in
@@ -195,11 +195,15 @@ module student_fir_parallel #(
 	logic [31:0] stageCounter;
 	logic waitAdder;
 
-	logic [DATA_SIZE_FIR_OUT-1:0] y_out_int_int;
+	logic signed [DATA_SIZE_FIR_OUT-1:0] y_out_int_int;
+	logic signed [DATA_SIZE_FIR_OUT-1:0] y_out_int_int_1;
+	logic signed [DATA_SIZE_FIR_OUT-1:0] y_out_int_int_2;
 
 	always_ff @(posedge clk_i, negedge rst_ni) begin
 		if (~rst_ni) begin
 			y_out_int_int <= '0;
+			y_out_int_int_1 <= '0;
+			y_out_int_int_2 <= '0;
 			valid_strobe_out <= '0;
 			stageCounter <= stageNum;
 			waitAdder <= '0;
@@ -209,7 +213,9 @@ module student_fir_parallel #(
 			end
 			if(waitAdder) begin
 				if(stageCounter == 0) begin
-					y_out_int_int <= adder_tree_y_out[DATA_SIZE_FIR_OUT-1:0];
+					y_out_int_int <= $signed(adder_tree_y_out[DATA_SIZE_FIR_OUT-1:0]);
+					y_out_int_int_1 <= $signed(adder_tree_y_out[DATA_SIZE_FIR_OUT + $clog2(NUM_FIR) - 1 -: DATA_SIZE_FIR_OUT]);
+					y_out_int_int_2 <= $signed(adder_tree_y_out[26:3]);
 					valid_strobe_out <= '1;
 					waitAdder <= '0;
 					stageCounter <= stageNum;

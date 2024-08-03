@@ -110,9 +110,12 @@ localparam int unsigned NUM_FIR = 8; //only numbers which are power of 2 are sup
   logic [DATA_SIZE-1:0] Data_iis_O_L;
   logic [DATA_SIZE-1:0] Data_iis_O_R;
   logic valid_strobe_out;
-  logic [DATA_SIZE_FIR_OUT-1:0] y_out_l;
-  logic [DATA_SIZE_FIR_OUT-1:0] y_out_r;
+  logic signed [DATA_SIZE_FIR_OUT-1:0] y_out_l;
+  logic signed [DATA_SIZE_FIR_OUT-1:0] y_out_r;
   logic [DATA_SIZE-1:0] sample_shift_out;
+
+    logic [15:0] sine_input;
+
 
 	student_fir_parallel #(
 	.ADDR_WIDTH(ADDR_WIDTH),
@@ -124,7 +127,8 @@ localparam int unsigned NUM_FIR = 8; //only numbers which are power of 2 are sup
 	.clk_i(clk_i),
     .rst_ni(rst_ni),
 	.valid_strobe_in(valid_strobe_2FIR),
-    .sample_in(Data_iis_O_L),
+    //.sample_in(Data_iis_O_L),
+    .sample_in(sine_input),
 	.valid_strobe_out(valid_strobe_out),
     .y_out(y_out_l),
 	.tl_i(tl_student_i[2]),  //master input (incoming request)
@@ -141,6 +145,7 @@ localparam int unsigned NUM_FIR = 8; //only numbers which are power of 2 are sup
     .AC_BCLK(bclk),       // Codec Bit Clock
     .AC_LRCLK(lrclk),      // Codec Left/Right Clock
     .AC_ADC_SDATA(userio_i.ac_adc_sdata),  // Codec ADC Serial Data
+    //.AC_ADC_SDATA('1),  // Codec ADC Serial Data
     .AC_DAC_SDATA(dac_sdata),  // Codec DAC Serial Data
 	
   	.Data_I_R('0), 	 	//Data from HW to Codec (mono Channel)
@@ -154,22 +159,37 @@ localparam int unsigned NUM_FIR = 8; //only numbers which are power of 2 are sup
 );
 	
 
-// 	student_iis_handler iss_handler(
-//     .clk_i(clk_i),
-//     .rst_ni(rst_ni),
+   sine_wave_output sine_wave_ins (
+   .clk(clk_i),
+   .rst_ni(rst_ni),
+   .LRCLK(lrclk),
+   .sine_wave_out(sine_input)
+);
 
-//     .AC_MCLK(mclk),       // Codec Master Clock
-//     .AC_BCLK(bclk),       // Codec Bit Clock
-//     .AC_LRCLK(lrclk),      // Codec Left/Right Clock
-//     //.AC_ADC_SDATA(userio_i.ac_adc_sdata),  // Codec ADC Serial Data
-// 	.AC_ADC_SDATA('1),  // Codec ADC Serial Data
-//     .AC_DAC_SDATA(dac_sdata),  // Codec DAC Serial Data
+    /*
 
-//     .Data_I_L('0),     // Data from HW to Codec (Left Channel)
-//     .Data_I_R('1),     // Data from HW to Codec (Right Channel)
-//     .Data_O_L(Data_iis_O_L),     // Data from Codec to HW (Left Channel)
-//     .Data_O_R(Data_iis_O_R),     // Data from Codec to HW (Right Channel)
-//     .valid_strobe(valid_strobe_2FIR)  // Valid strobe to HW
-// );
+student_iis_handler iss_handler(
+     .clk_i(clk_i),
+     .rst_ni(rst_ni),
+
+     .AC_MCLK(mclk),       // Codec Master Clock
+     .AC_BCLK(bclk),       // Codec Bit Clock
+     .AC_LRCLK(lrclk),      // Codec Left/Right Clock
+     //.AC_ADC_SDATA(userio_i.ac_adc_sdata),  // Codec ADC Serial Data
+     .AC_ADC_SDATA('1),  // Codec ADC Serial Data
+     .AC_DAC_SDATA(dac_sdata),  // Codec DAC Serial Data
+
+     .Data_I_L(y_out_l),     // Data from HW to Codec (Left Channel)
+     .Data_I_R('0),     // Data from HW to Codec (Right Channel)
+     .Data_O_L(Data_iis_O_L),     // Data from Codec to HW (Left Channel)
+     .Data_O_R(Data_iis_O_R),     // Data from Codec to HW (Right Channel)
+     .valid_strobe(valid_strobe_2FIR),  // Valid strobe to HW
+	.tl_i(tl_student_i[3]),  //master input (incoming request)
+    .tl_o(tl_student_o[3])  //slave output (this module's response)
+ );
+
+
+*/
+ 
 
 endmodule

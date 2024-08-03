@@ -4,6 +4,7 @@
 #include "iic_ctrl.h"
 #include "userinterface.h"
 #include "filter_parallel.h"
+#include "iis_handler.h"
 
 static void delay_cycles(int n_cycles) {
     REG32(RV_TIMER_CTRL(0)) = (1<<RV_TIMER_CTRL_ACTIVE0_LSB);
@@ -14,9 +15,12 @@ static void delay_cycles(int n_cycles) {
 int main(void) {
     printf("Welcome to rvlab FIR Parallel!\n");
 
-	fir_p_en_sine_wave(1);
+	//printf("Start Audio Config!\n");
 
-	delay_cycles(1000);
+	//start_audio_codec_config();
 
+	//printf("Enable Loopback!\n");
+	//enable_loopback(0);
+	
     return 0;
 }

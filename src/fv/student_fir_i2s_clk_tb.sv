@@ -30,7 +30,7 @@ module student_fir_i2s_clk_tb;
 //   logic compute_finished_out;
   logic [DATA_SIZE-1:0] sample_shift_out;
   logic valid_strobe_out;
-  logic [DATA_SIZE_FIR_OUT-1:0] y_out;
+  logic signed [DATA_SIZE_FIR_OUT-1:0] y_out;
 
   // Memory to store the input samples from sin.mem
   logic [7:0] sin_mem [0:1023]; // Adjust the size based on your file
@@ -64,7 +64,6 @@ module student_fir_i2s_clk_tb;
     .rst_ni(rst_ni),
     .valid_strobe_in(valid_strobe_in),
     .sample_in(sample_in),
-    // .compute_finished_out(compute_finished_out),
     .sample_shift_out(sample_shift_out),
     .valid_strobe_out(valid_strobe_out),
     .y_out(y_out),
@@ -115,7 +114,7 @@ module student_fir_i2s_clk_tb;
 	if (DEBUGMODE == 1) begin
 		$readmemh("/home/rvlab/groups/rvlab01/Desktop/dev_hejie_copy_2/risc-v-lab-group-01/src/rtl/student/data/sin_low_debug.mem", sin_mem);
 	end else begin
-		$readmemh("/home/rvlab/groups/rvlab01/Desktop/dev_hejie_fir_testing/risc-v-lab-group-01/src/rtl/student/data/random.mem", sin_mem);
+		$readmemh("/home/rvlab/groups/rvlab01/Desktop/data/sin_low.mem", sin_mem);
 	end
 
 	bus.reset();
@@ -127,7 +126,7 @@ module student_fir_i2s_clk_tb;
 
 	// Apply test stimulus
 	$display("Apply test stimulus:");
-	for(int j= 0; j < 4; j = j+1) begin
+	//for(int j= 0; j < 6; j = j+1) begin
 		for (int i = 0; i < MaxAddr; i = i + 1) begin
 			sample_in = {8'b0, sin_mem[i]}; // Zero-pad the 8-bit value to 16 bits
 			@(posedge LRCLK_Rise);
@@ -139,17 +138,29 @@ module student_fir_i2s_clk_tb;
 			counting = 0;
 			$display("Number of clock cycles from valid_strobe_in to valid_strobe_out: %0d", clk_count);
 			clk_count = 0; // Reset counter for next iteration
-			//read sample_shift_out_internal
-			bus.get_word(sample_shift_out_reg, tlul_read_data);
-			//read y out
-			bus.get_word(y_out_upper_reg, tlul_read_data);
-			bus.get_word(y_out_lower_reg, tlul_read_data);
+			// //read sample_shift_out_internal
+			// bus.get_word(sample_shift_out_reg, tlul_read_data);
+			// //read y out
+			// bus.get_word(y_out_upper_reg, tlul_read_data);
+			// bus.get_word(y_out_lower_reg, tlul_read_data);
 			@(posedge clk_i);
 		end
-	end
+	//end
 
+		$stop;
+	  end
 	
+	initial begin
+    	$monitor("Time: %0t | valid_strobe_in: %0b | sample_in: %0h | sample_shift_out: %0h | valid_strobe_out: %0b | y_out: %0h",
+             $time, valid_strobe_in, sample_in, sample_shift_out, valid_strobe_out, y_out);
+  	end
+  
 
+  
+
+endmodule
+	
+/*
 	//apply tlul write on coeff dpram:
 	$display("Apply tlul write on coeff dpram:");
 	for (int i = 0; i < MaxAddr; i++) begin
@@ -231,7 +242,7 @@ module student_fir_i2s_clk_tb;
 	end
 	@(posedge clk_i);
 
-    $stop;
+    
   end
 
   // Clock cycle counter
@@ -246,9 +257,4 @@ module student_fir_i2s_clk_tb;
 //     $monitor("Time: %0t | valid_strobe_in: %0b | sample_in: %0h | compute_finished_out: %0b | sample_shift_out: %0h | valid_strobe_out: %0b | y_out: %0h",
 //              $time, valid_strobe_in, sample_in, compute_finished_out, sample_shift_out, valid_strobe_out, y_out);
 //   end
-  initial begin
-    $monitor("Time: %0t | valid_strobe_in: %0b | sample_in: %0h | sample_shift_out: %0h | valid_strobe_out: %0b | y_out: %0h",
-             $time, valid_strobe_in, sample_in, sample_shift_out, valid_strobe_out, y_out);
-  end
-
-endmodule
+*/

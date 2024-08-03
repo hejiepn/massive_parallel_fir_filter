@@ -1,0 +1,5 @@
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/rvlab/groups/rvlab01/Desktop/testing_saturday/risc-v-lab-group-01/src/fv/student_fir_i2s_clk_tb.sv" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module student_fir_i2s_clk_tb
+ERROR: [VRFC 10-2989] 'tlul_pkg' is not declared [/home/rvlab/groups/rvlab01/Desktop/testing_saturday/risc-v-lab-group-01/src/fv/student_fir_i2s_clk_tb.sv:42]
+ERROR: [VRFC 10-2989] 'tlul_pkg' is not declared [/home/rvlab/groups/rvlab01/Desktop/testing_saturday/risc-v-lab-group-01/src/fv/student_fir_i2s_clk_tb.sv:43]
+ERROR: [VRFC 10-2865] module 'student_fir_i2s_clk_tb' ignored due to previous errors [/home/rvlab/groups/rvlab01/Desktop/testing_saturday/risc-v-lab-group-01/src/fv/student_fir_i2s_clk_tb.sv:1]

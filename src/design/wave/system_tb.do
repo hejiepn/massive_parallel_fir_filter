@@ -704,7 +704,7 @@ add wave -noupdate -group TL_UL /system_tb/board/DUT/core_i/tl_bram_main_d2h
 add wave -noupdate -divider {Running Light}
 add wave -noupdate /system_tb/board/DUT/core_i/student_i/rlight_i/led_o
 add wave -noupdate -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/valid_strobe_out
-add wave -noupdate -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/y_out
+add wave -noupdate -group fir_parallel -format Analog-Step -height 84 -min -1.0 /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/y_out
 add wave -noupdate -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/reg2hw
 add wave -noupdate -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/hw2reg
 add wave -noupdate -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/sine_wave_output_int
@@ -712,12 +712,12 @@ add wave -noupdate -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut
 add wave -noupdate -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/sample_shift_in_internal
 add wave -noupdate -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/valid_strobe_out_internal
 add wave -noupdate -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/y_out_internal
-add wave -noupdate -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/sample_in_internal_first
+add wave -noupdate -group fir_parallel -format Analog-Step -height 84 -max 254.0 /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/sample_in_internal_first
 add wave -noupdate -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/valid_strobe_in_prev
 add wave -noupdate -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/valid_strobe_in_pos_edge
 add wave -noupdate -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/useTlulSample
 add wave -noupdate -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/adder_tree_y_out
-add wave -noupdate -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/y_out_int_int
+add wave -noupdate -group fir_parallel -format Analog-Step -height 84 -min -1.0 /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/y_out_int_int
 add wave -noupdate -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/useSineWave
 add wave -noupdate -group i2c /system_tb/board/DUT/core_i/student_i/dut_student_iic/sda_oe
 add wave -noupdate -group i2c /system_tb/board/DUT/core_i/student_i/dut_student_iic/scl_oe
@@ -729,19 +729,17 @@ add wave -noupdate -group i2c /system_tb/board/DUT/core_i/student_i/dut_student_
 add wave -noupdate -group i2c /system_tb/board/DUT/core_i/student_i/dut_student_iic/sda_i_dd
 add wave -noupdate -group i2c /system_tb/board/DUT/core_i/student_i/dut_student_iic/scl_i_d
 add wave -noupdate -group i2c /system_tb/board/DUT/core_i/student_i/dut_student_iic/scl_i_dd
-add wave -noupdate -group i2s /system_tb/board/ac_lrclk
-add wave -noupdate -group i2s /system_tb/board/ac_dac_sdata
-add wave -noupdate /system_tb/board/DUT/core_i/student_i/iss_handler/AC_MCLK
-add wave -noupdate /system_tb/board/DUT/core_i/student_i/iss_handler/AC_BCLK
-add wave -noupdate /system_tb/board/DUT/core_i/student_i/iss_handler/AC_LRCLK
-add wave -noupdate /system_tb/board/DUT/core_i/student_i/iss_handler/AC_DAC_SDATA
-add wave -noupdate /system_tb/board/DUT/core_i/student_i/iss_handler/Data_O_L
-add wave -noupdate /system_tb/board/DUT/core_i/student_i/iss_handler/Data_O_R
-add wave -noupdate /system_tb/board/DUT/core_i/student_i/iss_handler/valid_strobe
+add wave -noupdate /system_tb/board/ac_lrclk
+add wave -noupdate /system_tb/board/ac_dac_sdata
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/y_out
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/sample_in_internal_first
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/y_out_int_int
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/y_out_int_int_1
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/y_out_int_int_2
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {2881904073856 fs} 0}
 quietly wave cursor active 1
-configure wave -namecolwidth 475
+configure wave -namecolwidth 599
 configure wave -valuecolwidth 125
 configure wave -justifyvalue left
 configure wave -signalnamewidth 0
@@ -755,4 +753,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {2826097531230 fs} {2927376071518 fs}
+WaveRestoreZoom {0 fs} {5892365333333 fs}

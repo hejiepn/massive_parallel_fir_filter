@@ -66,7 +66,12 @@ add wave -noupdate -group fir4_bram_coeff {/student_fir_parallel_i2s_clk_tb/dut_
 add wave -noupdate /student_fir_parallel_i2s_clk_tb/dut_fir_parallel/useSineWave
 add wave -noupdate /student_fir_parallel_i2s_clk_tb/dut_fir_parallel/y_out_int_int
 add wave -noupdate /student_fir_parallel_i2s_clk_tb/dut_fir_parallel/y_out
+add wave -noupdate /student_fir_parallel_i2s_clk_tb/dut_fir_parallel/sample_shift_in_internal
 add wave -noupdate /student_fir_parallel_i2s_clk_tb/dut_fir_parallel/y_out_internal
+add wave -noupdate /student_fir_parallel_i2s_clk_tb/dut_fir_parallel/y_out
+add wave -noupdate /student_fir_parallel_i2s_clk_tb/dut_fir_parallel/y_out_int_int
+add wave -noupdate /student_fir_parallel_i2s_clk_tb/dut_fir_parallel/y_out_int_int_1
+add wave -noupdate /student_fir_parallel_i2s_clk_tb/dut_fir_parallel/y_out_int_int_2
 TreeUpdate [SetDefaultTree]
 WaveRestoreCursors {{Cursor 1} {5362080000000 fs} 0}
 quietly wave cursor active 1
@@ -84,4 +89,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {0 fs} {66963491381562 fs}
+WaveRestoreZoom {0 fs} {14070149940095 fs}

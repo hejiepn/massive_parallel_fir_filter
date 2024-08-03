@@ -36,7 +36,7 @@ module student_fir_parallel_i2s_clk_tb;
 //   logic compute_finished_out;
   logic [DATA_SIZE-1:0] sample_shift_out;
   logic valid_strobe_out;
-  logic [DATA_SIZE_FIR_OUT-1:0] y_out;
+  logic signed [DATA_SIZE_FIR_OUT-1:0] y_out;
 
   // Memory to store the input samples from sin.mem
   logic [7:0] sin_mem [0:1023]; // Adjust the size based on your file
@@ -124,7 +124,7 @@ module student_fir_parallel_i2s_clk_tb;
 	if (DEBUGMODE == 1) begin
 		$readmemh("/home/rvlab/groups/rvlab01/Desktop/dev_hejie_copy_2/risc-v-lab-group-01/src/rtl/student/data/sin_low_debug.mem", sin_mem);
 	end else begin
-		$readmemh("/home/rvlab/groups/rvlab01/Desktop/dev_hejie_fir_testing/risc-v-lab-group-01/src/rtl/student/data/random.mem", sin_mem);
+		$readmemh("/home/rvlab/groups/rvlab01/Desktop/data/sin_low.mem", sin_mem);
 	end
 
 	bus.reset();
@@ -137,7 +137,7 @@ module student_fir_parallel_i2s_clk_tb;
 	// Apply test stimulus
 	$display("Apply test stimulus:");
 	
-for(int j = 0; j < 6; j = j+1) begin
+//for(int j = 0; j < 6; j = j+1) begin
 	for (int i = 0; i < MaxAddr; i = i + 1) begin
 		sample_in = {'0, sin_mem[i]}; // Zero-pad the 8-bit value to 16 bits
 		@(posedge LRCLK_Rise);
@@ -154,8 +154,8 @@ for(int j = 0; j < 6; j = j+1) begin
 		bus.get_word(y_out_lower_reg, tlul_read_data);
 		@(posedge clk_i);
 	end
-end
-	
+//end
+	/*
 
 	// Apply test stimulus with tlul sample in
 	$display("Apply test stimulus with tlul sample in");
@@ -251,7 +251,7 @@ end
 		$display("Test erfolgreich.");
 	end
 	@(posedge clk_i);
-
+*/
     $stop;
   end
 

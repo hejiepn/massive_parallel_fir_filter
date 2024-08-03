@@ -51,7 +51,7 @@
         {bits: "23:0", name: "fir_to_iis_left", desc: "read PCM Bits out of IIS Handler"}
       ]
     }
-		{
+	{
       name: "pcm_in_right"
       desc: "send PCM Bits which would come from fir from right channel"
       swaccess: "wo"
@@ -59,6 +59,16 @@
       hwqe : "true"
       fields: [
         {bits: "23:0", name: "fir_to_iis_right", desc: "read PCM Bits out of IIS Handler"}
+      ]
+    }
+	{
+      name: "loopback_enable"
+      desc: "enable loopback mode"
+      swaccess: "wo"
+      hwaccess: "hro"
+      hwqe : "true"
+      fields: [
+        {bits: "0", name: "enable loopback mode", desc: "enable loopback mode"}
       ]
     }
   ]

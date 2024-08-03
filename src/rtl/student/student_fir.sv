@@ -293,10 +293,10 @@ end
 
 			end
 			COMPUTE: begin
-				$display("fir_state: Compute");
+				//$display("fir_state: Compute");
 				//$display("wr_addr: %4x rd_addr: %4x rd_addr_c: %4x", wr_addr, rd_addr, rd_addr_c);
 				//$display("enb_samples: %1x enb_coeff: %1x", enb_samples, enb_coeff);
-				$display("fir_sum: %d read_sample: %d read_coeff: %d", fir_sum, read_sample, read_coeff);
+				//$display("fir_sum: %d read_sample: %d read_coeff: %d", fir_sum, read_sample, read_coeff);
 				// fir_sum <= fir_sum + read_sample * read_coeff;
 				fir_sum <= fir_sum + 48'(signed'(read_sample) * signed'(read_coeff));
 				//if( rd_addr == wr_addr) begin

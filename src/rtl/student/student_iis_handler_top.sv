@@ -15,8 +15,8 @@ module student_iis_handler_top #(
     input logic AC_ADC_SDATA,  // Codec ADC Serial Data
 
     // From FIR
-	input logic [DATA_SIZE_FIR_OUT-1:0] Data_I_R, 	 //Data from HW to Codec (mono Channel)
-	input logic [DATA_SIZE_FIR_OUT-1:0] Data_I_L, 	 //Data from HW to Codec (mono Channel)
+	input logic signed [DATA_SIZE_FIR_OUT-1:0] Data_I_R, 	 //Data from HW to Codec (mono Channel)
+	input logic signed [DATA_SIZE_FIR_OUT-1:0] Data_I_L, 	 //Data from HW to Codec (mono Channel)
   input logic valid_strobe_I,  // Valid strobe from HW
 
 	// To FIR
@@ -147,6 +147,7 @@ assign ADC_SDATA_int = useTLUL? ADC_SDATA_tlul : AC_ADC_SDATA;
   logic use_tl_pcm_in_left;
   logic [DATA_SIZE_FIR_OUT-1:0] Data_I_L_int;
   logic [DATA_SIZE_FIR_OUT-1:0] Data_I_L_tlul;
+  logic AC_DAC_SDATA_int;
 
   student_iis_transmitter #(
 	.DATA_SIZE_FIR_OUT(DATA_SIZE_FIR_OUT)
@@ -159,9 +160,22 @@ assign ADC_SDATA_int = useTLUL? ADC_SDATA_tlul : AC_ADC_SDATA;
 	.LRCLK_Rise(LRCLK_Rise_int),
 	.LRCLK_Fall(LRCLK_Fall_int),
 	.BCLK_Fall(BCLK_Fall_int),
-	.AC_DAC_SDATA(AC_DAC_SDATA)
+	.AC_DAC_SDATA(AC_DAC_SDATA_int)
   );
 
+  logic loobackEnable;
+
+  always_ff @(posedge clk_i, negedge rst_ni) begin
+	if(!rst_ni) begin
+		loobackEnable <= 1'b0;
+	end else begin
+		if(reg2hw.loopback_enable.qe) begin
+			loobackEnable <= reg2hw.loopback_enable.q;
+		end
+	end
+  end
+
+  assign AC_DAC_SDATA = loobackEnable? AC_ADC_SDATA : AC_DAC_SDATA_int;
 
 //   always_ff @(posedge clk_i, negedge rst_ni) begin
 // 	if (~rst_ni) begin
