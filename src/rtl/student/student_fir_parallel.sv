@@ -52,7 +52,7 @@ module student_fir_parallel #(
 	.devmode_i(1'b1)
   );
 
-  logic [23:0] sine_wave_output_int;
+  logic [15:0] sine_wave_output_int;
 
   sine_wave_output sine_wave_ins (
     .clk(clk_i),
@@ -259,7 +259,7 @@ logic useSineWave;
 				useSineWave <= reg2hw.sine_enable.q;
 			end
 			if(useSineWave) begin
-				y_out <= (sine_wave_output_int << 5);
+				y_out <= {'0,(sine_wave_output_int << 5)};
 			end else begin
 				y_out <= (y_out_int_int << 5);
 			end

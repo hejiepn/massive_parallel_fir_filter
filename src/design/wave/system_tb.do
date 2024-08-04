@@ -702,9 +702,9 @@ add wave -noupdate -group TL_UL /system_tb/board/DUT/core_i/tl_cpud_d2h
 add wave -noupdate -group TL_UL /system_tb/board/DUT/core_i/tl_bram_main_h2d
 add wave -noupdate -group TL_UL /system_tb/board/DUT/core_i/tl_bram_main_d2h
 add wave -noupdate -divider {Running Light}
-add wave -noupdate -expand -group fir_0 {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/sample_in_internal}
-add wave -noupdate -expand -group fir_0 {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/fir_sum}
-add wave -noupdate -expand -group fir_0 {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/y_out}
+add wave -noupdate -group fir_0 {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/sample_in_internal}
+add wave -noupdate -group fir_0 {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/fir_sum}
+add wave -noupdate -group fir_0 {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/y_out}
 add wave -noupdate /system_tb/board/DUT/core_i/student_i/rlight_i/led_o
 add wave -noupdate -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/valid_strobe_out
 add wave -noupdate -group fir_parallel -format Analog-Step -height 84 -min -1.0 /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/y_out
@@ -734,15 +734,43 @@ add wave -noupdate -group i2c /system_tb/board/DUT/core_i/student_i/dut_student_
 add wave -noupdate -group i2c /system_tb/board/DUT/core_i/student_i/dut_student_iic/scl_i_dd
 add wave -noupdate /system_tb/board/ac_lrclk
 add wave -noupdate /system_tb/board/ac_dac_sdata
-add wave -noupdate -format Analog-Step -height 84 -min -1.0 /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/y_out
+add wave -noupdate -max -1.9504682313709053e-10 -min -1098016.0 /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/y_out
 add wave -noupdate -format Analog-Step -height 84 -max 254.0 /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/sample_in_internal_first
-add wave -noupdate -format Analog-Step -height 84 -min -1.0 /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/y_out_int_int
-add wave -noupdate -format Analog-Step -height 84 -max 2097151.0 /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/y_out_int_int_1
-add wave -noupdate -format Analog-Step -height 84 -max 2097151.0 /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/y_out_int_int_2
+add wave -noupdate -max -6.0952132230340789e-12 -min -34313.0 /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/y_out_int_int
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/y_out_int_int_1
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/y_out_int_int_2
+add wave -noupdate {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/tl_student_dpram_i}
+add wave -noupdate {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/tl_student_dpram_o}
+add wave -noupdate {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/reg2hw}
+add wave -noupdate {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/hw2reg}
+add wave -noupdate {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/coeff_dpram/dpram_samples/bram}
+add wave -noupdate -group fir_0_coeff_dpram {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/coeff_dpram/tl_i}
+add wave -noupdate -group fir_0_coeff_dpram {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/coeff_dpram/tl_o}
+add wave -noupdate -group fir_0_coeff_dpram {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/coeff_dpram/TL_DataSize}
+add wave -noupdate -group fir_0_coeff_dpram {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/coeff_dpram/req}
+add wave -noupdate -group fir_0_coeff_dpram {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/coeff_dpram/we}
+add wave -noupdate -group fir_0_coeff_dpram {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/coeff_dpram/addr}
+add wave -noupdate -group fir_0_coeff_dpram {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/coeff_dpram/wdata}
+add wave -noupdate -group fir_0_coeff_dpram {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/coeff_dpram/wmask}
+add wave -noupdate -group fir_0_coeff_dpram {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/coeff_dpram/rdata}
+add wave -noupdate -group fir_0_coeff_dpram {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/coeff_dpram/rvalid}
+add wave -noupdate -group fir_0_sample_dpram {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/samples_dpram/tl_i}
+add wave -noupdate -group fir_0_sample_dpram {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/samples_dpram/tl_o}
+add wave -noupdate -group fir_0_sample_dpram {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/samples_dpram/TL_DataSize}
+add wave -noupdate -group fir_0_sample_dpram {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/samples_dpram/req}
+add wave -noupdate -group fir_0_sample_dpram {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/samples_dpram/we}
+add wave -noupdate -group fir_0_sample_dpram {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/samples_dpram/addr}
+add wave -noupdate -group fir_0_sample_dpram {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/samples_dpram/wdata}
+add wave -noupdate -group fir_0_sample_dpram {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/samples_dpram/wmask}
+add wave -noupdate -group fir_0_sample_dpram {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/samples_dpram/rdata}
+add wave -noupdate -group fir_0_sample_dpram {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/samples_dpram/rvalid}
+add wave -noupdate -group fir_0_sample_dpram {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/samples_dpram/dpram_samples/bram}
+add wave -noupdate {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[3]/genblk1/fir_i_middle/coeff_dpram/dpram_samples/bram}
+add wave -noupdate {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[7]/genblk1/fir_i_middle/coeff_dpram/dpram_samples/bram}
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {3168840000000 fs} 0}
+WaveRestoreCursors {{Cursor 1} {5496373194494 fs} 0}
 quietly wave cursor active 1
-configure wave -namecolwidth 599
+configure wave -namecolwidth 754
 configure wave -valuecolwidth 218
 configure wave -justifyvalue left
 configure wave -signalnamewidth 0
@@ -756,4 +784,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {12107600 ps} {5097299600 ps}
+WaveRestoreZoom {0 fs} {18219053776172 fs}

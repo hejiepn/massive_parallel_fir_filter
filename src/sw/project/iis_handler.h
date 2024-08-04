@@ -7,7 +7,7 @@
 #include "rvlab.h"
 
 
- void enable_loopback(bool enable);
+ void enable_effect(bool enable);
 
  uint32_t readSerialOut(void);
  uint16_t readPcmOutRight(void);

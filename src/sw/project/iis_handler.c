@@ -1,6 +1,6 @@
 #include "iis_handler.h"
 
-void enable_loopback(bool enable) {
+void enable_effect(bool enable) {
 	REG32(STUDENT_IIS_HANDLER_LOOPBACK_ENABLE(0)) = enable;
 }
 

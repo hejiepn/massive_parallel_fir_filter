@@ -20,3 +20,67 @@
  void fir_p_en_sine_wave(bool enable) {
 	REG32(STUDENT_FIR_PARALLEL_SINE_ENABLE(0)) = enable;
  }
+
+
+void fir_s_coeff(uint16_t coeff, uint16_t address, uint8_t fir_index) {
+
+    if (fir_index >= 8) {
+        // Handle error: fir_index out of bounds
+        printf("fir_index out of bounds! \n");
+        return;
+    }
+
+    uint32_t base_addr = STUDENT_FIR_BASE_ADDR_ARRAY[fir_index];
+
+    // Ensure address only uses 10 bits (bits 11:2)
+    uint32_t addr_mask = 0x3FF; // 10 bits mask
+    uint32_t masked_address = (address & addr_mask) << 2; // Shift to bits 11:2
+
+    // Preserve bits 1:0 of the base address
+    uint32_t base_lower_bits = base_addr & 0x3;
+
+    // Combine base address with the masked and shifted address
+    uint32_t full_address = (base_addr & ~0xFFC) | masked_address | base_lower_bits;
+
+    // Prepare the coefficient
+    uint32_t padded_coeff = (uint32_t)coeff;
+
+    // Write to the calculated address
+    REG32(full_address) = padded_coeff;
+}
+
+void bp_effect(void) {
+    for(int fir_index = 0; fir_index < 8; fir_index = fir_index + 1) {
+        printf("Config FIR Unit %d \n", fir_index);
+        for(int i = 0; i < 1024; i = i +1) {
+            fir_s_coeff(bp_20_20khz[i], i, fir_index);
+        }
+    } 
+}
+
+void bs_effect(void) {
+    for(int fir_index = 0; fir_index < 8; fir_index = fir_index + 1) {
+        printf("Config FIR Unit %d \n", fir_index);
+        for(int i = 0; i < 1024; i = i +1) {
+            fir_s_coeff(bs_500_2khz[i], i, fir_index);
+        }
+    } 
+}
+
+void hp_effect(void) {
+    for(int fir_index = 0; fir_index < 8; fir_index = fir_index + 1) {
+        printf("Config FIR Unit %d \n", fir_index);
+        for(int i = 0; i < 1024; i = i +1) {
+            fir_s_coeff(hp_200[i], i, fir_index);
+        }
+    } 
+}
+
+void lp_effect(void) {
+    for(int fir_index = 0; fir_index < 8; fir_index = fir_index + 1) {
+        printf("Config FIR Unit %d \n", fir_index);
+        for(int i = 0; i < 1024; i = i +1) {
+            fir_s_coeff(lp_15khz[i], i, fir_index);
+        }
+    } 
+}

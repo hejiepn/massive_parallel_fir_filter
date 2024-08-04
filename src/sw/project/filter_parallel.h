@@ -5,14 +5,50 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include "rvlab.h"
+#include "bandpass_coeff.h"
+#include "bandstop_coeff.h"
+#include "hp_coeff.h"
+#include "lp_coeff.h"
 
 #define FIR_NUM 8
+#define ADDRESS_WIDTH 10
+#define MAX_ADDR 2^ADDRESS_WIDTH
 
- uint32_t fir_p_read_y_out_upper(void);
- uint32_t fir_p_read_y_out_lower(void);
- uint16_t fir_p_read_shift_out_samples(void);
- void fir_p_write_in_samples(uint16_t sample);
- void fir_p_en_sine_wave(bool enable);
+#define STUDENT_FIR0_BASE_ADDR_c 0x10201000
+#define STUDENT_FIR1_BASE_ADDR_c 0x10211000
+#define STUDENT_FIR2_BASE_ADDR_c 0x10221000
+#define STUDENT_FIR3_BASE_ADDR_c 0x10231000
+#define STUDENT_FIR4_BASE_ADDR_c 0x10241000
+#define STUDENT_FIR5_BASE_ADDR_c 0x10251000
+#define STUDENT_FIR6_BASE_ADDR_c 0x10261000
+#define STUDENT_FIR7_BASE_ADDR_c 0x10271000
+
+// Define the array
+static uint32_t STUDENT_FIR_BASE_ADDR_ARRAY[] = {
+    STUDENT_FIR0_BASE_ADDR_c,
+    STUDENT_FIR1_BASE_ADDR_c,
+    STUDENT_FIR2_BASE_ADDR_c,
+    STUDENT_FIR3_BASE_ADDR_c,
+    STUDENT_FIR4_BASE_ADDR_c,
+    STUDENT_FIR5_BASE_ADDR_c,
+    STUDENT_FIR6_BASE_ADDR_c,
+    STUDENT_FIR7_BASE_ADDR_c
+};
+
+#define STUDENT_FIR_BASE_ADDR_ARRAY_SIZE (sizeof(STUDENT_FIR_BASE_ADDR_ARRAY) / sizeof(STUDENT_FIR_BASE_ADDR_ARRAY[0]))
+
+
+uint32_t fir_p_read_y_out_upper(void);
+uint32_t fir_p_read_y_out_lower(void);
+uint16_t fir_p_read_shift_out_samples(void);
+void fir_p_write_in_samples(uint16_t sample);
+void fir_p_en_sine_wave(bool enable);
+
+void fir_s_coeff(uint16_t coeff, uint16_t address, uint8_t fir_index);
+void bp_effect(void);
+void bs_effect(void);
+void hp_effect(void);
+void lp_effect(void);
 
 /**
  * Adressing in the FIR Parallel
@@ -31,8 +67,9 @@
  *
  * 
  * DPRAM Memory Addressing
- * for e.g.  #define STUDENT_FIR0_BASE_ADDR_s 0x10200000
- * last 2 Bytes respond to address in bram
+ * for e.g.  #define STUDENT_FIR0_BASE_ADDR_s 0x10201000
+ * addr_o   = (tl_i.a_valid) ? tl_i.a_address[11:2] : '0;
+ * Bit 11 to 2 responds to the address in the dpram
  * 
  **/            
 

@@ -5,6 +5,9 @@
 #include "userinterface.h"
 #include "filter_parallel.h"
 #include "iis_handler.h"
+#include "bandpass_coeff.h"
+
+#define MAX_LINE_LENGTH 1024  // Adjust if needed
 
 static void delay_cycles(int n_cycles) {
     REG32(RV_TIMER_CTRL(0)) = (1<<RV_TIMER_CTRL_ACTIVE0_LSB);
@@ -17,10 +20,22 @@ int main(void) {
 
 	printf("Start Audio Config!\n");
 
-	start_audio_codec_config();
+	//start_audio_codec_config();
 
 	//printf("Enable Loopback!\n");
-	enable_loopback(0);
+	//enable_effect(0);
+
+	printf("bandpass effect \n");
+    bp_effect();
+
+    printf("bandstop effect \n");
+    bs_effect();
+
+    printf("highpass effect \n");
+    hp_effect();
+
+    printf("lowpass effect \n");
+    lp_effect();
 
 	/*
 		while(true) {
