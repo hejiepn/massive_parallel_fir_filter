@@ -127,7 +127,8 @@ module student_fir_i2s_clk_tb;
 	// Apply test stimulus
 	$display("Apply test stimulus:");
 	//for(int j= 0; j < 6; j = j+1) begin
-		for (int i = 0; i < MaxAddr; i = i + 1) begin
+		//for (int i = 0; i < MaxAddr; i = i + 1) begin
+		for (int i = 0; i < 2; i = i + 1) begin
 			sample_in = {8'b0, sin_mem[i]}; // Zero-pad the 8-bit value to 16 bits
 			@(posedge LRCLK_Rise);
 			valid_strobe_in <= 1;
@@ -146,6 +147,15 @@ module student_fir_i2s_clk_tb;
 			@(posedge clk_i);
 		end
 	//end
+
+
+	bus.wait_cycles(200000000);
+	bus.wait_cycles(200000000);
+	bus.wait_cycles(200000000);
+	bus.wait_cycles(200000000);
+	bus.wait_cycles(200000000);
+
+
 
 		$stop;
 	  end

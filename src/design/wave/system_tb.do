@@ -734,9 +734,10 @@ add wave -noupdate -group i2c /system_tb/board/DUT/core_i/student_i/dut_student_
 add wave -noupdate -group i2c /system_tb/board/DUT/core_i/student_i/dut_student_iic/scl_i_dd
 add wave -noupdate /system_tb/board/ac_lrclk
 add wave -noupdate /system_tb/board/ac_dac_sdata
-add wave -noupdate -max -1.9504682313709053e-10 -min -1098016.0 /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/y_out
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/sine_wave_ins/sine_wave_out
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/y_out
 add wave -noupdate -format Analog-Step -height 84 -max 254.0 /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/sample_in_internal_first
-add wave -noupdate -max -6.0952132230340789e-12 -min -34313.0 /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/y_out_int_int
+add wave -noupdate /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/y_out_int_int
 add wave -noupdate /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/y_out_int_int_1
 add wave -noupdate /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/y_out_int_int_2
 add wave -noupdate {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/tl_student_dpram_i}
@@ -768,7 +769,7 @@ add wave -noupdate -group fir_0_sample_dpram {/system_tb/board/DUT/core_i/studen
 add wave -noupdate {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[3]/genblk1/fir_i_middle/coeff_dpram/dpram_samples/bram}
 add wave -noupdate {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[7]/genblk1/fir_i_middle/coeff_dpram/dpram_samples/bram}
 TreeUpdate [SetDefaultTree]
-WaveRestoreCursors {{Cursor 1} {5496373194494 fs} 0}
+WaveRestoreCursors {{Cursor 1} {46964551436620 fs} 0}
 quietly wave cursor active 1
 configure wave -namecolwidth 754
 configure wave -valuecolwidth 218
@@ -784,4 +785,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {0 fs} {18219053776172 fs}
+WaveRestoreZoom {0 fs} {33800245352113 fs}

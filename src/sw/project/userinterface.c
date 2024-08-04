@@ -43,6 +43,13 @@ void cmd_lw(char *args[]);
 void cmd_sw(char *args[]);
 void cmd_dump(char *args[]);
 
+void cmd_bp(char *args[]);
+void cmd_bs(char *args[]);
+void cmd_hp(char *args[]);
+void cmd_lp(char *args[]);
+void cmd_iis(char *args[]);
+
+
 struct cmd {
     char *name;
     char *help;
@@ -53,6 +60,11 @@ struct cmd {
     {"lw", " ADDR: Load word.", 1, cmd_lw},
     {"sw", " ADDR DATA: Store word.", 2, cmd_sw},
     {"dump", " ADDR WORDS: Dump memory.", 2, cmd_dump},
+    {"bp", " apply bandpass filter to left or right", 1, cmd_bp},
+    {"bs", " apply bandstop filter to left or right", 1, cmd_bs},
+    {"hp", " apply highpass filter to left or right", 1, cmd_hp},
+    {"lp", " apply lowpass filter to left or right", 1, cmd_lp},
+    {"iis", " apply effect", 1, cmd_iis},
     {NULL, NULL, 0, NULL}
 };
 
@@ -63,6 +75,111 @@ void cmd_help(char *args[]) {
     for(c = cmds;c->name;c++) {
         printf("\t%s%s\n", c->name, c->help);
     }   
+}
+
+void cmd_iis(char *args[]) {
+    if (args[1] == NULL) {
+        printf("Error: No channel specified.\n");
+        return;
+    }
+
+    int effect;
+
+    if (strcmp(args[1], "1") == 0) {
+        effect = 1;
+    } else if (strcmp(args[1], "0") == 0) {
+        effect = 0;
+    } else {
+        printf("Error: Unknown channel '%s'. Use 'left' or 'right'.\n", args[1]);
+        return;
+    }
+
+    // Call the bp_effect function with the specified channel
+        enable_effect(effect);
+}
+
+void cmd_bp(char *args[]) {
+    if (args[1] == NULL) {
+        printf("Error: No channel specified.\n");
+        return;
+    }
+
+    fir_parallel_left_right channel;
+
+    if (strcmp(args[1], "l") == 0) {
+        channel = left;
+    } else if (strcmp(args[1], "r") == 0) {
+        channel = right;
+    } else {
+        printf("Error: Unknown channel '%s'. Use 'left' or 'right'.\n", args[1]);
+        return;
+    }
+
+    // Call the bp_effect function with the specified channel
+    bp_effect(channel);
+}
+
+void cmd_bs(char *args[]) {
+    if (args[1] == NULL) {
+        printf("Error: No channel specified.\n");
+        return;
+    }
+
+    fir_parallel_left_right channel;
+
+    if (strcmp(args[1], "l") == 0) {
+        channel = left;
+    } else if (strcmp(args[1], "r") == 0) {
+        channel = right;
+    } else {
+        printf("Error: Unknown channel '%s'. Use 'left' or 'right'.\n", args[1]);
+        return;
+    }
+
+    // Call the bp_effect function with the specified channel
+    bs_effect(channel);
+}
+
+void cmd_hp(char *args[]) {
+    if (args[1] == NULL) {
+        printf("Error: No channel specified.\n");
+        return;
+    }
+
+    fir_parallel_left_right channel;
+
+    if (strcmp(args[1], "l") == 0) {
+        channel = left;
+    } else if (strcmp(args[1], "r") == 0) {
+        channel = right;
+    } else {
+        printf("Error: Unknown channel '%s'. Use 'left' or 'right'.\n", args[1]);
+        return;
+    }
+
+    // Call the bp_effect function with the specified channel
+    hp_effect(channel);
+}
+
+void cmd_lp(char *args[]) {
+    if (args[1] == NULL) {
+        printf("Error: No channel specified.\n");
+        return;
+    }
+
+    fir_parallel_left_right channel;
+
+    if (strcmp(args[1], "l") == 0) {
+        channel = left;
+    } else if (strcmp(args[1], "r") == 0) {
+        channel = right;
+    } else {
+        printf("Error: Unknown channel '%s'. Use 'left' or 'right'.\n", args[1]);
+        return;
+    }
+
+    // Call the bp_effect function with the specified channel
+    lp_effect(channel);
 }
 
 void cmd_lw(char *args[]) {

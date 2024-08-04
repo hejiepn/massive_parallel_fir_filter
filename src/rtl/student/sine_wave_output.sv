@@ -7,6 +7,7 @@ module sine_wave_output (
 
     logic [15:0] sine_wave_mem [0:1023];
     logic [9:0] sin_cnt;
+    logic one_time;
 
     // Read sine wave values from .mem file
     initial begin
@@ -33,11 +34,17 @@ logic lrclk_prev;
     always_ff @(posedge clk, negedge rst_ni) begin
         if(!rst_ni) begin
             sin_cnt <= '0;
+            one_time <= 0;
             sine_wave_out_int <= '0;
         end else begin
-            if(lrclk_pos_edge) begin
-                sine_wave_out_int <= sine_wave_mem[sin_cnt];
-                sin_cnt <= sin_cnt + 1;
+            if(one_time) begin
+                sine_wave_out_int <= '0;
+            end else begin 
+                if(lrclk_pos_edge) begin
+                    sine_wave_out_int <= sine_wave_mem[sin_cnt];
+                    sin_cnt <= sin_cnt + 1;
+                    if(sin_cnt == 500) one_time <= 1;
+                end
             end
         end
     end

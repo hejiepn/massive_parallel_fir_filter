@@ -56,6 +56,7 @@ void fir_s_coeff(uint16_t coeff, uint16_t address, uint8_t fir_index, fir_parall
 }
 
 void bp_effect(fir_parallel_left_right channel) {
+    printf("bp_effect %d !\n", (int)channel);
     for(int fir_index = 0; fir_index < 8; fir_index = fir_index + 1) {
         printf("Config FIR Unit %d \n", fir_index);
         for(int i = 0; i < 1024; i = i +1) {
@@ -65,6 +66,7 @@ void bp_effect(fir_parallel_left_right channel) {
 }
 
 void bs_effect(fir_parallel_left_right channel) {
+    printf("bp_effect %d !\n", (int)channel);
     for(int fir_index = 0; fir_index < 8; fir_index = fir_index + 1) {
         printf("Config FIR Unit %d \n", fir_index);
         for(int i = 0; i < 1024; i = i +1) {
@@ -74,6 +76,7 @@ void bs_effect(fir_parallel_left_right channel) {
 }
 
 void hp_effect(fir_parallel_left_right channel) {
+    printf("bp_effect %d !\n", (int)channel);
     for(int fir_index = 0; fir_index < 8; fir_index = fir_index + 1) {
         printf("Config FIR Unit %d \n", fir_index);
         for(int i = 0; i < 1024; i = i +1) {
@@ -83,6 +86,7 @@ void hp_effect(fir_parallel_left_right channel) {
 }
 
 void lp_effect(fir_parallel_left_right channel) {
+    printf("bp_effect %d !\n", (int)channel);
     for(int fir_index = 0; fir_index < 8; fir_index = fir_index + 1) {
         printf("Config FIR Unit %d \n", fir_index);
         for(int i = 0; i < 1024; i = i +1) {
@@ -90,3 +94,85 @@ void lp_effect(fir_parallel_left_right channel) {
         }
     } 
 }
+
+/*
+void bp_effect_l(void) {
+    printf("bp_effect left!\n");
+    for(int fir_index = 0; fir_index < 8; fir_index = fir_index + 1) {
+        printf("Config FIR Unit %d \n", fir_index);
+        for(int i = 0; i < 1024; i = i +1) {
+            fir_s_coeff(bp_20_20khz[i], i, fir_index, left);
+        }
+    } 
+}
+
+void bp_effect_r(void) {
+    printf("bp_effect right!\n");
+    for(int fir_index = 0; fir_index < 8; fir_index = fir_index + 1) {
+        printf("Config FIR Unit %d \n", fir_index);
+        for(int i = 0; i < 1024; i = i +1) {
+            fir_s_coeff(bp_20_20khz[i], i, fir_index, right);
+        }
+    } 
+}
+
+void bs_effect_l(void) {
+    printf("bs_effect left!\n");
+    for(int fir_index = 0; fir_index < 8; fir_index = fir_index + 1) {
+        printf("Config FIR Unit %d \n", fir_index);
+        for(int i = 0; i < 1024; i = i +1) {
+            fir_s_coeff(bs_500_2khz[i], i, fir_index, left);
+        }
+    } 
+}
+
+void bs_effect_r(void) {
+    printf("bp_effect right!\n");
+    for(int fir_index = 0; fir_index < 8; fir_index = fir_index + 1) {
+        printf("Config FIR Unit %d \n", fir_index);
+        for(int i = 0; i < 1024; i = i +1) {
+            fir_s_coeff(bs_500_2khz[i], i, fir_index, right);
+        }
+    } 
+}
+
+void hp_effect_l(void) {
+    printf("hp_effect left!\n");
+    for(int fir_index = 0; fir_index < 8; fir_index = fir_index + 1) {
+        printf("Config FIR Unit %d \n", fir_index);
+        for(int i = 0; i < 1024; i = i +1) {
+            fir_s_coeff(hp_200[i], i, fir_index, left);
+        }
+    } 
+}
+
+void hp_effect_r(void) {
+    printf("hp_effect right!\n");
+    for(int fir_index = 0; fir_index < 8; fir_index = fir_index + 1) {
+        printf("Config FIR Unit %d \n", fir_index);
+        for(int i = 0; i < 1024; i = i +1) {
+            fir_s_coeff(hp_200[i], i, fir_index, right);
+        }
+    } 
+}
+
+void lp_effect_l(void) {
+    printf("lp_effect left!\n");
+    for(int fir_index = 0; fir_index < 8; fir_index = fir_index + 1) {
+        printf("Config FIR Unit %d \n", fir_index);
+        for(int i = 0; i < 1024; i = i +1) {
+            fir_s_coeff(lp_15khz[i], i, fir_index, left);
+        }
+    } 
+}
+
+void lp_effect_r(void) {
+    printf("lp_effect right!\n");
+    for(int fir_index = 0; fir_index < 8; fir_index = fir_index + 1) {
+        printf("Config FIR Unit %d \n", fir_index);
+        for(int i = 0; i < 1024; i = i +1) {
+            fir_s_coeff(lp_15khz[i], i, fir_index, right);
+        }
+    } 
+}
+*/

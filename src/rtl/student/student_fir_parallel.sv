@@ -259,11 +259,14 @@ logic useSineWave;
 				useSineWave <= reg2hw.sine_enable.q;
 			end
 			if(useSineWave) begin
-				y_out <= {'0,(sine_wave_output_int << 5)};
+				y_out <= {'0,(sine_wave_output_int << 4)};
 			end else begin
-				y_out <= (y_out_int_int << 5);
+				y_out <= (y_out_int_int << 4);
 			end
 		end
 	end
+	
+
+//	assign y_out = y_out_int_int;
 
 endmodule

@@ -72,10 +72,23 @@ void fir_p_write_in_samples(uint16_t sample);
 void fir_p_en_sine_wave(bool enable);
 
 void fir_s_coeff(uint16_t coeff, uint16_t address, uint8_t fir_index, fir_parallel_left_right channel);
+
 void bp_effect(fir_parallel_left_right channel);
 void bs_effect(fir_parallel_left_right channel);
 void hp_effect(fir_parallel_left_right channel);
 void lp_effect(fir_parallel_left_right channel);
+
+/*
+void bp_effect_r(void);
+void bs_effect_r(void);
+void hp_effect_r(void);
+void lp_effect_r(void);
+
+void bp_effect_l(void);
+void bs_effect_l(void);
+void hp_effect_l(void);
+void lp_effect_l(void);
+*/
 
 /**
  * Adressing in the FIR Parallel

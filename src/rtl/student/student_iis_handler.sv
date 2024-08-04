@@ -10,8 +10,8 @@ module student_iis_handler (
     output logic AC_DAC_SDATA,  // Codec DAC Serial Data
 
     // To/From HW
-    input  logic [15:0] Data_I_L,     // Data from HW to Codec (Left Channel)
-    input  logic [15:0] Data_I_R,     // Data from HW to Codec (Right Channel)
+    input  logic [23:0] Data_I_L,     // Data from HW to Codec (Left Channel)
+    input  logic [23:0] Data_I_R,     // Data from HW to Codec (Right Channel)
     output logic [15:0] Data_O_L,     // Data from Codec to HW (Left Channel)
     output logic [15:0] Data_O_R,     // Data from Codec to HW (Right Channel)
 	input  tlul_pkg::tl_h2d_t tl_i,
@@ -43,18 +43,18 @@ student_iis_handler_hw2reg_t hw2reg; // Read
 
   // Generation of AC_BCLK (1/16 of the system clock) -> 3.125 MHz
   // Also Generate Falling and Rising Edge Strobes
-  logic [2:0] Cnt_BCLK;
-//   logic [3:0] Cnt_BCLK;
+  //logic [2:0] Cnt_BCLK;
+  logic [3:0] Cnt_BCLK;
   logic AC_BCLK_int;
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
-      Cnt_BCLK <= 3'b111;
-	//   Cnt_BCLK <= 4'd8;
+    //  Cnt_BCLK <= 3'b111;
+	   Cnt_BCLK <= 4'd8;
       AC_BCLK_int <= 1'b0;
     end else begin
       if (Cnt_BCLK == 0) begin
-        Cnt_BCLK <= 3'b111;
-		// Cnt_BCLK <= 4'd8;
+     //   Cnt_BCLK <= 3'b111;
+		 Cnt_BCLK <= 4'd8;
         AC_BCLK_int <= ~AC_BCLK_int;
       end else Cnt_BCLK <= Cnt_BCLK - 1'b1;
     end
@@ -68,18 +68,18 @@ student_iis_handler_hw2reg_t hw2reg; // Read
 
   // Generation of AC_LRCLK (1/1024 of the system clock) -> 48.828 kHz 
   // Also Generate Falling and Rising Edge Strobes
-  logic [8:0] Cnt_LRCLK;
-//   logic [9:0] Cnt_LRCLK;´
+//  logic [8:0] Cnt_LRCLK;
+   logic [9:0] Cnt_LRCLK;
   logic AC_LRCLK_int;
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
-      Cnt_LRCLK <= 9'b111111111;
-	//  Cnt_LRCLK <= 10'd566;
+  //    Cnt_LRCLK <= 9'b111111111;
+	  Cnt_LRCLK <= 10'd566;
       AC_LRCLK_int <= 1'b0;
     end else begin
       if (Cnt_LRCLK == 0) begin
-        Cnt_LRCLK <= 9'b111111111;
-		//  Cnt_LRCLK <= 10'd566;
+  //      Cnt_LRCLK <= 9'b111111111;
+		  Cnt_LRCLK <= 10'd566;
         AC_LRCLK_int <= ~AC_LRCLK_int;
       end else Cnt_LRCLK <= Cnt_LRCLK - 1;
     end
@@ -93,21 +93,21 @@ student_iis_handler_hw2reg_t hw2reg; // Read
 
 
   // Shift out data to send to the codec
-  logic [16:0] Data_Out_int;
+  logic [24:0] Data_Out_int;
   always_ff @(posedge clk_i or negedge rst_ni) begin
     if (!rst_ni) begin
-      Data_Out_int[16]   <= 1'b0;  // Append a 0 to the MSB because we ghave to wait one bclk cycle
-      Data_Out_int[15:0] <= '0;
+      Data_Out_int[24]   <= 1'b0;  // Append a 0 to the MSB because we ghave to wait one bclk cycle
+      Data_Out_int[23:0] <= '0;
     end else begin
       Data_Out_int <= Data_Out_int;
       if (LRCLK_Rise) begin
-        Data_Out_int[16]   <= 1'b0;
-        Data_Out_int[15:0] <= Data_I_R;
+        Data_Out_int[24]   <= 1'b0;
+        Data_Out_int[23:0] <= Data_I_R;
       end else if (LRCLK_Fall) begin
-        Data_Out_int[16]   <= 1'b0;
-        Data_Out_int[15:0] <= Data_I_L;
+        Data_Out_int[24]   <= 1'b0;
+        Data_Out_int[23:0] <= Data_I_L;
       end else if (BCLK_Fall == 1'b1 && LRCLK_Fall == 1'b0 && LRCLK_Rise == 1'b0) begin
-        Data_Out_int <= {Data_Out_int[15:0], 1'b0};
+        Data_Out_int <= {Data_Out_int[23:0], 1'b0};
       end
     end
   end
@@ -124,7 +124,7 @@ student_iis_handler_hw2reg_t hw2reg; // Read
 	end
   end
 
-  assign AC_DAC_SDATA = loobackEnable? AC_ADC_SDATA : Data_Out_int[16];;
+  assign AC_DAC_SDATA = loobackEnable? AC_ADC_SDATA : Data_Out_int[16];
 
   //assign AC_DAC_SDATA = Data_Out_int[16];
 

@@ -154,6 +154,8 @@ module student_fir_parallel_i2s_clk_tb;
 		bus.get_word(y_out_lower_reg, tlul_read_data);
 		@(posedge clk_i);
 	end
+
+	sample_in = '0;
 //end
 	/*
 
@@ -252,7 +254,7 @@ module student_fir_parallel_i2s_clk_tb;
 	end
 	@(posedge clk_i);
 */
-    $stop;
+    //$stop;
   end
 
   // Clock cycle counter

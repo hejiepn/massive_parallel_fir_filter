@@ -135,29 +135,6 @@ localparam int unsigned NUM_FIR = 8; //only numbers which are power of 2 are sup
 	.tl_o(tl_student_o[2])  //slave output (this module's response)
 );
 
-	student_iis_handler_top #(
-	 .DATA_SIZE(DATA_SIZE),
-	 .DATA_SIZE_FIR_OUT(DATA_SIZE_FIR_OUT)
-  ) dut_student_iis (
-    .clk_i(clk_i),
-    .rst_ni(rst_ni),
-    .AC_MCLK(mclk),       // Codec Master Clock
-    .AC_BCLK(bclk),       // Codec Bit Clock
-    .AC_LRCLK(lrclk),      // Codec Left/Right Clock
-    .AC_ADC_SDATA(userio_i.ac_adc_sdata),  // Codec ADC Serial Data
-    //.AC_ADC_SDATA('1),  // Codec ADC Serial Data
-    .AC_DAC_SDATA(dac_sdata),  // Codec DAC Serial Data
-	
-  	.Data_I_R(y_out_r), 	 	//Data from HW to Codec (mono Channel)
-    .Data_I_L(y_out_l),
-  	.Data_O_L(Data_iis_O_L),	 //Data from Codec to HW (mono Channel)
-    .Data_O_R(Data_iis_O_R),
-  	.valid_strobe_I(valid_strobe_out), // Valid strobe from HW
-  	.valid_strobe(valid_strobe_2FIR),    // Valid strobe to HW
-    .tl_i(tl_student_i[3]),  //master input (incoming request)
-    .tl_o(tl_student_o[3])  //slave output (this module's response)
-);
-
   student_fir_parallel #(
   .ADDR_WIDTH(ADDR_WIDTH),
   .DATA_SIZE(DATA_SIZE),
@@ -183,30 +160,27 @@ localparam int unsigned NUM_FIR = 8; //only numbers which are power of 2 are sup
    .sine_wave_out(sine_input)
 );
 
-    /*
 
-student_iis_handler iss_handler(
-     .clk_i(clk_i),
-     .rst_ni(rst_ni),
-
-     .AC_MCLK(mclk),       // Codec Master Clock
-     .AC_BCLK(bclk),       // Codec Bit Clock
-     .AC_LRCLK(lrclk),      // Codec Left/Right Clock
-     //.AC_ADC_SDATA(userio_i.ac_adc_sdata),  // Codec ADC Serial Data
-     .AC_ADC_SDATA('1),  // Codec ADC Serial Data
-     .AC_DAC_SDATA(dac_sdata),  // Codec DAC Serial Data
-
-     .Data_I_L(y_out_l),     // Data from HW to Codec (Left Channel)
-     .Data_I_R('0),     // Data from HW to Codec (Right Channel)
-     .Data_O_L(Data_iis_O_L),     // Data from Codec to HW (Left Channel)
-     .Data_O_R(Data_iis_O_R),     // Data from Codec to HW (Right Channel)
-     .valid_strobe(valid_strobe_2FIR),  // Valid strobe to HW
-	.tl_i(tl_student_i[3]),  //master input (incoming request)
+  student_iis_handler_top #(
+   .DATA_SIZE(DATA_SIZE),
+   .DATA_SIZE_FIR_OUT(DATA_SIZE_FIR_OUT)
+  ) dut_student_iis (
+    .clk_i(clk_i),
+    .rst_ni(rst_ni),
+    .AC_MCLK(mclk),       // Codec Master Clock
+    .AC_BCLK(bclk),       // Codec Bit Clock
+    .AC_LRCLK(lrclk),      // Codec Left/Right Clock
+    .AC_ADC_SDATA(userio_i.ac_adc_sdata),  // Codec ADC Serial Data
+    .AC_DAC_SDATA(dac_sdata),  // Codec DAC Serial Data
+  
+    .Data_I_R(y_out_r),     //Data from HW to Codec (mono Channel)
+    .Data_I_L(y_out_l),
+    .Data_O_L(Data_iis_O_L),   //Data from Codec to HW (mono Channel)
+    .Data_O_R(Data_iis_O_R),
+    .valid_strobe_I(valid_strobe_out), // Valid strobe from HW
+    .valid_strobe(valid_strobe_2FIR),    // Valid strobe to HW
+    .tl_i(tl_student_i[3]),  //master input (incoming request)
     .tl_o(tl_student_o[3])  //slave output (this module's response)
- );
-
-
-*/
- 
+); 
 
 endmodule
