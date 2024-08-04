@@ -51,5 +51,15 @@
         {bits: "0", name: "use sine", desc: "choose to use sin gen or not"}
       ]
     }
+    {
+      name: "shift_amount"
+      desc: "shift output to left"
+      swaccess: "wo"
+      hwaccess: "hro"
+      hwqe: "true"
+      fields: [
+        {bits: "3:0", name: "shift amount", desc: "shift output to left"}
+      ]
+    }
   ]
 }

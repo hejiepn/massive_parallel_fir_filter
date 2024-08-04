@@ -48,6 +48,7 @@ void cmd_bs(char *args[]);
 void cmd_hp(char *args[]);
 void cmd_lp(char *args[]);
 void cmd_iis(char *args[]);
+void cmd_shift(char *args[]);
 
 
 struct cmd {
@@ -65,6 +66,7 @@ struct cmd {
     {"hp", " apply highpass filter to left or right", 1, cmd_hp},
     {"lp", " apply lowpass filter to left or right", 1, cmd_lp},
     {"iis", " apply effect", 1, cmd_iis},
+    {"sh", " apply shift on output, channel", 2, cmd_shift},
     {NULL, NULL, 0, NULL}
 };
 
@@ -75,6 +77,33 @@ void cmd_help(char *args[]) {
     for(c = cmds;c->name;c++) {
         printf("\t%s%s\n", c->name, c->help);
     }   
+}
+
+void cmd_shift(char *args[]) {
+    if (args[1] == NULL) {
+        printf("Error: No channel specified.\n");
+        return;
+    }
+
+    char *endptr;
+    unsigned long effect = strtoul(args[1], &endptr, 10);
+    if(*args[1]=='\0' || *endptr!='\0') {
+         printf("Error: Invalid shift amount '%s'.\n", args[1]);
+        return;
+    }
+
+    fir_parallel_left_right channel;
+
+    if (strcmp(args[2], "l") == 0) {
+        channel = left;
+    } else if (strcmp(args[1], "r") == 0) {
+        channel = right;
+    } else {
+        printf("Error: Unknown channel '%s'. Use 'left' or 'right'.\n", args[1]);
+        return;
+    }
+
+    shift_amount((uint16_t)effect, channel);
 }
 
 void cmd_iis(char *args[]) {

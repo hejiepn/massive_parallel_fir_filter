@@ -706,22 +706,23 @@ add wave -noupdate -group fir_0 {/system_tb/board/DUT/core_i/student_i/dut_fir_p
 add wave -noupdate -group fir_0 {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/fir_sum}
 add wave -noupdate -group fir_0 {/system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/fir[0]/genblk1/fir_i_first/y_out}
 add wave -noupdate /system_tb/board/DUT/core_i/student_i/rlight_i/led_o
-add wave -noupdate -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/valid_strobe_out
-add wave -noupdate -group fir_parallel -format Analog-Step -height 84 -min -1.0 /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/y_out
-add wave -noupdate -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/reg2hw
-add wave -noupdate -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/hw2reg
-add wave -noupdate -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/sine_wave_output_int
-add wave -noupdate -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/sample_shift_out_internal
-add wave -noupdate -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/sample_shift_in_internal
-add wave -noupdate -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/valid_strobe_out_internal
-add wave -noupdate -group fir_parallel -expand /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/y_out_internal
-add wave -noupdate -group fir_parallel -format Analog-Step -height 84 -max 254.0 /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/sample_in_internal_first
-add wave -noupdate -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/valid_strobe_in_prev
-add wave -noupdate -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/valid_strobe_in_pos_edge
-add wave -noupdate -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/useTlulSample
-add wave -noupdate -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/adder_tree_y_out
-add wave -noupdate -group fir_parallel -format Analog-Step -height 84 -min -1.0 /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/y_out_int_int
-add wave -noupdate -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/useSineWave
+add wave -noupdate -expand -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/shift_amount
+add wave -noupdate -expand -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/valid_strobe_out
+add wave -noupdate -expand -group fir_parallel -format Analog-Step -height 84 -min -1.0 /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/y_out
+add wave -noupdate -expand -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/reg2hw
+add wave -noupdate -expand -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/hw2reg
+add wave -noupdate -expand -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/sine_wave_output_int
+add wave -noupdate -expand -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/sample_shift_out_internal
+add wave -noupdate -expand -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/sample_shift_in_internal
+add wave -noupdate -expand -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/valid_strobe_out_internal
+add wave -noupdate -expand -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/y_out_internal
+add wave -noupdate -expand -group fir_parallel -format Analog-Step -height 84 -max 254.0 /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/sample_in_internal_first
+add wave -noupdate -expand -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/valid_strobe_in_prev
+add wave -noupdate -expand -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/valid_strobe_in_pos_edge
+add wave -noupdate -expand -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/useTlulSample
+add wave -noupdate -expand -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/adder_tree_y_out
+add wave -noupdate -expand -group fir_parallel -format Analog-Step -height 84 -min -1.0 /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/y_out_int_int
+add wave -noupdate -expand -group fir_parallel /system_tb/board/DUT/core_i/student_i/dut_fir_parallel_left/useSineWave
 add wave -noupdate -group i2c /system_tb/board/DUT/core_i/student_i/dut_student_iic/sda_oe
 add wave -noupdate -group i2c /system_tb/board/DUT/core_i/student_i/dut_student_iic/scl_oe
 add wave -noupdate -group i2c /system_tb/board/DUT/core_i/student_i/dut_student_iic/tl_i
@@ -785,4 +786,4 @@ configure wave -griddelta 40
 configure wave -timeline 0
 configure wave -timelineunits ns
 update
-WaveRestoreZoom {0 fs} {33800245352113 fs}
+WaveRestoreZoom {0 fs} {30394996753206 fs}

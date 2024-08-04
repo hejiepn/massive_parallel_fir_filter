@@ -23,5 +23,6 @@ void cmd_bs(char *args[]);
 void cmd_hp(char *args[]);
 void cmd_lp(char *args[]);
 void cmd_iis(char *args[]);
+void cmd_shift(char *args[]);
 
 #endif // _USERINTERFACE_H

@@ -78,6 +78,8 @@ void bs_effect(fir_parallel_left_right channel);
 void hp_effect(fir_parallel_left_right channel);
 void lp_effect(fir_parallel_left_right channel);
 
+void shift_amount(uint16_t shift_amount, fir_parallel_left_right channel);
+
 /*
 void bp_effect_r(void);
 void bs_effect_r(void);

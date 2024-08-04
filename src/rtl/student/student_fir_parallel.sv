@@ -248,6 +248,18 @@ module student_fir_parallel #(
 		end
 	end
 
+logic [3:0] shift_amount;
+
+always_ff @(posedge clk_i or negedge rst_ni) begin : proc_shift_amount
+	if(~rst_ni) begin
+		 shift_amount <= 4'd4;
+	end else begin
+		if(reg2hw.shift_amount.qe) begin
+			shift_amount <= reg2hw.shift_amount.q;
+		end
+	end
+end
+
 
 logic useSineWave;
 	
@@ -259,9 +271,9 @@ logic useSineWave;
 				useSineWave <= reg2hw.sine_enable.q;
 			end
 			if(useSineWave) begin
-				y_out <= {'0,(sine_wave_output_int << 4)};
+				y_out <= {'0,(sine_wave_output_int << shift_amount)};
 			end else begin
-				y_out <= (y_out_int_int << 4);
+				y_out <= (y_out_int_int << shift_amount);
 			end
 		end
 	end
