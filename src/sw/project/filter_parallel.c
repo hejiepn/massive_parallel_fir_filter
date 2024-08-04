@@ -22,7 +22,7 @@
  }
 
 
-void fir_s_coeff(uint16_t coeff, uint16_t address, uint8_t fir_index) {
+void fir_s_coeff(uint16_t coeff, uint16_t address, uint8_t fir_index, fir_parallel_left_right channel) {
 
     if (fir_index >= 8) {
         // Handle error: fir_index out of bounds
@@ -30,7 +30,13 @@ void fir_s_coeff(uint16_t coeff, uint16_t address, uint8_t fir_index) {
         return;
     }
 
-    uint32_t base_addr = STUDENT_FIR_BASE_ADDR_ARRAY[fir_index];
+    uint32_t base_addr;
+
+    if(channel == right) {
+        base_addr = STUDENT_FIR_BASE_ADDR_ARRAY_right[fir_index];    
+    } else {
+        base_addr = STUDENT_FIR_BASE_ADDR_ARRAY[fir_index];    
+    }
 
     // Ensure address only uses 10 bits (bits 11:2)
     uint32_t addr_mask = 0x3FF; // 10 bits mask
@@ -49,38 +55,38 @@ void fir_s_coeff(uint16_t coeff, uint16_t address, uint8_t fir_index) {
     REG32(full_address) = padded_coeff;
 }
 
-void bp_effect(void) {
+void bp_effect(fir_parallel_left_right channel) {
     for(int fir_index = 0; fir_index < 8; fir_index = fir_index + 1) {
         printf("Config FIR Unit %d \n", fir_index);
         for(int i = 0; i < 1024; i = i +1) {
-            fir_s_coeff(bp_20_20khz[i], i, fir_index);
+            fir_s_coeff(bp_20_20khz[i], i, fir_index, channel);
         }
     } 
 }
 
-void bs_effect(void) {
+void bs_effect(fir_parallel_left_right channel) {
     for(int fir_index = 0; fir_index < 8; fir_index = fir_index + 1) {
         printf("Config FIR Unit %d \n", fir_index);
         for(int i = 0; i < 1024; i = i +1) {
-            fir_s_coeff(bs_500_2khz[i], i, fir_index);
+            fir_s_coeff(bs_500_2khz[i], i, fir_index, channel);
         }
     } 
 }
 
-void hp_effect(void) {
+void hp_effect(fir_parallel_left_right channel) {
     for(int fir_index = 0; fir_index < 8; fir_index = fir_index + 1) {
         printf("Config FIR Unit %d \n", fir_index);
         for(int i = 0; i < 1024; i = i +1) {
-            fir_s_coeff(hp_200[i], i, fir_index);
+            fir_s_coeff(hp_200[i], i, fir_index, channel);
         }
     } 
 }
 
-void lp_effect(void) {
+void lp_effect(fir_parallel_left_right channel) {
     for(int fir_index = 0; fir_index < 8; fir_index = fir_index + 1) {
         printf("Config FIR Unit %d \n", fir_index);
         for(int i = 0; i < 1024; i = i +1) {
-            fir_s_coeff(lp_15khz[i], i, fir_index);
+            fir_s_coeff(lp_15khz[i], i, fir_index, channel);
         }
     } 
 }

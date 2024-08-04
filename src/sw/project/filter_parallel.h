@@ -37,6 +37,33 @@ static uint32_t STUDENT_FIR_BASE_ADDR_ARRAY[] = {
 
 #define STUDENT_FIR_BASE_ADDR_ARRAY_SIZE (sizeof(STUDENT_FIR_BASE_ADDR_ARRAY) / sizeof(STUDENT_FIR_BASE_ADDR_ARRAY[0]))
 
+#define STUDENT_FIR0_BASE_ADDR_c_r 0x10401000
+#define STUDENT_FIR1_BASE_ADDR_c_r 0x10411000
+#define STUDENT_FIR2_BASE_ADDR_c_r 0x10421000
+#define STUDENT_FIR3_BASE_ADDR_c_r 0x10431000
+#define STUDENT_FIR4_BASE_ADDR_c_r 0x10441000
+#define STUDENT_FIR5_BASE_ADDR_c_r 0x10451000
+#define STUDENT_FIR6_BASE_ADDR_c_r 0x10461000
+#define STUDENT_FIR7_BASE_ADDR_c_r 0x10471000
+
+// Define the array
+static uint32_t STUDENT_FIR_BASE_ADDR_ARRAY_right[] = {
+    STUDENT_FIR0_BASE_ADDR_c_r,
+    STUDENT_FIR1_BASE_ADDR_c_r,
+    STUDENT_FIR2_BASE_ADDR_c_r,
+    STUDENT_FIR3_BASE_ADDR_c_r,
+    STUDENT_FIR4_BASE_ADDR_c_r,
+    STUDENT_FIR5_BASE_ADDR_c_r,
+    STUDENT_FIR6_BASE_ADDR_c_r,
+    STUDENT_FIR7_BASE_ADDR_c_r
+};
+
+typedef enum
+{
+    left = 0,
+    right = 1
+} fir_parallel_left_right;
+
 
 uint32_t fir_p_read_y_out_upper(void);
 uint32_t fir_p_read_y_out_lower(void);
@@ -44,11 +71,11 @@ uint16_t fir_p_read_shift_out_samples(void);
 void fir_p_write_in_samples(uint16_t sample);
 void fir_p_en_sine_wave(bool enable);
 
-void fir_s_coeff(uint16_t coeff, uint16_t address, uint8_t fir_index);
-void bp_effect(void);
-void bs_effect(void);
-void hp_effect(void);
-void lp_effect(void);
+void fir_s_coeff(uint16_t coeff, uint16_t address, uint8_t fir_index, fir_parallel_left_right channel);
+void bp_effect(fir_parallel_left_right channel);
+void bs_effect(fir_parallel_left_right channel);
+void hp_effect(fir_parallel_left_right channel);
+void lp_effect(fir_parallel_left_right channel);
 
 /**
  * Adressing in the FIR Parallel

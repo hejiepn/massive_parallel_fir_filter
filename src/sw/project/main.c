@@ -26,16 +26,16 @@ int main(void) {
 	//enable_effect(0);
 
 	printf("bandpass effect \n");
-    bp_effect();
+    bp_effect(left);
 
     printf("bandstop effect \n");
-    bs_effect();
+    bs_effect(left);
 
     printf("highpass effect \n");
-    hp_effect();
+    hp_effect(left);
 
     printf("lowpass effect \n");
-    lp_effect();
+    lp_effect(left);
 
 	/*
 		while(true) {

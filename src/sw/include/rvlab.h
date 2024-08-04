@@ -36,4 +36,7 @@
 #include "reggen/student_iis_handler.h"
 #define STUDENT_IIS_HANDLER0_BASE_ADDR 0x10300000
 
+#include "reggen/student_fir_parallel.h"
+#define STUDENT_FIR_PARALLEL1_BASE_ADDR 0x10480000
+
 #endif // _RVLAB_H
