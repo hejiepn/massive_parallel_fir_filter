@@ -127,8 +127,7 @@ localparam int unsigned NUM_FIR = 8; //only numbers which are power of 2 are sup
 	.clk_i(clk_i),
     .rst_ni(rst_ni),
 	.valid_strobe_in(valid_strobe_2FIR),
-    //.sample_in(Data_iis_O_L),
-    .sample_in(sine_input),
+    .sample_in(Data_iis_O_L),
 	.valid_strobe_out(valid_strobe_out),
     .y_out(y_out_l),
 	.tl_i(tl_student_i[2]),  //master input (incoming request)
