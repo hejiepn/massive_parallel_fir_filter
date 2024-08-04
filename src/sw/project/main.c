@@ -20,22 +20,26 @@ int main(void) {
 
 	printf("Start Audio Config!\n");
 
-	//start_audio_codec_config();
+	start_audio_codec_config();
 
 	//printf("Enable Loopback!\n");
 	//enable_effect(0);
-
+/*
 	printf("bandpass effect \n");
     bp_effect(left);
-
+*/
     printf("bandstop effect \n");
     bs_effect(left);
 
+    printf("highpass effect \n");
+    hp_effect(right);
+/*
     printf("highpass effect \n");
     hp_effect(left);
 
     printf("lowpass effect \n");
     lp_effect(left);
+*/
 
 	/*
 		while(true) {
