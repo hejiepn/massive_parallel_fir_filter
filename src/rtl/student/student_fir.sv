@@ -58,7 +58,7 @@ module student_fir #(
 
   // Define constants for memory definition
   localparam MAX_ADDR = 2**ADDR_WIDTH;
-  localparam ROM_FILE_COEFF = (DEBUGMODE == 1) ? "/home/rvlab/groups/rvlab01/Desktop/dev_hejie_copy_2/risc-v-lab-group-01/src/rtl/student/data/coe_lp_debug.mem" : "/home/rvlab/groups/rvlab01/Desktop/filter_coefficient/hp_6khz.mem";  // File for memory initialization
+  localparam ROM_FILE_COEFF = (DEBUGMODE == 1) ? "/home/rvlab/groups/rvlab01/Desktop/filter_coefficient/lp_15khz.mem" : "/home/rvlab/groups/rvlab01/Desktop/filter_coefficient/lp_15khz.mem";  // File for memory initialization
   localparam ROM_FILE_SAMPLES = (DEBUGMODE == 1) ? "/home/rvlab/groups/rvlab01/Desktop/dev_hejie_copy_2/risc-v-lab-group-01/src/rtl/student/data/zeros.mem" : "/home/rvlab/groups/rvlab01/Desktop/dev_hejie_copy_2/risc-v-lab-group-01/src/rtl/student/data/zeros.mem";
  
   // Read and write pointers
