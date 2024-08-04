@@ -261,7 +261,7 @@ logic useSineWave;
 			if(useSineWave) begin
 				y_out <= {'0,(sine_wave_output_int << 5)};
 			end else begin
-				y_out <= (y_out_int_int << 5);
+				y_out <= y_out_int_int;
 			end
 		end
 	end
