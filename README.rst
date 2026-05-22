@@ -14,3 +14,36 @@ Current Issues:
 
 
 The latest version can be found on the branch: NewStartStereo
+
+# Massive Parallel FIR Filter
+
+## Overview
+
+This project implements a **high-performance Finite Impulse Response (FIR) filter** designed for massively parallel execution.
+
+The goal is to optimize digital signal processing (DSP) workloads using parallel computation techniques to achieve high throughput and efficient CPU utilization.
+
+---
+
+## What This Project Is
+
+A FIR filter is a core DSP component used to process signals by applying a weighted sum over a sliding window.
+
+This implementation focuses on:
+
+- Parallelizing filter computations
+- Optimizing performance for large-scale input signals
+- Efficient memory and cache usage
+
+---
+
+## What I Implemented
+
+- FIR filter kernel implementation from scratch
+- Parallel processing pipeline for large signal arrays
+- Efficient convolution-based computation model
+- Thread-level or task-level parallelization (depending on build)
+- Optimized memory access patterns for cache performance
+- Configurable filter coefficients (taps)
+
+---
